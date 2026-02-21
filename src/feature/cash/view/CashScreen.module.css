@@ -1,0 +1,581 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 16px;
+  color: #0f172a;
+}
+
+.content {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.tabs {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabBtn {
+  height: 38px;
+  border: 1px solid #94a3b8;
+  background: #f8fafc;
+  color: #0f172a;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0 14px;
+}
+
+.tabBtnActive {
+  border-color: #0f172a;
+  background: #0f172a;
+  color: white;
+}
+
+.summaryCard {
+  margin-top: 16px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.summaryCard p {
+  margin: 0;
+  color: #334155;
+}
+
+.operationCard {
+  margin-top: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.helpText {
+  margin: 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.inlineForm {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 250px;
+}
+
+.field span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.input {
+  height: 38px;
+  border: 1px solid #cbd5e1;
+  padding: 0 8px;
+  font-size: 14px;
+}
+
+.layout {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.95fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.layoutClosed .tableCard,
+.layoutClosed .detailCard {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.tableCard {
+  border: 1px solid #e2e8f0;
+  background: white;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 62vh;
+}
+
+.tableTitle {
+  margin: 0 0 10px;
+  padding: 12px 10px 0;
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.tableHead,
+.tableFilters,
+.tableRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.9fr) minmax(0, 0.8fr) minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  min-width: 760px;
+}
+
+.tableHead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tableFilters {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tableRow {
+  border-top: 1px solid #e2e8f0;
+  background: white;
+  width: 100%;
+  text-align: left;
+  border-right: none;
+  border-left: none;
+  border-bottom: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.tableRowEven {
+  background: #f8fafc;
+}
+
+.tableRowActive {
+  background: #e2e8f0;
+}
+
+.tableHead > div,
+.tableFilters > div,
+.tableRow > div {
+  min-width: 0;
+}
+
+.tableRow > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.headerCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.headerBtn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-weight: 900;
+  cursor: pointer;
+  color: #0f172a;
+}
+
+.headerBtnActive {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.filterWrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filterInput,
+.filterInputDate {
+  width: min(160px, 100%);
+  height: 32px;
+  border: none;
+  border-bottom: 1px solid #0f172a;
+  padding: 0 4px;
+  font-size: 14px;
+  background: transparent;
+}
+
+.filterInputDate {
+  border-bottom: none;
+  padding-right: 0;
+}
+
+.clearBtn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  color: #334155;
+  line-height: 1;
+}
+
+.detailCard {
+  border: 1px solid #e2e8f0;
+  background: white;
+  padding: 12px;
+  max-height: 62vh;
+  overflow-y: auto;
+}
+
+.detailTitle {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.detailBody {
+  display: grid;
+  gap: 8px;
+}
+
+.detailBody p {
+  margin: 0;
+  color: #334155;
+}
+
+.detailTable {
+  border: 1px solid #e2e8f0;
+  overflow-x: auto;
+}
+
+.detailHead,
+.detailRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) 70px 110px 120px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  min-width: 560px;
+}
+
+.detailHead {
+  background: #f1f5f9;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.detailRow {
+  border-top: 1px solid #e2e8f0;
+}
+
+.detailHead > div,
+.detailRow > div {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cellRight {
+  text-align: right;
+}
+
+.totalLine {
+  margin-top: 8px;
+  font-weight: 900;
+}
+
+.closeSummaryCard {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.closeSummaryTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.closeSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.closeSummaryGrid p {
+  margin: 0;
+  color: #334155;
+}
+
+.paymentBreakdown {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.paymentBreakdown p {
+  margin: 0;
+  color: #334155;
+}
+
+.assignmentCard {
+  margin-top: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.assignmentList {
+  display: grid;
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.assignmentRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+  background: #f8fafc;
+}
+
+.assignmentMeta {
+  display: grid;
+  gap: 3px;
+}
+
+.assignmentMeta strong {
+  color: #0f172a;
+}
+
+.assignmentMeta span {
+  color: #475569;
+  font-size: 13px;
+}
+
+.assignmentInput {
+  height: 36px;
+  border: 1px solid #cbd5e1;
+  padding: 0 8px;
+}
+
+.secondaryBtn {
+  height: 36px;
+  border: 1px solid #334155;
+  background: white;
+  color: #0f172a;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 0 12px;
+}
+
+.auditLayout {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.auditListCard,
+.auditDetailCard {
+  border: 1px solid #e2e8f0;
+  background: white;
+  padding: 12px;
+}
+
+.auditList {
+  display: grid;
+  gap: 8px;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.auditRow {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.auditRow strong {
+  color: #0f172a;
+}
+
+.auditRow span {
+  color: #475569;
+  font-size: 13px;
+}
+
+.auditRowActive {
+  border-color: #0f172a;
+  background: #e2e8f0;
+}
+
+.auditBody {
+  display: grid;
+  gap: 10px;
+}
+
+.auditSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 10px;
+}
+
+.auditSummaryGrid p {
+  margin: 0;
+  color: #334155;
+}
+
+.auditChecks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.mismatchBox {
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  padding: 8px;
+  display: grid;
+  gap: 4px;
+}
+
+.mismatchBox p {
+  margin: 0;
+  color: #9f1239;
+  font-size: 13px;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 90px;
+  border: 1px solid #cbd5e1;
+  resize: vertical;
+  padding: 8px;
+  font: inherit;
+}
+
+.placeholder {
+  margin: 0;
+  padding: 14px;
+  color: #475569;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primaryBtn {
+  height: 44px;
+  border-radius: 0;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0 14px;
+  border: 1px solid #0f172a;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #0f172a;
+  color: white;
+}
+
+.error {
+  margin: 0;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 800;
+}
+
+.message {
+  margin: 0;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 800;
+}
+
+@media (max-width: 1024px) {
+  .summaryCard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .auditLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .assignmentRow {
+    grid-template-columns: 1fr;
+  }
+
+  .closeSummaryGrid,
+  .paymentBreakdown,
+  .auditSummaryGrid,
+  .auditChecks {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -1,0 +1,56 @@
+import type { AppUserRecord } from "../model/user.types";
+
+export type UserDraft = {
+  name: string;
+  email: string;
+  username: string;
+  password: string;
+  startHour: string;
+  endHour: string;
+};
+
+export type UserUpdateDraft = {
+  name: string;
+  email: string;
+  username: string;
+  password?: string;
+  startHour: string;
+  endHour: string;
+};
+
+async function readJsonOrThrow<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return (await response.json()) as T;
+}
+
+export async function fetchUsersApi(): Promise<AppUserRecord[]> {
+  const response = await fetch("/users");
+  return await readJsonOrThrow<AppUserRecord[]>(response);
+}
+
+export async function createUserApi(draft: UserDraft): Promise<AppUserRecord> {
+  const response = await fetch("/users", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  return await readJsonOrThrow<AppUserRecord>(response);
+}
+
+export async function updateUserApi(id: string, draft: UserUpdateDraft): Promise<AppUserRecord> {
+  const response = await fetch(`/users/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  return await readJsonOrThrow<AppUserRecord>(response);
+}
+
+export async function deleteUserApi(id: string): Promise<{ ok: boolean; id: string }> {
+  const response = await fetch(`/users/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+  return await readJsonOrThrow<{ ok: boolean; id: string }>(response);
+}

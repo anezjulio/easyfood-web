@@ -1,0 +1,403 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 16px;
+  color: #0f172a;
+}
+
+.content {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.tabs {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabBtn {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tabBtnActive {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.layout {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.55fr);
+  gap: 16px;
+  align-items: stretch;
+  height: calc(100vh - 220px);
+  max-height: calc(100vh - 220px);
+  overflow: hidden;
+}
+
+.formCard {
+  min-width: 0;
+  max-width: 620px;
+  background: white;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  display: grid;
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.formTitle {
+  margin: 0 0 4px;
+  font-size: 24px;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.form {
+  display: grid;
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: minmax(90px, 140px) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.field > span {
+  text-align: right;
+  align-self: center;
+  line-height: 1.2;
+}
+
+.input,
+.select {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 16px;
+  background: white;
+  height: 44px;
+  padding: 0 14px;
+}
+
+.valueBox {
+  min-height: 44px;
+  padding: 10px 0;
+  color: #334155;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+  border: none;
+  background: transparent;
+}
+
+.errorBox {
+  padding: 10px 14px;
+  border-radius: 0;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 800;
+}
+
+.successBox {
+  padding: 10px 14px;
+  border-radius: 0;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 800;
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 0;
+  font-weight: 900;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  border: 1px solid #0f172a;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #0f172a;
+  color: white;
+}
+
+.secondaryBtn {
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: white;
+  color: #0f172a;
+}
+
+.listCard {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.marginsPanel {
+  margin-top: 16px;
+  height: calc(100vh - 252px);
+  max-height: calc(100vh - 252px);
+  overflow: hidden;
+}
+
+.success {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 0;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 800;
+}
+
+.error {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: 0;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 800;
+}
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+
+.subPanel {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 12px;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 12px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.meta {
+  margin: 0;
+  color: #475569;
+  font-size: 13px;
+}
+
+.selectorLayout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.05fr);
+  gap: 12px;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.selectorList {
+  display: grid;
+  gap: 8px;
+  max-height: none;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.selectorRow {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  background: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  gap: 3px;
+}
+
+.selectorRowActive {
+  border-color: #0f172a;
+  box-shadow: inset 0 0 0 1px #0f172a;
+  background: #f8fafc;
+}
+
+.selectorMain {
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.selectorMeta {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.2;
+}
+
+.selectorValue {
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.selectorDetail {
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  display: grid;
+  gap: 10px;
+  min-height: 0;
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.detailMeta {
+  margin: 0;
+  color: #334155;
+  font-size: 13px;
+}
+
+.historyTitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.historyList {
+  display: grid;
+  gap: 8px;
+  max-height: 260px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.historyRow {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 8px 10px;
+  display: grid;
+  gap: 2px;
+}
+
+.historyValue {
+  margin: 0;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.historyDate {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.secondaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.empty {
+  margin: 0;
+  color: #64748b;
+}
+
+@media (max-width: 900px) {
+  .layout,
+  .gridTwo {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+  }
+
+  .layout,
+  .marginsPanel {
+    overflow: visible;
+  }
+
+  .selectorLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .field {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .field > span {
+    text-align: left;
+  }
+
+  .selectorList,
+  .historyList {
+    max-height: 320px;
+  }
+
+  .formCard,
+  .listCard,
+  .subPanel {
+    min-height: auto;
+    overflow: visible;
+  }
+}

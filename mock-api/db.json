@@ -1,0 +1,3556 @@
+{
+  "products": [
+    {
+      "id": "p-tc-rapido",
+      "name": "Producto Rotacion Alta",
+      "price": 2500,
+      "costPrice": 2500,
+      "createdAt": "2026-02-16T07:39:27.032Z",
+      "category": "bebida"
+    },
+    {
+      "id": "p-tc-pancho",
+      "name": "Pancho Caso Test",
+      "price": 2500,
+      "costPrice": 2500,
+      "createdAt": "2026-02-16T07:39:27.032Z",
+      "category": "perecedero"
+    },
+    {
+      "id": "p-tc-coca",
+      "name": "Coca-Cola Caso Test",
+      "price": 2500,
+      "costPrice": 2500,
+      "createdAt": "2026-02-16T07:39:27.032Z",
+      "category": "bebida"
+    },
+    {
+      "id": "p-1770933817509-5022",
+      "name": "nuevo producto de prueba a ver si anda",
+      "price": 124525,
+      "costPrice": 124525,
+      "createdAt": "2026-02-12T22:03:37.509Z",
+      "barcode": "6846846845453",
+      "category": "vivere"
+    },
+    {
+      "id": "p1",
+      "name": "Coca-Cola 500ml",
+      "price": 1500,
+      "costPrice": 1500,
+      "createdAt": "2026-01-20T12:00:00.000Z",
+      "barcode": "7790000000001",
+      "category": "bebida"
+    },
+    {
+      "id": "p2",
+      "name": "Alfajor",
+      "price": 900,
+      "costPrice": 900,
+      "createdAt": "2026-01-22T09:30:00.000Z",
+      "barcode": "7790000000002",
+      "category": "golosina"
+    },
+    {
+      "id": "p3",
+      "name": "Agua 1.5L",
+      "price": 1200,
+      "costPrice": 1200,
+      "createdAt": "2026-01-23T18:10:00.000Z",
+      "barcode": "7790000000003",
+      "category": "bebida"
+    },
+    {
+      "id": "p4",
+      "name": "Pan lactal",
+      "price": 2200,
+      "costPrice": 2200,
+      "createdAt": "2026-01-05T10:15:00.000Z",
+      "barcode": "7790000000004",
+      "category": "vivere"
+    },
+    {
+      "id": "p5",
+      "name": "Leche entera 1L",
+      "price": 1800,
+      "costPrice": 1800,
+      "createdAt": "2026-01-06T08:00:00.000Z",
+      "barcode": "7790000000005",
+      "category": "vivere"
+    },
+    {
+      "id": "p6",
+      "name": "Gaseosa naranja 1.5L",
+      "price": 2594,
+      "costPrice": 2594,
+      "createdAt": "2026-01-19T08:07:12.226Z",
+      "barcode": "7795165823539",
+      "category": "bebida"
+    },
+    {
+      "id": "p7",
+      "name": "Jugo multifruta 1L",
+      "price": 9490,
+      "costPrice": 9490,
+      "createdAt": "2026-01-18T16:51:05.024Z",
+      "barcode": "7798161632149",
+      "category": "bebida"
+    },
+    {
+      "id": "p8",
+      "name": "Agua saborizada limon 500ml",
+      "price": 2143,
+      "costPrice": 2143,
+      "createdAt": "2026-01-04T22:35:28.678Z",
+      "barcode": "7792827940540",
+      "category": "bebida"
+    },
+    {
+      "id": "p9",
+      "name": "Soda 1L",
+      "price": 835,
+      "costPrice": 835,
+      "createdAt": "2026-01-07T11:10:20.059Z",
+      "barcode": "7791380778582",
+      "category": "bebida"
+    },
+    {
+      "id": "p10",
+      "name": "Energetica 473ml",
+      "price": 9336,
+      "costPrice": 9336,
+      "createdAt": "2026-01-17T06:41:53.782Z",
+      "barcode": "7796950357156",
+      "category": "bebida"
+    },
+    {
+      "id": "p11",
+      "name": "Galletitas chocolate 300g",
+      "price": 4791,
+      "costPrice": 4791,
+      "createdAt": "2026-01-09T14:58:34.223Z",
+      "barcode": "7798639951466",
+      "category": "chocolate"
+    },
+    {
+      "id": "p12",
+      "name": "Galletitas avena 250g",
+      "price": 5168,
+      "costPrice": 5168,
+      "createdAt": "2026-01-29T20:46:56.392Z",
+      "barcode": "7791070305338",
+      "category": "golosina"
+    },
+    {
+      "id": "p13",
+      "name": "Bizcochos salados 200g",
+      "price": 8817,
+      "costPrice": 8817,
+      "createdAt": "2026-01-06T21:08:58.311Z",
+      "barcode": "7792653506458",
+      "category": "golosina"
+    },
+    {
+      "id": "p14",
+      "name": "Tostadas integrales 200g",
+      "price": 2279,
+      "costPrice": 2279,
+      "createdAt": "2026-01-08T12:49:33.014Z",
+      "barcode": "7794346970833",
+      "category": "vivere"
+    },
+    {
+      "id": "p15",
+      "name": "Pan de hamburguesa x4",
+      "price": 4910,
+      "costPrice": 4910,
+      "createdAt": "2026-01-26T00:00:13.663Z",
+      "barcode": "7795774483072",
+      "category": "vivere"
+    },
+    {
+      "id": "p16",
+      "name": "Pan de panchos x6",
+      "price": 5915,
+      "costPrice": 5915,
+      "createdAt": "2026-01-30T20:31:52.185Z",
+      "barcode": "7797698643073",
+      "category": "vivere"
+    },
+    {
+      "id": "p17",
+      "name": "Tapas para tarta x2",
+      "price": 9149,
+      "costPrice": 9149,
+      "createdAt": "2026-01-23T00:53:42.755Z",
+      "barcode": "7794424793756",
+      "category": "vivere"
+    },
+    {
+      "id": "p18",
+      "name": "Fideos tirabuzon 500g",
+      "price": 7162,
+      "costPrice": 7162,
+      "createdAt": "2026-02-12T21:13:15.300Z",
+      "imageUrl": "/images/whatsapp-image-2026-01-05-at-6-46-35-am-41939.jpeg",
+      "barcode": "7791144177140",
+      "category": "vivere"
+    },
+    {
+      "id": "p19",
+      "name": "Fideos spaghetti 500g",
+      "price": 8109,
+      "costPrice": 8109,
+      "createdAt": "2026-01-02T11:46:38.704Z",
+      "barcode": "7791016829933",
+      "category": "vivere"
+    },
+    {
+      "id": "p20",
+      "name": "Polenta instantanea 500g",
+      "price": 6988,
+      "costPrice": 6988,
+      "createdAt": "2026-01-10T18:39:00.371Z",
+      "barcode": "7795821684719",
+      "category": "vivere"
+    },
+    {
+      "id": "p21",
+      "name": "Pure instantaneo 125g",
+      "price": 1323,
+      "costPrice": 1323,
+      "createdAt": "2026-01-05T11:14:59.460Z",
+      "barcode": "7798146904521",
+      "category": "vivere"
+    },
+    {
+      "id": "p22",
+      "name": "Arroz integral 1kg",
+      "price": 6501,
+      "costPrice": 6501,
+      "createdAt": "2026-02-11T08:27:00.468Z",
+      "barcode": "7794637650438",
+      "category": "vivere"
+    },
+    {
+      "id": "p23",
+      "name": "Arroz largo fino 1kg",
+      "price": 3857,
+      "costPrice": 3857,
+      "createdAt": "2026-01-30T08:34:54.688Z",
+      "barcode": "7799268767947",
+      "category": "vivere"
+    },
+    {
+      "id": "p24",
+      "name": "Lentejas secas 500g",
+      "price": 6505,
+      "costPrice": 6505,
+      "createdAt": "2026-01-18T21:52:24.972Z",
+      "barcode": "7790876873526",
+      "category": "vivere"
+    },
+    {
+      "id": "p25",
+      "name": "Garbanzos secos 500g",
+      "price": 2593,
+      "costPrice": 2593,
+      "createdAt": "2026-01-04T09:43:02.604Z",
+      "barcode": "7790494599565",
+      "category": "vivere"
+    },
+    {
+      "id": "p26",
+      "name": "Porotos negros 500g",
+      "price": 8669,
+      "costPrice": 8669,
+      "createdAt": "2026-01-30T08:27:57.109Z",
+      "barcode": "7796249890136",
+      "category": "vivere"
+    },
+    {
+      "id": "p27",
+      "name": "Harina leudante 1kg",
+      "price": 6826,
+      "costPrice": 6826,
+      "createdAt": "2026-01-26T02:54:26.262Z",
+      "barcode": "7799141357006",
+      "category": "vivere"
+    },
+    {
+      "id": "p28",
+      "name": "Harina integral 1kg",
+      "price": 3872,
+      "costPrice": 3872,
+      "createdAt": "2026-02-08T10:49:37.212Z",
+      "barcode": "7798810769734",
+      "category": "vivere"
+    },
+    {
+      "id": "p29",
+      "name": "Premezcla pizza 1kg",
+      "price": 5130,
+      "costPrice": 5130,
+      "createdAt": "2026-01-27T16:45:29.162Z",
+      "barcode": "7797694428986",
+      "category": "vivere"
+    },
+    {
+      "id": "p30",
+      "name": "Azucar rubia 1kg",
+      "price": 8585,
+      "costPrice": 8585,
+      "createdAt": "2026-01-01T10:56:18.023Z",
+      "barcode": "7793817716270",
+      "category": "vivere"
+    },
+    {
+      "id": "p31",
+      "name": "Edulcorante liquido 250ml",
+      "price": 8170,
+      "costPrice": 8170,
+      "createdAt": "2026-01-25T07:32:40.907Z",
+      "barcode": "7793481501418",
+      "category": "vivere"
+    },
+    {
+      "id": "p32",
+      "name": "Cacao en polvo 180g",
+      "price": 2789,
+      "costPrice": 2789,
+      "createdAt": "2026-02-01T16:51:42.206Z",
+      "barcode": "7799250339775",
+      "category": "chocolate"
+    },
+    {
+      "id": "p33",
+      "name": "Chocolate para taza 200g",
+      "price": 3861,
+      "costPrice": 3861,
+      "createdAt": "2026-01-13T08:32:26.972Z",
+      "barcode": "7795971030642",
+      "category": "chocolate"
+    },
+    {
+      "id": "p34",
+      "name": "Cafe instantaneo 170g",
+      "price": 6707,
+      "costPrice": 6707,
+      "createdAt": "2026-01-23T23:04:18.967Z",
+      "barcode": "7799890907831",
+      "category": "vivere"
+    },
+    {
+      "id": "p35",
+      "name": "Te verde en saquitos",
+      "price": 6404,
+      "costPrice": 6404,
+      "createdAt": "2026-01-04T17:26:10.440Z",
+      "barcode": "7797037925757",
+      "category": "vivere"
+    },
+    {
+      "id": "p36",
+      "name": "Yerba saborizada 500g",
+      "price": 7530,
+      "costPrice": 7530,
+      "createdAt": "2026-01-10T06:26:59.425Z",
+      "barcode": "7795144943530",
+      "category": "vivere"
+    },
+    {
+      "id": "p37",
+      "name": "Leche descremada 1L",
+      "price": 1258,
+      "costPrice": 1258,
+      "createdAt": "2026-02-03T16:36:11.878Z",
+      "barcode": "7799844852856",
+      "category": "vivere"
+    },
+    {
+      "id": "p38",
+      "name": "Leche deslactosada 1L",
+      "price": 6807,
+      "costPrice": 6807,
+      "createdAt": "2026-01-08T13:50:08.774Z",
+      "barcode": "7798091466816",
+      "category": "vivere"
+    },
+    {
+      "id": "p39",
+      "name": "Yogur bebible frutilla 1L",
+      "price": 1672,
+      "costPrice": 1672,
+      "createdAt": "2026-01-15T18:23:10.113Z",
+      "barcode": "7797334821151",
+      "category": "vivere"
+    },
+    {
+      "id": "p40",
+      "name": "Queso rallado 150g",
+      "price": 4542,
+      "costPrice": 4542,
+      "createdAt": "2026-01-08T07:37:13.184Z",
+      "barcode": "7792720277318",
+      "category": "vivere"
+    },
+    {
+      "id": "p41",
+      "name": "Queso en hebras 200g",
+      "price": 5772,
+      "costPrice": 5772,
+      "createdAt": "2026-02-09T17:01:14.796Z",
+      "barcode": "7791525741037",
+      "category": "vivere"
+    },
+    {
+      "id": "p42",
+      "name": "Mantequilla 100g",
+      "price": 5884,
+      "costPrice": 5884,
+      "createdAt": "2026-01-10T01:26:23.040Z",
+      "barcode": "7791228428763",
+      "category": "vivere"
+    },
+    {
+      "id": "p43",
+      "name": "Dulce de membrillo 500g",
+      "price": 5628,
+      "costPrice": 5628,
+      "createdAt": "2026-01-25T04:40:34.138Z",
+      "barcode": "7799909930093",
+      "category": "vivere"
+    },
+    {
+      "id": "p44",
+      "name": "Dulce de batata 500g",
+      "price": 7890,
+      "costPrice": 7890,
+      "createdAt": "2026-01-30T04:11:29.155Z",
+      "barcode": "7792580118470",
+      "category": "vivere"
+    },
+    {
+      "id": "p45",
+      "name": "Mermelada durazno 450g",
+      "price": 2109,
+      "costPrice": 2109,
+      "createdAt": "2026-01-19T20:27:18.081Z",
+      "barcode": "7791248356435",
+      "category": "vivere"
+    },
+    {
+      "id": "p46",
+      "name": "Miel de flores 500g",
+      "price": 5295,
+      "costPrice": 5295,
+      "createdAt": "2026-02-11T02:10:15.802Z",
+      "barcode": "7795361380541",
+      "category": "vivere"
+    },
+    {
+      "id": "p47",
+      "name": "Atun al natural lata",
+      "price": 9999,
+      "costPrice": 9999,
+      "createdAt": "2026-02-12T19:19:31.957Z",
+      "imageUrl": "/images/pi7_passport_photo-20917.jpeg",
+      "barcode": "7794084607330",
+      "category": "vivere"
+    },
+    {
+      "id": "p48",
+      "name": "Sardinas en tomate lata",
+      "price": 3695,
+      "costPrice": 3695,
+      "createdAt": "2026-01-02T16:51:03.937Z",
+      "barcode": "7799597915529",
+      "category": "vivere"
+    },
+    {
+      "id": "p49",
+      "name": "Arvejas secas 500g",
+      "price": 3238,
+      "costPrice": 3238,
+      "createdAt": "2026-02-10T10:49:53.033Z",
+      "barcode": "7797049166026",
+      "category": "vivere"
+    },
+    {
+      "id": "p50",
+      "name": "Choclo en granos lata",
+      "price": 6072,
+      "costPrice": 6072,
+      "createdAt": "2026-02-01T13:14:06.379Z",
+      "barcode": "7792139788946",
+      "category": "vivere"
+    },
+    {
+      "id": "p51",
+      "name": "Aceitunas verdes 180g",
+      "price": 3110,
+      "costPrice": 3110,
+      "createdAt": "2026-02-12T11:51:29.822Z",
+      "barcode": "7794677343132",
+      "category": "vivere"
+    },
+    {
+      "id": "p52",
+      "name": "Pepinillos en vinagre 250g",
+      "price": 3691,
+      "costPrice": 3691,
+      "createdAt": "2026-01-25T21:05:45.077Z",
+      "barcode": "7798103923855",
+      "category": "vivere"
+    },
+    {
+      "id": "p53",
+      "name": "Pure de tomate 520g",
+      "price": 7859,
+      "costPrice": 7859,
+      "createdAt": "2026-02-08T13:14:06.158Z",
+      "barcode": "7793019147482",
+      "category": "vivere"
+    },
+    {
+      "id": "p54",
+      "name": "Salsa fileto 340g",
+      "price": 6980,
+      "costPrice": 6980,
+      "createdAt": "2026-02-05T00:10:56.676Z",
+      "barcode": "7797074460777",
+      "category": "vivere"
+    },
+    {
+      "id": "p55",
+      "name": "Salsa bolognesa 340g",
+      "price": 8344,
+      "costPrice": 8344,
+      "createdAt": "2026-01-04T13:28:25.878Z",
+      "barcode": "7790188599600",
+      "category": "vivere"
+    },
+    {
+      "id": "p56",
+      "name": "Mayonesa light 500g",
+      "price": 8089,
+      "costPrice": 8089,
+      "createdAt": "2026-02-10T05:59:13.869Z",
+      "barcode": "7792031478944",
+      "category": "vivere"
+    },
+    {
+      "id": "p57",
+      "name": "Mostaza dijon 200g",
+      "price": 2983,
+      "costPrice": 2983,
+      "createdAt": "2026-02-07T17:49:26.026Z",
+      "barcode": "7790270463992",
+      "category": "vivere"
+    },
+    {
+      "id": "p58",
+      "name": "Ketchup picante 500g",
+      "price": 6262,
+      "costPrice": 6262,
+      "createdAt": "2026-02-01T07:14:00.936Z",
+      "barcode": "7799290782168",
+      "category": "vivere"
+    },
+    {
+      "id": "p59",
+      "name": "Salsa golf 250g",
+      "price": 2524,
+      "costPrice": 2524,
+      "createdAt": "2026-02-04T06:35:29.348Z",
+      "barcode": "7791018632515",
+      "category": "vivere"
+    },
+    {
+      "id": "p60",
+      "name": "Vinagre de manzana 500ml",
+      "price": 3417,
+      "costPrice": 3417,
+      "createdAt": "2026-01-24T07:42:12.907Z",
+      "barcode": "7792024023486",
+      "category": "vivere"
+    },
+    {
+      "id": "p61",
+      "name": "Aceite mezcla 900ml",
+      "price": 3752,
+      "costPrice": 3752,
+      "createdAt": "2026-01-21T18:04:15.930Z",
+      "barcode": "7792269052385",
+      "category": "vivere"
+    },
+    {
+      "id": "p62",
+      "name": "Aceite oliva 500ml",
+      "price": 3347,
+      "costPrice": 3347,
+      "createdAt": "2026-01-06T13:43:51.182Z",
+      "barcode": "7791266565677",
+      "category": "vivere"
+    },
+    {
+      "id": "p63",
+      "name": "Sal parrillera 500g",
+      "price": 4238,
+      "costPrice": 4238,
+      "createdAt": "2026-02-11T22:28:32.765Z",
+      "barcode": "7798864036191",
+      "category": "vivere"
+    },
+    {
+      "id": "p64",
+      "name": "Pimienta negra molida 100g",
+      "price": 1811,
+      "costPrice": 1811,
+      "createdAt": "2026-01-30T10:55:35.979Z",
+      "barcode": "7798331883373",
+      "category": "vivere"
+    },
+    {
+      "id": "p65",
+      "name": "Ajo en polvo 50g",
+      "price": 1966,
+      "costPrice": 1966,
+      "createdAt": "2026-02-05T17:07:34.436Z",
+      "barcode": "7799486237776",
+      "category": "vivere"
+    },
+    {
+      "id": "p66",
+      "name": "Oregano seco 25g",
+      "price": 2789,
+      "costPrice": 2789,
+      "createdAt": "2026-01-02T20:28:45.457Z",
+      "barcode": "7796046328158",
+      "category": "vivere"
+    },
+    {
+      "id": "p67",
+      "name": "Condimento provenzal 50g",
+      "price": 3101,
+      "costPrice": 3101,
+      "createdAt": "2026-01-21T13:54:44.973Z",
+      "barcode": "7790803729499",
+      "category": "vivere"
+    },
+    {
+      "id": "p68",
+      "name": "Caldo verduras cubos x12",
+      "price": 3082,
+      "costPrice": 3082,
+      "createdAt": "2026-01-06T18:55:27.706Z",
+      "barcode": "7791498744792",
+      "category": "vivere"
+    },
+    {
+      "id": "p69",
+      "name": "Caldo carne cubos x12",
+      "price": 8606,
+      "costPrice": 8606,
+      "createdAt": "2026-01-26T01:27:12.247Z",
+      "barcode": "7793322436985",
+      "category": "vivere"
+    },
+    {
+      "id": "p70",
+      "name": "Sopa instantanea pollo",
+      "price": 5366,
+      "costPrice": 5366,
+      "createdAt": "2026-01-09T11:53:37.674Z",
+      "barcode": "7795940036984",
+      "category": "vivere"
+    },
+    {
+      "id": "p71",
+      "name": "Cereal chocolate 300g",
+      "price": 1913,
+      "costPrice": 1913,
+      "createdAt": "2026-02-11T09:28:55.711Z",
+      "barcode": "7793646869102",
+      "category": "chocolate"
+    },
+    {
+      "id": "p72",
+      "name": "Granola con miel 350g",
+      "price": 1585,
+      "costPrice": 1585,
+      "createdAt": "2026-01-09T17:07:55.729Z",
+      "barcode": "7797683061280",
+      "category": "vivere"
+    },
+    {
+      "id": "p73",
+      "name": "Avena instantanea 400g",
+      "price": 8037,
+      "costPrice": 8037,
+      "createdAt": "2026-02-10T10:44:33.180Z",
+      "barcode": "7792972678438",
+      "category": "vivere"
+    },
+    {
+      "id": "p74",
+      "name": "Barrita mani x6",
+      "price": 9393,
+      "costPrice": 9393,
+      "createdAt": "2026-01-08T21:18:03.094Z",
+      "barcode": "7796093401060",
+      "category": "golosina"
+    },
+    {
+      "id": "p75",
+      "name": "Barrita chocolate x6",
+      "price": 6952,
+      "costPrice": 6952,
+      "createdAt": "2026-01-05T22:09:29.408Z",
+      "barcode": "7796370928341",
+      "category": "chocolate"
+    },
+    {
+      "id": "p76",
+      "name": "Frutos secos mix 200g",
+      "price": 5339,
+      "costPrice": 5339,
+      "createdAt": "2026-01-17T03:39:23.514Z",
+      "barcode": "7794759715343",
+      "category": "vivere"
+    },
+    {
+      "id": "p78",
+      "name": "Papas fritas clasicas 150g",
+      "price": 8574,
+      "costPrice": 8574,
+      "createdAt": "2026-01-23T01:24:08.413Z",
+      "barcode": "7797768885645",
+      "category": "golosina"
+    },
+    {
+      "id": "p79",
+      "name": "Palitos salados 140g",
+      "price": 3173,
+      "costPrice": 3173,
+      "createdAt": "2026-01-25T14:52:06.639Z",
+      "barcode": "7798650716580",
+      "category": "golosina"
+    },
+    {
+      "id": "p80",
+      "name": "Nachos queso 180g",
+      "price": 902,
+      "costPrice": 902,
+      "createdAt": "2026-02-03T15:24:47.737Z",
+      "barcode": "7793622803171",
+      "category": "golosina"
+    },
+    {
+      "id": "p81",
+      "name": "Caramelos menta 100g",
+      "price": 1557,
+      "costPrice": 1557,
+      "createdAt": "2026-01-18T11:05:05.792Z",
+      "barcode": "7792845210096",
+      "category": "golosina"
+    },
+    {
+      "id": "p82",
+      "name": "Chicles menta x30",
+      "price": 2351,
+      "costPrice": 2351,
+      "createdAt": "2026-01-02T04:02:13.479Z",
+      "barcode": "7790633636893",
+      "category": "golosina"
+    },
+    {
+      "id": "p83",
+      "name": "Chocolate relleno 120g",
+      "price": 6292,
+      "costPrice": 6292,
+      "createdAt": "2026-01-20T17:41:20.443Z",
+      "barcode": "7795981775885",
+      "category": "chocolate"
+    },
+    {
+      "id": "p84",
+      "name": "Alfajor triple chocolate",
+      "price": 8271,
+      "costPrice": 8271,
+      "createdAt": "2026-01-04T23:49:20.620Z",
+      "barcode": "7796183016699",
+      "category": "chocolate"
+    },
+    {
+      "id": "p85",
+      "name": "Helado crema 1L",
+      "price": 2468,
+      "costPrice": 2468,
+      "createdAt": "2026-01-31T15:30:50.686Z",
+      "barcode": "7799589803742",
+      "category": "helado"
+    },
+    {
+      "id": "p86",
+      "name": "Postre vainilla 100g",
+      "price": 4954,
+      "costPrice": 4954,
+      "createdAt": "2026-01-05T00:24:08.672Z",
+      "barcode": "7792168361376",
+      "category": "vivere"
+    },
+    {
+      "id": "p87",
+      "name": "Gelatina frutilla 80g",
+      "price": 3549,
+      "costPrice": 3549,
+      "createdAt": "2026-02-08T03:16:41.246Z",
+      "barcode": "7795922985255",
+      "category": "vivere"
+    },
+    {
+      "id": "p88",
+      "name": "Detergente limon 750ml",
+      "price": 1972,
+      "costPrice": 1972,
+      "createdAt": "2026-02-11T02:37:26.700Z",
+      "barcode": "7790335019646",
+      "category": "perecedero"
+    },
+    {
+      "id": "p89",
+      "name": "Lavandina perfumada 1L",
+      "price": 8663,
+      "costPrice": 8663,
+      "createdAt": "2026-01-20T22:48:10.791Z",
+      "barcode": "7793973938174",
+      "category": "perecedero"
+    },
+    {
+      "id": "p90",
+      "name": "Desinfectante pisos 900ml",
+      "price": 1000,
+      "costPrice": 1000,
+      "createdAt": "2026-02-12T20:43:40.215Z",
+      "imageUrl": "/images/mcm3d_-_regina_-_dino_crisis_-_dino-98240.png",
+      "barcode": "7795365545173",
+      "category": "perecedero"
+    },
+    {
+      "id": "p91",
+      "name": "Jabon en polvo 800g",
+      "price": 3151,
+      "costPrice": 3151,
+      "createdAt": "2026-01-18T01:34:02.286Z",
+      "barcode": "7791488363008",
+      "category": "perecedero"
+    },
+    {
+      "id": "p92",
+      "name": "Suavizante ropa 900ml",
+      "price": 1638,
+      "costPrice": 1638,
+      "createdAt": "2026-01-22T03:28:35.948Z",
+      "barcode": "7799467316367",
+      "category": "perecedero"
+    },
+    {
+      "id": "p93",
+      "name": "Esponja multiuso x2",
+      "price": 2151,
+      "costPrice": 2151,
+      "createdAt": "2026-01-10T15:11:18.813Z",
+      "barcode": "7795325831897",
+      "category": "vivere"
+    },
+    {
+      "id": "p94",
+      "name": "Rollo cocina x3",
+      "price": 7176,
+      "costPrice": 7176,
+      "createdAt": "2026-01-29T15:41:43.944Z",
+      "barcode": "7798380473556",
+      "category": "vivere"
+    },
+    {
+      "id": "p95",
+      "name": "Papel higienico x6",
+      "price": 6244,
+      "costPrice": 6244,
+      "createdAt": "2026-01-01T15:05:22.393Z",
+      "barcode": "7790081008229",
+      "category": "vivere"
+    },
+    {
+      "id": "p96",
+      "name": "Servilletas x200",
+      "price": 1530,
+      "costPrice": 1530,
+      "createdAt": "2026-01-04T22:09:09.560Z",
+      "barcode": "7799358596656",
+      "category": "vivere"
+    },
+    {
+      "id": "p97",
+      "name": "Toallas humedas x50",
+      "price": 2381,
+      "costPrice": 2381,
+      "createdAt": "2026-02-11T15:22:32.658Z",
+      "barcode": "7792212581632",
+      "category": "vivere"
+    },
+    {
+      "id": "p98",
+      "name": "Jabon tocador 125g",
+      "price": 2617,
+      "costPrice": 2617,
+      "createdAt": "2026-02-06T03:24:28.539Z",
+      "barcode": "7797812315407",
+      "category": "vivere"
+    },
+    {
+      "id": "p99",
+      "name": "Shampoo anticaspa 400ml",
+      "price": 1837,
+      "costPrice": 1837,
+      "createdAt": "2026-02-06T01:26:39.755Z",
+      "barcode": "7799527921696",
+      "category": "perecedero"
+    },
+    {
+      "id": "p100",
+      "name": "Acondicionador nutricion 400ml",
+      "price": 6039,
+      "costPrice": 6039,
+      "createdAt": "2026-01-21T19:37:55.551Z",
+      "barcode": "7796802715428",
+      "category": "perecedero"
+    },
+    {
+      "id": "p101",
+      "name": "Pasta dental menta 120g",
+      "price": 4341,
+      "costPrice": 4341,
+      "createdAt": "2026-01-15T09:02:40.529Z",
+      "barcode": "7798236851611",
+      "category": "perecedero"
+    },
+    {
+      "id": "p102",
+      "name": "Enjuague bucal 500ml",
+      "price": 7591,
+      "costPrice": 7591,
+      "createdAt": "2026-01-30T04:56:19.785Z",
+      "barcode": "7794722334283",
+      "category": "perecedero"
+    },
+    {
+      "id": "p103",
+      "name": "Desodorante roll-on 60ml",
+      "price": 5571,
+      "costPrice": 5571,
+      "createdAt": "2026-02-05T13:30:29.265Z",
+      "barcode": "7790981145236",
+      "category": "perecedero"
+    },
+    {
+      "id": "p104",
+      "name": "Crema de manos 100ml",
+      "price": 9087,
+      "costPrice": 9087,
+      "createdAt": "2026-01-03T10:54:51.397Z",
+      "barcode": "7790980008712",
+      "category": "perecedero"
+    },
+    {
+      "id": "p105",
+      "name": "Repelente aerosol 170g",
+      "price": 7496,
+      "costPrice": 7496,
+      "createdAt": "2026-02-06T20:18:14.676Z",
+      "barcode": "7791496895815",
+      "category": "perecedero"
+    }
+  ],
+  "productPrices": [
+    {
+      "id": "pp-1771042478110-27",
+      "productId": "p90",
+      "newPrice": 1000,
+      "createdAt": "2026-02-14T04:14:38.110Z"
+    }
+  ],
+  "users": [
+    {
+      "id": "u-admin",
+      "name": "Administrador",
+      "email": "admin@easycommerce.local",
+      "username": "admin",
+      "password": "81dc9bdb52d04dc20036dbd8313ed055",
+      "createdAt": "2026-02-14T08:00:00.000Z",
+      "updatedAt": "2026-02-14T08:00:00.000Z",
+      "startHour": "08:00",
+      "endHour": "18:00"
+    },
+    {
+      "id": "u-user",
+      "name": "Operador Base",
+      "email": "user@easycommerce.local",
+      "username": "user",
+      "password": "81dc9bdb52d04dc20036dbd8313ed055",
+      "createdAt": "2026-02-14T08:05:00.000Z",
+      "updatedAt": "2026-02-14T08:05:00.000Z",
+      "startHour": "08:00",
+      "endHour": "17:00"
+    },
+    {
+      "id": "u-op1",
+      "name": "Operador Uno",
+      "email": "operador1@easycommerce.local",
+      "username": "operador1",
+      "password": "81dc9bdb52d04dc20036dbd8313ed055",
+      "createdAt": "2026-02-14T08:10:00.000Z",
+      "updatedAt": "2026-02-14T08:10:00.000Z",
+      "startHour": "09:00",
+      "endHour": "17:00"
+    },
+    {
+      "id": "u-op2",
+      "name": "Operador Dos",
+      "email": "operador2@easycommerce.local",
+      "username": "operador2",
+      "password": "81dc9bdb52d04dc20036dbd8313ed055",
+      "createdAt": "2026-02-14T08:15:00.000Z",
+      "updatedAt": "2026-02-14T08:15:00.000Z",
+      "startHour": "10:00",
+      "endHour": "18:00"
+    },
+    {
+      "id": "u-op3",
+      "name": "Operador Tres",
+      "email": "operador3@easycommerce.local",
+      "username": "operador3",
+      "password": "81dc9bdb52d04dc20036dbd8313ed055",
+      "createdAt": "2026-02-14T08:20:00.000Z",
+      "updatedAt": "2026-02-14T08:20:00.000Z",
+      "startHour": "12:00",
+      "endHour": "20:00"
+    }
+  ],
+  "deleteRequests": [],
+  "requests": [
+    {
+      "id": "rq-1771271155267-8217",
+      "requestType": "permissions",
+      "description": "ma;ana me lo tomo libre",
+      "requestedBy": "user",
+      "requestedAt": "2026-02-16T19:45:55.267Z",
+      "status": "pending"
+    },
+    {
+      "id": "rq-1771271144497-6154",
+      "requestType": "merchandise",
+      "description": "se acaban las golosinas, reponer mas, quedan pocos alfajores y gomitas",
+      "requestedBy": "user",
+      "requestedAt": "2026-02-16T19:45:44.497Z",
+      "status": "pending"
+    },
+    {
+      "id": "rq-1771267399526-4937",
+      "requestType": "permissions",
+      "description": "el miercoles no puedo trabajar, me surgio una emergencia",
+      "requestedBy": "admin",
+      "requestedAt": "2026-02-16T18:43:19.526Z",
+      "status": "rejected",
+      "reviewedBy": "admin",
+      "reviewedAt": "2026-02-16T18:56:20.360Z",
+      "reviewComment": "podrias explicar mas"
+    },
+    {
+      "id": "rq-1771267381364-9813",
+      "requestType": "merchandise",
+      "description": "se acaban los refrescos, pedir mas cocacolas, quedan 24 unidades, y aguas solo 10",
+      "requestedBy": "admin",
+      "requestedAt": "2026-02-16T18:43:01.364Z",
+      "status": "pending"
+    },
+    {
+      "id": "rq-1771267357582-5452",
+      "requestType": "merchandise",
+      "description": "se estan acabando los cigarros de tipo belmon y malboro",
+      "requestedBy": "admin",
+      "requestedAt": "2026-02-16T18:42:37.582Z",
+      "status": "approved",
+      "reviewedBy": "admin",
+      "reviewedAt": "2026-02-16T19:06:44.552Z",
+      "supplyOrderId": "so-1771268804540-5440",
+      "supplierMessage": "30 malboro\n20 lucky normal\n30 lucky menta\n10 paquetes filtros\n10 sobres para cigarros\n10 paquetes tabaco"
+    },
+    {
+      "id": "rq-1771259468107-6245",
+      "requestType": "permissions",
+      "description": "el prox viernes no puedo ir a trabajar a las 3pm por cita medica",
+      "requestedBy": "admin",
+      "requestedAt": "2026-02-16T16:31:08.107Z",
+      "status": "approved",
+      "reviewedBy": "admin",
+      "reviewedAt": "2026-02-16T18:56:03.119Z",
+      "reviewComment": "ok"
+    },
+    {
+      "id": "rq-1771258814082-4373",
+      "requestType": "permissions",
+      "description": "maÃ±ana no puedo ir a trabajar a las 3pm por cita medica",
+      "requestedBy": "admin",
+      "requestedAt": "2026-02-16T16:20:14.082Z",
+      "status": "approved",
+      "reviewedBy": "admin",
+      "reviewedAt": "2026-02-16T16:27:15.855Z"
+    },
+    {
+      "id": "rq-1771258791597-8600",
+      "requestType": "merchandise",
+      "description": "necesitamos mas cocas, alfajores, y aguas, unas 40 porque quedan apoenas 20 unidades",
+      "requestedBy": "admin",
+      "requestedAt": "2026-02-16T16:19:51.597Z",
+      "status": "approved",
+      "reviewedBy": "admin",
+      "reviewedAt": "2026-02-16T17:27:45.673Z",
+      "supplyOrderId": "so-1771262865661-522",
+      "supplierMessage": "30 panchos\n20 chocolates\n10 cajas de lapices"
+    }
+  ],
+  "stocks": [
+    {
+      "id": "se-1771641609099-1705",
+      "productId": "p90",
+      "quantity": -3,
+      "description": "Venta orden or-1771641602513-337",
+      "createdAt": "2026-02-21T02:40:09.099Z"
+    },
+    {
+      "id": "se-1771378368710-8558",
+      "productId": "p35",
+      "quantity": -1,
+      "description": "Venta orden or-1771378252509-8881",
+      "createdAt": "2026-02-18T01:32:48.710Z"
+    },
+    {
+      "id": "se-tc-p-tc-rapido-8",
+      "productId": "p-tc-rapido",
+      "quantity": 8,
+      "createdAt": "2026-02-16T07:39:27.032Z"
+    },
+    {
+      "id": "se-tc-p-tc-pancho-5",
+      "productId": "p-tc-pancho",
+      "quantity": 5,
+      "createdAt": "2026-02-16T07:39:27.032Z",
+      "expirationDate": "2026-03-07T07:39:27.032Z"
+    },
+    {
+      "id": "se-tc-p-tc-coca-12",
+      "productId": "p-tc-coca",
+      "quantity": 12,
+      "createdAt": "2026-02-16T07:39:27.032Z"
+    },
+    {
+      "id": "se-1771296764283-8430",
+      "productId": "p-1770933817509-5022",
+      "quantity": -1,
+      "description": "Venta orden or-1771296762765-6848",
+      "createdAt": "2026-02-17T02:52:44.283Z"
+    },
+    {
+      "id": "se-1771296764273-9517",
+      "productId": "p90",
+      "quantity": -1,
+      "description": "Venta orden or-1771296762765-6848",
+      "createdAt": "2026-02-17T02:52:44.273Z"
+    },
+    {
+      "id": "se-1771296733015-2457",
+      "productId": "p74",
+      "quantity": -2,
+      "description": "Venta orden or-1771296731380-3465",
+      "createdAt": "2026-02-17T02:52:13.015Z"
+    },
+    {
+      "id": "se-1771296733007-6317",
+      "productId": "p90",
+      "quantity": -10,
+      "description": "Venta orden or-1771296731380-3465",
+      "createdAt": "2026-02-17T02:52:13.007Z"
+    },
+    {
+      "id": "se-1771296732997-1095",
+      "productId": "p35",
+      "quantity": -1,
+      "description": "Venta orden or-1771296731380-3465",
+      "createdAt": "2026-02-17T02:52:12.997Z"
+    },
+    {
+      "id": "se-1771048668548-2269",
+      "productId": "p90",
+      "expirationDate": "2026-02-19",
+      "quantity": 345,
+      "createdAt": "2026-02-14T05:57:48.548Z"
+    },
+    {
+      "id": "se-1771048653923-1666",
+      "productId": "p35",
+      "quantity": 23,
+      "createdAt": "2026-02-14T05:57:33.923Z"
+    },
+    {
+      "id": "se-1771048650630-7583",
+      "productId": "p5",
+      "quantity": 35,
+      "createdAt": "2026-02-14T05:57:30.630Z"
+    },
+    {
+      "id": "se-1771048642033-8034",
+      "productId": "p26",
+      "quantity": 23,
+      "createdAt": "2026-02-14T05:57:22.033Z"
+    },
+    {
+      "id": "se-1771048637790-8111",
+      "productId": "p74",
+      "quantity": 34,
+      "createdAt": "2026-02-14T05:57:17.790Z"
+    },
+    {
+      "id": "se-1771045165263-1824",
+      "productId": "p18",
+      "quantity": -1,
+      "description": "Venta orden or-1771045164339-4185",
+      "createdAt": "2026-02-14T04:59:25.263Z"
+    },
+    {
+      "id": "se-1771045165253-7040",
+      "productId": "p16",
+      "quantity": -3,
+      "description": "Venta orden or-1771045164339-4185",
+      "createdAt": "2026-02-14T04:59:25.253Z"
+    },
+    {
+      "id": "se-1771045158326-1057",
+      "productId": "p-1770933817509-5022",
+      "quantity": -1,
+      "description": "Venta orden or-1771045157306-1251",
+      "createdAt": "2026-02-14T04:59:18.326Z"
+    },
+    {
+      "id": "se-1771045153579-9145",
+      "productId": "p74",
+      "quantity": -1,
+      "description": "Venta orden or-1771045152411-3099",
+      "createdAt": "2026-02-14T04:59:13.579Z"
+    },
+    {
+      "id": "se-1771045153570-8033",
+      "productId": "p16",
+      "quantity": -1,
+      "description": "Venta orden or-1771045152411-3099",
+      "createdAt": "2026-02-14T04:59:13.570Z"
+    },
+    {
+      "id": "se-1771045153561-3334",
+      "productId": "p35",
+      "quantity": -1,
+      "description": "Venta orden or-1771045152411-3099",
+      "createdAt": "2026-02-14T04:59:13.561Z"
+    },
+    {
+      "id": "se-1771045153551-9263",
+      "productId": "p-1770933817509-5022",
+      "quantity": -2,
+      "description": "Venta orden or-1771045152411-3099",
+      "createdAt": "2026-02-14T04:59:13.551Z"
+    },
+    {
+      "id": "se-1771043456488-197",
+      "productId": "p-1770933817509-5022",
+      "quantity": -3,
+      "description": "Venta orden or-1771043455343-6416",
+      "createdAt": "2026-02-14T04:30:56.488Z"
+    },
+    {
+      "id": "se-1771043446964-628",
+      "productId": "p-1770933817509-5022",
+      "quantity": -1,
+      "description": "Venta orden or-1771043445759-5953",
+      "createdAt": "2026-02-14T04:30:46.964Z"
+    },
+    {
+      "id": "se-1771025558384-5807",
+      "productId": "p18",
+      "quantity": -3,
+      "description": "Venta orden or-1771025557315-7173",
+      "createdAt": "2026-02-13T23:32:38.384Z"
+    },
+    {
+      "id": "se-1771025544260-3821",
+      "productId": "p46",
+      "quantity": -1,
+      "description": "Venta orden or-1771025542919-9006",
+      "createdAt": "2026-02-13T23:32:24.260Z"
+    },
+    {
+      "id": "se-1771025544252-4820",
+      "productId": "p26",
+      "quantity": -1,
+      "description": "Venta orden or-1771025542919-9006",
+      "createdAt": "2026-02-13T23:32:24.252Z"
+    },
+    {
+      "id": "se-1771025544242-6482",
+      "productId": "p5",
+      "quantity": -1,
+      "description": "Venta orden or-1771025542919-9006",
+      "createdAt": "2026-02-13T23:32:24.242Z"
+    },
+    {
+      "id": "se-1771025497648-2213",
+      "productId": "p-1770933817509-5022",
+      "quantity": -2,
+      "description": "Venta orden or-1771025496619-3082",
+      "createdAt": "2026-02-13T23:31:37.648Z"
+    },
+    {
+      "id": "se-1771022231989-2490",
+      "productId": "p-1770933817509-5022",
+      "quantity": -1,
+      "description": "Venta orden or-1771022228706-7233",
+      "createdAt": "2026-02-13T22:37:11.989Z"
+    },
+    {
+      "id": "se-1771021756927-9756",
+      "productId": "p18",
+      "quantity": -3,
+      "description": "Venta orden or-1771021752568-7837",
+      "createdAt": "2026-02-13T22:29:16.927Z"
+    },
+    {
+      "id": "se-1771021732714-4150",
+      "productId": "p18",
+      "quantity": 30,
+      "createdAt": "2026-02-13T22:28:52.714Z"
+    },
+    {
+      "id": "se-1770934040269-2835",
+      "productId": "p-1770933817509-5022",
+      "quantity": 4,
+      "createdAt": "2026-02-12T22:07:20.269Z"
+    },
+    {
+      "id": "se-1770933880093-932",
+      "productId": "p-1770933817509-5022",
+      "quantity": 52,
+      "createdAt": "2026-02-12T22:04:40.093Z"
+    },
+    {
+      "id": "se-1770933850203-7292",
+      "productId": "p-1770933817509-5022",
+      "quantity": 5,
+      "createdAt": "2026-02-12T22:04:10.203Z"
+    },
+    {
+      "id": "se-fix-p75-1770926986149-10",
+      "productId": "p75",
+      "quantity": 9,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p5-1770926986149-9",
+      "productId": "p5",
+      "quantity": 13,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p57-1770926986149-8",
+      "productId": "p57",
+      "quantity": 11,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p37-1770926986149-7",
+      "productId": "p37",
+      "quantity": 8,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p35-1770926986149-6",
+      "productId": "p35",
+      "quantity": 5,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p82-1770926986149-5",
+      "productId": "p82",
+      "quantity": 8,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p26-1770926986149-4",
+      "productId": "p26",
+      "quantity": 8,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p46-1770926986149-3",
+      "productId": "p46",
+      "quantity": 2,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p93-1770926986149-2",
+      "productId": "p93",
+      "quantity": 4,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.149Z"
+    },
+    {
+      "id": "se-fix-p74-1770926986148-1",
+      "productId": "p74",
+      "quantity": 4,
+      "description": "Ajuste automatico para evitar existencia negativa",
+      "createdAt": "2026-02-12T20:09:46.148Z"
+    },
+    {
+      "id": "se-seed-001",
+      "productId": "p31",
+      "manufactureDate": "2026-01-11",
+      "expirationDate": "2026-04-05",
+      "quantity": 8,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-08T21:34:50.948Z"
+    },
+    {
+      "id": "se-seed-002",
+      "productId": "p89",
+      "quantity": 8,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-18T07:15:12.393Z"
+    },
+    {
+      "id": "se-seed-003",
+      "productId": "p74",
+      "manufactureDate": "2026-01-29",
+      "expirationDate": "2026-03-07",
+      "quantity": -3,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-21T00:04:51.461Z"
+    },
+    {
+      "id": "se-seed-004",
+      "productId": "p16",
+      "quantity": 17,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-05T22:49:47.826Z"
+    },
+    {
+      "id": "se-seed-005",
+      "productId": "p93",
+      "manufactureDate": "2025-12-16",
+      "expirationDate": "2026-03-24",
+      "quantity": -3,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-03T18:43:47.293Z"
+    },
+    {
+      "id": "se-seed-006",
+      "productId": "p86",
+      "manufactureDate": "2025-12-30",
+      "expirationDate": "2026-02-25",
+      "quantity": 18,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-10T05:03:33.905Z"
+    },
+    {
+      "id": "se-seed-007",
+      "productId": "p53",
+      "quantity": 4,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-12T06:15:14.009Z"
+    },
+    {
+      "id": "se-seed-008",
+      "productId": "p46",
+      "quantity": -17,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-02-10T06:59:35.764Z"
+    },
+    {
+      "id": "se-seed-009",
+      "productId": "p14",
+      "manufactureDate": "2025-12-14",
+      "expirationDate": "2026-03-26",
+      "quantity": 5,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-24T21:59:13.398Z"
+    },
+    {
+      "id": "se-seed-010",
+      "productId": "p36",
+      "manufactureDate": "2026-01-28",
+      "expirationDate": "2026-02-07",
+      "quantity": 1,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-01T23:58:25.940Z"
+    },
+    {
+      "id": "se-seed-011",
+      "productId": "p68",
+      "quantity": 13,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-01T13:33:39.372Z"
+    },
+    {
+      "id": "se-seed-012",
+      "productId": "p15",
+      "manufactureDate": "2026-01-09",
+      "expirationDate": "2026-03-16",
+      "quantity": 15,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-05T16:43:03.402Z"
+    },
+    {
+      "id": "se-seed-013",
+      "productId": "p26",
+      "quantity": -16,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-16T04:51:50.090Z"
+    },
+    {
+      "id": "se-seed-014",
+      "productId": "p60",
+      "quantity": 1,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-13T05:02:50.545Z"
+    },
+    {
+      "id": "se-seed-015",
+      "productId": "p87",
+      "quantity": -1,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-02-07T21:29:55.396Z"
+    },
+    {
+      "id": "se-seed-016",
+      "productId": "p4",
+      "manufactureDate": "2026-01-31",
+      "expirationDate": "2026-03-29",
+      "quantity": 15,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-07T08:36:50.470Z"
+    },
+    {
+      "id": "se-seed-017",
+      "productId": "p82",
+      "quantity": -7,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-31T18:48:38.721Z"
+    },
+    {
+      "id": "se-seed-018",
+      "productId": "p72",
+      "manufactureDate": "2026-01-07",
+      "expirationDate": "2026-03-12",
+      "quantity": 7,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-31T22:42:20.202Z"
+    },
+    {
+      "id": "se-seed-019",
+      "productId": "p102",
+      "quantity": 7,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-03T07:56:41.014Z"
+    },
+    {
+      "id": "se-seed-020",
+      "productId": "p33",
+      "manufactureDate": "2025-12-21",
+      "expirationDate": "2026-03-19",
+      "quantity": 8,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-27T06:03:23.632Z"
+    },
+    {
+      "id": "se-seed-021",
+      "productId": "p35",
+      "quantity": -4,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-17T11:41:47.880Z"
+    },
+    {
+      "id": "se-seed-022",
+      "productId": "p92",
+      "manufactureDate": "2026-01-05",
+      "expirationDate": "2026-04-27",
+      "quantity": 4,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-04T08:12:16.495Z"
+    },
+    {
+      "id": "se-seed-023",
+      "productId": "p99",
+      "quantity": 3,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-29T23:29:02.038Z"
+    },
+    {
+      "id": "se-seed-024",
+      "productId": "p87",
+      "quantity": 10,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-04T07:55:50.010Z"
+    },
+    {
+      "id": "se-seed-025",
+      "productId": "p86",
+      "manufactureDate": "2025-12-01",
+      "expirationDate": "2026-02-22",
+      "quantity": -13,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-07T08:58:12.148Z"
+    },
+    {
+      "id": "se-seed-026",
+      "productId": "p2",
+      "manufactureDate": "2025-12-21",
+      "expirationDate": "2026-03-04",
+      "quantity": 8,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-13T13:44:30.837Z"
+    },
+    {
+      "id": "se-seed-027",
+      "productId": "p16",
+      "manufactureDate": "2025-12-17",
+      "expirationDate": "2026-03-04",
+      "quantity": 14,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-12T09:05:21.926Z"
+    },
+    {
+      "id": "se-seed-028",
+      "productId": "p59",
+      "manufactureDate": "2026-01-05",
+      "expirationDate": "2026-04-09",
+      "quantity": 9,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-17T11:45:59.513Z"
+    },
+    {
+      "id": "se-seed-029",
+      "productId": "p100",
+      "manufactureDate": "2025-12-30",
+      "expirationDate": "2026-01-14",
+      "quantity": 3,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-03T05:45:28.953Z"
+    },
+    {
+      "id": "se-seed-030",
+      "productId": "p16",
+      "manufactureDate": "2026-01-10",
+      "expirationDate": "2026-03-23",
+      "quantity": 16,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-12T16:44:57.286Z"
+    },
+    {
+      "id": "se-seed-031",
+      "productId": "p78",
+      "manufactureDate": "2026-01-21",
+      "expirationDate": "2026-02-27",
+      "quantity": 1,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-01T02:55:45.816Z"
+    },
+    {
+      "id": "se-seed-032",
+      "productId": "p13",
+      "quantity": 12,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-20T04:07:59.431Z"
+    },
+    {
+      "id": "se-seed-033",
+      "productId": "p46",
+      "manufactureDate": "2025-12-14",
+      "expirationDate": "2026-03-14",
+      "quantity": 16,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-09T14:21:12.935Z"
+    },
+    {
+      "id": "se-seed-034",
+      "productId": "p34",
+      "manufactureDate": "2025-12-10",
+      "expirationDate": "2026-04-08",
+      "quantity": 5,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-11T08:58:19.100Z"
+    },
+    {
+      "id": "se-seed-035",
+      "productId": "p84",
+      "manufactureDate": "2025-12-13",
+      "expirationDate": "2026-04-07",
+      "quantity": 6,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-25T05:52:24.451Z"
+    },
+    {
+      "id": "se-seed-036",
+      "productId": "p37",
+      "quantity": -7,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-02-08T13:55:46.709Z"
+    },
+    {
+      "id": "se-seed-037",
+      "productId": "p105",
+      "manufactureDate": "2026-01-13",
+      "expirationDate": "2026-01-20",
+      "quantity": 17,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-05T02:10:04.819Z"
+    },
+    {
+      "id": "se-seed-038",
+      "productId": "p49",
+      "quantity": 12,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-07T20:16:05.697Z"
+    },
+    {
+      "id": "se-seed-039",
+      "productId": "p57",
+      "quantity": -10,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-03T21:24:59.297Z"
+    },
+    {
+      "id": "se-seed-040",
+      "productId": "p5",
+      "quantity": -12,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-31T03:32:37.906Z"
+    },
+    {
+      "id": "se-seed-041",
+      "productId": "p75",
+      "manufactureDate": "2025-12-19",
+      "expirationDate": "2026-01-01",
+      "quantity": -8,
+      "description": "Ajuste de inventario demo",
+      "createdAt": "2026-01-25T10:28:26.412Z"
+    },
+    {
+      "id": "se-seed-042",
+      "productId": "p24",
+      "quantity": 15,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-30T10:01:16.328Z"
+    },
+    {
+      "id": "se-seed-043",
+      "productId": "p76",
+      "quantity": 12,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-17T04:06:28.141Z"
+    },
+    {
+      "id": "se-seed-044",
+      "productId": "p105",
+      "quantity": 7,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-21T20:46:25.748Z"
+    },
+    {
+      "id": "se-seed-045",
+      "productId": "p86",
+      "manufactureDate": "2025-12-14",
+      "expirationDate": "2026-03-30",
+      "quantity": 9,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-17T17:59:06.860Z"
+    },
+    {
+      "id": "se-seed-046",
+      "productId": "p26",
+      "quantity": 9,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-08T11:54:06.063Z"
+    },
+    {
+      "id": "se-seed-047",
+      "productId": "p94",
+      "quantity": 7,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-01-02T10:03:16.048Z"
+    },
+    {
+      "id": "se-seed-048",
+      "productId": "p42",
+      "manufactureDate": "2025-12-25",
+      "expirationDate": "2026-03-04",
+      "quantity": 12,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-07T17:37:43.450Z"
+    },
+    {
+      "id": "se-seed-049",
+      "productId": "p39",
+      "quantity": 12,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-08T18:30:50.162Z"
+    },
+    {
+      "id": "se-seed-050",
+      "productId": "p27",
+      "quantity": 9,
+      "description": "Ingreso inicial de demo",
+      "createdAt": "2026-02-11T03:20:09.806Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "or-1771641602513-337",
+      "items": [
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 3
+        }
+      ],
+      "createdAt": "2026-02-21T02:40:02.513Z",
+      "status": "pagada",
+      "total": 3240,
+      "operator": "admin",
+      "paymentMethod": "tarjeta credito"
+    },
+    {
+      "id": "or-1771640504215-4589",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        },
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-21T02:21:44.215Z",
+      "status": "cancelada",
+      "total": 133918,
+      "operator": "admin",
+      "cancelledAt": "2026-02-21T02:40:02.513Z"
+    },
+    {
+      "id": "or-1771379684577-6856",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        },
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-18T01:54:44.577Z",
+      "status": "cancelada",
+      "total": 133918,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T02:43:01.813Z"
+    },
+    {
+      "id": "or-1771378252509-8881",
+      "items": [
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-18T01:30:52.509Z",
+      "status": "pagada",
+      "total": 6916,
+      "operator": "admin",
+      "paymentMethod": "tarjeta credito"
+    },
+    {
+      "id": "or-1771377619426-5993",
+      "items": [
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-02-18T01:20:19.426Z",
+      "status": "cancelada",
+      "total": 2000,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T01:54:40.192Z"
+    },
+    {
+      "id": "or-1771377294529-9028",
+      "items": [
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-18T01:14:54.529Z",
+      "status": "cancelada",
+      "total": 6404,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T01:30:52.509Z"
+    },
+    {
+      "id": "or-1771377190667-9437",
+      "items": [
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-18T01:13:10.667Z",
+      "status": "cancelada",
+      "total": 9393,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T01:30:52.509Z"
+    },
+    {
+      "id": "or-1771377072650-35",
+      "items": [
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 1
+        },
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 2
+        },
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-18T01:11:12.650Z",
+      "status": "cancelada",
+      "total": 144311,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T01:30:52.509Z"
+    },
+    {
+      "id": "or-1771376978111-7461",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        },
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 1
+        },
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-18T01:09:38.111Z",
+      "status": "cancelada",
+      "total": 134918,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T01:30:52.509Z"
+    },
+    {
+      "id": "or-1771376740228-1994",
+      "items": [
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 1
+        },
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 1
+        },
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-18T01:05:40.228Z",
+      "status": "cancelada",
+      "total": 16797,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T01:30:52.509Z"
+    },
+    {
+      "id": "or-1771376194706-7505",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        },
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 1
+        },
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-18T00:56:34.706Z",
+      "status": "cancelada",
+      "total": 140322,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T01:13:10.667Z"
+    },
+    {
+      "id": "or-1771366974235-8614",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        },
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 1
+        },
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-17T22:22:54.235Z",
+      "status": "cancelada",
+      "total": 131929,
+      "operator": "admin",
+      "cancelledAt": "2026-02-18T00:54:48.471Z"
+    },
+    {
+      "id": "or-1771296762765-6848",
+      "items": [
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 1
+        },
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-17T02:52:42.765Z",
+      "status": "pagada",
+      "total": 125525,
+      "operator": "admin",
+      "paymentMethod": "mercadopago"
+    },
+    {
+      "id": "or-1771296731380-3465",
+      "items": [
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        },
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 10
+        },
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-02-17T02:52:11.380Z",
+      "status": "pagada",
+      "total": 35190,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771045164339-4185",
+      "items": [
+        {
+          "productId": "p16",
+          "productName": "Pan de panchos x6",
+          "unitPrice": 5915,
+          "quantity": 3
+        },
+        {
+          "productId": "p18",
+          "productName": "Fideos tirabuzon 500g",
+          "unitPrice": 7162,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-14T04:59:24.339Z",
+      "status": "pagada",
+      "total": 24907,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771045157306-1251",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-14T04:59:17.306Z",
+      "status": "pagada",
+      "total": 124525,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771045152411-3099",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 2
+        },
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        },
+        {
+          "productId": "p16",
+          "productName": "Pan de panchos x6",
+          "unitPrice": 5915,
+          "quantity": 1
+        },
+        {
+          "productId": "p74",
+          "productName": "Barrita mani x6",
+          "unitPrice": 9393,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-14T04:59:12.411Z",
+      "status": "pagada",
+      "total": 270762,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771043455343-6416",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 3
+        }
+      ],
+      "createdAt": "2026-02-14T04:30:55.343Z",
+      "status": "pagada",
+      "total": 373575,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771043445759-5953",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-14T04:30:45.759Z",
+      "status": "pagada",
+      "total": 124525,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771025557315-7173",
+      "items": [
+        {
+          "productId": "p18",
+          "productName": "Fideos tirabuzon 500g",
+          "unitPrice": 7162,
+          "quantity": 3
+        }
+      ],
+      "createdAt": "2026-02-13T23:32:37.315Z",
+      "status": "pagada",
+      "total": 21486,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771025542919-9006",
+      "items": [
+        {
+          "productId": "p5",
+          "productName": "Leche entera 1L",
+          "unitPrice": 1800,
+          "quantity": 1
+        },
+        {
+          "productId": "p26",
+          "productName": "Porotos negros 500g",
+          "unitPrice": 8669,
+          "quantity": 1
+        },
+        {
+          "productId": "p46",
+          "productName": "Miel de flores 500g",
+          "unitPrice": 5295,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-13T23:32:22.919Z",
+      "status": "pagada",
+      "total": 15764,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771025496619-3082",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-02-13T23:31:36.619Z",
+      "status": "pagada",
+      "total": 249050,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771022228706-7233",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-13T22:37:08.706Z",
+      "status": "pagada",
+      "total": 124525,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771021752568-7837",
+      "items": [
+        {
+          "productId": "p18",
+          "productName": "Fideos tirabuzon 500g",
+          "unitPrice": 7162,
+          "quantity": 3
+        }
+      ],
+      "createdAt": "2026-02-13T22:29:12.568Z",
+      "status": "pagada",
+      "total": 21486,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or-1771017841584-1141",
+      "items": [
+        {
+          "productId": "p5",
+          "productName": "Leche entera 1L",
+          "unitPrice": 1800,
+          "quantity": 1
+        },
+        {
+          "productId": "p26",
+          "productName": "Porotos negros 500g",
+          "unitPrice": 8669,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-13T21:24:01.584Z",
+      "status": "cancelada",
+      "total": 10469,
+      "operator": "admin",
+      "cancelledAt": "2026-02-17T03:31:24.545Z"
+    }
+  ],
+  "invoices": [
+    {
+      "id": "fc-1771641609110-3536",
+      "orderId": "or-1771641602513-337",
+      "createdAt": "2026-02-21T02:40:09.110Z",
+      "total": 3240,
+      "paymentMethod": "tarjeta credito",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771378368720-8177",
+      "orderId": "or-1771378252509-8881",
+      "createdAt": "2026-02-18T01:32:48.720Z",
+      "total": 6916,
+      "paymentMethod": "tarjeta credito",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771296764292-8026",
+      "orderId": "or-1771296762765-6848",
+      "createdAt": "2026-02-17T02:52:44.292Z",
+      "total": 125525,
+      "paymentMethod": "mercadopago",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771296733023-6022",
+      "orderId": "or-1771296731380-3465",
+      "createdAt": "2026-02-17T02:52:13.023Z",
+      "total": 35190,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771045165271-7007",
+      "orderId": "or-1771045164339-4185",
+      "createdAt": "2026-02-14T04:59:25.271Z",
+      "total": 24907,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771045158336-6734",
+      "orderId": "or-1771045157306-1251",
+      "createdAt": "2026-02-14T04:59:18.336Z",
+      "total": 124525,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771045153587-4197",
+      "orderId": "or-1771045152411-3099",
+      "createdAt": "2026-02-14T04:59:13.587Z",
+      "total": 270762,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771043456498-8543",
+      "orderId": "or-1771043455343-6416",
+      "createdAt": "2026-02-14T04:30:56.498Z",
+      "total": 373575,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771043446975-2135",
+      "orderId": "or-1771043445759-5953",
+      "createdAt": "2026-02-14T04:30:46.975Z",
+      "total": 124525,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771025558394-1853",
+      "orderId": "or-1771025557315-7173",
+      "createdAt": "2026-02-13T23:32:38.394Z",
+      "total": 21486,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771025544268-5871",
+      "orderId": "or-1771025542919-9006",
+      "createdAt": "2026-02-13T23:32:24.268Z",
+      "total": 15764,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771025497658-3077",
+      "orderId": "or-1771025496619-3082",
+      "createdAt": "2026-02-13T23:31:37.658Z",
+      "total": 249050,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771022231999-2496",
+      "orderId": "or-1771022228706-7233",
+      "createdAt": "2026-02-13T22:37:11.999Z",
+      "total": 124525,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc-1771021756936-9850",
+      "orderId": "or-1771021752568-7837",
+      "createdAt": "2026-02-13T22:29:16.936Z",
+      "total": 21486,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    }
+  ],
+  "workdays": [
+    {
+      "id": "wd-1771379680181-1460",
+      "operator": "admin",
+      "startedAt": "2026-02-18T01:54:40.181Z",
+      "endedAt": "2026-02-18T02:45:18.256Z",
+      "orderIds": [],
+      "status": "closed",
+      "closeRequestedAt": "2026-02-18T02:43:22.408Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 0,
+        "declaredClosingCash": 0,
+        "closingDifference": 0,
+        "balanceTotal": 0
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-02-18T02:45:18.256Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
+    },
+    {
+      "id": "wd-1771376164518-8755",
+      "operator": "admin",
+      "startedAt": "2026-02-18T00:56:04.518Z",
+      "endedAt": "2026-02-18T01:33:03.614Z",
+      "orderIds": [
+        "or-1771378252509-8881"
+      ],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771271929690-8443",
+      "operator": "admin",
+      "startedAt": "2026-02-16T19:58:49.690Z",
+      "endedAt": "2026-02-18T00:55:13.154Z",
+      "orderIds": [
+        "or-1771296762765-6848",
+        "or-1771296731380-3465"
+      ],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771271109867-674",
+      "operator": "user",
+      "startedAt": "2026-02-16T19:45:09.867Z",
+      "endedAt": "2026-02-18T02:45:15.757Z",
+      "orderIds": [],
+      "status": "closed",
+      "closeRequestedAt": "2026-02-18T02:44:41.304Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 200000,
+        "expectedClosingCash": 200000,
+        "declaredClosingCash": 200000,
+        "closingDifference": 0,
+        "balanceTotal": 200000
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-02-18T02:45:15.757Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
+    },
+    {
+      "id": "wd-1771078761135-9457",
+      "operator": "admin",
+      "startedAt": "2026-02-14T14:19:21.135Z",
+      "endedAt": "2026-02-16T19:45:06.886Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771049075445-1318",
+      "operator": "admin",
+      "startedAt": "2026-02-14T06:04:35.445Z",
+      "endedAt": "2026-02-14T07:02:38.663Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771048747368-3660",
+      "operator": "operador2",
+      "startedAt": "2026-02-14T05:59:07.369Z",
+      "endedAt": "2026-02-14T06:00:47.131Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771048623715-6642",
+      "operator": "operador2",
+      "startedAt": "2026-02-14T05:57:03.715Z",
+      "endedAt": "2026-02-14T05:58:57.852Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771048020247-8783",
+      "operator": "admin",
+      "startedAt": "2026-02-14T05:47:00.247Z",
+      "endedAt": "2026-02-14T05:57:01.230Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771047369121-3512",
+      "operator": "admin",
+      "startedAt": "2026-02-14T05:36:09.121Z",
+      "endedAt": "2026-02-14T05:46:58.917Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771045614726-6377",
+      "operator": "admin",
+      "startedAt": "2026-02-14T05:06:54.726Z",
+      "endedAt": "2026-02-14T05:36:07.751Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771044771380-4242",
+      "operator": "admin",
+      "startedAt": "2026-02-14T04:52:51.380Z",
+      "endedAt": "2026-02-14T05:05:49.158Z",
+      "orderIds": [
+        "or-1771045164339-4185",
+        "or-1771045157306-1251",
+        "or-1771045152411-3099"
+      ],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771043468705-1884",
+      "operator": "admin",
+      "startedAt": "2026-02-14T04:31:08.705Z",
+      "endedAt": "2026-02-14T04:33:19.536Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771042449318-1808",
+      "operator": "admin",
+      "startedAt": "2026-02-14T04:14:09.318Z",
+      "endedAt": "2026-02-14T04:31:06.922Z",
+      "orderIds": [
+        "or-1771043455343-6416",
+        "or-1771043445759-5953"
+      ],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771042425582-617",
+      "operator": "admin",
+      "startedAt": "2026-02-14T04:13:45.582Z",
+      "endedAt": "2026-02-14T04:13:59.543Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771026295431-1322",
+      "operator": "admin",
+      "startedAt": "2026-02-13T23:44:55.431Z",
+      "endedAt": "2026-02-14T04:09:01.636Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771026291596-3307",
+      "operator": "admin",
+      "startedAt": "2026-02-13T23:44:51.596Z",
+      "endedAt": "2026-02-13T23:44:55.110Z",
+      "orderIds": [],
+      "status": "closed"
+    },
+    {
+      "id": "wd-1771024671518-9944",
+      "operator": "admin",
+      "startedAt": "2026-02-13T23:17:51.518Z",
+      "endedAt": "2026-02-13T23:44:49.505Z",
+      "orderIds": [],
+      "status": "closed"
+    }
+  ],
+  "cashOpeningAssignments": [],
+  "supplyOrders": [
+    {
+      "id": "so-1771272589092-4427",
+      "supplierName": "chucherias s.a",
+      "description": "50 alfajores varios",
+      "expectedTotal": 70000,
+      "createdAt": "2026-02-16T20:09:49.092Z",
+      "createdBy": "admin",
+      "status": "pending"
+    },
+    {
+      "id": "so-1771272572976-1699",
+      "supplierName": "tabaqueria gaona s.a.",
+      "description": "20 cigarros\n30 filtros",
+      "expectedTotal": 60000,
+      "createdAt": "2026-02-16T20:09:32.976Z",
+      "createdBy": "admin",
+      "status": "received",
+      "isExactAmount": false,
+      "actualTotal": 40000,
+      "remainingAmount": 20000,
+      "receivedAt": "2026-02-16T20:11:08.871Z",
+      "receivedBy": "admin",
+      "invoiceImageUrl": "/images/login-bg-17638.jpg",
+      "receiveComment": "llegaron menos alfajores"
+    },
+    {
+      "id": "so-1771268804540-5440",
+      "supplierName": "tabaqueria gaona s.a.",
+      "description": "30 malboro\n20 lucky normal\n30 lucky menta\n10 paquetes filtros\n10 sobres para cigarros\n10 paquetes tabaco",
+      "expectedTotal": 1200000,
+      "createdAt": "2026-02-16T19:06:44.540Z",
+      "createdBy": "admin",
+      "status": "received",
+      "isExactAmount": false,
+      "actualTotal": 1000000,
+      "remainingAmount": 200000,
+      "receivedAt": "2026-02-16T19:47:12.467Z",
+      "receivedBy": "user",
+      "invoiceImageUrl": "/images/login-bg-78009.jpg"
+    },
+    {
+      "id": "so-1771262865661-522",
+      "supplierName": "chucherias s.a",
+      "description": "30 panchos\n20 chocolates\n10 cajas de lapices",
+      "expectedTotal": 352000,
+      "createdAt": "2026-02-16T17:27:45.661Z",
+      "createdBy": "admin",
+      "status": "received",
+      "isExactAmount": false,
+      "actualTotal": 200000,
+      "remainingAmount": 152000,
+      "receivedAt": "2026-02-16T17:29:45.417Z",
+      "receivedBy": "admin",
+      "invoiceImageUrl": "/images/360_f_318606217_hk8jo2mvoi33sqokyrfof929j7jgip0p-4608.jpg"
+    },
+    {
+      "id": "so-1771221643581-5406",
+      "supplierName": "chucherias s.a",
+      "description": "50 uni cocacolas\n20 uni panchos\n10 cigarros50 uni cocacolas\n20 uni panchos\n10 cigarros50 uni cocacolas\n20 uni panchos\n10 cigarros50 uni cocacolas\n20 uni panchos\n10 cigarros",
+      "expectedTotal": 890000,
+      "createdAt": "2026-02-16T06:00:43.581Z",
+      "createdBy": "admin",
+      "status": "received",
+      "isExactAmount": false,
+      "actualTotal": 800000,
+      "remainingAmount": 90000,
+      "receivedAt": "2026-02-16T06:01:50.852Z",
+      "receivedBy": "admin",
+      "invoiceImageUrl": "/images/360_f_318606217_hk8jo2mvoi33sqokyrfof929j7jgip0p-38007.jpg"
+    },
+    {
+      "id": "so-1771221632178-4131",
+      "supplierName": "chucherias s.a",
+      "description": "50 uni cocacolas\n20 uni panchos\n10 cigarros\n50 uni cocacolas\n20 uni panchos\n10 cigarros",
+      "expectedTotal": 400000,
+      "createdAt": "2026-02-16T06:00:32.178Z",
+      "createdBy": "admin",
+      "status": "received",
+      "isExactAmount": true,
+      "actualTotal": 400000,
+      "remainingAmount": 0,
+      "receivedAt": "2026-02-16T06:02:02.430Z",
+      "receivedBy": "admin",
+      "invoiceImageUrl": "/images/login-bg-66024.jpg"
+    },
+    {
+      "id": "so-1771219686241-4417",
+      "supplierName": "chucherias s.a",
+      "description": "50 uni cocacolas\n20 uni panchos\n10 cigarros",
+      "expectedTotal": 35600,
+      "createdAt": "2026-02-16T05:28:06.241Z",
+      "createdBy": "admin",
+      "status": "received",
+      "isExactAmount": false,
+      "actualTotal": 20000,
+      "remainingAmount": 15600,
+      "receivedAt": "2026-02-16T05:31:17.641Z",
+      "receivedBy": "admin",
+      "invoiceImageUrl": "/images/360_f_318606217_hk8jo2mvoi33sqokyrfof929j7jgip0p-10291.jpg"
+    }
+  ],
+  "expenses": [
+    {
+      "id": "ex-1771278753360-2565",
+      "description": "destapado de ba;o con maquina",
+      "amount": 20000,
+      "expenseType": "unexpected",
+      "createdBy": "admin",
+      "createdAt": "2026-02-16T21:52:33.360Z"
+    },
+    {
+      "id": "ex-1771278732604-2590",
+      "description": "mantenimiento aire acond",
+      "amount": 15000,
+      "expenseType": "recurrent",
+      "createdBy": "admin",
+      "createdAt": "2026-02-16T21:52:12.604Z"
+    },
+    {
+      "id": "ex-1771278711789-1551",
+      "description": "fimigacion mensual",
+      "amount": 120002,
+      "expenseType": "unexpected",
+      "createdBy": "admin",
+      "createdAt": "2026-02-16T21:51:51.789Z"
+    }
+  ],
+  "licenses": [
+    {
+      "id": "lc-tc-expiring",
+      "name": "Bromatologia (caso por vencer)",
+      "description": "Caso de prueba: licencia con vencimiento proximo.",
+      "category": "perecedero",
+      "issueDate": "2025-04-23T07:39:27.032Z",
+      "expirationDate": "2026-03-03T07:39:27.032Z",
+      "durationDays": 314,
+      "contactEmail": "bromatologia@test.local",
+      "contactPhone": "2222-2222",
+      "sourceAddress": "Centro sanitario - caso test",
+      "status": "active",
+      "createdAt": "2025-04-23T07:39:27.032Z",
+      "updatedAt": "2026-02-16T07:39:27.032Z",
+      "issuances": []
+    },
+    {
+      "id": "lc-tc-required",
+      "name": "Manipulacion de alimentos (caso pendiente)",
+      "description": "Caso de prueba: permiso requerido para categoria vive res/panchos.",
+      "category": "vivere",
+      "contactEmail": "permiso@test.local",
+      "contactPhone": "1111-1111",
+      "sourceAddress": "Oficina municipal - caso test",
+      "status": "pending-renewal",
+      "createdAt": "2026-02-07T07:39:27.032Z",
+      "updatedAt": "2026-02-16T07:39:27.032Z",
+      "issuances": []
+    }
+  ],
+  "notifications": [
+    {
+      "id": "nt-1771641609099-173",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Desinfectante pisos 900ml",
+      "description": "Se registro un ingreso de -3 unidades para Desinfectante pisos 900ml.",
+      "createdAt": "2026-02-21T02:40:09.099Z",
+      "dueAt": "2026-02-28T02:40:09.099Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se-1771641609099-1705",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771641609065-2337",
+      "type": "sale-created",
+      "title": "Venta registrada: or-1771641602513-337",
+      "description": "Venta por 3240 (admin).",
+      "createdAt": "2026-02-21T02:40:09.065Z",
+      "dueAt": "2026-02-22T02:40:09.065Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or-1771641602513-337",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771382718256-6197",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd-1771379680181-1460.",
+      "createdAt": "2026-02-18T02:45:18.256Z",
+      "dueAt": "2026-02-19T02:45:18.256Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771379680181-1460",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771382715757-4700",
+      "type": "cash-closed",
+      "title": "Caja cerrada: user",
+      "description": "Se cerro la jornada wd-1771271109867-674.",
+      "createdAt": "2026-02-18T02:45:15.757Z",
+      "dueAt": "2026-02-19T02:45:15.757Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771271109867-674",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771382681304-2726",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: user",
+      "description": "La jornada wd-1771271109867-674 fue enviada para auditoria.",
+      "createdAt": "2026-02-18T02:44:41.304Z",
+      "dueAt": "2026-02-25T02:44:41.304Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd-1771271109867-674",
+      "status": "received",
+      "receivedAt": "2026-02-18T02:45:15.757Z"
+    },
+    {
+      "id": "nt-1771382602409-8141",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd-1771379680181-1460 fue enviada para auditoria.",
+      "createdAt": "2026-02-18T02:43:22.408Z",
+      "dueAt": "2026-02-25T02:43:22.408Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd-1771379680181-1460",
+      "status": "received",
+      "receivedAt": "2026-02-18T02:45:18.256Z"
+    },
+    {
+      "id": "nt-1771379680181-6992",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin.",
+      "createdAt": "2026-02-18T01:54:40.181Z",
+      "dueAt": "2026-02-19T01:54:40.181Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771379680181-1460",
+      "status": "received",
+      "receivedAt": "2026-02-18T02:45:18.256Z"
+    },
+    {
+      "id": "nt-1771378383616-4875",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd-1771376164518-8755.",
+      "createdAt": "2026-02-18T01:33:03.614Z",
+      "dueAt": "2026-02-19T01:33:03.614Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771376164518-8755",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771378368710-3023",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Te verde en saquitos",
+      "description": "Se registro un ingreso de -1 unidades para Te verde en saquitos.",
+      "createdAt": "2026-02-18T01:32:48.710Z",
+      "dueAt": "2026-02-25T01:32:48.710Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se-1771378368710-8558",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771378368690-7343",
+      "type": "sale-created",
+      "title": "Venta registrada: or-1771378252509-8881",
+      "description": "Venta por 6916 (admin).",
+      "createdAt": "2026-02-18T01:32:48.690Z",
+      "dueAt": "2026-02-19T01:32:48.690Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or-1771378252509-8881",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771376164518-9999",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin.",
+      "createdAt": "2026-02-18T00:56:04.518Z",
+      "dueAt": "2026-02-19T00:56:04.518Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771376164518-8755",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771376113156-317",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd-1771271929690-8443.",
+      "createdAt": "2026-02-18T00:55:13.154Z",
+      "dueAt": "2026-02-19T00:55:13.154Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771271929690-8443",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-3638",
+      "type": "manual-due",
+      "title": "Caso prueba manual vencimiento",
+      "description": "Notificacion manual con fecha de vencimiento de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-22T07:39:27.032Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "manual",
+      "entityId": "manual-due-tc",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-156",
+      "type": "manual-action",
+      "title": "Caso prueba manual accion",
+      "description": "Notificacion manual con accion de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Resolver accion",
+      "entityType": "manual",
+      "entityId": "manual-action-tc",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-5342",
+      "type": "manual-fixed",
+      "title": "Caso prueba manual fija",
+      "description": "Notificacion fija manual de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "isFixed": true,
+      "requiresAction": false,
+      "entityType": "manual",
+      "entityId": "manual-fixed-tc",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-2013",
+      "type": "operation-request-reviewed",
+      "title": "Caso prueba solicitud revisada",
+      "description": "Solicitud de prueba revisada por administrador.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "operation-request",
+      "entityId": "rq-tc-reviewed",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-7780",
+      "type": "operation-request-permissions",
+      "title": "Caso prueba solicitud operador permisos",
+      "description": "Operador solicita permiso de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Revisar solicitud",
+      "entityType": "operation-request",
+      "entityId": "rq-tc-perm",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-8248",
+      "type": "operation-request-merchandise",
+      "title": "Caso prueba solicitud operador mercancia",
+      "description": "Operador solicita mercancia de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Revisar solicitud",
+      "entityType": "operation-request",
+      "entityId": "rq-tc-merch",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-782",
+      "type": "stock-created",
+      "title": "Caso prueba ingreso stock",
+      "description": "Ingreso de stock de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "bebida",
+      "entityType": "stock",
+      "entityId": "se-tc-stock-created",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-9588",
+      "type": "product-created",
+      "title": "Caso prueba producto creado",
+      "description": "Alta de producto de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "bebida",
+      "entityType": "product",
+      "entityId": "p-tc-rapido",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-2139",
+      "type": "price-changed",
+      "title": "Caso prueba precio modificado: Coca-Cola Caso Test",
+      "description": "Cambio de precio de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "bebida",
+      "entityType": "product",
+      "entityId": "p-tc-coca",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-381",
+      "type": "user-deleted",
+      "title": "Caso prueba usuario eliminado",
+      "description": "Usuario de prueba eliminado.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "user",
+      "entityId": "u-tc-deleted",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-4694",
+      "type": "user-updated",
+      "title": "Caso prueba usuario modificado",
+      "description": "Usuario de prueba modificado.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "user",
+      "entityId": "u-tc-updated",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-3369",
+      "type": "user-created",
+      "title": "Caso prueba usuario creado",
+      "description": "Usuario de prueba creado.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "user",
+      "entityId": "u-tc-created",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-1173",
+      "type": "cash-closed",
+      "title": "Caso prueba caja cerrada",
+      "description": "Cierre de caja de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-18T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-tc-close",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-6620",
+      "type": "cash-opened",
+      "title": "Caso prueba caja abierta",
+      "description": "Apertura de caja de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-18T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-tc-open",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-9588",
+      "type": "supply-received",
+      "title": "Caso prueba mercancia recibida",
+      "description": "Mercancia de prueba recibida correctamente.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "supply-order",
+      "entityId": "so-tc-1",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-7404",
+      "type": "supply-approved",
+      "title": "Caso prueba solicitud aprobada",
+      "description": "Solicitud de mercancia aprobada por administrador.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "operation-request",
+      "entityId": "rq-tc-approved",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-1162",
+      "type": "supply-pending-receive",
+      "title": "Caso prueba pendiente recepcion proveedor",
+      "description": "Pedido de prueba pendiente hasta recibir mercancia.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Registrar recepcion",
+      "entityType": "supply-order",
+      "entityId": "so-tc-1",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-4130",
+      "type": "supply-requested",
+      "title": "Caso prueba solicitud a proveedor",
+      "description": "Se solicito mercancia al proveedor de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "supply-order",
+      "entityId": "so-tc-1",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-8488",
+      "type": "sale-created",
+      "title": "Caso prueba venta",
+      "description": "Se registro venta diaria de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-18T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or-tc-1",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-6035",
+      "type": "expense-created",
+      "title": "Caso prueba gasto",
+      "description": "Se registro gasto operativo de prueba.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-24T07:39:27.033Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "expense",
+      "entityId": "ex-tc-1",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-4809",
+      "type": "product-expiring",
+      "title": "Producto por vencer: Pancho Caso Test",
+      "description": "Caso de prueba: Pancho Caso Test vence en menos de 3 semanas.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-14T07:39:27.032Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se-tc-p-tc-pancho-5",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-498",
+      "type": "product-low-stock",
+      "title": "Stock bajo: Producto Rotacion Alta",
+      "description": "Stock actual 8. Minimo configurado 10. Reponer producto.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Reponer stock",
+      "category": "bebida",
+      "entityType": "product",
+      "entityId": "p-tc-rapido",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-5162",
+      "type": "product-low-stock",
+      "title": "Stock bajo: Coca-Cola Caso Test",
+      "description": "Stock actual 12. Minimo configurado 30. Reponer producto.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Reponer stock",
+      "category": "bebida",
+      "entityType": "product",
+      "entityId": "p-tc-coca",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-1300",
+      "type": "license-expiring",
+      "title": "Permiso por vencer: Bromatologia (caso por vencer)",
+      "description": "El permiso/licencia Bromatologia (caso por vencer) vence el 2026-03-03T07:39:27.032Z.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "dueAt": "2026-02-10T07:39:27.032Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "category": "perecedero",
+      "entityType": "license",
+      "entityId": "lc-tc-expiring",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771313967033-7942",
+      "type": "license-required",
+      "title": "Gestionar permiso: Manipulacion de alimentos (caso pendiente)",
+      "description": "El permiso/licencia Manipulacion de alimentos (caso pendiente) esta pendiente por renovar.",
+      "createdAt": "2026-02-17T07:39:27.033Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Renovar permiso",
+      "category": "vivere",
+      "entityType": "license",
+      "entityId": "lc-tc-required",
+      "status": "active"
+    }
+  ],
+  "notificationSettings": [
+    {
+      "type": "license-required",
+      "leadDays": 21,
+      "durationDays": 0
+    },
+    {
+      "type": "license-expiring",
+      "leadDays": 21,
+      "durationDays": 7
+    },
+    {
+      "type": "product-expiring",
+      "leadDays": 21,
+      "durationDays": 7
+    },
+    {
+      "type": "product-low-stock",
+      "leadDays": 0,
+      "durationDays": 0
+    },
+    {
+      "type": "expense-created",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "sale-created",
+      "leadDays": 0,
+      "durationDays": 1
+    },
+    {
+      "type": "supply-requested",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "supply-approved",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "supply-received",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "supply-pending-receive",
+      "leadDays": 0,
+      "durationDays": 0
+    },
+    {
+      "type": "cash-opened",
+      "leadDays": 0,
+      "durationDays": 1
+    },
+    {
+      "type": "cash-closed",
+      "leadDays": 0,
+      "durationDays": 1
+    },
+    {
+      "type": "cash",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "user-created",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "user-updated",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "user-deleted",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "price-changed",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "product-created",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "stock-created",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "operation-request-merchandise",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "operation-request-permissions",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "operation-request-reviewed",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "manual-fixed",
+      "leadDays": 0,
+      "durationDays": 0
+    },
+    {
+      "type": "manual-action",
+      "leadDays": 0,
+      "durationDays": 7
+    },
+    {
+      "type": "manual-due",
+      "leadDays": 0,
+      "durationDays": 7
+    }
+  ],
+  "stockThresholdSettings": {
+    "categoryThresholds": {
+      "bebida": 10,
+      "vivere": 10,
+      "helado": 10,
+      "chocolate": 10,
+      "tabaqueria": 10,
+      "golosina": 10,
+      "perecedero": 10
+    },
+    "productThresholds": [
+      {
+        "productId": "p-tc-coca",
+        "minUnits": 30
+      }
+    ]
+  },
+  "priceMarginSettings": {
+    "categoryMargins": {
+      "bebida": 30,
+      "vivere": 40,
+      "helado": 30,
+      "chocolate": 30,
+      "tabaqueria": 30,
+      "golosina": 30,
+      "perecedero": 30
+    },
+    "productMargins": [],
+    "categoryMarginHistory": [
+      {
+        "id": "cmh-1771361802530-9483",
+        "category": "vivere",
+        "previousMarginPercent": 37,
+        "marginPercent": 40,
+        "createdAt": "2026-02-17T20:56:42.530Z"
+      }
+    ],
+    "productMarginHistory": [
+      {
+        "id": "pmh-1771361809254-2127",
+        "productId": "p-1770933817509-5022",
+        "previousMarginPercent": 36,
+        "marginPercent": null,
+        "createdAt": "2026-02-17T20:56:49.254Z"
+      }
+    ]
+  },
+  "paymentMethodSettings": {
+    "methods": [
+      {
+        "method": "efectivo",
+        "discountPercent": 0,
+        "surchargePercent": 0
+      },
+      {
+        "method": "tarjeta debito",
+        "discountPercent": 0,
+        "surchargePercent": 0
+      },
+      {
+        "method": "tarjeta credito",
+        "discountPercent": 0,
+        "surchargePercent": 8
+      },
+      {
+        "method": "mercadopago",
+        "discountPercent": 0,
+        "surchargePercent": 0
+      }
+    ]
+  },
+  "taxSettings": {
+    "ivaPercent": 21,
+    "mode": "show_only"
+  }
+}

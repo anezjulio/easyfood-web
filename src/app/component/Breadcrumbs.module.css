@@ -1,0 +1,72 @@
+.nav {
+  margin-top: 10px;
+}
+
+.navInline {
+  margin-top: 0;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+}
+
+.listTitle {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.listTitle .item,
+.listTitle .link,
+.listTitle .current {
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.item + .item::before {
+  content: "/";
+  color: #94a3b8;
+  margin: 0 8px;
+}
+
+.link {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: #334155;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.linkTitle {
+  color: #475569;
+  font-weight: 500;
+}
+
+.linkTitle:hover {
+  color: #1e293b;
+}
+
+.current {
+  color: #0f172a;
+  font-weight: 900;
+}

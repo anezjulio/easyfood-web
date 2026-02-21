@@ -1,0 +1,50 @@
+import type { SupplyOrder, SupplyOrderDraft, SupplyOrderReceiveDraft } from "../model/supply.types";
+
+async function readJsonOrThrow<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+  return (await response.json()) as T;
+}
+
+export async function fetchSupplyOrdersApi(): Promise<SupplyOrder[]> {
+  const response = await fetch("/supply-orders");
+  return await readJsonOrThrow<SupplyOrder[]>(response);
+}
+
+export async function createSupplyOrderApi(draft: SupplyOrderDraft): Promise<SupplyOrder> {
+  const response = await fetch("/supply-orders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  return await readJsonOrThrow<SupplyOrder>(response);
+}
+
+export async function updateSupplyOrderApi(
+  id: string,
+  draft: { supplierName: string; description: string; expectedTotal: number },
+): Promise<SupplyOrder> {
+  const response = await fetch(`/supply-orders/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  return await readJsonOrThrow<SupplyOrder>(response);
+}
+
+export async function cancelSupplyOrderApi(id: string): Promise<{ ok: boolean; id: string }> {
+  const response = await fetch(`/supply-orders/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+  return await readJsonOrThrow<{ ok: boolean; id: string }>(response);
+}
+
+export async function receiveSupplyOrderApi(id: string, draft: SupplyOrderReceiveDraft): Promise<SupplyOrder> {
+  const response = await fetch(`/supply-orders/${encodeURIComponent(id)}/receive`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  return await readJsonOrThrow<SupplyOrder>(response);
+}

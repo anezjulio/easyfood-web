@@ -1,0 +1,393 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 16px;
+  color: #0f172a;
+}
+
+.content {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.layout {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.12fr);
+  gap: 10px;
+  align-items: stretch;
+  height: calc(100vh - 220px);
+  max-height: calc(100vh - 220px);
+  overflow: hidden;
+}
+
+.formCard {
+  min-width: 0;
+  max-width: none;
+  background: white;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.modeSwitch {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.modeBtn {
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.modeBtnActive {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.form {
+  display: grid;
+  gap: 8px;
+}
+
+.formCompact {
+  gap: 6px;
+}
+
+.section {
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+  display: grid;
+  gap: 8px;
+}
+
+.sectionSplit {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.imagePanel {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+}
+
+.fieldsColumn {
+  display: grid;
+  gap: 8px;
+}
+
+.fieldStack {
+  display: grid;
+  gap: 8px;
+}
+
+.fieldMatrix {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 10px;
+}
+
+.fieldSpanTwo {
+  grid-column: 1 / -1;
+}
+
+.productImage {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.imageFallback {
+  width: 140px;
+  height: 140px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed #94a3b8;
+  background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%);
+  color: #0f172a;
+  font-size: 48px;
+  font-weight: 900;
+}
+
+.productSummary {
+  display: grid;
+  gap: 6px;
+}
+
+.productSummary p {
+  margin: 0;
+  color: #334155;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: minmax(110px, 150px) minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.field > span {
+  text-align: right;
+}
+
+.fieldCompact {
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.fieldCompact > span {
+  text-align: left;
+  font-size: 12px;
+  color: #334155;
+}
+
+.input {
+  height: 40px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 14px;
+  background: white;
+}
+
+.inputWithAction {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inputStack {
+  display: grid;
+  gap: 6px;
+}
+
+.inputWithAction .input {
+  flex: 1;
+}
+
+.inlineBtn {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.toggleLabel {
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.inlineBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.selectInput {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230f172a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px 8px;
+}
+
+.textarea {
+  min-height: 58px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 14px;
+  background: white;
+  resize: none;
+}
+
+.valueBox {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  color: #334155;
+  font-weight: 800;
+}
+
+.errorBox {
+  padding: 10px 14px;
+  border-radius: 0;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 800;
+}
+
+.successBox {
+  padding: 10px 14px;
+  border-radius: 0;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 800;
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 0;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  border: 1px solid #0f172a;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #0f172a;
+  color: white;
+}
+
+.secondaryBtn {
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: white;
+  color: #0f172a;
+}
+
+.uploadBtn {
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid #0f172a;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.uploadBtn[aria-disabled="true"] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.listCard {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .sectionSplit {
+    grid-template-columns: 1fr;
+  }
+
+  .fieldMatrix {
+    grid-template-columns: 1fr;
+  }
+
+  .field {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .field > span {
+    text-align: left;
+  }
+
+  .inputWithAction {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .formCard,
+  .listCard {
+    min-height: auto;
+    overflow: visible;
+  }
+}

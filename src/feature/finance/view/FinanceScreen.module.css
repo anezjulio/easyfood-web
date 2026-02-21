@@ -1,0 +1,356 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 16px;
+  color: #0f172a;
+}
+
+.content {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.guardBox {
+  margin-top: 14px;
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #991b1b;
+  font-weight: 800;
+  padding: 12px;
+}
+
+.tabs {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabBtn {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tabBtnActive {
+  background: #0f172a;
+  color: #ffffff;
+  border-color: #0f172a;
+}
+
+.success {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: 0;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 800;
+}
+
+.error {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border-radius: 0;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 800;
+}
+
+.meta {
+  margin: 12px 0 0;
+  color: #475569;
+  font-size: 13px;
+}
+
+.gridTwo {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  height: calc(100vh - 252px);
+  max-height: calc(100vh - 252px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.subPanel {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 12px;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 12px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.selectorLayout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.05fr);
+  gap: 12px;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.selectorList {
+  display: grid;
+  gap: 8px;
+  max-height: none;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.selectorRow {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  background: #ffffff;
+  text-align: left;
+  cursor: pointer;
+  display: grid;
+  gap: 3px;
+}
+
+.selectorRowActive {
+  border-color: #0f172a;
+  box-shadow: inset 0 0 0 1px #0f172a;
+  background: #f8fafc;
+}
+
+.selectorMain {
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.selectorMeta {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.2;
+}
+
+.selectorValue {
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.selectorDetail {
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  display: grid;
+  gap: 10px;
+  min-height: 0;
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.detailMeta {
+  margin: 0;
+  color: #334155;
+  font-size: 13px;
+}
+
+.form {
+  display: grid;
+  gap: 10px;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: minmax(120px, 160px) minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.field > span {
+  text-align: right;
+}
+
+.fieldInline {
+  display: grid;
+  gap: 4px;
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.input,
+.select {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 15px;
+  background: white;
+  height: 40px;
+  padding: 0 10px;
+}
+
+.historyTitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.historyList {
+  display: grid;
+  gap: 8px;
+  max-height: 260px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.historyRow {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 8px 10px;
+  display: grid;
+  gap: 2px;
+}
+
+.historyValue {
+  margin: 0;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.historyDate {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.paymentList {
+  display: grid;
+  gap: 8px;
+}
+
+.paymentRow {
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.paymentName {
+  font-size: 14px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.formActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 0;
+  font-weight: 900;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  border: 1px solid #0f172a;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #0f172a;
+  color: white;
+}
+
+.secondaryBtn {
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: white;
+  color: #0f172a;
+}
+
+.secondaryBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.empty {
+  margin: 0;
+  color: #64748b;
+}
+
+@media (max-width: 980px) {
+  .gridTwo {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .selectorLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .paymentRow {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .field {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .field > span {
+    text-align: left;
+  }
+
+  .subPanel {
+    min-height: auto;
+    overflow: visible;
+  }
+}

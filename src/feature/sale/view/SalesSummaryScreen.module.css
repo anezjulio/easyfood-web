@@ -1,0 +1,149 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 16px;
+  color: #0f172a;
+}
+
+.content {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 8px;
+  display: grid;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.summaryCard {
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 14px;
+  display: grid;
+  gap: 14px;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.metaGrid p {
+  margin: 0;
+  color: #334155;
+}
+
+.tableWrap {
+  border: 1px solid #e2e8f0;
+  overflow-x: auto;
+}
+
+.tableHead,
+.tableRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) 90px 140px 160px;
+  gap: 8px;
+  align-items: center;
+  padding: 10px;
+  min-width: 620px;
+}
+
+.tableHead {
+  background: #f1f5f9;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.tableRow {
+  border-top: 1px solid #e2e8f0;
+  color: #334155;
+  font-weight: 700;
+}
+
+.tableHead > div,
+.tableRow > div {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cellRight {
+  text-align: right;
+}
+
+.totals {
+  display: grid;
+  justify-content: end;
+  gap: 6px;
+}
+
+.totals p {
+  margin: 0;
+  color: #0f172a;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  height: 44px;
+  border-radius: 0;
+  font-weight: 900;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0 14px;
+}
+
+.primaryBtn {
+  border: 1px solid #0f172a;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #0f172a;
+  color: white;
+}
+
+.secondaryBtn {
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: white;
+  color: #0f172a;
+}
+
+@media (max-width: 860px) {
+  .metaGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .tableHead,
+  .tableRow {
+    grid-template-columns: minmax(0, 1fr) 72px 120px 132px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 620px) {
+  .metaGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
