@@ -62,6 +62,34 @@
   color: #0f172a;
 }
 
+.scanInlineRow {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.5fr) minmax(220px, 1fr);
+  gap: 10px;
+  align-items: end;
+}
+
+.scanField {
+  display: grid;
+  gap: 6px;
+}
+
+.scanField > span {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.scanHint {
+  margin: 0;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  align-self: end;
+  padding-bottom: 12px;
+}
+
 .selectedBox {
   border: 1px solid #e2e8f0;
   background: #f8fafc;
@@ -509,6 +537,19 @@
     width: 30px;
   }
 
+  .addProductBtn {
+    width: 100%;
+  }
+
+  .scanInlineRow {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .scanHint {
+    padding-bottom: 0;
+  }
+
   .quantityInput,
   .addProductBtn {
     width: 100%;
@@ -530,6 +571,14 @@
     align-items: stretch;
   }
 
+  .quantityRow {
+    grid-template-columns: 1fr;
+  }
+
+  .quantityRow > span {
+    text-align: left;
+  }
+
   .methodGrid {
     grid-template-columns: 1fr;
   }
@@ -549,13 +598,6 @@
     margin-top: 0 !important;
   }
 
-  .quantityRow {
-    grid-template-columns: 1fr;
-  }
-
-  .quantityRow > span {
-    text-align: left;
-  }
 }
 
 

@@ -1,6 +1,17 @@
 {
   "products": [
     {
+      "id": "p-1771656748439-6090",
+      "name": "Glade 360 cm3",
+      "price": 3331,
+      "costPrice": 2562,
+      "createdAt": "2026-02-21T06:52:28.439Z",
+      "imageUrl": "/images/untitled-70106.png",
+      "barcode": "7790520998200",
+      "category": "perecedero",
+      "supplyOrderId": "so-1771272572976-1699"
+    },
+    {
       "id": "p-tc-rapido",
       "name": "Producto Rotacion Alta",
       "price": 2500,
@@ -975,6 +986,14 @@
   ],
   "productPrices": [
     {
+      "id": "pp-1771656748439-4342",
+      "productId": "p-1771656748439-6090",
+      "newPrice": 3331,
+      "costPrice": 2562,
+      "marginPercent": 30,
+      "createdAt": "2026-02-21T06:52:28.439Z"
+    },
+    {
       "id": "pp-1771042478110-27",
       "productId": "p90",
       "newPrice": 1000,
@@ -1122,6 +1141,30 @@
     }
   ],
   "stocks": [
+    {
+      "id": "se-1771658272959-5364",
+      "productId": "p90",
+      "quantity": -1,
+      "description": "Venta orden or-1771658270164-3751",
+      "createdAt": "2026-02-21T07:17:52.959Z"
+    },
+    {
+      "id": "se-1771658272946-1582",
+      "productId": "p35",
+      "quantity": -1,
+      "description": "Venta orden or-1771658270164-3751",
+      "createdAt": "2026-02-21T07:17:52.946Z"
+    },
+    {
+      "id": "se-1771656748491-8020",
+      "productId": "p-1771656748439-6090",
+      "expirationDate": "2026-06-27",
+      "quantity": 151,
+      "supplyOrderId": "so-1771272572976-1699",
+      "costPrice": 2562,
+      "salePrice": 3331,
+      "createdAt": "2026-02-21T06:52:28.491Z"
+    },
     {
       "id": "se-1771641609099-1705",
       "productId": "p90",
@@ -1830,6 +1873,28 @@
   ],
   "orders": [
     {
+      "id": "or-1771658270164-3751",
+      "items": [
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        },
+        {
+          "productId": "p90",
+          "productName": "Desinfectante pisos 900ml",
+          "unitPrice": 1000,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-21T07:17:50.164Z",
+      "status": "pagada",
+      "total": 7996,
+      "operator": "admin",
+      "paymentMethod": "tarjeta credito"
+    },
+    {
       "id": "or-1771641602513-337",
       "items": [
         {
@@ -2364,6 +2429,14 @@
   ],
   "invoices": [
     {
+      "id": "fc-1771658272969-6020",
+      "orderId": "or-1771658270164-3751",
+      "createdAt": "2026-02-21T07:17:52.969Z",
+      "total": 7996,
+      "paymentMethod": "tarjeta credito",
+      "operator": "admin"
+    },
+    {
       "id": "fc-1771641609110-3536",
       "orderId": "or-1771641602513-337",
       "createdAt": "2026-02-21T02:40:09.110Z",
@@ -2477,6 +2550,32 @@
     }
   ],
   "workdays": [
+    {
+      "id": "wd-1771658311444-5242",
+      "operator": "admin",
+      "startedAt": "2026-02-21T07:18:31.444Z",
+      "orderIds": [],
+      "status": "pending-close",
+      "openingDeclaredAmount": 2000,
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-02-21T07:18:57.769Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 2000,
+        "declaredClosingCash": 3000,
+        "closingDifference": 1000,
+        "balanceTotal": 2000
+      }
+    },
     {
       "id": "wd-1771379680181-1460",
       "operator": "admin",
@@ -2851,6 +2950,132 @@
     }
   ],
   "notifications": [
+    {
+      "id": "nt-1771658337769-3180",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd-1771658311444-5242 fue enviada para auditoria.",
+      "createdAt": "2026-02-21T07:18:57.769Z",
+      "dueAt": "2026-02-28T07:18:57.769Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd-1771658311444-5242",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771658311444-6493",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 2000.",
+      "createdAt": "2026-02-21T07:18:31.444Z",
+      "dueAt": "2026-02-22T07:18:31.444Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771658311444-5242",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771658272959-5772",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Desinfectante pisos 900ml",
+      "description": "Se registro un ingreso de -1 unidades para Desinfectante pisos 900ml.",
+      "createdAt": "2026-02-21T07:17:52.959Z",
+      "dueAt": "2026-02-28T07:17:52.959Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se-1771658272959-5364",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771658272946-8438",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Te verde en saquitos",
+      "description": "Se registro un ingreso de -1 unidades para Te verde en saquitos.",
+      "createdAt": "2026-02-21T07:17:52.946Z",
+      "dueAt": "2026-02-28T07:17:52.946Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se-1771658272946-1582",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771658272917-7910",
+      "type": "sale-created",
+      "title": "Venta registrada: or-1771658270164-3751",
+      "description": "Venta por 7996 (admin).",
+      "createdAt": "2026-02-21T07:17:52.917Z",
+      "dueAt": "2026-02-22T07:17:52.917Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or-1771658270164-3751",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771656748491-56",
+      "type": "product-expiring",
+      "title": "Producto por vencer: glade 360 cm3",
+      "description": "Lote con vencimiento 2026-06-27 para glade 360 cm3.",
+      "createdAt": "2026-02-21T06:52:28.491Z",
+      "dueAt": "2026-06-06T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se-1771656748491-8020",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771656748491-4401",
+      "type": "stock-created",
+      "title": "Ingreso de stock: glade 360 cm3",
+      "description": "Se registro un ingreso de 151 unidades para glade 360 cm3.",
+      "createdAt": "2026-02-21T06:52:28.491Z",
+      "dueAt": "2026-02-28T06:52:28.491Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se-1771656748491-8020",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771656748440-2644",
+      "type": "product-low-stock",
+      "title": "Stock bajo: glade 360 cm3",
+      "description": "Stock actual 0. Minimo configurado 10. Reponer producto.",
+      "createdAt": "2026-02-21T06:52:28.440Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Reponer stock",
+      "category": "perecedero",
+      "entityType": "product",
+      "entityId": "p-1771656748439-6090",
+      "status": "received",
+      "receivedAt": "2026-02-21T06:52:28.491Z"
+    },
+    {
+      "id": "nt-1771656748440-6209",
+      "type": "product-created",
+      "title": "Nuevo producto: glade 360 cm3",
+      "description": "Se registro el producto glade 360 cm3.",
+      "createdAt": "2026-02-21T06:52:28.439Z",
+      "dueAt": "2026-02-28T06:52:28.439Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "perecedero",
+      "entityType": "product",
+      "entityId": "p-1771656748439-6090",
+      "status": "active"
+    },
     {
       "id": "nt-1771641609099-173",
       "type": "stock-created",
@@ -3505,7 +3730,12 @@
       "golosina": 30,
       "perecedero": 30
     },
-    "productMargins": [],
+    "productMargins": [
+      {
+        "productId": "p-1771656748439-6090",
+        "marginPercent": 30
+      }
+    ],
     "categoryMarginHistory": [
       {
         "id": "cmh-1771361802530-9483",
@@ -3516,6 +3746,13 @@
       }
     ],
     "productMarginHistory": [
+      {
+        "id": "pmh-1771656748481-1557",
+        "productId": "p-1771656748439-6090",
+        "previousMarginPercent": null,
+        "marginPercent": 30,
+        "createdAt": "2026-02-21T06:52:28.481Z"
+      },
       {
         "id": "pmh-1771361809254-2127",
         "productId": "p-1770933817509-5022",

@@ -50,6 +50,10 @@ function normalize(s: string) {
     .replace(/\p{Diacritic}/gu, "");
 }
 
+function keepOnlyDigits(value: string) {
+  return (value || "").replace(/\D/g, "");
+}
+
 function matchesPriceFilter(price: number, filterDigits: string): boolean {
   if (!filterDigits) return true;
   const priceDigits = String(Math.trunc(Math.abs(price)));
@@ -79,6 +83,7 @@ export default function SalesScreen() {
   const auth = useAuth();
   const cartCardRef = useRef<HTMLElement | null>(null);
   const listCardRef = useRef<HTMLElement | null>(null);
+  const barcodeScanInputRef = useRef<HTMLInputElement | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
@@ -90,6 +95,7 @@ export default function SalesScreen() {
 
   const [nameFilter, setNameFilter] = useState("");
   const [barcodeFilter, setBarcodeFilter] = useState("");
+  const [barcodeScanInput, setBarcodeScanInput] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
   const [createdAtFilter, setCreatedAtFilter] = useState("");
@@ -260,7 +266,17 @@ export default function SalesScreen() {
     return () => {
       window.removeEventListener("resize", syncModalPlacement);
     };
-  }, [isModalOpen, cart.length, pendingOrder?.id, selectedProductId, quantityToAdd]);
+  }, [isModalOpen, cart.length, pendingOrder?.id, selectedProductId]);
+
+  useEffect(() => {
+    if (isModalOpen) return;
+    const timerId = window.setTimeout(() => {
+      barcodeScanInputRef.current?.focus();
+    }, 0);
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [isModalOpen]);
 
   const filteredProducts = useMemo(() => {
     const q = normalize(nameFilter);
@@ -365,7 +381,7 @@ export default function SalesScreen() {
     if (key === "createdAt") setCreatedAtFilter(value);
   }
 
-  function addSelectedProductToCart() {
+  function addProductToCart(product: Product, rawQuantity: number) {
     setError("");
     setMessage("");
 
@@ -374,47 +390,87 @@ export default function SalesScreen() {
       return;
     }
 
-    if (!selectedProduct) {
-      setError("Selecciona un producto.");
-      return;
-    }
-
-    const nextQuantity = Math.trunc(Number(quantityToAdd));
+    const nextQuantity = Math.trunc(Number(rawQuantity));
     if (!Number.isFinite(nextQuantity) || nextQuantity < 1) {
       setError("La cantidad debe ser un numero mayor o igual a 1.");
       return;
     }
 
-    if (nextQuantity > selectedProductStock) {
-      setError(`No puedes agregar mas de ${selectedProductStock} unidades.`);
+    const productStock = Math.max(0, Math.trunc(Number(product.existencia || 0)));
+    if (nextQuantity > productStock) {
+      setError(`No puedes agregar mas de ${productStock} unidades.`);
       return;
     }
 
+    setSelectedProductId(product.id);
     setCart((current) => {
-      const existing = current.find((item) => item.productId === selectedProduct.id);
+      const existing = current.find((item) => item.productId === product.id);
       if (!existing) {
         return [
           ...current,
           {
-            productId: selectedProduct.id,
-            productName: selectedProduct.name,
-            unitPrice: selectedProduct.price,
+            productId: product.id,
+            productName: product.name,
+            unitPrice: product.price,
             quantity: nextQuantity,
           },
         ];
       }
 
       const combinedQuantity = existing.quantity + nextQuantity;
-      if (combinedQuantity > selectedProductStock) {
-        setError(`No puedes superar la existencia (${selectedProductStock}) para ${selectedProduct.name}.`);
+      if (combinedQuantity > productStock) {
+        setError(`No puedes superar la existencia (${productStock}) para ${product.name}.`);
         return current;
       }
 
       return current.map((item) => {
-        if (item.productId !== selectedProduct.id) return item;
+        if (item.productId !== product.id) return item;
         return { ...item, quantity: combinedQuantity };
       });
     });
+  }
+
+  function addSelectedProductToCart() {
+    if (!selectedProduct) {
+      setError("Selecciona un producto.");
+      return;
+    }
+    addProductToCart(selectedProduct, Number(quantityToAdd));
+  }
+
+  function handleBarcodeScanChange(nextValue: string) {
+    const digits = keepOnlyDigits(nextValue);
+    setBarcodeScanInput(digits);
+    setBarcodeFilter(digits);
+  }
+
+  function handleBarcodeScanSubmit() {
+    const scannedCode = keepOnlyDigits(barcodeScanInput);
+    if (!scannedCode) return;
+
+    if (hasPendingPayment) {
+      setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
+      return;
+    }
+
+    setBarcodeFilter(scannedCode);
+
+    const matches = products.filter((item) => {
+      const raw = (item.barcode || "").trim();
+      if (!raw) return false;
+      return raw === scannedCode || keepOnlyDigits(raw) === scannedCode;
+    });
+    const matchedProduct =
+      matches.find((item) => Math.max(0, Math.trunc(Number(item.existencia || 0))) > 0) || matches[0] || null;
+
+    if (!matchedProduct) {
+      setError(`No se encontro un producto con el codigo ${scannedCode}.`);
+      return;
+    }
+
+    addProductToCart(matchedProduct, 1);
+    setBarcodeScanInput("");
+    barcodeScanInputRef.current?.focus();
   }
 
   function removeFromCart(productId: string) {
@@ -616,7 +672,7 @@ export default function SalesScreen() {
                         min={1}
                         max={selectedProductStock}
                         value={quantityToAdd}
-                        onChange={(e) => setQuantityToAdd(e.target.value)}
+                        onChange={(event) => setQuantityToAdd(event.target.value)}
                         className={`${styles.input} ${styles.quantityInput}`}
                         disabled={!selectedProduct || selectedProductStock < 1 || hasPendingPayment}
                       />
@@ -633,6 +689,32 @@ export default function SalesScreen() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className={styles.scanInlineRow}>
+              <p className={styles.scanHint}>Escanea el codigo y presiona Enter para agregar 1 unidad al carrito.</p>
+
+              <label className={styles.scanField}>
+                <span>Codigo de barras</span>
+                <input
+                  ref={barcodeScanInputRef}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="\d*"
+                  value={barcodeScanInput}
+                  onChange={(event) => handleBarcodeScanChange(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Enter") return;
+                    event.preventDefault();
+                    handleBarcodeScanSubmit();
+                  }}
+                  placeholder="Escanea y presiona Enter"
+                  className={styles.input}
+                  disabled={hasPendingPayment}
+                  autoComplete="off"
+                  aria-label="Escanear codigo de barras"
+                />
+              </label>
             </div>
 
             <div className={styles.cartList}>
