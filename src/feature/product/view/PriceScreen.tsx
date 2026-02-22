@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
+import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
+import { formatIntegerTextMask, parsePositiveIntFromTextMask } from "../../../shared/format/numeric";
+import { matchesPriceFilter } from "../../../shared/product/product-filter";
+import { normalizeForSearch } from "../../../shared/search/search";
 import ProductTable from "../component/ProductTable";
 import {
   PRODUCT_CATEGORIES,
@@ -20,45 +24,9 @@ import {
   updateCategoryPriceMarginApi,
   upsertProductPriceMarginApi,
 } from "../service/product.api";
-import { formatDateAR, formatMoneyARS } from "../viewmodel/useProductListViewModel";
 import styles from "./PriceScreen.module.css";
 
 type PriceTab = "update" | "margins";
-
-function normalize(s: string) {
-  return (s || "")
-    .toLowerCase()
-    .trim()
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "");
-}
-
-function matchesPriceFilter(price: number, filterDigits: string): boolean {
-  if (!filterDigits) return true;
-  const priceDigits = String(Math.trunc(Math.abs(price)));
-  const trailingZeros = (filterDigits.match(/0+$/)?.[0].length ?? 0);
-  if (trailingZeros >= 2) {
-    return priceDigits === filterDigits;
-  }
-  return priceDigits.includes(filterDigits);
-}
-
-function formatPriceTextMask(input: string): string {
-  const digits = (input || "").replace(/\D/g, "");
-  if (!digits) return "";
-  const normalized = digits.replace(/^0+/, "");
-  if (!normalized) return "";
-  return new Intl.NumberFormat("es-AR", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Number(normalized));
-}
-
-function parsePriceTextMask(input: string): number {
-  const parsed = Math.trunc(Number((input || "").replace(/\D/g, "")));
-  if (!Number.isFinite(parsed) || parsed <= 0) return 0;
-  return parsed;
-}
 
 export default function PriceScreen() {
   const [tab, setTab] = useState<PriceTab>("update");
@@ -136,7 +104,7 @@ export default function PriceScreen() {
       setNewCostPrice("");
       return;
     }
-    setNewCostPrice(formatPriceTextMask(String(selectedProductCurrentCost)));
+    setNewCostPrice(formatIntegerTextMask(String(selectedProductCurrentCost)));
   }, [selectedProduct, selectedProductCurrentCost]);
 
   const selectedProductForMargin = useMemo(
@@ -172,16 +140,16 @@ export default function PriceScreen() {
     setProductMarginDraft(String(selectedProductOverrideMargin ?? selectedProductMarginForEditor));
   }, [selectedProductForMargin, selectedProductOverrideMargin, selectedProductMarginForEditor]);
 
-  const newCostPriceValue = parsePriceTextMask(newCostPrice);
+  const newCostPriceValue = parsePositiveIntFromTextMask(newCostPrice);
   const newSalePricePreview = calculateSalePrice(newCostPriceValue, selectedProductMargin);
 
   const filteredProducts = useMemo(() => {
-    const q = normalize(nameFilter);
+    const q = normalizeForSearch(nameFilter);
     const p = (priceFilter || "").replace(/\D/g, "");
     let list = products;
 
     if (q) {
-      list = list.filter((item) => normalize(item.name).includes(q));
+      list = list.filter((item) => normalizeForSearch(item.name).includes(q));
     }
 
     if (barcodeFilter.trim()) {
@@ -446,7 +414,7 @@ export default function PriceScreen() {
                   <input
                     type="text"
                     value={newCostPrice}
-                    onChange={(e) => setNewCostPrice(formatPriceTextMask(e.target.value))}
+                    onChange={(e) => setNewCostPrice(formatIntegerTextMask(e.target.value))}
                     className={styles.input}
                     inputMode="numeric"
                     placeholder="0"

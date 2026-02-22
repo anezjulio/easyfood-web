@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { OperationRequest, OperationRequestType } from "../model/request.types";
 import {
   cancelOperationRequestApi,
@@ -10,20 +12,6 @@ import {
   updateOperationRequestApi,
 } from "../service/request.api";
 import styles from "./OperationRequestsScreen.module.css";
-
-function formatDateTime(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(d);
-}
-
-function normalize(text: string) {
-  return (text || "").toLowerCase().trim();
-}
 
 function requestTypeLabel(value: OperationRequestType) {
   return value === "merchandise" ? "Mercancia" : "Permisos";
@@ -48,7 +36,7 @@ export default function OperationRequestsScreen() {
   const [message, setMessage] = useState("");
   const [cancelModalRequestId, setCancelModalRequestId] = useState<string | null>(null);
 
-  const currentUsername = normalize(auth.user?.username || "");
+  const currentUsername = normalizeForSearch(auth.user?.username || "");
 
   useEffect(() => {
     let alive = true;
@@ -75,11 +63,11 @@ export default function OperationRequestsScreen() {
   }, []);
 
   const visibleRequests = useMemo(() => {
-    const query = normalize(search);
+    const query = normalizeForSearch(search);
     let list = requests;
 
     if (auth.user?.role !== "admin") {
-      list = list.filter((item) => normalize(item.requestedBy) === currentUsername);
+      list = list.filter((item) => normalizeForSearch(item.requestedBy) === currentUsername);
     }
 
     if (statusFilter !== "all") {
@@ -111,7 +99,7 @@ export default function OperationRequestsScreen() {
   );
 
   function isRequestOwnedByCurrentUser(item: OperationRequest) {
-    return normalize(item.requestedBy) === currentUsername;
+    return normalizeForSearch(item.requestedBy) === currentUsername;
   }
 
   function canEditPendingRequest(item: OperationRequest) {
@@ -483,4 +471,5 @@ export default function OperationRequestsScreen() {
     </div>
   );
 }
+
 

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { formatDateAR, formatMoneyARS } from "../../product/viewmodel/useProductListViewModel";
+import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
 import { formatPaymentMethodLabel } from "../model/sale.types";
 import styles from "./SalesSummaryScreen.module.css";
 

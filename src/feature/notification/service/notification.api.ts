@@ -7,13 +7,7 @@ import type {
   NotificationType,
 } from "../model/notification.types";
 import type { ProductCategory } from "../../product/model/product.types";
-
-async function readJsonOrThrow<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return (await response.json()) as T;
-}
+import { readJsonOrThrow } from "../../../shared/http/http";
 
 export async function fetchNotificationsApi(): Promise<AppNotification[]> {
   const response = await fetch("/notifications");

@@ -4,13 +4,7 @@ import type {
   LicenseRecord,
   UpdateLicenseDraft,
 } from "../model/license.types";
-
-async function readJsonOrThrow<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return (await response.json()) as T;
-}
+import { readJsonOrThrow } from "../../../shared/http/http";
 
 export async function fetchLicensesApi(): Promise<LicenseRecord[]> {
   const response = await fetch("/licenses");
@@ -43,4 +37,3 @@ export async function addLicenseIssuanceApi(id: string, draft: CreateLicenseIssu
   });
   return await readJsonOrThrow<LicenseRecord>(response);
 }
-

@@ -1,42 +1,39 @@
 import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
+import HeaderOperationNotice from "../../../app/component/HeaderOperationNotice";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime, formatMoneyARS } from "../../../shared/format/locale";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { Expense } from "../../expense/model/expense.types";
 import { fetchExpensesApi } from "../../expense/service/expense.api";
-import { formatMoneyARS } from "../../product/viewmodel/useProductListViewModel";
 import { PAYMENT_METHODS, formatPaymentMethodLabel, type Order, type PaymentMethod } from "../../sale/model/sale.types";
 import { fetchOrdersApi } from "../../sale/service/sale.api";
 import type { SupplyOrder } from "../../supply/model/supply.types";
 import { fetchSupplyOrdersApi } from "../../supply/service/supply.api";
 import type { AppUserRecord } from "../../user/model/user.types";
 import { fetchUsersApi } from "../../user/service/user.api";
-import type { CashOpeningAssignment, Workday, WorkdayAuditChecks, WorkdayCloseSummary } from "../model/cash.types";
+import type { CashOpeningAssignment, CashShift, Workday, WorkdayAuditChecks, WorkdayCloseSummary } from "../model/cash.types";
 import {
   fetchCashOpeningAssignmentsApi,
   fetchCurrentWorkdayApi,
   fetchWorkdaysApi,
-  openWorkdayApi,
-  requestWorkdayCloseApi,
   reviewWorkdayCloseApi,
   upsertCashOpeningAssignmentApi,
 } from "../service/cash.api";
+import { openCashWithAmount, requestCashCloseWithAmount } from "../service/cash.operation";
+import { markCashSessionClosed, markCashSessionOpen } from "../service/cash.session";
 import styles from "./CashScreen.module.css";
 
 type CashTab = "cash" | "close-review";
 type CashSortKey = "id" | "operator" | "paymentMethod" | "total" | "createdAt";
 type WorkdayStatus = "open" | "pending-close" | "closed";
+type AssignmentDraft = { amount: string; shift: CashShift };
 
-function formatDateTime(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", { dateStyle: "short", timeStyle: "short" }).format(d);
-}
-
-function normalize(value: string) {
-  return (value || "").toLowerCase().trim();
-}
+const CASH_SHIFT_WINDOWS: Record<CashShift, { startHour: string; endHour: string; label: string }> = {
+  diurno: { startHour: "08:00", endHour: "19:59", label: "Diurno" },
+  nocturno: { startHour: "20:00", endHour: "07:59", label: "Nocturno" },
+};
 
 function resolveWorkdayStatus(workday: Workday | null | undefined): WorkdayStatus {
   if (!workday) return "closed";
@@ -50,6 +47,24 @@ function parseMoneyInput(value: string): number | null {
   const parsed = Number(normalized);
   if (!Number.isFinite(parsed) || parsed < 0) return null;
   return Math.trunc(parsed);
+}
+
+function parseHourToMinutes(value: string): number | null {
+  const [hh, mm] = String(value || "").trim().split(":");
+  const hours = Number(hh);
+  const minutes = Number(mm);
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+  return hours * 60 + minutes;
+}
+
+function inferShiftFromHours(startHour: string, endHour: string): CashShift {
+  const start = parseHourToMinutes(startHour);
+  const end = parseHourToMinutes(endHour);
+  if (start === null || end === null) return "diurno";
+  if (start > end) return "nocturno";
+  if (start >= 18 * 60 || start < 6 * 60) return "nocturno";
+  return "diurno";
 }
 
 function buildPaymentTotals(): Record<PaymentMethod, number> {
@@ -92,12 +107,12 @@ function computeWorkdayCloseSummaryFromData(
   const totalSales = PAYMENT_METHODS.reduce((acc, method) => acc + totalByPaymentMethod[method], 0);
   const cashSales = totalByPaymentMethod.efectivo;
   const totalExpenses = expenses
-    .filter((item) => normalize(item.createdBy) === normalize(workday.operator) && isWithinRange(item.createdAt, fromMs, toMs))
+    .filter((item) => normalizeForSearch(item.createdBy) === normalizeForSearch(workday.operator) && isWithinRange(item.createdAt, fromMs, toMs))
     .reduce((acc, item) => acc + Math.trunc(Number(item.amount || 0)), 0);
   const totalSupplyReturns = supplyOrders
     .filter((item) => {
       if (item.status !== "received") return false;
-      if (normalize(item.receivedBy || "") !== normalize(workday.operator)) return false;
+      if (normalizeForSearch(item.receivedBy || "") !== normalizeForSearch(workday.operator)) return false;
       return isWithinRange(item.receivedAt, fromMs, toMs);
     })
     .reduce((acc, item) => {
@@ -194,7 +209,7 @@ export default function CashScreen() {
   const [declaredClosingCashInput, setDeclaredClosingCashInput] = useState("");
   const [isOpening, setIsOpening] = useState(false);
   const [isRequestingClose, setIsRequestingClose] = useState(false);
-  const [assignmentDrafts, setAssignmentDrafts] = useState<Record<string, string>>({});
+  const [assignmentDrafts, setAssignmentDrafts] = useState<Record<string, AssignmentDraft>>({});
   const [savingAssignmentFor, setSavingAssignmentFor] = useState("");
   const [selectedReviewWorkdayId, setSelectedReviewWorkdayId] = useState("");
   const [auditChecks, setAuditChecks] = useState<WorkdayAuditChecks>(buildDefaultAuditChecks());
@@ -219,6 +234,11 @@ export default function CashScreen() {
         fetchCashOpeningAssignmentsApi(),
         isAdmin ? fetchUsersApi() : Promise.resolve([]),
       ]);
+      if (currentWorkday && resolveWorkdayStatus(currentWorkday) === "open") {
+        markCashSessionOpen(username);
+      } else {
+        markCashSessionClosed(username);
+      }
       setWorkday(currentWorkday);
       setWorkdays(allWorkdays);
       setOrders(allOrders);
@@ -226,7 +246,7 @@ export default function CashScreen() {
       setSupplyOrders(allSupplyOrders);
       setAssignments(allAssignments);
       setUsers(allUsers);
-      const ownAssignment = allAssignments.find((item) => normalize(item.operator) === normalize(username));
+      const ownAssignment = allAssignments.find((item) => normalizeForSearch(item.operator) === normalizeForSearch(username));
       if (!currentWorkday) {
         setOpeningAmountInput(ownAssignment ? String(ownAssignment.amount) : "");
         setDeclaredClosingCashInput("");
@@ -238,14 +258,20 @@ export default function CashScreen() {
       } else {
         setDeclaredClosingCashInput("");
       }
-      const nextDrafts: Record<string, string> = {};
+      const nextDrafts: Record<string, AssignmentDraft> = {};
       for (const user of allUsers) {
         if (!user.username) continue;
-        if (normalize(user.username) === "admin") continue;
-        nextDrafts[user.username] = "";
+        if (normalizeForSearch(user.username) === "admin") continue;
+        nextDrafts[user.username] = {
+          amount: "",
+          shift: inferShiftFromHours(user.startHour, user.endHour),
+        };
       }
       for (const assignment of allAssignments) {
-        nextDrafts[assignment.operator] = String(assignment.amount);
+        nextDrafts[assignment.operator] = {
+          amount: String(assignment.amount),
+          shift: assignment.shift || nextDrafts[assignment.operator]?.shift || "diurno",
+        };
       }
       setAssignmentDrafts(nextDrafts);
     } catch {
@@ -268,17 +294,17 @@ export default function CashScreen() {
   }, [orders, workday]);
 
   const filteredOrders = useMemo(() => {
-    const idQuery = normalize(orderIdFilter);
-    const operatorQuery = normalize(operatorFilter);
-    const paymentQuery = normalize(paymentFilter);
+    const idQuery = normalizeForSearch(orderIdFilter);
+    const operatorQuery = normalizeForSearch(operatorFilter);
+    const paymentQuery = normalizeForSearch(paymentFilter);
     const totalDigits = totalFilter.replace(/\D/g, "");
     let list = dayOrders;
-    if (idQuery) list = list.filter((item) => normalize(item.id).includes(idQuery));
-    if (operatorQuery) list = list.filter((item) => normalize(item.operator).includes(operatorQuery));
+    if (idQuery) list = list.filter((item) => normalizeForSearch(item.id).includes(idQuery));
+    if (operatorQuery) list = list.filter((item) => normalizeForSearch(item.operator).includes(operatorQuery));
     if (paymentQuery) {
       list = list.filter((item) => {
         const raw = String(item.paymentMethod || "");
-        return normalize(`${raw} ${formatPaymentMethodLabel(item.paymentMethod)}`).includes(paymentQuery);
+        return normalizeForSearch(`${raw} ${formatPaymentMethodLabel(item.paymentMethod)}`).includes(paymentQuery);
       });
     }
     if (totalDigits) list = list.filter((item) => String(Math.trunc(item.total)).includes(totalDigits));
@@ -312,19 +338,19 @@ export default function CashScreen() {
 
   const ownAssignment = useMemo(() => {
     if (!auth.user?.username) return null;
-    return assignments.find((item) => normalize(item.operator) === normalize(auth.user?.username || "")) || null;
+    return assignments.find((item) => normalizeForSearch(item.operator) === normalizeForSearch(auth.user?.username || "")) || null;
   }, [assignments, auth.user?.username]);
 
   const assignmentRows = useMemo(() => {
     const byUsername = new Map<string, AppUserRecord>();
     for (const user of users) {
       const key = String(user.username || "").trim();
-      if (!key || normalize(key) === "admin") continue;
+      if (!key || normalizeForSearch(key) === "admin") continue;
       byUsername.set(key, user);
     }
     for (const assignment of assignments) {
       const key = String(assignment.operator || "").trim();
-      if (!key || normalize(key) === "admin") continue;
+      if (!key || normalizeForSearch(key) === "admin") continue;
       if (byUsername.has(key)) continue;
       byUsername.set(key, {
         id: key,
@@ -420,7 +446,7 @@ export default function CashScreen() {
     setError("");
     setMessage("");
     try {
-      const opened = await openWorkdayApi(auth.user.username, { openingAmount });
+      const opened = await openCashWithAmount(auth.user.username, openingAmount);
       const difference = Math.trunc(Number(opened.openingDifferenceAmount || 0));
       if (difference !== 0) {
         setMessage(
@@ -430,8 +456,8 @@ export default function CashScreen() {
         setMessage("Caja abierta.");
       }
       await reload();
-    } catch {
-      setError("No se pudo abrir caja.");
+    } catch (error) {
+      setError(error instanceof Error && error.message ? error.message : "No se pudo abrir caja.");
     } finally {
       setIsOpening(false);
     }
@@ -448,15 +474,16 @@ export default function CashScreen() {
     setError("");
     setMessage("");
     try {
-      await requestWorkdayCloseApi(workday.id, {
-        operator: auth.user.username,
+      await requestCashCloseWithAmount(
+        workday.id,
+        auth.user.username,
         declaredClosingCash,
-        orderIds: dayOrders.map((item) => item.id),
-      });
+        dayOrders.map((item) => item.id),
+      );
       setMessage("Cierre efectuado.");
       await reload();
-    } catch {
-      setError("No se pudo solicitar el cierre de caja.");
+    } catch (error) {
+      setError(error instanceof Error && error.message ? error.message : "No se pudo solicitar el cierre de caja.");
     } finally {
       setIsRequestingClose(false);
     }
@@ -464,7 +491,9 @@ export default function CashScreen() {
 
   async function handleSaveAssignment(operator: string) {
     if (!auth.user?.username) return;
-    const amount = parseMoneyInput(assignmentDrafts[operator] || "");
+    const draft = assignmentDrafts[operator];
+    const amount = parseMoneyInput(draft?.amount || "");
+    const shift = draft?.shift || "diurno";
     if (amount === null) {
       setError(`Ingresa un monto valido para ${operator}.`);
       return;
@@ -473,11 +502,20 @@ export default function CashScreen() {
     setError("");
     setMessage("");
     try {
-      await upsertCashOpeningAssignmentApi(operator, { amount, updatedBy: auth.user.username });
-      setMessage(`Monto de apertura actualizado para ${operator}.`);
+      const updated = await upsertCashOpeningAssignmentApi(operator, { amount, shift, updatedBy: auth.user.username });
+      setAssignmentDrafts((current) => ({
+        ...current,
+        [operator]: {
+          amount: String(updated.amount),
+          shift: updated.shift,
+        },
+      }));
+      const shiftLabel = CASH_SHIFT_WINDOWS[updated.shift]?.label || updated.shift;
+      const shiftHours = `${updated.startHour} a ${updated.endHour}`;
+      setMessage(`Apertura actualizada para ${operator}: ${shiftLabel} (${shiftHours}).`);
       await reload();
-    } catch {
-      setError("No se pudo actualizar el monto de apertura.");
+    } catch (error) {
+      setError(error instanceof Error && error.message ? error.message : "No se pudo actualizar el monto de apertura.");
     } finally {
       setSavingAssignmentFor("");
     }
@@ -496,6 +534,9 @@ export default function CashScreen() {
         notes: auditNotes.trim() || undefined,
         mismatchReport: auditMismatchReport.trim() || generatedReport || undefined,
       });
+      if (normalizeForSearch(selectedReviewWorkday.operator) === normalizeForSearch(auth.user.username)) {
+        markCashSessionClosed(auth.user.username);
+      }
       setMessage("Cierre efectuado.");
       await reload();
     } catch {
@@ -508,15 +549,25 @@ export default function CashScreen() {
   const openingAssigned = ownAssignment ? ownAssignment.amount : workday?.openingAssignedAmount;
   const openingDeclared = workday?.openingDeclaredAmount;
   const openingDifference = Math.trunc(Number(workday?.openingDifferenceAmount || 0));
+  const clearHeaderNotice = () => {
+    setError("");
+    setMessage("");
+  };
 
   return (
     <div className={styles.page}>
       <div className={styles.content}>
         <header className={styles.header}>
-          <div>
+          <div className={styles.headerLead}>
             <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Caja" }]} asTitle />
             <p className={styles.subtitle}>Apertura, cierre y auditoria de caja por jornada.</p>
           </div>
+          <HeaderOperationNotice
+            className={styles.headerNotice}
+            message={message}
+            error={error}
+            onClose={clearHeaderNotice}
+          />
           <SessionStatusBar />
         </header>
 
@@ -541,27 +592,16 @@ export default function CashScreen() {
 
         {activeTab === "cash" ? (
           <>
-            <section className={styles.summaryCard}>
-              <p><strong>Usuario:</strong> {workday?.operator || auth.user?.username || "-"}</p>
-              <p><strong>Estado:</strong> {status === "open" ? "Abierta" : status === "pending-close" ? "Pendiente de cierre" : "Cerrada"}</p>
-              <p><strong>Apertura:</strong> {workday ? formatDateTime(workday.startedAt) : "-"}</p>
-              <p><strong>Cierre:</strong> {workday?.endedAt ? formatDateTime(workday.endedAt) : status === "pending-close" ? "Pendiente admin" : "Caja abierta"}</p>
-              <p><strong>Ventas del turno:</strong> {dayOrders.length}</p>
-              <p><strong>Total vendido:</strong> {formatMoneyARS(dayTotal)}</p>
-              <p><strong>Monto asignado:</strong> {typeof openingAssigned === "number" ? formatMoneyARS(openingAssigned) : "-"}</p>
-              <p><strong>Monto declarado:</strong> {typeof openingDeclared === "number" ? formatMoneyARS(openingDeclared) : "-"}</p>
-              <p><strong>Diferencia apertura:</strong> {workday ? formatMoneyARS(Math.abs(openingDifference)) : "-"} {workday && openingDifference !== 0 ? `(${openingDifference > 0 ? "sobra" : "falta"})` : ""}</p>
-            </section>
-
             <section className={styles.operationCard}>
               {!workday ? (
                 <>
                   <h2 className={styles.sectionTitle}>Apertura de caja</h2>
-                  <p className={styles.helpText}>
-                    {ownAssignment
-                      ? `Monto asignado por administracion: ${formatMoneyARS(ownAssignment.amount)}.`
-                      : "No hay monto asignado por administracion para este usuario."}
-                  </p>
+                  {ownAssignment && ownAssignment.amount > 0 ? (
+                    <p className={styles.helpText}>
+                      Monto asignado por administracion:{" "}
+                      <span className={styles.assignedAmount}>{formatMoneyARS(ownAssignment.amount)}</span>.
+                    </p>
+                  ) : null}
                   <div className={styles.inlineForm}>
                     <label className={styles.field}>
                       <span>Efectivo recibido para abrir caja</span>
@@ -616,6 +656,21 @@ export default function CashScreen() {
               )}
             </section>
 
+            <section className={styles.summaryCard}>
+              <p><strong>Usuario:</strong> {workday?.operator || auth.user?.username || "-"}</p>
+              <p><strong>Estado:</strong> {status === "open" ? "Abierta" : status === "pending-close" ? "Pendiente de cierre" : "Cerrada"}</p>
+              <p><strong>Apertura:</strong> {workday ? formatDateTime(workday.startedAt) : "-"}</p>
+              <p><strong>Cierre:</strong> {workday?.endedAt ? formatDateTime(workday.endedAt) : status === "pending-close" ? "Pendiente admin" : "Caja abierta"}</p>
+              <p><strong>Ventas del turno:</strong> {dayOrders.length}</p>
+              <p><strong>Total vendido:</strong> {formatMoneyARS(dayTotal)}</p>
+              <p>
+                <strong>Monto asignado:</strong>{" "}
+                {typeof openingAssigned === "number" ? <span className={styles.assignedAmount}>{formatMoneyARS(openingAssigned)}</span> : "-"}
+              </p>
+              <p><strong>Monto declarado:</strong> {typeof openingDeclared === "number" ? formatMoneyARS(openingDeclared) : "-"}</p>
+              <p><strong>Diferencia apertura:</strong> {workday ? formatMoneyARS(Math.abs(openingDifference)) : "-"} {workday && openingDifference !== 0 ? `(${openingDifference > 0 ? "sobra" : "falta"})` : ""}</p>
+            </section>
+
             {isAdmin ? (
               <section className={styles.assignmentCard}>
                 <h2 className={styles.sectionTitle}>Montos de apertura por usuario/turno</h2>
@@ -623,37 +678,67 @@ export default function CashScreen() {
                   <p className={styles.placeholder}>No hay usuarios para asignar montos.</p>
                 ) : (
                   <div className={styles.assignmentList}>
-                    {assignmentRows.map((user) => (
-                      <div key={user.username} className={styles.assignmentRow}>
-                        <div className={styles.assignmentMeta}>
-                          <strong>{user.username}</strong>
-                          <span>
-                            Turno: {user.startHour || "--:--"} a {user.endHour || "--:--"}
-                          </span>
+                    {assignmentRows.map((user) => {
+                      const currentDraft = assignmentDrafts[user.username] || {
+                        amount: "",
+                        shift: inferShiftFromHours(user.startHour, user.endHour),
+                      };
+                      const shiftWindow = CASH_SHIFT_WINDOWS[currentDraft.shift];
+                      return (
+                        <div key={user.username} className={styles.assignmentRow}>
+                          <div className={styles.assignmentMeta}>
+                            <strong>{user.username}</strong>
+                            <span>
+                              Turno asignado: {shiftWindow.label} ({shiftWindow.startHour} a {shiftWindow.endHour})
+                            </span>
+                          </div>
+                          <select
+                            className={styles.assignmentSelect}
+                            value={currentDraft.shift}
+                            onChange={(event) =>
+                              setAssignmentDrafts((current) => ({
+                                ...current,
+                                [user.username]: {
+                                  amount: current[user.username]?.amount ?? "",
+                                  shift: event.target.value as CashShift,
+                                },
+                              }))
+                            }
+                          >
+                            <option value="diurno">
+                              Diurno ({CASH_SHIFT_WINDOWS.diurno.startHour} a {CASH_SHIFT_WINDOWS.diurno.endHour})
+                            </option>
+                            <option value="nocturno">
+                              Nocturno ({CASH_SHIFT_WINDOWS.nocturno.startHour} a {CASH_SHIFT_WINDOWS.nocturno.endHour})
+                            </option>
+                          </select>
+                          <input
+                            className={styles.assignmentInput}
+                            type="number"
+                            min={0}
+                            step={1}
+                            value={currentDraft.amount}
+                            onChange={(event) =>
+                              setAssignmentDrafts((current) => ({
+                                ...current,
+                                [user.username]: {
+                                  amount: event.target.value,
+                                  shift: current[user.username]?.shift || currentDraft.shift,
+                                },
+                              }))
+                            }
+                          />
+                          <button
+                            type="button"
+                            className={styles.secondaryBtn}
+                            disabled={savingAssignmentFor === user.username}
+                            onClick={() => void handleSaveAssignment(user.username)}
+                          >
+                            {savingAssignmentFor === user.username ? "Guardando..." : "Guardar"}
+                          </button>
                         </div>
-                        <input
-                          className={styles.assignmentInput}
-                          type="number"
-                          min={0}
-                          step={1}
-                          value={assignmentDrafts[user.username] ?? ""}
-                          onChange={(event) =>
-                            setAssignmentDrafts((current) => ({
-                              ...current,
-                              [user.username]: event.target.value,
-                            }))
-                          }
-                        />
-                        <button
-                          type="button"
-                          className={styles.secondaryBtn}
-                          disabled={savingAssignmentFor === user.username}
-                          onClick={() => void handleSaveAssignment(user.username)}
-                        >
-                          {savingAssignmentFor === user.username ? "Guardando..." : "Guardar"}
-                        </button>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </section>
@@ -847,8 +932,6 @@ export default function CashScreen() {
           </section>
         )}
 
-        {error ? <p className={styles.error}>{error}</p> : null}
-        {message ? <p className={styles.message}>{message}</p> : null}
       </div>
     </div>
   );
@@ -946,3 +1029,4 @@ function renderSortableHeader(
     </div>
   );
 }
+

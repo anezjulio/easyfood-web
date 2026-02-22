@@ -1873,6 +1873,21 @@
   ],
   "orders": [
     {
+      "id": "or-1771795221731-7835",
+      "items": [
+        {
+          "productId": "p-1771656748439-6090",
+          "productName": "Glade 360 cm3",
+          "unitPrice": 3331,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-02-22T21:20:21.732Z",
+      "status": "por pagar",
+      "total": 6662,
+      "operator": "admin"
+    },
+    {
       "id": "or-1771658270164-3751",
       "items": [
         {
@@ -2551,11 +2566,174 @@
   ],
   "workdays": [
     {
+      "id": "wd-1771795208464-9113",
+      "operator": "admin",
+      "startedAt": "2026-02-22T21:20:08.464Z",
+      "orderIds": [],
+      "status": "open",
+      "openingDeclaredAmount": 50000,
+      "openingDifferenceAmount": 0
+    },
+    {
+      "id": "wd-1771751653463-145",
+      "operator": "admin",
+      "startedAt": "2026-02-22T09:14:13.463Z",
+      "endedAt": "2026-02-22T09:14:37.668Z",
+      "orderIds": [],
+      "status": "closed",
+      "openingDeclaredAmount": 2500,
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-02-22T09:14:24.593Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 2500,
+        "declaredClosingCash": 2500,
+        "closingDifference": 0,
+        "balanceTotal": 2500
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-02-22T09:14:37.668Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
+    },
+    {
+      "id": "wd-1771749620481-4062",
+      "operator": "user",
+      "startedAt": "2026-02-22T08:40:20.481Z",
+      "endedAt": "2026-02-22T09:14:04.485Z",
+      "orderIds": [],
+      "status": "closed",
+      "openingAssignedAmount": 5000,
+      "openingDeclaredAmount": 5000,
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-02-22T08:40:44.868Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 5000,
+        "declaredClosingCash": 5000,
+        "closingDifference": 0,
+        "balanceTotal": 5000
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-02-22T09:14:04.485Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
+    },
+    {
+      "id": "wd-1771749319381-949",
+      "operator": "admin",
+      "startedAt": "2026-02-22T08:35:19.381Z",
+      "endedAt": "2026-02-22T09:14:02.775Z",
+      "orderIds": [],
+      "status": "closed",
+      "openingDeclaredAmount": 2500,
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-02-22T08:35:23.227Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 2500,
+        "declaredClosingCash": 2500,
+        "closingDifference": 0,
+        "balanceTotal": 2500
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-02-22T09:14:02.775Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
+    },
+    {
+      "id": "wd-1771719418042-5697",
+      "operator": "user",
+      "startedAt": "2026-02-22T00:16:58.042Z",
+      "endedAt": "2026-02-22T00:17:32.230Z",
+      "orderIds": [],
+      "status": "closed",
+      "openingDeclaredAmount": 2500,
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-02-22T00:17:06.576Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 2500,
+        "declaredClosingCash": 2500,
+        "closingDifference": 0,
+        "balanceTotal": 2500
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-02-22T00:17:32.230Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
+    },
+    {
       "id": "wd-1771658311444-5242",
       "operator": "admin",
       "startedAt": "2026-02-21T07:18:31.444Z",
+      "endedAt": "2026-02-22T00:17:30.735Z",
       "orderIds": [],
-      "status": "pending-close",
+      "status": "closed",
       "openingDeclaredAmount": 2000,
       "openingDifferenceAmount": 0,
       "closeRequestedAt": "2026-02-21T07:18:57.769Z",
@@ -2574,6 +2752,18 @@
         "declaredClosingCash": 3000,
         "closingDifference": 1000,
         "balanceTotal": 2000
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-02-22T00:17:30.735Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        },
+        "mismatchReport": "El operador admin, en la jornada wd-1771658311444-5242, presenta diferencias. Cierre en efectivo: esperado $ 2.000, declarado $ 3.000 (sobra $ 1.000)."
       }
     },
     {
@@ -2789,7 +2979,17 @@
       "status": "closed"
     }
   ],
-  "cashOpeningAssignments": [],
+  "cashOpeningAssignments": [
+    {
+      "operator": "user",
+      "amount": 5000,
+      "shift": "diurno",
+      "startHour": "08:00",
+      "endHour": "19:59",
+      "updatedBy": "admin",
+      "updatedAt": "2026-02-22T00:17:20.412Z"
+    }
+  ],
   "supplyOrders": [
     {
       "id": "so-1771272589092-4427",
@@ -2951,6 +3151,213 @@
   ],
   "notifications": [
     {
+      "id": "nt-1771795208465-8800",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 50000.",
+      "createdAt": "2026-02-22T21:20:08.464Z",
+      "dueAt": "2026-02-23T21:20:08.464Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771795208464-9113",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771751677668-1499",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd-1771751653463-145.",
+      "createdAt": "2026-02-22T09:14:37.668Z",
+      "dueAt": "2026-02-23T09:14:37.668Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771751653463-145",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771751664593-2032",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd-1771751653463-145 fue enviada para auditoria.",
+      "createdAt": "2026-02-22T09:14:24.593Z",
+      "dueAt": "2026-03-01T09:14:24.593Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd-1771751653463-145",
+      "status": "received",
+      "receivedAt": "2026-02-22T09:14:37.668Z"
+    },
+    {
+      "id": "nt-1771751653463-3971",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 2500.",
+      "createdAt": "2026-02-22T09:14:13.463Z",
+      "dueAt": "2026-02-23T09:14:13.463Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771751653463-145",
+      "status": "received",
+      "receivedAt": "2026-02-22T09:14:37.668Z"
+    },
+    {
+      "id": "nt-1771751644485-5312",
+      "type": "cash-closed",
+      "title": "Caja cerrada: user",
+      "description": "Se cerro la jornada wd-1771749620481-4062.",
+      "createdAt": "2026-02-22T09:14:04.485Z",
+      "dueAt": "2026-02-23T09:14:04.485Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771749620481-4062",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771751642775-5522",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd-1771749319381-949.",
+      "createdAt": "2026-02-22T09:14:02.775Z",
+      "dueAt": "2026-02-23T09:14:02.775Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771749319381-949",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771749644868-8990",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: user",
+      "description": "La jornada wd-1771749620481-4062 fue enviada para auditoria.",
+      "createdAt": "2026-02-22T08:40:44.868Z",
+      "dueAt": "2026-03-01T08:40:44.868Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd-1771749620481-4062",
+      "status": "received",
+      "receivedAt": "2026-02-22T09:14:04.485Z"
+    },
+    {
+      "id": "nt-1771749620481-6445",
+      "type": "cash-opened",
+      "title": "Caja abierta: user",
+      "description": "Se abrio caja para user con 5000.",
+      "createdAt": "2026-02-22T08:40:20.481Z",
+      "dueAt": "2026-02-23T08:40:20.481Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771749620481-4062",
+      "status": "received",
+      "receivedAt": "2026-02-22T09:14:04.485Z"
+    },
+    {
+      "id": "nt-1771749323228-8224",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd-1771749319381-949 fue enviada para auditoria.",
+      "createdAt": "2026-02-22T08:35:23.227Z",
+      "dueAt": "2026-03-01T08:35:23.227Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd-1771749319381-949",
+      "status": "received",
+      "receivedAt": "2026-02-22T09:14:02.775Z"
+    },
+    {
+      "id": "nt-1771749319381-1115",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 2500.",
+      "createdAt": "2026-02-22T08:35:19.381Z",
+      "dueAt": "2026-02-23T08:35:19.381Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771749319381-949",
+      "status": "received",
+      "receivedAt": "2026-02-22T09:14:02.775Z"
+    },
+    {
+      "id": "nt-1771719452230-9204",
+      "type": "cash-closed",
+      "title": "Caja cerrada: user",
+      "description": "Se cerro la jornada wd-1771719418042-5697.",
+      "createdAt": "2026-02-22T00:17:32.230Z",
+      "dueAt": "2026-02-23T00:17:32.230Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771719418042-5697",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771719450735-2401",
+      "type": "cash",
+      "title": "Diferencias detectadas en cierre: admin",
+      "description": "El operador admin, en la jornada wd-1771658311444-5242, presenta diferencias. Cierre en efectivo: esperado $ 2.000, declarado $ 3.000 (sobra $ 1.000).",
+      "createdAt": "2026-02-22T00:17:30.735Z",
+      "dueAt": "2026-03-01T00:17:30.735Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771658311444-5242",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771719450735-4767",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd-1771658311444-5242.",
+      "createdAt": "2026-02-22T00:17:30.735Z",
+      "dueAt": "2026-02-23T00:17:30.735Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771658311444-5242",
+      "status": "active"
+    },
+    {
+      "id": "nt-1771719426577-6072",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: user",
+      "description": "La jornada wd-1771719418042-5697 fue enviada para auditoria.",
+      "createdAt": "2026-02-22T00:17:06.576Z",
+      "dueAt": "2026-03-01T00:17:06.576Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd-1771719418042-5697",
+      "status": "received",
+      "receivedAt": "2026-02-22T00:17:32.230Z"
+    },
+    {
+      "id": "nt-1771719418043-8088",
+      "type": "cash-opened",
+      "title": "Caja abierta: user",
+      "description": "Se abrio caja para user con 2500.",
+      "createdAt": "2026-02-22T00:16:58.042Z",
+      "dueAt": "2026-02-23T00:16:58.042Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd-1771719418042-5697",
+      "status": "received",
+      "receivedAt": "2026-02-22T00:17:32.230Z"
+    },
+    {
       "id": "nt-1771658337769-3180",
       "type": "cash",
       "title": "Cierre de caja pendiente: admin",
@@ -2962,7 +3369,8 @@
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
       "entityId": "wd-1771658311444-5242",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-02-22T00:17:30.735Z"
     },
     {
       "id": "nt-1771658311444-6493",
@@ -2975,7 +3383,8 @@
       "requiresAction": false,
       "entityType": "workday",
       "entityId": "wd-1771658311444-5242",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-02-22T00:17:30.735Z"
     },
     {
       "id": "nt-1771658272959-5772",

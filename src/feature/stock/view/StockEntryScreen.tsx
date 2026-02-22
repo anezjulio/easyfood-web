@@ -3,7 +3,11 @@ import { useLocation, useSearchParams } from "react-router-dom";
 import ProductTable from "../../product/component/ProductTable";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
+import { formatIntegerTextMask, parsePositiveIntFromTextMask } from "../../../shared/format/numeric";
+import { matchesNumericContainsFilter, matchesPriceFilter } from "../../../shared/product/product-filter";
+import { normalizeForSearch } from "../../../shared/search/search";
 import {
   PRODUCT_CATEGORIES,
   calculateSalePrice,
@@ -23,7 +27,6 @@ import {
   updateCategoryPriceMarginApi,
   upsertProductPriceMarginApi,
 } from "../../product/service/product.api";
-import { formatDateAR, formatMoneyARS } from "../../product/viewmodel/useProductListViewModel";
 import type { SupplyOrder } from "../../supply/model/supply.types";
 import { fetchSupplyOrdersApi } from "../../supply/service/supply.api";
 import { createStockEntryApi } from "../service/stock.api";
@@ -32,47 +35,6 @@ import { generateAutoBarcode } from "../../product/model/product.barcode";
 import styles from "./StockEntryScreen.module.css";
 
 type EntryMode = "existing" | "new";
-
-function normalize(s: string) {
-  return (s || "")
-    .toLowerCase()
-    .trim()
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "");
-}
-
-function matchesPriceFilter(price: number, filterDigits: string): boolean {
-  if (!filterDigits) return true;
-  const priceDigits = String(Math.trunc(Math.abs(price)));
-  const trailingZeros = (filterDigits.match(/0+$/)?.[0].length ?? 0);
-  if (trailingZeros >= 2) {
-    return priceDigits === filterDigits;
-  }
-  return priceDigits.includes(filterDigits);
-}
-
-function matchesExistenceFilter(existencia: number, filterDigits: string): boolean {
-  if (!filterDigits) return true;
-  const existenciaDigits = String(Math.trunc(Math.abs(existencia)));
-  return existenciaDigits.includes(filterDigits);
-}
-
-function formatPriceTextMask(input: string): string {
-  const digits = (input || "").replace(/\D/g, "");
-  if (!digits) return "";
-  const normalized = digits.replace(/^0+/, "");
-  if (!normalized) return "";
-  return new Intl.NumberFormat("es-AR", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Number(normalized));
-}
-
-function parsePriceTextMask(input: string): number {
-  const parsed = Math.trunc(Number((input || "").replace(/\D/g, "")));
-  if (!Number.isFinite(parsed) || parsed <= 0) return 0;
-  return parsed;
-}
 
 export default function StockEntryScreen() {
   const auth = useAuth();
@@ -133,7 +95,6 @@ export default function StockEntryScreen() {
 
       setProducts(productList);
       setMarginSettings(marginList);
-      setCategoryMarginDraft(String(marginList.categoryMargins[newCategory] ?? 30));
       setReceivedOrders(received);
       if (typeof nextSelectedId !== "undefined") {
         setSelectedProductId(nextSelectedId);
@@ -218,20 +179,20 @@ export default function StockEntryScreen() {
       Number.isFinite(Number(selectedProduct.costPrice)) && Number(selectedProduct.costPrice) > 0
         ? Math.trunc(Number(selectedProduct.costPrice))
         : fallbackCost;
-    setCostPrice(formatPriceTextMask(String(productCost)));
+    setCostPrice(formatIntegerTextMask(String(productCost)));
   }, [activeMarginPercent, mode, selectedProduct]);
 
-  const costPriceValue = parsePriceTextMask(costPrice);
+  const costPriceValue = parsePositiveIntFromTextMask(costPrice);
   const salePricePreview = calculateSalePrice(costPriceValue, activeMarginPercent);
 
   const filteredProducts = useMemo(() => {
-    const q = normalize(nameFilter);
+    const q = normalizeForSearch(nameFilter);
     const p = (priceFilter || "").replace(/\D/g, "");
     const e = (existenciaFilter || "").replace(/\D/g, "");
     let list = products;
 
     if (q) {
-      list = list.filter((item) => normalize(item.name).includes(q));
+      list = list.filter((item) => normalizeForSearch(item.name).includes(q));
     }
 
     if (barcodeFilter.trim()) {
@@ -244,7 +205,7 @@ export default function StockEntryScreen() {
     }
 
     if (e) {
-      list = list.filter((item) => matchesExistenceFilter(Number(item.existencia || 0), e));
+      list = list.filter((item) => matchesNumericContainsFilter(Number(item.existencia || 0), e));
     }
 
     if (createdAtFilter) {
@@ -697,7 +658,7 @@ export default function StockEntryScreen() {
                       type="text"
                       inputMode="numeric"
                       value={costPrice}
-                      onChange={(event) => setCostPrice(formatPriceTextMask(event.target.value))}
+                      onChange={(event) => setCostPrice(formatIntegerTextMask(event.target.value))}
                       placeholder="0"
                     />
                   </label>
@@ -888,3 +849,4 @@ export default function StockEntryScreen() {
     </div>
   );
 }
+

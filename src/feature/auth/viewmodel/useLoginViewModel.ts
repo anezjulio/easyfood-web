@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { fakeLogin } from "../service/auth.fake";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { markCashSessionClosed } from "../../cash/service/cash.session";
 
 export function useLoginViewModel() {
   const auth = useAuth();
@@ -15,10 +16,12 @@ export function useLoginViewModel() {
     setLoading(true);
     try {
       const user = await fakeLogin(username.trim(), password);
+      markCashSessionClosed(user.username);
       auth.login(user);
       return true;
-    } catch (e: any) {
-      setError(e?.message ?? "Error");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Error";
+      setError(message);
       return false;
     } finally {
       setLoading(false);
@@ -35,3 +38,4 @@ export function useLoginViewModel() {
     submit,
   };
 }
+

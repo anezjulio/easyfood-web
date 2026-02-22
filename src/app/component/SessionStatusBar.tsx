@@ -1,60 +1,49 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../provider/AuthProvider";
-import { fetchCurrentWorkdayApi, onCashStatusChanged } from "../../feature/cash/service/cash.api";
+import { useAuth } from "../provider/useAuth";
+import { onCashStatusChanged } from "../../feature/cash/service/cash.api";
+import { syncCashState } from "../../feature/cash/service/cash.operation";
+import { markCashSessionClosed } from "../../feature/cash/service/cash.session";
 import styles from "./SessionStatusBar.module.css";
 
 export default function SessionStatusBar({ showSalesShortcut = true }: { showSalesShortcut?: boolean }) {
   const nav = useNavigate();
   const auth = useAuth();
   const [isCashOpen, setIsCashOpen] = useState(false);
+  const username = auth.user?.username ?? "";
+  const isCashOpenForSession = isCashOpen;
 
   useEffect(() => {
-    let alive = true;
-    async function loadCashState() {
-      if (!auth.user?.username) {
-        setIsCashOpen(false);
-        return;
-      }
-      try {
-        const current = await fetchCurrentWorkdayApi(auth.user.username);
-        if (!alive) return;
-        const currentStatus = current?.status || (current?.endedAt ? "closed" : "open");
-        setIsCashOpen(currentStatus === "open");
-      } catch {
-        if (!alive) return;
-        setIsCashOpen(false);
-      }
+    if (!username) {
+      return;
     }
 
-    void loadCashState();
+    let alive = true;
 
-    const off = onCashStatusChanged(() => {
-      void loadCashState();
+    async function loadCashState(operator: string) {
+      const { isOpen } = await syncCashState(operator);
+      if (!alive) return;
+      setIsCashOpen(isOpen);
+    }
+
+    void loadCashState(username);
+
+    const off = onCashStatusChanged((operator) => {
+      if (operator !== username) return;
+      void loadCashState(operator);
     });
-    const pollId = window.setInterval(() => {
-      void loadCashState();
-    }, 4000);
-    const handleFocus = () => {
-      void loadCashState();
-    };
-    const handleVisibility = () => {
-      if (document.visibilityState !== "visible") return;
-      void loadCashState();
-    };
-    window.addEventListener("focus", handleFocus);
-    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       alive = false;
       off();
-      window.clearInterval(pollId);
-      window.removeEventListener("focus", handleFocus);
-      document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [auth.user?.username]);
+  }, [username]);
 
   function handleLogout() {
+    if (auth.user?.username) {
+      markCashSessionClosed(auth.user.username);
+    }
+    setIsCashOpen(false);
     auth.logout();
     nav("/login", { replace: true });
   }
@@ -64,17 +53,21 @@ export default function SessionStatusBar({ showSalesShortcut = true }: { showSal
       <div className={styles.userLabel}>
         Usuario: <span className={styles.userName}>{auth.user?.username || "-"}</span>
       </div>
-      <div className={`${styles.cashState} ${isCashOpen ? styles.cashOpen : styles.cashClosed}`}>
-        {isCashOpen ? "Caja abierta" : "Caja cerrada"}
+      <div className={`${styles.cashState} ${isCashOpenForSession ? styles.cashOpen : styles.cashClosed}`}>
+        {isCashOpenForSession ? "Caja abierta" : "Caja cerrada"}
       </div>
-      {showSalesShortcut && isCashOpen ? (
+      {showSalesShortcut && isCashOpenForSession ? (
         <button type="button" onClick={() => nav("/sales")} className={styles.salesBtn}>
           Ventas
         </button>
       ) : null}
+      <button type="button" onClick={() => nav("/cash")} className={styles.cashActionBtn}>
+        {isCashOpenForSession ? "Cerrar caja" : "Abrir caja"}
+      </button>
       <button type="button" onClick={handleLogout} className={styles.logoutBtn}>
         Cerrar sesion
       </button>
     </div>
   );
 }
+

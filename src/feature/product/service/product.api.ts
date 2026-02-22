@@ -1,4 +1,5 @@
 import type { PriceMarginSettings, Product, ProductCategory } from "../model/product.types";
+import { readJsonOrThrow } from "../../../shared/http/http";
 import {
   createProductPriceRecord,
   createProduct,
@@ -21,13 +22,6 @@ const FAKE_API_URL = (import.meta.env.VITE_FAKE_API_URL || "").trim();
 
 function getUrl(path: string) {
   return FAKE_API_URL ? `${FAKE_API_URL}${path}` : path;
-}
-
-async function readJsonOrThrow<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return (await response.json()) as T;
 }
 
 export async function fetchProducts(): Promise<Product[]> {

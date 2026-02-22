@@ -1,6 +1,7 @@
 import type { PaymentMethod } from "../../sale/model/sale.types";
 
 export type WorkdayStatus = "open" | "pending-close" | "closed";
+export type CashShift = "diurno" | "nocturno";
 
 export type WorkdayCloseSummary = {
   totalSales: number;
@@ -33,6 +34,9 @@ export type WorkdayAdminReview = {
 export type CashOpeningAssignment = {
   operator: string;
   amount: number;
+  shift: CashShift;
+  startHour: string;
+  endHour: string;
   updatedBy: string;
   updatedAt: string;
 };

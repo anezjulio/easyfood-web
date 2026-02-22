@@ -1,11 +1,5 @@
 import type { Expense, ExpenseDraft } from "../model/expense.types";
-
-async function readJsonOrThrow<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return (await response.json()) as T;
-}
+import { readJsonOrThrow } from "../../../shared/http/http";
 
 export async function fetchExpensesApi(): Promise<Expense[]> {
   const response = await fetch("/expenses");

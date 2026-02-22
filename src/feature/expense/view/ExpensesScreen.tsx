@@ -2,25 +2,13 @@ import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
 import { resolveImageUrl, uploadImageFromFile } from "../../../shared/image/image.service";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { Expense, ExpenseType } from "../model/expense.types";
 import { createExpenseApi, fetchExpensesApi } from "../service/expense.api";
 import styles from "./ExpensesScreen.module.css";
-
-function normalize(text: string) {
-  return (text || "").toLowerCase().trim();
-}
-
-function formatDateTime(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(d);
-}
 
 function formatMoneyMask(value: number) {
   const amount = Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : 0;
@@ -40,7 +28,7 @@ function expenseTypeLabel(value: ExpenseType) {
 
 export default function ExpensesScreen() {
   const auth = useAuth();
-  const currentUsername = normalize(auth.user?.username || "");
+  const currentUsername = normalizeForSearch(auth.user?.username || "");
   const isAdmin = auth.user?.role === "admin";
 
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -73,8 +61,9 @@ export default function ExpensesScreen() {
         if (!alive) return;
         setError("No se pudieron cargar los gastos.");
       } finally {
-        if (!alive) return;
-        setLoading(false);
+        if (alive) {
+          setLoading(false);
+        }
       }
     })();
     return () => {
@@ -83,16 +72,16 @@ export default function ExpensesScreen() {
   }, []);
 
   const visibleExpenses = useMemo(() => {
-    const query = normalize(search);
+    const query = normalizeForSearch(search);
     let list = expenses;
     if (!isAdmin) {
-      list = list.filter((item) => normalize(item.createdBy) === currentUsername);
+      list = list.filter((item) => normalizeForSearch(item.createdBy) === currentUsername);
     }
     if (typeFilter !== "all") {
       list = list.filter((item) => item.expenseType === typeFilter);
     }
     if (query) {
-      list = list.filter((item) => normalize(`${item.description} ${item.createdBy}`).includes(query));
+      list = list.filter((item) => normalizeForSearch(`${item.description} ${item.createdBy}`).includes(query));
     }
     return [...list].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }, [currentUsername, expenses, isAdmin, search, typeFilter]);
@@ -455,3 +444,4 @@ export default function ExpensesScreen() {
     </div>
   );
 }
+

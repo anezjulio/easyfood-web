@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   calculateSalePrice,
   inferCostPriceFromSalePrice,
@@ -20,27 +20,11 @@ import {
   updateProductApi,
   upsertProductPriceMarginApi,
 } from "../service/product.api";
-import { formatDateAR, formatMoneyARS } from "./useProductListViewModel";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
 import { uploadImageFromFile } from "../../../shared/image/image.service";
-
-function normalize(s: string) {
-  return (s || "")
-    .toLowerCase()
-    .trim()
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "");
-}
-
-function matchesPriceFilter(price: number, filterDigits: string): boolean {
-  if (!filterDigits) return true;
-  const priceDigits = String(Math.trunc(Math.abs(price)));
-  const trailingZeros = filterDigits.match(/0+$/)?.[0].length ?? 0;
-  if (trailingZeros >= 2) {
-    return priceDigits === filterDigits;
-  }
-  return priceDigits.includes(filterDigits);
-}
+import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
+import { matchesPriceFilter } from "../../../shared/product/product-filter";
+import { normalizeForSearch } from "../../../shared/search/search";
 
 export function useProductCrudViewModel() {
   const auth = useAuth();
@@ -73,7 +57,7 @@ export function useProductCrudViewModel() {
   const [newProductUseMarginOverride, setNewProductUseMarginOverride] = useState(false);
   const [newProductMarginDraft, setNewProductMarginDraft] = useState("30");
 
-  async function reloadProducts(nextSelectedId?: string | null) {
+  const reloadProducts = useCallback(async (nextSelectedId?: string | null) => {
     setLoading(true);
     const list = await fetchProducts();
     setProducts(list);
@@ -81,22 +65,21 @@ export function useProductCrudViewModel() {
     if (typeof nextSelectedId !== "undefined") {
       setSelectedProductId(nextSelectedId);
     }
-  }
+  }, []);
 
-  async function reloadMarginSettings() {
+  const reloadMarginSettings = useCallback(async () => {
     try {
       const next = await fetchPriceMarginSettingsApi();
       setMarginSettings(next);
-      setCategoryMarginDraft(String(next.categoryMargins[category] ?? 30));
     } catch {
       setMarginSettings(null);
     }
-  }
+  }, []);
 
   useEffect(() => {
     void reloadProducts(null);
     void reloadMarginSettings();
-  }, []);
+  }, [reloadMarginSettings, reloadProducts]);
 
   const selectedProduct = useMemo(
     () => products.find((item) => item.id === selectedProductId) || null,
@@ -104,12 +87,12 @@ export function useProductCrudViewModel() {
   );
 
   const filteredProducts = useMemo(() => {
-    const q = normalize(nameFilter);
+    const q = normalizeForSearch(nameFilter);
     const p = (priceFilter || "").replace(/\D/g, "");
     let list = products;
 
     if (q) {
-      list = list.filter((item) => normalize(item.name).includes(q));
+      list = list.filter((item) => normalizeForSearch(item.name).includes(q));
     }
 
     if (barcodeFilter.trim()) {
@@ -159,8 +142,6 @@ export function useProductCrudViewModel() {
     newProductMarginPercent,
     newProductUseMarginOverride,
     selectedProduct,
-    selectedProduct?.category,
-    selectedProduct?.id,
   ]);
 
   const salePricePreview = useMemo(() => {
@@ -502,3 +483,4 @@ export function useProductCrudViewModel() {
     formatDateAR,
   };
 }
+

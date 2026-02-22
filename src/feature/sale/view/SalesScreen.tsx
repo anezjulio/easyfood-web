@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
+import HeaderOperationNotice from "../../../app/component/HeaderOperationNotice";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
 import ProductTable from "../../product/component/ProductTable";
 import type { Product, ProductSortKey } from "../../product/model/product.types";
 import { fetchProducts } from "../../product/service/product.api";
-import { formatDateAR, formatMoneyARS } from "../../product/viewmodel/useProductListViewModel";
+import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
+import { keepOnlyDigits } from "../../../shared/format/numeric";
+import { matchesPriceFilter } from "../../../shared/product/product-filter";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { Order, PaymentMethod, PaymentMethodSettings, TaxSettings } from "../model/sale.types";
 import {
   PAYMENT_METHODS,
@@ -25,7 +29,12 @@ import {
 } from "../service/sale.api";
 import { createStockEntryApi } from "../../stock/service/stock.api";
 import { resolveImageUrl } from "../../../shared/image/image.service";
-import { addOrderToCurrentWorkdayApi, fetchCurrentWorkdayApi, onCashStatusChanged } from "../../cash/service/cash.api";
+import {
+  addOrderToCurrentWorkdayApi,
+  fetchCashOpeningAssignmentsApi,
+  onCashStatusChanged,
+} from "../../cash/service/cash.api";
+import { openCashWithAmount, syncCashState as syncCashStateService } from "../../cash/service/cash.operation";
 import styles from "./SalesScreen.module.css";
 
 type CartItem = {
@@ -42,26 +51,6 @@ function generateOrderCode() {
   return `ORD-${stamp}-${rand}`;
 }
 
-function normalize(s: string) {
-  return (s || "")
-    .toLowerCase()
-    .trim()
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "");
-}
-
-function keepOnlyDigits(value: string) {
-  return (value || "").replace(/\D/g, "");
-}
-
-function matchesPriceFilter(price: number, filterDigits: string): boolean {
-  if (!filterDigits) return true;
-  const priceDigits = String(Math.trunc(Math.abs(price)));
-  const trailingZeros = filterDigits.match(/0+$/)?.[0].length ?? 0;
-  if (trailingZeros >= 2) return priceDigits === filterDigits;
-  return priceDigits.includes(filterDigits);
-}
-
 function getPendingTimeoutMinutes() {
   const raw = Math.trunc(Number(import.meta.env.VITE_ORDER_PENDING_TIMEOUT_MINUTES));
   if (!Number.isFinite(raw) || raw <= 0) return 15;
@@ -76,6 +65,14 @@ function isPendingOrderExpired(order: Order) {
   const createdAtMs = new Date(order.createdAt).getTime();
   if (!Number.isFinite(createdAtMs)) return false;
   return Date.now() - createdAtMs >= PENDING_PAYMENT_TIMEOUT_MS;
+}
+
+function parseOpeningAmount(value: string): number | null {
+  const normalized = String(value || "").trim().replace(",", ".");
+  if (!normalized) return null;
+  const parsed = Number(normalized);
+  if (!Number.isFinite(parsed) || parsed < 0) return null;
+  return Math.trunc(parsed);
 }
 
 export default function SalesScreen() {
@@ -109,10 +106,16 @@ export default function SalesScreen() {
   const [paymentMethodSettings, setPaymentMethodSettings] = useState<PaymentMethodSettings>(buildDefaultPaymentMethodSettings());
   const [taxSettings, setTaxSettings] = useState<TaxSettings>(buildDefaultTaxSettings());
   const [isApprovingPayment, setIsApprovingPayment] = useState(false);
-  const [isCashOpen, setIsCashOpen] = useState(true);
+  const [isCashOpen, setIsCashOpen] = useState(false);
+  const [assignedOpeningAmount, setAssignedOpeningAmount] = useState<number | null>(null);
+  const [openingAmountInput, setOpeningAmountInput] = useState("");
+  const [isOpeningCashFromModal, setIsOpeningCashFromModal] = useState(false);
+  const [cashModalError, setCashModalError] = useState("");
   const [paymentModalTop, setPaymentModalTop] = useState<number | null>(null);
   const [paymentModalLeft, setPaymentModalLeft] = useState<number | null>(null);
   const [paymentModalWidth, setPaymentModalWidth] = useState<number | null>(null);
+  const currentUsername = auth.user?.username ?? "";
+  const isCashOpenForSession = isCashOpen;
 
   async function reloadProducts() {
     setLoading(true);
@@ -142,48 +145,55 @@ export default function SalesScreen() {
   }, []);
 
   useEffect(() => {
-    let alive = true;
-    async function syncCashState() {
-      if (!auth.user?.username) {
-        setIsCashOpen(false);
-        return;
-      }
-      try {
-        const current = await fetchCurrentWorkdayApi(auth.user.username);
-        if (!alive) return;
-        const currentStatus = current?.status || (current?.endedAt ? "closed" : "open");
-        setIsCashOpen(currentStatus === "open");
-      } catch {
-        if (!alive) return;
-        setIsCashOpen(false);
-      }
+    if (!currentUsername) {
+      setAssignedOpeningAmount(null);
+      return;
     }
 
-    void syncCashState();
-    const off = onCashStatusChanged(() => {
-      void syncCashState();
+    let alive = true;
+    (async () => {
+      try {
+        const assignments = await fetchCashOpeningAssignmentsApi();
+        if (!alive) return;
+        const own = assignments.find(
+          (item) => normalizeForSearch(item.operator) === normalizeForSearch(currentUsername),
+        );
+        setAssignedOpeningAmount(own ? Math.trunc(Number(own.amount || 0)) : null);
+      } catch {
+        if (!alive) return;
+        setAssignedOpeningAmount(null);
+      }
+    })();
+
+    return () => {
+      alive = false;
+    };
+  }, [currentUsername]);
+
+  useEffect(() => {
+    if (!currentUsername) {
+      setIsCashOpen(false);
+      return;
+    }
+
+    let alive = true;
+    async function syncCashState(operator: string) {
+      const result = await syncCashStateService(operator);
+      if (!alive) return;
+      setIsCashOpen(result.isOpen);
+    }
+
+    void syncCashState(currentUsername);
+    const off = onCashStatusChanged((operator) => {
+      if (operator !== currentUsername) return;
+      void syncCashState(operator);
     });
-    const pollId = window.setInterval(() => {
-      void syncCashState();
-    }, 4000);
-    const handleFocus = () => {
-      void syncCashState();
-    };
-    const handleVisibility = () => {
-      if (document.visibilityState !== "visible") return;
-      void syncCashState();
-    };
-    window.addEventListener("focus", handleFocus);
-    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       alive = false;
       off();
-      window.clearInterval(pollId);
-      window.removeEventListener("focus", handleFocus);
-      document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [auth.user?.username]);
+  }, [currentUsername]);
 
   const selectedProduct = useMemo(
     () => products.find((p) => p.id === selectedProductId) || null,
@@ -279,18 +289,18 @@ export default function SalesScreen() {
   }, [isModalOpen]);
 
   const filteredProducts = useMemo(() => {
-    const q = normalize(nameFilter);
-    const c = normalize(categoryFilter);
+    const q = normalizeForSearch(nameFilter);
+    const c = normalizeForSearch(categoryFilter);
     const p = priceFilter.replace(/\D/g, "");
     let list = products;
 
-    if (q) list = list.filter((item) => normalize(item.name).includes(q));
+    if (q) list = list.filter((item) => normalizeForSearch(item.name).includes(q));
     if (barcodeFilter.trim()) {
       const barcodeQuery = barcodeFilter.trim();
       list = list.filter((item) => (item.barcode || "").includes(barcodeQuery));
     }
     if (c) {
-      list = list.filter((item) => normalize(item.category || "").includes(c));
+      list = list.filter((item) => normalizeForSearch(item.category || "").includes(c));
     }
     if (p) list = list.filter((item) => matchesPriceFilter(item.price, p));
     if (createdAtFilter) {
@@ -565,6 +575,34 @@ export default function SalesScreen() {
     setMessage("El pago no pudo concretarse. Puedes volver a intentarlo.");
   }
 
+  async function openCashFromModal() {
+    if (!currentUsername) {
+      setCashModalError("No hay un usuario activo para abrir caja.");
+      return;
+    }
+
+    const openingAmount = parseOpeningAmount(openingAmountInput);
+    if (openingAmount === null) {
+      setCashModalError("Ingresa un monto valido para abrir caja.");
+      return;
+    }
+
+    setCashModalError("");
+    setIsOpeningCashFromModal(true);
+    setError("");
+    setMessage("");
+    try {
+      await openCashWithAmount(currentUsername, openingAmount);
+      setIsCashOpen(true);
+      setOpeningAmountInput("");
+      setMessage("Caja abierta. Ya puedes continuar con la venta.");
+    } catch (error) {
+      setCashModalError(error instanceof Error && error.message ? error.message : "No se pudo abrir caja desde esta pantalla.");
+    } finally {
+      setIsOpeningCashFromModal(false);
+    }
+  }
+
   async function approvePayment() {
     if (!pendingOrder) {
       setError("No hay compra pendiente para aprobar.");
@@ -627,19 +665,29 @@ export default function SalesScreen() {
     }
   }
 
-  const generateLabel = hasPendingPayment ? "Reintentar pago" : "Generar compra";
+  const generateLabel = "Pagar";
   const orderCodeLabel = pendingOrder?.id || draftOrderCode;
+  const clearHeaderNotice = () => {
+    setError("");
+    setMessage("");
+  };
 
   return (
     <div className={styles.page}>
-      <div className={`${styles.content} ${!isCashOpen ? styles.contentDisabled : ""}`}>
+      <div className={`${styles.content} ${!isCashOpenForSession ? styles.contentDisabled : ""}`}>
         <header className={styles.header}>
-          <div>
+          <div className={styles.headerLead}>
             <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Ventas" }]} asTitle />
             <p className={styles.subtitle}>
               Arma la compra y simula la aprobacion o rechazo del pago (vence en {PENDING_PAYMENT_TIMEOUT_MINUTES} min por defecto).
             </p>
           </div>
+          <HeaderOperationNotice
+            className={styles.headerNotice}
+            message={message}
+            error={error}
+            onClose={clearHeaderNotice}
+          />
           <SessionStatusBar showSalesShortcut={false} />
         </header>
 
@@ -768,14 +816,11 @@ export default function SalesScreen() {
               <p className={styles.totalValue}>{formatMoneyARS(cartBaseTotal)}</p>
             </div>
 
-            {error ? <p className={styles.error}>{error}</p> : null}
-            {message ? <p className={styles.message}>{message}</p> : null}
-
             <button
               type="button"
               className={styles.primaryBtn}
               onClick={openPaymentModal}
-              disabled={cart.length === 0 || isApprovingPayment || !isCashOpen}
+              disabled={cart.length === 0 || isApprovingPayment || !isCashOpenForSession}
             >
               {generateLabel}
             </button>
@@ -914,14 +959,54 @@ export default function SalesScreen() {
         </div>
       ) : null}
 
-      {!isCashOpen ? (
+      {!isCashOpenForSession ? (
         <div className={styles.modalOverlay} role="presentation">
           <section className={styles.modalCard} role="dialog" aria-modal="true" aria-label="Caja cerrada">
-            <h3 className={styles.modalTitle}>Caja cerrada</h3>
+            <h3 className={styles.modalTitle}>Apertura de caja</h3>
             <p className={styles.modalHint}>Usuario: {auth.user?.username || "-"}</p>
-            <p className={styles.modalHint}>Estado: cerrada</p>
+            <p className={`${styles.modalHint} ${styles.modalStatusLine}`}>
+              Estado: <span className={styles.modalHintError}>Cerrada</span>
+            </p>
+            {typeof assignedOpeningAmount === "number" && assignedOpeningAmount > 0 ? (
+              <p className={styles.modalHint}>
+                Monto asignado por administracion:{" "}
+                <span className={styles.assignedAmount}>{formatMoneyARS(assignedOpeningAmount)}</span>.
+              </p>
+            ) : null}
+            <form
+              className={styles.closedCashInlineForm}
+              onSubmit={(event) => {
+                event.preventDefault();
+                void openCashFromModal();
+              }}
+            >
+              <label className={styles.closedCashField}>
+                <span>Efectivo recibido para abrir caja</span>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min={0}
+                  step={1}
+                  value={openingAmountInput}
+                  onChange={(event) => setOpeningAmountInput(event.target.value)}
+                  placeholder="0"
+                />
+              </label>
+              <button type="submit" className={styles.primaryBtn} disabled={isOpeningCashFromModal || !currentUsername}>
+                {isOpeningCashFromModal ? "Abriendo..." : "Abrir caja"}
+              </button>
+            </form>
+            {cashModalError ? <p className={styles.inlineError}>{cashModalError}</p> : null}
             <div className={styles.modalActions}>
-              <button type="button" className={styles.primaryBtn} onClick={() => nav("/cash")}>
+              <button
+                type="button"
+                className={styles.secondaryBtn}
+                onClick={() => nav("/operation")}
+                disabled={isOpeningCashFromModal}
+              >
+                Volver
+              </button>
+              <button type="button" className={styles.secondaryBtn} onClick={() => nav("/cash")} disabled={isOpeningCashFromModal}>
                 Ir a caja
               </button>
             </div>
@@ -931,3 +1016,4 @@ export default function SalesScreen() {
     </div>
   );
 }
+

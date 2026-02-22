@@ -169,9 +169,14 @@ type WorkdayAdminReview = {
   mismatchReport?: string;
 };
 
+type CashShift = "diurno" | "nocturno";
+
 type CashOpeningAssignment = {
   operator: string;
   amount: number;
+  shift: CashShift;
+  startHour: string;
+  endHour: string;
   updatedBy: string;
   updatedAt: string;
 };
@@ -1181,10 +1186,15 @@ function mockDbPlugin(): Plugin {
             if (!Number.isFinite(body.amount) || body.amount < 0) {
               return sendJson(res, 400, { message: "Amount must be a non-negative number" });
             }
+            const shift = normalizeCashShift(body.shift);
+            const shiftWindow = CASH_SHIFT_WINDOWS[shift];
             const index = db.cashOpeningAssignments.findIndex((item) => item.operator === cashOpeningAssignmentOperator);
             const assignment: CashOpeningAssignment = {
               operator: cashOpeningAssignmentOperator,
               amount: Math.trunc(body.amount),
+              shift,
+              startHour: shiftWindow.startHour,
+              endHour: shiftWindow.endHour,
               updatedBy: body.updatedBy || "admin",
               updatedAt: new Date().toISOString(),
             };
@@ -1233,6 +1243,17 @@ function mockDbPlugin(): Plugin {
             }
 
             const assignment = findCashOpeningAssignment(db, body.operator);
+            const isAdminOperator = body.operator.trim().toLowerCase() === "admin";
+            if (!assignment && !isAdminOperator) {
+              return sendJson(res, 403, {
+                message: "No tienes un turno y monto de apertura asignados. Contacta al administrador.",
+              });
+            }
+            if (assignment && !isNowWithinRange(assignment.startHour, assignment.endHour)) {
+              return sendJson(res, 403, {
+                message: `Fuera del horario asignado (${assignment.startHour} a ${assignment.endHour}) para el turno ${assignment.shift}.`,
+              });
+            }
             const openingDeclaredAmount = Math.trunc(body.openingAmount);
             const openingAssignedAmount = assignment ? Math.trunc(assignment.amount) : undefined;
             const openingDifferenceAmount =
@@ -2600,6 +2621,49 @@ function normalizeWorkdayRecord(input: unknown): Workday | null {
   };
 }
 
+const CASH_SHIFT_WINDOWS: Record<CashShift, { startHour: string; endHour: string }> = {
+  diurno: { startHour: "08:00", endHour: "19:59" },
+  nocturno: { startHour: "20:00", endHour: "07:59" },
+};
+
+function normalizeCashShift(value: unknown): CashShift {
+  const raw = String(value || "").trim().toLowerCase();
+  return raw === "nocturno" ? "nocturno" : "diurno";
+}
+
+function parseTimeMinutes(value: unknown): number | null {
+  const raw = String(value || "").trim();
+  const match = /^(\d{1,2}):(\d{2})$/.exec(raw);
+  if (!match) return null;
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+  return hours * 60 + minutes;
+}
+
+function normalizeShiftHours(shift: CashShift, startHour: unknown, endHour: unknown): { startHour: string; endHour: string } {
+  const fallback = CASH_SHIFT_WINDOWS[shift];
+  const startMinutes = parseTimeMinutes(startHour);
+  const endMinutes = parseTimeMinutes(endHour);
+  if (startMinutes === null || endMinutes === null) {
+    return fallback;
+  }
+  const format = (value: number) => `${String(Math.trunc(value / 60)).padStart(2, "0")}:${String(value % 60).padStart(2, "0")}`;
+  return { startHour: format(startMinutes), endHour: format(endMinutes) };
+}
+
+function isNowWithinRange(startHour: string, endHour: string, now = new Date()): boolean {
+  const startMinutes = parseTimeMinutes(startHour);
+  const endMinutes = parseTimeMinutes(endHour);
+  if (startMinutes === null || endMinutes === null) return true;
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+  if (startMinutes <= endMinutes) {
+    return currentMinutes >= startMinutes && currentMinutes <= endMinutes;
+  }
+  return currentMinutes >= startMinutes || currentMinutes <= endMinutes;
+}
+
 function resolveCashOpeningAssignments(input: unknown[]): CashOpeningAssignment[] {
   const map = new Map<string, CashOpeningAssignment>();
   for (const item of input) {
@@ -2607,9 +2671,14 @@ function resolveCashOpeningAssignments(input: unknown[]): CashOpeningAssignment[
     const operator = String(raw.operator || "").trim();
     const amount = Math.trunc(Number(raw.amount));
     if (!operator || !Number.isFinite(amount) || amount < 0) continue;
+    const shift = normalizeCashShift(raw.shift);
+    const hours = normalizeShiftHours(shift, raw.startHour, raw.endHour);
     map.set(operator, {
       operator,
       amount,
+      shift,
+      startHour: hours.startHour,
+      endHour: hours.endHour,
       updatedBy: String(raw.updatedBy || "").trim() || "admin",
       updatedAt: String(raw.updatedAt || "").trim() || new Date().toISOString(),
     });
@@ -4037,10 +4106,11 @@ function sanitizeWorkdayAdminCloseDraft(input: unknown): {
   };
 }
 
-function sanitizeCashOpeningAssignmentDraft(input: unknown): { amount: number; updatedBy: string } {
-  const obj = (input || {}) as { amount?: unknown; updatedBy?: unknown };
+function sanitizeCashOpeningAssignmentDraft(input: unknown): { amount: number; shift: CashShift; updatedBy: string } {
+  const obj = (input || {}) as { amount?: unknown; shift?: unknown; updatedBy?: unknown };
   return {
     amount: Number(obj.amount),
+    shift: normalizeCashShift(obj.shift),
     updatedBy: String(obj.updatedBy || "").trim(),
   };
 }

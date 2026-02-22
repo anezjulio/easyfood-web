@@ -1,21 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
 import type { OperationRequest } from "../model/request.types";
 import { fetchOperationRequestsApi, updateOperationRequestStatusApi } from "../service/request.api";
 import { createSupplyOrderApi, fetchSupplyOrdersApi } from "../../supply/service/supply.api";
 import styles from "./ApproveRequestsScreen.module.css";
-
-function formatDateTime(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(d);
-}
 
 function requestTypeLabel(value: OperationRequest["requestType"]) {
   return value === "merchandise" ? "Mercancia" : "Solicitud";
@@ -59,8 +50,9 @@ export default function ApproveRequestsScreen() {
         if (!alive) return;
         setError("No se pudo cargar solicitudes.");
       } finally {
-        if (!alive) return;
-        setLoading(false);
+        if (alive) {
+          setLoading(false);
+        }
       }
     })();
     return () => {
@@ -502,3 +494,4 @@ export default function ApproveRequestsScreen() {
     </div>
   );
 }
+

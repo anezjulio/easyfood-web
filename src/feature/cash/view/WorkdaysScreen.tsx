@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
+import { formatDateTimeAR as formatDateTime, formatMoneyARS } from "../../../shared/format/locale";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { Workday } from "../model/cash.types";
 import { fetchWorkdaysApi } from "../service/cash.api";
 import type { Order } from "../../sale/model/sale.types";
 import { fetchOrdersApi } from "../../sale/service/sale.api";
-import { formatMoneyARS } from "../../product/viewmodel/useProductListViewModel";
 import styles from "./WorkdaysScreen.module.css";
 
 type WorkdaySortKey = "id" | "operator" | "startedAt" | "endedAt" | "orders";
@@ -17,24 +18,10 @@ type WorkdaysNavigationState = {
   orderId?: string;
 };
 
-function formatDateTime(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(d);
-}
-
 function formatWorkdayClose(item: Workday) {
   if (item.endedAt) return formatDateTime(item.endedAt);
   const status = item.status || (item.endedAt ? "closed" : "open");
   return status === "pending-close" ? "Pendiente admin" : "-";
-}
-
-function normalize(s: string) {
-  return (s || "").toLowerCase().trim();
 }
 
 function formatDuration(startIso: string, endIso?: string) {
@@ -75,11 +62,11 @@ export default function WorkdaysScreen() {
   }, []);
 
   const filtered = useMemo(() => {
-    const idQuery = normalize(idFilter);
-    const operatorQuery = normalize(operatorFilter);
+    const idQuery = normalizeForSearch(idFilter);
+    const operatorQuery = normalizeForSearch(operatorFilter);
     let list = workdays;
-    if (idQuery) list = list.filter((item) => normalize(item.id).includes(idQuery));
-    if (operatorQuery) list = list.filter((item) => normalize(item.operator).includes(operatorQuery));
+    if (idQuery) list = list.filter((item) => normalizeForSearch(item.id).includes(idQuery));
+    if (operatorQuery) list = list.filter((item) => normalizeForSearch(item.operator).includes(operatorQuery));
     if (startedFilter) list = list.filter((item) => item.startedAt.slice(0, 10) === startedFilter);
     if (endedFilter) list = list.filter((item) => (item.endedAt || "").slice(0, 10) === endedFilter);
 
@@ -110,12 +97,17 @@ export default function WorkdaysScreen() {
     if (navState?.from !== "balance-cash" || !navState.workdayId) return;
     const targetWorkday = workdays.find((item) => item.id === navState.workdayId);
     if (!targetWorkday) return;
-    setSelectedWorkdayId(targetWorkday.id);
-    if (navState.orderId && targetWorkday.orderIds.includes(navState.orderId)) {
-      setExpandedOrderIds([navState.orderId]);
-      return;
-    }
-    setExpandedOrderIds([]);
+    const timerId = window.setTimeout(() => {
+      setSelectedWorkdayId(targetWorkday.id);
+      if (navState.orderId && targetWorkday.orderIds.includes(navState.orderId)) {
+        setExpandedOrderIds([navState.orderId]);
+        return;
+      }
+      setExpandedOrderIds([]);
+    }, 0);
+    return () => {
+      window.clearTimeout(timerId);
+    };
   }, [loading, location.key, location.state, workdays]);
 
   const selectedTotal = useMemo(
@@ -328,3 +320,4 @@ function DateFilter({ value, onChange }: { value: string; onChange: (v: string) 
     </div>
   );
 }
+

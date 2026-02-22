@@ -1,13 +1,12 @@
-﻿import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useLoginViewModel } from "../viewmodel/useLoginViewModel";
 import styles from "./LoginScreen.module.css";
 
 export default function LoginScreen() {
   const vm = useLoginViewModel();
   const nav = useNavigate();
-  const location = useLocation() as any;
-
-  const from = location?.state?.from || "/operation";
+  const location = useLocation();
+  const from = (location.state as { from?: string } | null)?.from || "/operation";
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

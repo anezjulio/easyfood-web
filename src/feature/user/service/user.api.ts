@@ -1,4 +1,5 @@
 import type { AppUserRecord } from "../model/user.types";
+import { readJsonOrThrow } from "../../../shared/http/http";
 
 export type UserDraft = {
   name: string;
@@ -17,13 +18,6 @@ export type UserUpdateDraft = {
   startHour: string;
   endHour: string;
 };
-
-async function readJsonOrThrow<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return (await response.json()) as T;
-}
 
 export async function fetchUsersApi(): Promise<AppUserRecord[]> {
   const response = await fetch("/users");

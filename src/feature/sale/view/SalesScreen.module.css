@@ -13,11 +13,29 @@
 }
 
 .header {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: end;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-height: 44px;
+}
+
+.headerLead {
+  min-width: 0;
+  flex: 0 1 auto;
+  max-width: 44%;
+}
+
+.headerNotice {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: min(56vw, 760px);
+  z-index: 1;
 }
 
 .subtitle {
@@ -456,6 +474,19 @@
   font-size: 17px;
 }
 
+.modalHintError {
+  color: #991b1b;
+}
+
+.modalStatusLine {
+  color: #0f172a;
+}
+
+.assignedAmount {
+  color: #15803d;
+  font-weight: 900;
+}
+
 .modalTotals {
   display: grid;
   gap: 6px;
@@ -519,7 +550,53 @@
   flex-wrap: wrap;
 }
 
+.closedCashInlineForm {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.closedCashField {
+  display: grid;
+  gap: 6px;
+  min-width: 250px;
+}
+
+.closedCashField > span {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.inlineError {
+  margin: 0;
+  padding: 10px 14px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 800;
+}
+
 @media (max-width: 920px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .headerLead {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+
+  .headerNotice {
+    position: static;
+    transform: none;
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+    flex: 1 1 100%;
+    order: 3;
+  }
+
   .layout {
     grid-template-columns: 1fr;
   }
@@ -596,6 +673,11 @@
     max-width: 100%;
     max-height: calc(100vh - 20px);
     margin-top: 0 !important;
+  }
+
+  .closedCashInlineForm {
+    flex-direction: column;
+    align-items: stretch;
   }
 
 }

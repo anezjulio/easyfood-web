@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime, formatMoneyARS } from "../../../shared/format/locale";
 import type { Workday } from "../../cash/model/cash.types";
 import { fetchWorkdaysApi } from "../../cash/service/cash.api";
 import type { Expense } from "../../expense/model/expense.types";
 import { fetchExpensesApi } from "../../expense/service/expense.api";
-import { formatMoneyARS } from "../../product/viewmodel/useProductListViewModel";
 import type { Order } from "../../sale/model/sale.types";
 import { fetchOrdersApi } from "../../sale/service/sale.api";
 import type { SupplyOrder } from "../../supply/model/supply.types";
@@ -37,13 +37,6 @@ function formatTimeOnly(iso?: string) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   return new Intl.DateTimeFormat("es-AR", { timeStyle: "short", hour12: false }).format(d);
-}
-
-function formatDateTime(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", { dateStyle: "short", timeStyle: "short" }).format(d);
 }
 
 function getWorkdayMinutes(startIso: string, endIso?: string) {
@@ -184,8 +177,9 @@ export default function ReportsScreen() {
         if (!alive) return;
         setError("No se pudieron cargar los datos de balance.");
       } finally {
-        if (!alive) return;
-        setLoading(false);
+        if (alive) {
+          setLoading(false);
+        }
       }
     })();
     return () => {
@@ -601,7 +595,7 @@ export default function ReportsScreen() {
                                     key={order.id}
                                     className={`${styles.orderRow} ${i % 2 === 0 ? styles.orderRowEven : ""}`}
                                     onClick={() => switchToCashWorkday(wd.id)}
-                                    title="Abrir esta jornada en la pesta�a Caja"
+                                    title="Abrir esta jornada en la pestaï¿½a Caja"
                                   >
                                     <div className={styles.orderIdCell}>{order.id}</div>
                                     <div className={styles.cellCenter}>{formatDateOnly(order.createdAt)}</div>
@@ -1026,3 +1020,4 @@ export default function ReportsScreen() {
     </div>
   );
 }
+

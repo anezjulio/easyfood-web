@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { Product, ProductCategory } from "../../product/model/product.types";
 import { fetchProducts } from "../../product/service/product.api";
 import type {
@@ -68,17 +70,6 @@ const notificationTypeLabel: Record<NotificationType, string> = {
 
 const allTypes = Object.keys(notificationTypeLabel) as NotificationType[];
 
-function normalize(value: string) {
-  return String(value || "").trim().toLowerCase();
-}
-
-function formatDateTime(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", { dateStyle: "short", timeStyle: "short" }).format(d);
-}
-
 function getTime(value?: string) {
   if (!value) return Number.NaN;
   return new Date(value).getTime();
@@ -128,7 +119,7 @@ export default function NotificationsScreen() {
   const [createFixed, setCreateFixed] = useState(false);
   const [createRequiresAction, setCreateRequiresAction] = useState(true);
 
-  async function reload() {
+  const reload = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -143,19 +134,17 @@ export default function NotificationsScreen() {
       setStockThresholdSettings(stockThresholdList);
       setCategoryThresholdDrafts(buildCategoryThresholdDrafts(stockThresholdList));
       setProducts(productList);
-      if (!selectedProductIdForThreshold && productList.length > 0) {
-        setSelectedProductIdForThreshold(productList[0].id);
-      }
+      setSelectedProductIdForThreshold((current) => current || productList[0]?.id || "");
     } catch {
       setError("No se pudieron cargar notificaciones.");
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     void reload();
-  }, []);
+  }, [reload]);
 
   useEffect(() => {
     const selected = settings.find((item) => item.type === selectedSettingType);
@@ -192,7 +181,7 @@ export default function NotificationsScreen() {
   }, [selectedProductIdForThreshold, stockThresholdSettings]);
 
   const filteredNotifications = useMemo(() => {
-    const query = normalize(search);
+    const query = normalizeForSearch(search);
     const fromMs = fromDate ? new Date(`${fromDate}T00:00:00`).getTime() : Number.NEGATIVE_INFINITY;
     const toMs = toDate ? new Date(`${toDate}T23:59:59.999`).getTime() : Number.POSITIVE_INFINITY;
 
@@ -203,7 +192,7 @@ export default function NotificationsScreen() {
       if (!Number.isFinite(createdMs) || createdMs < fromMs || createdMs > toMs) return false;
       if (!query) return true;
       const raw = `${item.title} ${item.description} ${notificationTypeLabel[item.type]} ${item.entityType || ""} ${item.entityId || ""}`;
-      return normalize(raw).includes(query);
+      return normalizeForSearch(raw).includes(query);
     });
 
     list = [...list].sort((a, b) => {
@@ -800,3 +789,4 @@ function NotificationList({
     </div>
   );
 }
+

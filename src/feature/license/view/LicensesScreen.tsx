@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { ProductCategory } from "../../product/model/product.types";
 import type { LicenseRecord, LicenseStatus } from "../model/license.types";
 import { addLicenseIssuanceApi, createLicenseApi, fetchLicensesApi, updateLicenseApi } from "../service/license.api";
@@ -16,17 +18,6 @@ const categoryOptions: ProductCategory[] = [
   "golosina",
   "perecedero",
 ];
-
-function normalize(value: string) {
-  return String(value || "").trim().toLowerCase();
-}
-
-function formatDateTime(iso?: string) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", { dateStyle: "short", timeStyle: "short" }).format(d);
-}
 
 function formatDateOnly(iso?: string) {
   if (!iso) return "-";
@@ -144,14 +135,14 @@ export default function LicensesScreen() {
   }, [selected]);
 
   const filteredLicenses = useMemo(() => {
-    const query = normalize(search);
+    const query = normalizeForSearch(search);
     return sortedLicenses.filter((item) => {
       const itemStatus = resolveStatus(item);
       if (statusFilter !== "all" && itemStatus !== statusFilter) return false;
       if (categoryFilter !== "all" && item.category !== categoryFilter) return false;
       if (!query) return true;
       const raw = `${item.name} ${item.description} ${item.category || ""} ${item.contactEmail || ""} ${item.sourceAddress || ""}`;
-      return normalize(raw).includes(query);
+      return normalizeForSearch(raw).includes(query);
     });
   }, [categoryFilter, search, sortedLicenses, statusFilter]);
 
@@ -494,3 +485,4 @@ export default function LicensesScreen() {
     </div>
   );
 }
+

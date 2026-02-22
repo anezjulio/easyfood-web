@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateAR } from "../../../shared/format/locale";
 import {
   PRODUCT_CATEGORIES,
   resolveEffectiveMarginPercent,
@@ -16,7 +17,6 @@ import {
   updateCategoryPriceMarginApi,
   upsertProductPriceMarginApi,
 } from "../../product/service/product.api";
-import { formatDateAR } from "../../product/viewmodel/useProductListViewModel";
 import {
   PAYMENT_METHODS,
   formatPaymentMethodLabel,
@@ -549,3 +549,4 @@ export default function FinanceScreen() {
     </div>
   );
 }
+

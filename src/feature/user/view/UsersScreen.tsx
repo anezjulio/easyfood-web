@@ -1,26 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { md5 } from "../../../shared/crypto/md5";
+import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { AppUserRecord } from "../model/user.types";
 import { createUserApi, deleteUserApi, fetchUsersApi, updateUserApi } from "../service/user.api";
 import styles from "./UsersScreen.module.css";
 
 type UserSortKey = "name" | "email" | "username" | "createdAt" | "updatedAt" | "startHour" | "endHour";
-
-function formatDateTime(iso: string) {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(d);
-}
-
-function normalize(s: string) {
-  return (s || "").toLowerCase().trim();
-}
 
 export default function UsersScreen() {
   const auth = useAuth();
@@ -48,6 +37,25 @@ export default function UsersScreen() {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [hasUserSorted, setHasUserSorted] = useState(false);
 
+  function applyUserForm(user: AppUserRecord | null) {
+    if (!user) {
+      setName("");
+      setEmail("");
+      setUsername("");
+      setPassword("");
+      setStartHour("08:00");
+      setEndHour("17:00");
+      return;
+    }
+
+    setName(user.name);
+    setEmail(user.email);
+    setUsername(user.username);
+    setPassword("");
+    setStartHour(user.startHour);
+    setEndHour(user.endHour);
+  }
+
   async function reloadUsers(nextSelectedId?: string | null) {
     setLoading(true);
     const list = await fetchUsersApi();
@@ -55,11 +63,27 @@ export default function UsersScreen() {
     setLoading(false);
     if (typeof nextSelectedId !== "undefined") {
       setSelectedUserId(nextSelectedId);
+      const selected = list.find((item) => item.id === nextSelectedId) || null;
+      applyUserForm(selected);
     }
   }
 
   useEffect(() => {
-    void reloadUsers(null);
+    let alive = true;
+    (async () => {
+      try {
+        const list = await fetchUsersApi();
+        if (!alive) return;
+        setUsers(list);
+      } finally {
+        if (alive) {
+          setLoading(false);
+        }
+      }
+    })();
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const selectedUser = useMemo(
@@ -67,28 +91,18 @@ export default function UsersScreen() {
     [users, selectedUserId],
   );
 
-  useEffect(() => {
-    if (!selectedUser) return;
-    setName(selectedUser.name);
-    setEmail(selectedUser.email);
-    setUsername(selectedUser.username);
-    setPassword("");
-    setStartHour(selectedUser.startHour);
-    setEndHour(selectedUser.endHour);
-  }, [selectedUser]);
-
   const filteredUsers = useMemo(() => {
-    const n = normalize(nameFilter);
-    const e = normalize(emailFilter);
-    const u = normalize(usernameFilter);
-    const sh = normalize(startHourFilter);
-    const eh = normalize(endHourFilter);
+    const n = normalizeForSearch(nameFilter);
+    const e = normalizeForSearch(emailFilter);
+    const u = normalizeForSearch(usernameFilter);
+    const sh = normalizeForSearch(startHourFilter);
+    const eh = normalizeForSearch(endHourFilter);
     let list = users;
-    if (n) list = list.filter((item) => normalize(item.name).includes(n));
-    if (e) list = list.filter((item) => normalize(item.email).includes(e));
-    if (u) list = list.filter((item) => normalize(item.username).includes(u));
-    if (sh) list = list.filter((item) => normalize(item.startHour).includes(sh));
-    if (eh) list = list.filter((item) => normalize(item.endHour).includes(eh));
+    if (n) list = list.filter((item) => normalizeForSearch(item.name).includes(n));
+    if (e) list = list.filter((item) => normalizeForSearch(item.email).includes(e));
+    if (u) list = list.filter((item) => normalizeForSearch(item.username).includes(u));
+    if (sh) list = list.filter((item) => normalizeForSearch(item.startHour).includes(sh));
+    if (eh) list = list.filter((item) => normalizeForSearch(item.endHour).includes(eh));
     if (createdAtFilter) list = list.filter((item) => item.createdAt.slice(0, 10) === createdAtFilter);
     if (updatedAtFilter) list = list.filter((item) => item.updatedAt.slice(0, 10) === updatedAtFilter);
 
@@ -122,14 +136,15 @@ export default function UsersScreen() {
 
   function clearForm() {
     setSelectedUserId(null);
-    setName("");
-    setEmail("");
-    setUsername("");
-    setPassword("");
-    setStartHour("08:00");
-    setEndHour("17:00");
+    applyUserForm(null);
     setError("");
     setMessage("");
+  }
+
+  function selectUserForEdit(userId: string) {
+    const selected = users.find((item) => item.id === userId) || null;
+    setSelectedUserId(selected ? selected.id : null);
+    applyUserForm(selected);
   }
 
   async function submitForm(event: React.FormEvent) {
@@ -254,7 +269,7 @@ export default function UsersScreen() {
                 <input value={username} onChange={(e) => setUsername(e.target.value)} className={styles.input} />
               </label>
               <label className={styles.field}>
-                <span>{selectedUser ? "Cambiar contraseña" : "Contraseña"}</span>
+                <span>{selectedUser ? "Cambiar contrasena" : "Contrasena"}</span>
                 <input value={password} onChange={(e) => setPassword(e.target.value)} className={styles.input} type="password" />
               </label>
               <label className={styles.field}>
@@ -325,7 +340,7 @@ export default function UsersScreen() {
                   type="button"
                   key={item.id}
                   className={`${styles.tableRow} ${selectedUserId === item.id ? styles.rowActive : ""} ${index % 2 === 0 ? styles.rowEven : ""}`}
-                  onClick={() => setSelectedUserId(item.id)}
+                  onClick={() => selectUserForEdit(item.id)}
                 >
                   <div>{item.name}</div>
                   <div>{item.email}</div>
@@ -394,3 +409,4 @@ function DateFilter({ value, onChange }: { value: string; onChange: (value: stri
     </div>
   );
 }
+

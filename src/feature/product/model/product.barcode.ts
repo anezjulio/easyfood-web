@@ -1,13 +1,7 @@
-function normalize(value: string): string {
-  return (value || "")
-    .toLowerCase()
-    .trim()
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "");
-}
+import { normalizeForSearch } from "../../../shared/search/search";
 
 export function isPanchoProductType(name: string): boolean {
-  return normalize(name).includes("pancho");
+  return normalizeForSearch(name).includes("pancho");
 }
 
 export function generateAutoBarcode(): string {

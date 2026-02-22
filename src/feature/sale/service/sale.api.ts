@@ -7,6 +7,7 @@ import type {
   PaymentMethodSettings,
   TaxSettings,
 } from "../model/sale.types";
+import { readJsonOrThrow } from "../../../shared/http/http";
 
 type CreateOrderDraft = {
   items: OrderItem[];
@@ -25,13 +26,6 @@ type CreateInvoiceDraft = {
   paymentMethod: PaymentMethod;
   operator: string;
 };
-
-async function readJsonOrThrow<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return (await response.json()) as T;
-}
 
 export async function createOrderApi(draft: CreateOrderDraft): Promise<Order> {
   const response = await fetch("/orders", {

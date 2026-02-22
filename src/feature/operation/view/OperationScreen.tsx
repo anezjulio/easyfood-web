@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import styles from "./OperationScreen.module.css";
@@ -15,7 +15,7 @@ export default function OperationScreen() {
         <header className={styles.header}>
           <div>
             <Breadcrumbs items={[{ label: "Menu" }]} asTitle />
-            <p className={styles.subtitle}>Selecciona una opción</p>
+            <p className={styles.subtitle}>Selecciona una opcion</p>
           </div>
 
           <SessionStatusBar />
@@ -76,3 +76,4 @@ function BigBtn({ title, subtitle, onClick }: { title: string; subtitle: string;
     </button>
   );
 }
+

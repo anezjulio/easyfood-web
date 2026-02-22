@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
-import { formatMoneyARS } from "../../product/viewmodel/useProductListViewModel";
+import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime, formatMoneyARS } from "../../../shared/format/locale";
+import { normalizeForSearch } from "../../../shared/search/search";
 import type { SupplyOrder } from "../model/supply.types";
 import {
   cancelSupplyOrderApi,
@@ -12,23 +13,10 @@ import {
 } from "../service/supply.api";
 import styles from "./SupplyOrdersScreen.module.css";
 
-function formatDateTime(iso: string) {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return new Intl.DateTimeFormat("es-AR", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(d);
-}
-
-function normalize(text: string) {
-  return (text || "").toLowerCase().trim();
-}
-
 export default function SupplyOrdersScreen() {
   const auth = useAuth();
   const isAdmin = auth.user?.role === "admin";
-  const currentUsername = normalize(auth.user?.username || "");
+  const currentUsername = normalizeForSearch(auth.user?.username || "");
   const [orders, setOrders] = useState<SupplyOrder[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,17 +64,18 @@ export default function SupplyOrdersScreen() {
 
   const visibleOrders = useMemo(() => {
     if (isAdmin) return sortedOrders;
-    return sortedOrders.filter((item) => normalize(item.createdBy) === currentUsername);
+    return sortedOrders.filter((item) => normalizeForSearch(item.createdBy) === currentUsername);
   }, [currentUsername, isAdmin, sortedOrders]);
 
-  function canEditPendingOrder(order: SupplyOrder) {
-    return isAdmin && order.status === "pending" && normalize(order.createdBy) === currentUsername;
-  }
+  const canEditPendingOrder = useCallback(
+    (order: SupplyOrder) => isAdmin && order.status === "pending" && normalizeForSearch(order.createdBy) === currentUsername,
+    [currentUsername, isAdmin],
+  );
 
   const pendingCount = useMemo(() => visibleOrders.filter((item) => item.status === "pending").length, [visibleOrders]);
   const editingOrder = useMemo(
     () => visibleOrders.find((item) => item.id === editingOrderId && canEditPendingOrder(item)) || null,
-    [editingOrderId, visibleOrders],
+    [canEditPendingOrder, editingOrderId, visibleOrders],
   );
   const supplierOptions = useMemo(() => {
     const uniqueByKey = new Map<string, string>();
@@ -189,7 +178,7 @@ export default function SupplyOrdersScreen() {
     if (!canEditPendingOrder(order)) return;
     setError("");
     setMessage("");
-    const confirmed = window.confirm("¿Seguro que quieres cancelar este pedido pendiente?");
+    const confirmed = window.confirm("Seguro que quieres cancelar este pedido pendiente?");
     if (!confirmed) return;
     try {
       await cancelSupplyOrderApi(order.id);
@@ -385,3 +374,4 @@ export default function SupplyOrdersScreen() {
     </div>
   );
 }
+

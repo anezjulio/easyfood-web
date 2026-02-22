@@ -1,4 +1,4 @@
-﻿import type { Product, ProductSortKey } from "../model/product.types";
+import type { Product, ProductSortKey } from "../model/product.types";
 import ProductRow from "./ProductRow";
 
 type ColumnFilters = {

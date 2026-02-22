@@ -4,13 +4,7 @@ import type {
   OperationRequestStatus,
   OperationRequestType,
 } from "../model/request.types";
-
-async function readJsonOrThrow<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return (await response.json()) as T;
-}
+import { readJsonOrThrow } from "../../../shared/http/http";
 
 export async function fetchOperationRequestsApi(): Promise<OperationRequest[]> {
   const response = await fetch("/operation-requests");

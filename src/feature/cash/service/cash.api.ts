@@ -1,13 +1,7 @@
-import type { CashOpeningAssignment, Workday, WorkdayAdminReview, WorkdayAuditChecks } from "../model/cash.types";
+import type { CashOpeningAssignment, CashShift, Workday, WorkdayAdminReview, WorkdayAuditChecks } from "../model/cash.types";
+import { readJsonOrThrow } from "../../../shared/http/http";
 
 const CASH_STATUS_CHANGED_EVENT = "cash-status-changed";
-
-async function readJsonOrThrow<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-  return (await response.json()) as T;
-}
 
 function notifyCashStatusChanged(operator: string) {
   if (typeof window === "undefined") return;
@@ -47,7 +41,7 @@ export async function fetchCashOpeningAssignmentsApi(): Promise<CashOpeningAssig
 
 export async function upsertCashOpeningAssignmentApi(
   operator: string,
-  draft: { amount: number; updatedBy: string },
+  draft: { amount: number; shift: CashShift; updatedBy: string },
 ): Promise<CashOpeningAssignment> {
   const response = await fetch(`/cash-opening-assignments/${encodeURIComponent(operator)}`, {
     method: "PUT",

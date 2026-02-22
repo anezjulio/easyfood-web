@@ -2,7 +2,7 @@ import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
-import { useAuth } from "../../../app/provider/AuthProvider";
+import { useAuth } from "../../../app/provider/useAuth";
 import { resolveImageUrl, uploadImageFromFile } from "../../../shared/image/image.service";
 import type { SupplyOrder } from "../model/supply.types";
 import { fetchSupplyOrdersApi, receiveSupplyOrderApi } from "../service/supply.api";
@@ -370,7 +370,7 @@ export default function SupplyReceivingScreen() {
                       type="button"
                       className={styles.invoicePreviewBtn}
                       onClick={() => setIsInvoicePreviewOpen(true)}
-                      aria-label="Ver factura en tamaño completo"
+                      aria-label="Ver factura en tamano completo"
                     >
                       <img
                         className={styles.invoiceThumb}
@@ -418,3 +418,4 @@ export default function SupplyReceivingScreen() {
     </div>
   );
 }
+

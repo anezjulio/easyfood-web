@@ -13,11 +13,29 @@
 }
 
 .header {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: end;
   gap: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-height: 44px;
+}
+
+.headerLead {
+  min-width: 0;
+  flex: 0 1 auto;
+  max-width: 44%;
+}
+
+.headerNotice {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: min(56vw, 760px);
+  z-index: 1;
 }
 
 .subtitle {
@@ -84,6 +102,11 @@
   margin: 0;
   color: #475569;
   font-weight: 600;
+}
+
+.assignedAmount {
+  color: #15803d;
+  font-weight: 900;
 }
 
 .inlineForm {
@@ -373,7 +396,7 @@
 
 .assignmentRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 120px auto;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 1fr) 120px auto;
   gap: 10px;
   align-items: center;
   border: 1px solid #e2e8f0;
@@ -399,6 +422,13 @@
   height: 36px;
   border: 1px solid #cbd5e1;
   padding: 0 8px;
+}
+
+.assignmentSelect {
+  height: 36px;
+  border: 1px solid #cbd5e1;
+  padding: 0 8px;
+  background: #ffffff;
 }
 
 .secondaryBtn {
@@ -555,6 +585,25 @@
 }
 
 @media (max-width: 1024px) {
+  .header {
+    flex-wrap: wrap;
+  }
+
+  .headerLead {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+
+  .headerNotice {
+    position: static;
+    transform: none;
+    min-width: 0;
+    max-width: none;
+    width: 100%;
+    flex: 1 1 100%;
+    order: 3;
+  }
+
   .summaryCard {
     grid-template-columns: 1fr 1fr;
   }

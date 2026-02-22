@@ -128,3 +128,8 @@ Para que se aplique en cada encendido de la PC:
 ### Enlaces adicionales
 
 - Manual scanner 1100L/1200L (V2.3): `https://v6-file.globalso.com/upload/p/827/file/2024-11/1100l-1200l-user-manual-v2-3.pdf`
+
+## Documentacion tecnica
+
+- Arquitectura MVVM y criterios de capas: `docs/architecture-mvvm.md`
+- Integracion backend (paginas, servicios y endpoints): `docs/backend-integration.md`
