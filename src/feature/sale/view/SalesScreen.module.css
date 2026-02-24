@@ -273,6 +273,14 @@
   border-top: 1px solid #e2e8f0;
 }
 
+.cartRowOdd {
+  background: #f8fafc;
+}
+
+.cartRowSelected {
+  background: #e2e8f0;
+}
+
 .cellProduct {
   font-weight: 800;
   color: #0f172a;
@@ -445,6 +453,12 @@
   gap: 10px;
 }
 
+.modalTitleWrap {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
 .modalTitle {
   margin: 0;
   font-size: 30px;
@@ -452,16 +466,45 @@
   color: #0f172a;
 }
 
+.paymentTimer {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 6px 10px;
+  border: 1px solid #fcd34d;
+  border-left: 4px solid #d97706;
+  background: #fffbeb;
+  color: #92400e;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.paymentTimer strong {
+  color: #78350f;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.paymentTimerWarning {
+  color: #92400e;
+}
+
+.paymentTimerWarning strong {
+  color: #78350f;
+}
+
 .modalCloseBtn {
-  min-width: 92px;
-  height: 38px;
-  padding: 0 12px;
+  min-width: 120px;
+  height: 46px;
+  padding: 0 16px;
   border: 1px solid #e2e8f0;
   border-right: 2px solid #000000;
   border-bottom: 2px solid #000000;
   background: #ffffff;
   color: #0f172a;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 900;
   cursor: pointer;
   line-height: 1;
@@ -518,18 +561,18 @@
 }
 
 .methodBtn {
-  min-height: 62px;
+  min-height: 72px;
   border: 1px solid #cbd5e1;
   background: #ffffff;
   color: #0f172a;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 19px;
   cursor: pointer;
   display: grid;
   gap: 4px;
   align-content: center;
   justify-items: center;
-  padding: 8px;
+  padding: 10px;
 }
 
 .methodBtnActive {
@@ -538,7 +581,7 @@
 }
 
 .methodMeta {
-  font-size: 13px;
+  font-size: 14px;
   color: #475569;
   font-weight: 700;
 }
@@ -548,6 +591,24 @@
   gap: 10px;
   justify-content: flex-end;
   flex-wrap: wrap;
+}
+
+.paymentActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: flex-start;
+  width: 100%;
+  gap: 8px;
+}
+
+.paymentActionBtn {
+  min-height: 72px;
+  width: 100%;
+  font-size: 19px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .closedCashInlineForm {
@@ -657,6 +718,34 @@
   }
 
   .methodGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modalCloseBtn {
+    min-width: 104px;
+    height: 42px;
+    padding: 0 12px;
+    font-size: 14px;
+  }
+
+  .paymentTimer {
+    font-size: 14px;
+    padding: 5px 8px;
+    gap: 6px;
+  }
+
+  .paymentTimer strong {
+    font-size: 20px;
+  }
+
+  .methodBtn,
+  .paymentActionBtn {
+    min-height: 64px;
+    font-size: 18px;
+    padding: 8px;
+  }
+
+  .paymentActions {
     grid-template-columns: 1fr;
   }
 

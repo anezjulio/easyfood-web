@@ -94,6 +94,7 @@ export default function NotificationsScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [warning, setWarning] = useState("");
 
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState<"all" | NotificationType>("all");
@@ -118,6 +119,12 @@ export default function NotificationsScreen() {
   const [createCategory, setCreateCategory] = useState("");
   const [createFixed, setCreateFixed] = useState(false);
   const [createRequiresAction, setCreateRequiresAction] = useState(true);
+
+  function clearFeedback() {
+    setError("");
+    setWarning("");
+    setMessage("");
+  }
 
   const reload = useCallback(async () => {
     setLoading(true);
@@ -257,8 +264,7 @@ export default function NotificationsScreen() {
 
   async function saveSetting(event: FormEvent) {
     event.preventDefault();
-    setError("");
-    setMessage("");
+    clearFeedback();
     const nextLeadDays = Math.max(0, Math.trunc(Number(leadDays)));
     const nextDurationDays = Math.max(0, Math.trunc(Number(durationDays)));
     if (!Number.isFinite(nextLeadDays) || !Number.isFinite(nextDurationDays)) {
@@ -278,8 +284,7 @@ export default function NotificationsScreen() {
   }
 
   async function saveCategoryThreshold(category: ProductCategory) {
-    setError("");
-    setMessage("");
+    clearFeedback();
     const raw = categoryThresholdDrafts[category] || "10";
     const minUnits = Math.max(10, Math.trunc(Number(raw)));
     if (!Number.isFinite(minUnits)) {
@@ -298,8 +303,7 @@ export default function NotificationsScreen() {
 
   async function saveProductThreshold(event: FormEvent) {
     event.preventDefault();
-    setError("");
-    setMessage("");
+    clearFeedback();
     if (!selectedProductIdForThreshold) {
       setError("Selecciona un producto.");
       return;
@@ -319,8 +323,7 @@ export default function NotificationsScreen() {
   }
 
   async function removeProductThreshold(productId: string) {
-    setError("");
-    setMessage("");
+    clearFeedback();
     try {
       const updated = await removeProductStockThresholdApi(productId);
       setStockThresholdSettings(updated);
@@ -334,8 +337,7 @@ export default function NotificationsScreen() {
   }
 
   async function generateExamples() {
-    setError("");
-    setMessage("");
+    clearFeedback();
     try {
       const result = await generateNotificationExamplesApi();
       await reload();
@@ -346,21 +348,26 @@ export default function NotificationsScreen() {
   }
 
   async function updateNotificationStatus(id: string, status: NotificationStatus) {
-    setError("");
-    setMessage("");
+    clearFeedback();
     try {
       const updated = await updateNotificationApi(id, { status });
       setNotifications((current) => current.map((item) => (item.id === updated.id ? updated : item)));
-      setMessage(status === "received" ? "Notificacion marcada como recibida." : status === "disabled" ? "Notificacion deshabilitada." : "Notificacion reactivada.");
+      if (status === "disabled") {
+        setWarning("Notificacion deshabilitada.");
+        setMessage("");
+      } else {
+        setWarning("");
+        setMessage(status === "received" ? "Notificacion marcada como recibida." : "Notificacion reactivada.");
+      }
     } catch {
+      setWarning("");
       setError("No se pudo actualizar la notificacion.");
     }
   }
 
   async function createManualNotification(event: FormEvent) {
     event.preventDefault();
-    setError("");
-    setMessage("");
+    clearFeedback();
 
     const title = createTitle.trim();
     const description = createDescription.trim();
@@ -463,6 +470,7 @@ export default function NotificationsScreen() {
         </section>
 
         {message ? <p className={styles.success}>{message}</p> : null}
+        {warning ? <p className={styles.warning}>{warning}</p> : null}
         {error ? <p className={styles.error}>{error}</p> : null}
 
         <section className={styles.panel}>

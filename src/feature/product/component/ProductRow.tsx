@@ -6,6 +6,7 @@ export default function ProductRow({
   formatDate,
   selected,
   onClick,
+  onDoubleClick,
   rowIndex,
   showExistence = false,
   showCategory = false,
@@ -18,6 +19,7 @@ export default function ProductRow({
   formatDate: (iso: string) => string;
   selected: boolean;
   onClick: () => void;
+  onDoubleClick?: () => void;
   rowIndex: number;
   showExistence?: boolean;
   showCategory?: boolean;
@@ -37,6 +39,8 @@ export default function ProductRow({
       tabIndex={0}
       aria-pressed={selected}
       onClick={onClick}
+      onMouseDown={(event) => event.preventDefault()}
+      onDoubleClick={onDoubleClick}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") onClick();
       }}
@@ -88,4 +92,6 @@ const rowStyle: React.CSSProperties = {
   borderTop: "1px solid #e2e8f0",
   alignItems: "center",
   cursor: "pointer",
+  userSelect: "none",
+  WebkitUserSelect: "none",
 };

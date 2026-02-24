@@ -1873,6 +1873,56 @@
   ],
   "orders": [
     {
+      "id": "or-1771798269001-9039",
+      "items": [
+        {
+          "productId": "p-1771656748439-6090",
+          "productName": "Glade 360 cm3",
+          "unitPrice": 3331,
+          "quantity": 1
+        },
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-22T22:11:09.001Z",
+      "status": "cancelada",
+      "total": 9735,
+      "operator": "admin",
+      "cancelledAt": "2026-02-23T05:15:39.851Z"
+    },
+    {
+      "id": "or-1771797065271-3325",
+      "items": [
+        {
+          "productId": "p-1770933817509-5022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 2
+        },
+        {
+          "productId": "p35",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 2
+        },
+        {
+          "productId": "p-1771656748439-6090",
+          "productName": "Glade 360 cm3",
+          "unitPrice": 3331,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-02-22T21:51:05.271Z",
+      "status": "cancelada",
+      "total": 268520,
+      "operator": "admin",
+      "cancelledAt": "2026-02-22T22:11:09.000Z"
+    },
+    {
       "id": "or-1771795221731-7835",
       "items": [
         {
@@ -1883,9 +1933,10 @@
         }
       ],
       "createdAt": "2026-02-22T21:20:21.732Z",
-      "status": "por pagar",
+      "status": "cancelada",
       "total": 6662,
-      "operator": "admin"
+      "operator": "admin",
+      "cancelledAt": "2026-02-22T21:51:05.271Z"
     },
     {
       "id": "or-1771658270164-3751",

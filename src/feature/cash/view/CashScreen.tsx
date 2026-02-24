@@ -217,6 +217,7 @@ export default function CashScreen() {
   const [auditMismatchReport, setAuditMismatchReport] = useState("");
   const [isReviewingClose, setIsReviewingClose] = useState(false);
   const [message, setMessage] = useState("");
+  const [warning, setWarning] = useState("");
   const [error, setError] = useState("");
 
   async function reload() {
@@ -444,19 +445,23 @@ export default function CashScreen() {
     }
     setIsOpening(true);
     setError("");
+    setWarning("");
     setMessage("");
     try {
       const opened = await openCashWithAmount(auth.user.username, openingAmount);
       const difference = Math.trunc(Number(opened.openingDifferenceAmount || 0));
       if (difference !== 0) {
-        setMessage(
+        setWarning(
           `Caja abierta. Diferencia detectada: ${difference > 0 ? "sobra" : "falta"} ${formatMoneyARS(Math.abs(difference))}.`,
         );
+        setMessage("");
       } else {
+        setWarning("");
         setMessage("Caja abierta.");
       }
       await reload();
     } catch (error) {
+      setWarning("");
       setError(error instanceof Error && error.message ? error.message : "No se pudo abrir caja.");
     } finally {
       setIsOpening(false);
@@ -472,6 +477,7 @@ export default function CashScreen() {
     }
     setIsRequestingClose(true);
     setError("");
+    setWarning("");
     setMessage("");
     try {
       await requestCashCloseWithAmount(
@@ -480,9 +486,11 @@ export default function CashScreen() {
         declaredClosingCash,
         dayOrders.map((item) => item.id),
       );
+      setWarning("");
       setMessage("Cierre efectuado.");
       await reload();
     } catch (error) {
+      setWarning("");
       setError(error instanceof Error && error.message ? error.message : "No se pudo solicitar el cierre de caja.");
     } finally {
       setIsRequestingClose(false);
@@ -500,6 +508,7 @@ export default function CashScreen() {
     }
     setSavingAssignmentFor(operator);
     setError("");
+    setWarning("");
     setMessage("");
     try {
       const updated = await upsertCashOpeningAssignmentApi(operator, { amount, shift, updatedBy: auth.user.username });
@@ -512,9 +521,11 @@ export default function CashScreen() {
       }));
       const shiftLabel = CASH_SHIFT_WINDOWS[updated.shift]?.label || updated.shift;
       const shiftHours = `${updated.startHour} a ${updated.endHour}`;
+      setWarning("");
       setMessage(`Apertura actualizada para ${operator}: ${shiftLabel} (${shiftHours}).`);
       await reload();
     } catch (error) {
+      setWarning("");
       setError(error instanceof Error && error.message ? error.message : "No se pudo actualizar el monto de apertura.");
     } finally {
       setSavingAssignmentFor("");
@@ -525,6 +536,7 @@ export default function CashScreen() {
     if (!auth.user?.username || !selectedReviewWorkday || !selectedReviewSummary) return;
     setIsReviewingClose(true);
     setError("");
+    setWarning("");
     setMessage("");
     try {
       const generatedReport = buildWorkdayMismatchReport(selectedReviewWorkday, selectedReviewSummary, auditChecks);
@@ -537,9 +549,11 @@ export default function CashScreen() {
       if (normalizeForSearch(selectedReviewWorkday.operator) === normalizeForSearch(auth.user.username)) {
         markCashSessionClosed(auth.user.username);
       }
+      setWarning("");
       setMessage("Cierre efectuado.");
       await reload();
     } catch {
+      setWarning("");
       setError("No se pudo confirmar el cierre de caja.");
     } finally {
       setIsReviewingClose(false);
@@ -551,6 +565,7 @@ export default function CashScreen() {
   const openingDifference = Math.trunc(Number(workday?.openingDifferenceAmount || 0));
   const clearHeaderNotice = () => {
     setError("");
+    setWarning("");
     setMessage("");
   };
 
@@ -565,6 +580,7 @@ export default function CashScreen() {
           <HeaderOperationNotice
             className={styles.headerNotice}
             message={message}
+            warning={warning}
             error={error}
             onClose={clearHeaderNotice}
           />

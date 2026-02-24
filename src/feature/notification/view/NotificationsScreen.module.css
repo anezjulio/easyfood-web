@@ -249,6 +249,12 @@
   font-weight: 700;
 }
 
+.warning {
+  margin: 8px 0 0;
+  color: #92400e;
+  font-weight: 700;
+}
+
 .error {
   margin: 8px 0 0;
   color: #991b1b;

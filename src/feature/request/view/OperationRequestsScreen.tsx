@@ -34,6 +34,7 @@ export default function OperationRequestsScreen() {
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [warning, setWarning] = useState("");
   const [cancelModalRequestId, setCancelModalRequestId] = useState<string | null>(null);
 
   const currentUsername = normalizeForSearch(auth.user?.username || "");
@@ -118,6 +119,7 @@ export default function OperationRequestsScreen() {
     setDescription("");
     if (clearFeedback) {
       setError("");
+      setWarning("");
       setMessage("");
     }
   }
@@ -126,6 +128,7 @@ export default function OperationRequestsScreen() {
     if (!canSelectRequest(item)) return;
     setSelectedRequestId(item.id);
     setError("");
+    setWarning("");
     setMessage("");
 
     if (canEditPendingRequest(item)) {
@@ -160,6 +163,7 @@ export default function OperationRequestsScreen() {
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
+    setWarning("");
     setMessage("");
 
     const trimmedDescription = description.trim();
@@ -175,6 +179,7 @@ export default function OperationRequestsScreen() {
           description: trimmedDescription,
         });
         setRequests((current) => current.map((item) => (item.id === updated.id ? updated : item)));
+        setWarning("");
         setMessage("Solicitud pendiente actualizada.");
       } else {
         const created = await createOperationRequestApi({
@@ -183,6 +188,7 @@ export default function OperationRequestsScreen() {
           requestedBy: auth.user?.username || "operator",
         });
         setRequests((current) => [created, ...current]);
+        setWarning("");
         setMessage("Solicitud enviada para aprobacion.");
         setRequestType("merchandise");
         setDescription("");
@@ -208,6 +214,7 @@ export default function OperationRequestsScreen() {
       return;
     }
     setError("");
+    setWarning("");
     setMessage("");
 
     try {
@@ -216,7 +223,8 @@ export default function OperationRequestsScreen() {
       if (selectedRequestId === cancelModalRequest.id) {
         resetForm(false);
       }
-      setMessage("Solicitud pendiente cancelada.");
+      setWarning("Solicitud pendiente cancelada.");
+      setMessage("");
     } catch {
       setError("No se pudo cancelar la solicitud.");
     } finally {
@@ -389,6 +397,7 @@ export default function OperationRequestsScreen() {
               </label>
 
               {error ? <div className={styles.errorBox}>{error}</div> : null}
+              {warning ? <div className={styles.warningBox}>{warning}</div> : null}
               {message ? <div className={styles.successBox}>{message}</div> : null}
 
               <div className={styles.actions}>

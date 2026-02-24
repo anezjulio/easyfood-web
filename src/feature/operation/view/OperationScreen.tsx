@@ -24,7 +24,7 @@ export default function OperationScreen() {
         <section className={styles.groupSection}>
           <h2 className={styles.groupTitle}>Operaciones</h2>
           <div className={styles.grid}>
-            <BigBtn title="Ventas" subtitle="Cobros y tickets" onClick={() => nav("/sales")} />
+            <BigBtn title="Ventas" subtitle="Cobros y tickets" onClick={() => nav("/sales")} variant="sales" />
             <BigBtn title="Caja" subtitle="Apertura y cierre de turno" onClick={() => nav("/cash")} />
             <BigBtn title="Solicitudes" subtitle="Gestion de solicitudes" onClick={() => nav("/requests")} />
             <BigBtn title="Gastos" subtitle="Registro de egresos" onClick={() => nav("/expenses")} />
@@ -68,9 +68,21 @@ export default function OperationScreen() {
   );
 }
 
-function BigBtn({ title, subtitle, onClick }: { title: string; subtitle: string; onClick: () => void }) {
+function BigBtn({
+  title,
+  subtitle,
+  onClick,
+  variant = "default",
+}: {
+  title: string;
+  subtitle: string;
+  onClick: () => void;
+  variant?: "default" | "sales";
+}) {
+  const className = `${styles.bigBtn} ${variant === "sales" ? styles.bigBtnSales : ""}`.trim();
+
   return (
-    <button type="button" onClick={onClick} className={styles.bigBtn}>
+    <button type="button" onClick={onClick} className={className}>
       <div className={styles.bigBtnTitle}>{title}</div>
       <div className={styles.bigBtnSubtitle}>{subtitle}</div>
     </button>

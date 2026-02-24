@@ -110,6 +110,13 @@
   padding: 10px;
 }
 
+.warningBox {
+  border: 1px solid #fcd34d;
+  background: #fffbeb;
+  color: #92400e;
+  padding: 10px;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;

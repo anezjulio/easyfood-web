@@ -27,6 +27,7 @@ export default function SupplyOrdersScreen() {
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [warning, setWarning] = useState("");
 
   useEffect(() => {
     let alive = true;
@@ -106,6 +107,7 @@ export default function SupplyOrdersScreen() {
     setExpectedTotal("");
     setEditingOrderId(null);
     setError("");
+    setWarning("");
     setMessage("");
   }
 
@@ -116,12 +118,14 @@ export default function SupplyOrdersScreen() {
     setDescription(order.description);
     setExpectedTotal(String(order.expectedTotal));
     setError("");
+    setWarning("");
     setMessage("");
   }
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
+    setWarning("");
     setMessage("");
 
     if (!isAdmin) {
@@ -154,6 +158,7 @@ export default function SupplyOrdersScreen() {
           expectedTotal: total,
         });
         setOrders((current) => current.map((item) => (item.id === updated.id ? updated : item)));
+        setWarning("");
         setMessage("Pedido pendiente actualizado.");
         setEditingOrderId(null);
       } else {
@@ -164,6 +169,7 @@ export default function SupplyOrdersScreen() {
           createdBy: auth.user?.username || "operator",
         });
         setOrders((current) => [created, ...current]);
+        setWarning("");
         setMessage("Pedido esperado registrado.");
       }
       setSupplierName("");
@@ -177,6 +183,7 @@ export default function SupplyOrdersScreen() {
   async function cancelPendingOrder(order: SupplyOrder) {
     if (!canEditPendingOrder(order)) return;
     setError("");
+    setWarning("");
     setMessage("");
     const confirmed = window.confirm("Seguro que quieres cancelar este pedido pendiente?");
     if (!confirmed) return;
@@ -189,7 +196,8 @@ export default function SupplyOrdersScreen() {
         setDescription("");
         setExpectedTotal("");
       }
-      setMessage("Pedido pendiente cancelado.");
+      setWarning("Pedido pendiente cancelado.");
+      setMessage("");
     } catch {
       setError("No se pudo cancelar el pedido pendiente.");
     }
@@ -261,6 +269,7 @@ export default function SupplyOrdersScreen() {
                 </label>
 
                 {error ? <div className={styles.errorBox}>{error}</div> : null}
+                {warning ? <div className={styles.warningBox}>{warning}</div> : null}
                 {message ? <div className={styles.successBox}>{message}</div> : null}
 
                 <div className={styles.actions}>

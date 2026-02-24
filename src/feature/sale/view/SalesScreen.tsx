@@ -60,11 +60,16 @@ function getPendingTimeoutMinutes() {
 const PENDING_PAYMENT_TIMEOUT_MINUTES = getPendingTimeoutMinutes();
 const PENDING_PAYMENT_TIMEOUT_MS = PENDING_PAYMENT_TIMEOUT_MINUTES * 60_000;
 
-function isPendingOrderExpired(order: Order) {
-  if (order.status !== "por pagar") return false;
+function getPendingOrderRemainingMs(order: Order) {
+  if (order.status !== "por pagar") return 0;
   const createdAtMs = new Date(order.createdAt).getTime();
-  if (!Number.isFinite(createdAtMs)) return false;
-  return Date.now() - createdAtMs >= PENDING_PAYMENT_TIMEOUT_MS;
+  if (!Number.isFinite(createdAtMs)) return PENDING_PAYMENT_TIMEOUT_MS;
+  const elapsedMs = Date.now() - createdAtMs;
+  return Math.max(0, PENDING_PAYMENT_TIMEOUT_MS - elapsedMs);
+}
+
+function isPendingOrderExpired(order: Order) {
+  return getPendingOrderRemainingMs(order) <= 0;
 }
 
 function parseOpeningAmount(value: string): number | null {
@@ -88,6 +93,7 @@ export default function SalesScreen() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [draftOrderCode, setDraftOrderCode] = useState(() => generateOrderCode());
   const [message, setMessage] = useState("");
+  const [warning, setWarning] = useState("");
   const [error, setError] = useState("");
 
   const [nameFilter, setNameFilter] = useState("");
@@ -107,6 +113,7 @@ export default function SalesScreen() {
   const [taxSettings, setTaxSettings] = useState<TaxSettings>(buildDefaultTaxSettings());
   const [isApprovingPayment, setIsApprovingPayment] = useState(false);
   const [isCashOpen, setIsCashOpen] = useState(false);
+  const [isCashStateResolved, setIsCashStateResolved] = useState(false);
   const [assignedOpeningAmount, setAssignedOpeningAmount] = useState<number | null>(null);
   const [openingAmountInput, setOpeningAmountInput] = useState("");
   const [isOpeningCashFromModal, setIsOpeningCashFromModal] = useState(false);
@@ -114,6 +121,7 @@ export default function SalesScreen() {
   const [paymentModalTop, setPaymentModalTop] = useState<number | null>(null);
   const [paymentModalLeft, setPaymentModalLeft] = useState<number | null>(null);
   const [paymentModalWidth, setPaymentModalWidth] = useState<number | null>(null);
+  const [pendingPaymentRemainingMs, setPendingPaymentRemainingMs] = useState(0);
   const currentUsername = auth.user?.username ?? "";
   const isCashOpenForSession = isCashOpen;
 
@@ -173,14 +181,24 @@ export default function SalesScreen() {
   useEffect(() => {
     if (!currentUsername) {
       setIsCashOpen(false);
+      setIsCashStateResolved(false);
       return;
     }
 
     let alive = true;
+    setIsCashStateResolved(false);
     async function syncCashState(operator: string) {
-      const result = await syncCashStateService(operator);
-      if (!alive) return;
-      setIsCashOpen(result.isOpen);
+      try {
+        const result = await syncCashStateService(operator);
+        if (!alive) return;
+        setIsCashOpen(result.isOpen);
+      } catch {
+        if (!alive) return;
+        setIsCashOpen(false);
+      } finally {
+        if (!alive) return;
+        setIsCashStateResolved(true);
+      }
     }
 
     void syncCashState(currentUsername);
@@ -203,6 +221,23 @@ export default function SalesScreen() {
 
   const selectedProductStock = Math.max(0, Math.trunc(Number(selectedProduct?.existencia || 0)));
   const hasPendingPayment = pendingOrder?.status === "por pagar";
+
+  useEffect(() => {
+    if (!pendingOrder || pendingOrder.status !== "por pagar") {
+      setPendingPaymentRemainingMs(0);
+      return;
+    }
+
+    const syncRemaining = () => {
+      setPendingPaymentRemainingMs(getPendingOrderRemainingMs(pendingOrder));
+    };
+
+    syncRemaining();
+    const timerId = window.setInterval(syncRemaining, 1_000);
+    return () => {
+      window.clearInterval(timerId);
+    };
+  }, [pendingOrder]);
 
   useEffect(() => {
     if (!pendingOrder || pendingOrder.status !== "por pagar") return;
@@ -228,15 +263,14 @@ export default function SalesScreen() {
       setQuantityToAdd("1");
       setIsModalOpen(false);
       setError("");
-      setMessage(
-        `La orden ${pendingOrder.id} se cancelo automaticamente al superar ${PENDING_PAYMENT_TIMEOUT_MINUTES} minutos sin pago.`,
-      );
+      setWarning(`Se acabo el tiempo para pagar la orden ${pendingOrder.id}. El pago fue rechazado automaticamente.`);
+      setMessage("");
     }
 
     void expirePendingIfNeeded();
     const timerId = window.setInterval(() => {
       void expirePendingIfNeeded();
-    }, 15_000);
+    }, 1_000);
 
     return () => {
       cancelled = true;
@@ -366,6 +400,13 @@ export default function SalesScreen() {
     return subtotalAfterPaymentAdjustments;
   }, [ivaAmount, subtotalAfterPaymentAdjustments, taxSettings.mode]);
   const showSubtotalLine = pendingBaseTotal !== finalTotalForPayment;
+  const paymentCountdownLabel = useMemo(() => {
+    const totalSeconds = Math.max(0, Math.ceil(pendingPaymentRemainingMs / 1_000));
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  }, [pendingPaymentRemainingMs]);
+  const isPaymentCountdownWarning = pendingPaymentRemainingMs > 0 && pendingPaymentRemainingMs <= 60_000;
 
   function handleSortChange(nextKey: ProductSortKey) {
     setHasUserSorted(true);
@@ -393,6 +434,7 @@ export default function SalesScreen() {
 
   function addProductToCart(product: Product, rawQuantity: number) {
     setError("");
+    setWarning("");
     setMessage("");
 
     if (hasPendingPayment) {
@@ -446,6 +488,10 @@ export default function SalesScreen() {
       return;
     }
     addProductToCart(selectedProduct, Number(quantityToAdd));
+  }
+
+  function handleProductRowDoubleClick(product: Product) {
+    addProductToCart(product, 1);
   }
 
   function handleBarcodeScanChange(nextValue: string) {
@@ -520,6 +566,7 @@ export default function SalesScreen() {
 
   async function openPaymentModal() {
     setError("");
+    setWarning("");
     setMessage("");
 
     if (hasPendingPayment) {
@@ -537,9 +584,8 @@ export default function SalesScreen() {
         setQuantityToAdd("1");
         setIsModalOpen(false);
         setError("");
-        setMessage(
-          `La orden ${pendingOrder.id} vencio por tiempo y fue cancelada automaticamente.`,
-        );
+        setWarning(`Se acabo el tiempo para pagar la orden ${pendingOrder.id}. El pago fue rechazado automaticamente.`);
+        setMessage("");
         return;
       }
       setIsModalOpen(true);
@@ -572,7 +618,9 @@ export default function SalesScreen() {
 
   function rejectPayment() {
     setIsModalOpen(false);
-    setMessage("El pago no pudo concretarse. Puedes volver a intentarlo.");
+    setError("");
+    setWarning("Pago rechazado. Puedes volver a intentarlo antes de que venza el tiempo.");
+    setMessage("");
   }
 
   async function openCashFromModal() {
@@ -590,6 +638,7 @@ export default function SalesScreen() {
     setCashModalError("");
     setIsOpeningCashFromModal(true);
     setError("");
+    setWarning("");
     setMessage("");
     try {
       await openCashWithAmount(currentUsername, openingAmount);
@@ -610,6 +659,7 @@ export default function SalesScreen() {
     }
 
     setError("");
+    setWarning("");
     setMessage("");
     setIsApprovingPayment(true);
 
@@ -656,9 +706,11 @@ export default function SalesScreen() {
       setSelectedProductId(null);
       setQuantityToAdd("1");
       setIsModalOpen(false);
+      setWarning("");
       setMessage("");
       nav("/sales/summary", { state: summaryState });
     } catch {
+      setWarning("");
       setError("No se pudo confirmar el pago. La orden puede haber sido cancelada por tiempo.");
     } finally {
       setIsApprovingPayment(false);
@@ -667,14 +719,17 @@ export default function SalesScreen() {
 
   const generateLabel = "Pagar";
   const orderCodeLabel = pendingOrder?.id || draftOrderCode;
+  const shouldDisableSalesContent = !isCashStateResolved || !isCashOpenForSession;
+  const shouldShowClosedCashModal = Boolean(currentUsername) && isCashStateResolved && !isCashOpenForSession;
   const clearHeaderNotice = () => {
     setError("");
+    setWarning("");
     setMessage("");
   };
 
   return (
     <div className={styles.page}>
-      <div className={`${styles.content} ${!isCashOpenForSession ? styles.contentDisabled : ""}`}>
+      <div className={`${styles.content} ${shouldDisableSalesContent ? styles.contentDisabled : ""}`}>
         <header className={styles.header}>
           <div className={styles.headerLead}>
             <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Ventas" }]} asTitle />
@@ -685,6 +740,7 @@ export default function SalesScreen() {
           <HeaderOperationNotice
             className={styles.headerNotice}
             message={message}
+            warning={warning}
             error={error}
             onClose={clearHeaderNotice}
           />
@@ -777,37 +833,46 @@ export default function SalesScreen() {
               {cart.length === 0 ? (
                 <p className={styles.empty}>Aun no agregaste productos.</p>
               ) : (
-                cart.map((item) => (
-                  <div className={styles.cartRow} key={item.productId}>
-                  <div className={styles.cellProduct}>{item.productName}</div>
-                  <div className={styles.cellQty}>
-                    <input
-                        type="number"
-                        min={1}
-                        max={Math.max(0, Math.trunc(Number(products.find((p) => p.id === item.productId)?.existencia || 0)))}
-                        value={item.quantity}
-                        onChange={(e) => updateCartItemQuantity(item.productId, e.target.value)}
-                        className={styles.cartQtyInput}
-                        disabled={hasPendingPayment}
-                        aria-label={`Cantidad para ${item.productName}`}
-                      />
-                    </div>
-                    <div className={styles.cellPrice}>
-                      <span>{formatMoneyARS(item.unitPrice)}</span>
-                      <small className={styles.ivaInline}>IVA {ivaPercent}%: {formatMoneyARS(Math.round(item.unitPrice * (ivaPercent / 100)))}</small>
-                    </div>
-                    <div className={styles.cellSubtotal}>{formatMoneyARS(item.unitPrice * item.quantity)}</div>
-                    <button
-                      type="button"
-                      className={styles.cartRemoveBtn}
-                      onClick={() => removeFromCart(item.productId)}
-                      disabled={hasPendingPayment}
-                      aria-label={`Quitar ${item.productName}`}
+                cart.map((item, index) => {
+                  const isOddRow = index % 2 === 0;
+                  const isSelectedRow = item.productId === selectedProductId;
+                  return (
+                    <div
+                      className={`${styles.cartRow} ${isOddRow ? styles.cartRowOdd : ""} ${isSelectedRow ? styles.cartRowSelected : ""}`}
+                      key={item.productId}
                     >
-                      X
-                    </button>
-                  </div>
-                ))
+                      <div className={styles.cellProduct}>{item.productName}</div>
+                      <div className={styles.cellQty}>
+                        <input
+                          type="number"
+                          min={1}
+                          max={Math.max(0, Math.trunc(Number(products.find((p) => p.id === item.productId)?.existencia || 0)))}
+                          value={item.quantity}
+                          onChange={(e) => updateCartItemQuantity(item.productId, e.target.value)}
+                          className={styles.cartQtyInput}
+                          disabled={hasPendingPayment}
+                          aria-label={`Cantidad para ${item.productName}`}
+                        />
+                      </div>
+                      <div className={styles.cellPrice}>
+                        <span>{formatMoneyARS(item.unitPrice)}</span>
+                        <small className={styles.ivaInline}>
+                          IVA {ivaPercent}%: {formatMoneyARS(Math.round(item.unitPrice * (ivaPercent / 100)))}
+                        </small>
+                      </div>
+                      <div className={styles.cellSubtotal}>{formatMoneyARS(item.unitPrice * item.quantity)}</div>
+                      <button
+                        type="button"
+                        className={styles.cartRemoveBtn}
+                        onClick={() => removeFromCart(item.productId)}
+                        disabled={hasPendingPayment}
+                        aria-label={`Quitar ${item.productName}`}
+                      >
+                        X
+                      </button>
+                    </div>
+                  );
+                })
               )}
             </div>
 
@@ -834,6 +899,7 @@ export default function SalesScreen() {
               formatDate={formatDateAR}
               selectedProductId={selectedProductId}
               onSelectProduct={setSelectedProductId}
+              onProductDoubleClick={handleProductRowDoubleClick}
               sortKey={sortKey}
               sortDir={sortDir}
               showSortFeedback={hasUserSorted}
@@ -883,7 +949,14 @@ export default function SalesScreen() {
             }}
           >
             <div className={styles.modalHeader}>
-              <h3 className={styles.modalTitle}>Pago de compra</h3>
+              <div className={styles.modalTitleWrap}>
+                <h3 className={styles.modalTitle}>Pago de compra</h3>
+                {hasPendingPayment ? (
+                  <p className={`${styles.paymentTimer} ${isPaymentCountdownWarning ? styles.paymentTimerWarning : ""}`}>
+                    Tiempo restante: <strong>{paymentCountdownLabel}</strong>
+                  </p>
+                ) : null}
+              </div>
               <button
                 type="button"
                 className={styles.modalCloseBtn}
@@ -946,11 +1019,21 @@ export default function SalesScreen() {
               </p>
             </div>
 
-            <div className={styles.modalActions}>
-              <button type="button" className={styles.dangerBtn} onClick={rejectPayment} disabled={isApprovingPayment}>
+            <div className={`${styles.modalActions} ${styles.paymentActions}`}>
+              <button
+                type="button"
+                className={`${styles.dangerBtn} ${styles.paymentActionBtn}`}
+                onClick={rejectPayment}
+                disabled={isApprovingPayment}
+              >
                 Rechazar pago
               </button>
-              <button type="button" className={styles.primaryBtn} onClick={approvePayment} disabled={isApprovingPayment}>
+              <button
+                type="button"
+                className={`${styles.primaryBtn} ${styles.paymentActionBtn}`}
+                onClick={approvePayment}
+                disabled={isApprovingPayment}
+              >
                 {isApprovingPayment ? "Procesando..." : "Aprobar pago"}
               </button>
             </div>
@@ -959,7 +1042,7 @@ export default function SalesScreen() {
         </div>
       ) : null}
 
-      {!isCashOpenForSession ? (
+      {shouldShowClosedCashModal ? (
         <div className={styles.modalOverlay} role="presentation">
           <section className={styles.modalCard} role="dialog" aria-modal="true" aria-label="Caja cerrada">
             <h3 className={styles.modalTitle}>Apertura de caja</h3>

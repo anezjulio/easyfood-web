@@ -29,6 +29,7 @@ export default function ApproveRequestsScreen() {
 
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [noticeTone, setNoticeTone] = useState<"success" | "warning">("success");
 
   useEffect(() => {
     let alive = true;
@@ -129,6 +130,7 @@ export default function ApproveRequestsScreen() {
     if (!selectedRequest) return;
     setError("");
     setNotice("");
+    setNoticeTone("success");
     const trimmedComment = reviewComment.trim();
     if (selectedRequest.requestType === "permissions" && !trimmedComment) {
       setError("Ingresa una respuesta para justificar la aprobacion o el rechazo.");
@@ -142,6 +144,7 @@ export default function ApproveRequestsScreen() {
         { reviewComment: trimmedComment || undefined },
       );
       setRequests((current) => current.map((item) => (item.id === updated.id ? updated : item)));
+      setNoticeTone(nextStatus === "approved" ? "success" : "warning");
       setNotice(nextStatus === "approved" ? "Solicitud aprobada." : "Solicitud rechazada.");
       setReviewComment("");
     } catch {
@@ -153,6 +156,7 @@ export default function ApproveRequestsScreen() {
     if (!selectedRequest || selectedRequest.requestType !== "merchandise") return;
     setError("");
     setNotice("");
+    setNoticeTone("success");
 
     const trimmedSupplier = supplierName.trim();
     const trimmedSupplierMessage = supplierMessage.trim();
@@ -191,6 +195,7 @@ export default function ApproveRequestsScreen() {
       );
 
       setRequests((current) => current.map((item) => (item.id === updatedRequest.id ? updatedRequest : item)));
+      setNoticeTone("success");
       setNotice("Pedido a proveedor generado y solicitud aprobada.");
 
       setSupplierName("");
@@ -240,9 +245,13 @@ export default function ApproveRequestsScreen() {
         </section>
 
         {notice ? (
-          <section className={styles.noticeRow}>
+          <section className={`${styles.noticeRow} ${noticeTone === "warning" ? styles.noticeRowWarning : ""}`}>
             <span>{notice}</span>
-            <button type="button" className={styles.noticeCloseBtn} onClick={() => setNotice("")}>
+            <button
+              type="button"
+              className={`${styles.noticeCloseBtn} ${noticeTone === "warning" ? styles.noticeCloseBtnWarning : ""}`}
+              onClick={() => setNotice("")}
+            >
               Cerrar
             </button>
           </section>

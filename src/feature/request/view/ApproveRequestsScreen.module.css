@@ -62,6 +62,17 @@
   cursor: pointer;
 }
 
+.noticeRowWarning {
+  border-color: #fcd34d;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.noticeCloseBtnWarning {
+  border-color: #92400e;
+  color: #92400e;
+}
+
 .layout {
   margin-top: 16px;
   display: grid;
