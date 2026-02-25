@@ -460,6 +460,19 @@ function parsePendingTimeoutMinutes() {
   return 15;
 }
 
+function padIdPart(value: number): string {
+  return String(value).padStart(2, "0");
+}
+
+function formatIdDatePart(input: Date): string {
+  return `${padIdPart(input.getDate())}${padIdPart(input.getMonth() + 1)}${input.getFullYear()}${padIdPart(input.getHours())}${padIdPart(input.getMinutes())}${padIdPart(input.getSeconds())}`;
+}
+
+function buildEntityId(prefix: string, inputDate = new Date()): string {
+  const suffix = Math.floor(Math.random() * 10_000).toString().padStart(4, "0");
+  return `${prefix}${formatIdDatePart(inputDate)}${suffix}`;
+}
+
 function mockDbPlugin(): Plugin {
   return {
     name: "mock-db-middleware",
@@ -493,7 +506,7 @@ function mockDbPlugin(): Plugin {
             const salePrice = Math.max(1, Math.trunc(hasCostPrice ? calculateSalePriceFromCost(costPrice, effectiveMarginPercent) : draft.price));
             const now = new Date().toISOString();
             const product: Product = {
-              id: `p-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("p"),
               name: draft.name,
               price: salePrice,
               costPrice,
@@ -505,7 +518,7 @@ function mockDbPlugin(): Plugin {
             };
             db.products.unshift(product);
             const productPrice: ProductPrice = {
-              id: `pp-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("pp"),
               productId: product.id,
               newPrice: product.price,
               costPrice: product.costPrice,
@@ -553,7 +566,7 @@ function mockDbPlugin(): Plugin {
             }
             const now = new Date().toISOString();
             const user: AppUserRecord = {
-              id: `u-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("u"),
               name: draft.name,
               email: draft.email,
               username: draft.username,
@@ -669,7 +682,7 @@ function mockDbPlugin(): Plugin {
             };
 
             const productPrice: ProductPrice = {
-              id: `pp-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("pp"),
               productId: draft.productId,
               newPrice: nextPrice,
               costPrice: nextCostPrice,
@@ -762,7 +775,7 @@ function mockDbPlugin(): Plugin {
             }
 
             const request: DeleteRequest = {
-              id: `dr-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("dr"),
               requestType: body.requestType,
               title: body.title,
               description: body.description,
@@ -819,7 +832,7 @@ function mockDbPlugin(): Plugin {
             }
 
             const request: OperationRequest = {
-              id: `rq-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("rq"),
               requestType: body.requestType,
               description: body.description,
               requestedBy: body.requestedBy || "operator",
@@ -979,7 +992,7 @@ function mockDbPlugin(): Plugin {
               Number.isFinite(body.salePrice) && body.salePrice > 0 ? Math.trunc(body.salePrice) : undefined;
 
             const entry: StockEntry = {
-              id: `se-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("se"),
               productId: body.productId,
               manufactureDate: body.manufactureDate,
               expirationDate: body.expirationDate,
@@ -1043,7 +1056,7 @@ function mockDbPlugin(): Plugin {
             }
 
             const expense: Expense = {
-              id: `ex-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("ex"),
               description: draft.description,
               amount: Math.trunc(draft.amount),
               expenseType: draft.expenseType,
@@ -1082,7 +1095,7 @@ function mockDbPlugin(): Plugin {
             }
 
             const order: Order = {
-              id: `or-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("or"),
               items: draft.items,
               createdAt: new Date().toISOString(),
               status: "por pagar",
@@ -1162,7 +1175,7 @@ function mockDbPlugin(): Plugin {
             }
 
             const invoice: Invoice = {
-              id: `fc-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("fc"),
               orderId: draft.orderId,
               createdAt: new Date().toISOString(),
               total: Math.trunc(draft.total),
@@ -1260,7 +1273,7 @@ function mockDbPlugin(): Plugin {
               typeof openingAssignedAmount === "number" ? openingDeclaredAmount - openingAssignedAmount : 0;
 
             const workday: Workday = {
-              id: `wd-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("wd"),
               operator: body.operator,
               startedAt: new Date().toISOString(),
               orderIds: [],
@@ -1498,7 +1511,7 @@ function mockDbPlugin(): Plugin {
             }
 
             const supplyOrder: SupplyOrder = {
-              id: `so-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("so"),
               supplierName: draft.supplierName,
               description: draft.description,
               expectedTotal: Math.trunc(draft.expectedTotal),
@@ -1655,7 +1668,7 @@ function mockDbPlugin(): Plugin {
               draft.issueDate && draft.expirationDate
                 ? [
                     {
-                      id: `li-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+                      id: buildEntityId("li"),
                       issuedAt: draft.issueDate,
                       expiresAt: draft.expirationDate,
                       createdAt: now,
@@ -1663,7 +1676,7 @@ function mockDbPlugin(): Plugin {
                   ]
                 : [];
             const license: LicenseRecord = {
-              id: `lc-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("lc"),
               name: draft.name,
               description: draft.description,
               category: draft.category,
@@ -1738,7 +1751,7 @@ function mockDbPlugin(): Plugin {
             }
             const now = new Date().toISOString();
             const issuance: LicenseIssuance = {
-              id: `li-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+              id: buildEntityId("li"),
               issuedAt: draft.issuedAt,
               expiresAt: draft.expiresAt,
               createdAt: now,
@@ -2432,7 +2445,7 @@ function resolvePriceMarginSettings(input: unknown): PriceMarginSettings {
           const marginPercent = Number(node.marginPercent);
           if (!Number.isFinite(previousMarginPercent) || !Number.isFinite(marginPercent)) return null;
           return {
-            id: String(node.id || `cmh-${Date.now()}-${Math.floor(Math.random() * 10000)}`),
+            id: String(node.id || buildEntityId("cmh")),
             category,
             previousMarginPercent: normalizeMarginPercent(previousMarginPercent),
             marginPercent: normalizeMarginPercent(marginPercent),
@@ -2473,7 +2486,7 @@ function resolvePriceMarginSettings(input: unknown): PriceMarginSettings {
           if (previousRaw !== null && typeof previousRaw !== "undefined" && previousMarginPercent === null) return null;
           if (marginRaw !== null && typeof marginRaw !== "undefined" && marginPercent === null) return null;
           return {
-            id: String(node.id || `pmh-${Date.now()}-${Math.floor(Math.random() * 10000)}`),
+            id: String(node.id || buildEntityId("pmh")),
             productId,
             previousMarginPercent,
             marginPercent,
@@ -2798,7 +2811,7 @@ function normalizeLicenseRecord(input: unknown): LicenseRecord | null {
           const expiresAt = String(node.expiresAt || "").trim();
           if (!issuedAt || !expiresAt) return null;
           return {
-            id: String(node.id || `li-${Date.now()}-${Math.floor(Math.random() * 10000)}`),
+            id: String(node.id || buildEntityId("li")),
             issuedAt,
             expiresAt,
             createdAt: String(node.createdAt || "").trim() || new Date().toISOString(),
@@ -2809,7 +2822,7 @@ function normalizeLicenseRecord(input: unknown): LicenseRecord | null {
     : [];
 
   return {
-    id: String(draft.id || `lc-${Date.now()}-${Math.floor(Math.random() * 10000)}`),
+    id: String(draft.id || buildEntityId("lc")),
     name,
     description,
     category: normalizeCategory(draft.category),
@@ -2834,7 +2847,7 @@ function normalizeNotificationRecord(input: unknown): NotificationRecord | null 
   const description = String(draft.description || "").trim();
   if (!title || !description) return null;
   return {
-    id: String(draft.id || `nt-${Date.now()}-${Math.floor(Math.random() * 10000)}`),
+    id: String(draft.id || buildEntityId("nt")),
     type: typeRaw,
     title,
     description,
@@ -2973,7 +2986,7 @@ function createNotificationRecord(
   if (duplicate) return duplicate;
   const createdAt = draft.createdAt || new Date().toISOString();
   const record: NotificationRecord = {
-    id: `nt-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    id: buildEntityId("nt"),
     type: draft.type,
     title: draft.title,
     description: draft.description,
@@ -3125,7 +3138,7 @@ function getEffectiveProductPriceMarginPercent(db: MockDb, productId: string, ca
 const MAX_MARGIN_HISTORY = 300;
 
 function buildMarginHistoryId(prefix: "cmh" | "pmh"): string {
-  return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  return buildEntityId(prefix);
 }
 
 function pushCategoryMarginHistory(
@@ -3312,9 +3325,9 @@ function generateNotificationTestCases(db: MockDb): number {
     else db.licenses[index] = license;
   };
 
-  const coca = upsertProduct("p-tc-coca", "Coca-Cola Caso Test", "bebida");
-  const pancho = upsertProduct("p-tc-pancho", "Pancho Caso Test", "perecedero");
-  const rapido = upsertProduct("p-tc-rapido", "Producto Rotacion Alta", "bebida");
+  const coca = upsertProduct("ptccoca", "Coca-Cola Caso Test", "bebida");
+  const pancho = upsertProduct("ptcpancho", "Pancho Caso Test", "perecedero");
+  const rapido = upsertProduct("ptcrapido", "Producto Rotacion Alta", "bebida");
 
   db.stockThresholdSettings.categoryThresholds.bebida = Math.max(10, db.stockThresholdSettings.categoryThresholds.bebida || 10);
   const overrideIndex = db.stockThresholdSettings.productThresholds.findIndex((item) => item.productId === coca.id);
@@ -3326,7 +3339,7 @@ function generateNotificationTestCases(db: MockDb): number {
 
   const ensureStock = (id: string, quantity: number, expirationDate?: string) => {
     const entry: StockEntry = {
-      id: `se-tc-${id}-${Math.abs(quantity)}`,
+      id: `setc${id}${Math.abs(quantity)}`,
       productId: id,
       quantity,
       createdAt: iso(-1),
@@ -3342,7 +3355,7 @@ function generateNotificationTestCases(db: MockDb): number {
   ensureStock(rapido.id, 8, iso(28));
 
   const requiredLicense: LicenseRecord = {
-    id: "lc-tc-required",
+    id: "lctcrequired",
     name: "Manipulacion de alimentos (caso pendiente)",
     description: "Caso de prueba: permiso requerido para categoria vive res/panchos.",
     category: "vivere",
@@ -3360,7 +3373,7 @@ function generateNotificationTestCases(db: MockDb): number {
   upsertLicense(requiredLicense);
 
   const expiringLicense: LicenseRecord = {
-    id: "lc-tc-expiring",
+    id: "lctcexpiring",
     name: "Bromatologia (caso por vencer)",
     description: "Caso de prueba: licencia con vencimiento proximo.",
     category: "perecedero",
@@ -3389,7 +3402,7 @@ function generateNotificationTestCases(db: MockDb): number {
       expirationDate: iso(18),
       category: pancho.category,
       entityType: "stock",
-      entityId: `se-tc-${pancho.id}-5`,
+      entityId: `setc${pancho.id}5`,
     }),
   );
 
@@ -3399,7 +3412,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba gasto",
       description: "Se registro gasto operativo de prueba.",
       entityType: "expense",
-      entityId: "ex-tc-1",
+      entityId: "extc1",
     }),
   );
   countCreated(() =>
@@ -3408,7 +3421,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba venta",
       description: "Se registro venta diaria de prueba.",
       entityType: "order",
-      entityId: "or-tc-1",
+      entityId: "ortc1",
     }),
   );
   countCreated(() =>
@@ -3417,7 +3430,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba solicitud a proveedor",
       description: "Se solicito mercancia al proveedor de prueba.",
       entityType: "supply-order",
-      entityId: "so-tc-1",
+      entityId: "sotc1",
     }),
   );
   countCreated(() =>
@@ -3429,7 +3442,7 @@ function generateNotificationTestCases(db: MockDb): number {
       requiresAction: true,
       actionLabel: "Registrar recepcion",
       entityType: "supply-order",
-      entityId: "so-tc-1",
+      entityId: "sotc1",
       status: "active",
     }),
   );
@@ -3439,7 +3452,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba solicitud aprobada",
       description: "Solicitud de mercancia aprobada por administrador.",
       entityType: "operation-request",
-      entityId: "rq-tc-approved",
+      entityId: "rqtcapproved",
     }),
   );
   countCreated(() =>
@@ -3448,7 +3461,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba mercancia recibida",
       description: "Mercancia de prueba recibida correctamente.",
       entityType: "supply-order",
-      entityId: "so-tc-1",
+      entityId: "sotc1",
     }),
   );
 
@@ -3458,7 +3471,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba caja abierta",
       description: "Apertura de caja de prueba.",
       entityType: "workday",
-      entityId: "wd-tc-open",
+      entityId: "wdtcopen",
     }),
   );
   countCreated(() =>
@@ -3467,7 +3480,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba caja cerrada",
       description: "Cierre de caja de prueba.",
       entityType: "workday",
-      entityId: "wd-tc-close",
+      entityId: "wdtcclose",
     }),
   );
 
@@ -3477,7 +3490,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba usuario creado",
       description: "Usuario de prueba creado.",
       entityType: "user",
-      entityId: "u-tc-created",
+      entityId: "utccreated",
     }),
   );
   countCreated(() =>
@@ -3486,7 +3499,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba usuario modificado",
       description: "Usuario de prueba modificado.",
       entityType: "user",
-      entityId: "u-tc-updated",
+      entityId: "utcupdated",
     }),
   );
   countCreated(() =>
@@ -3495,7 +3508,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba usuario eliminado",
       description: "Usuario de prueba eliminado.",
       entityType: "user",
-      entityId: "u-tc-deleted",
+      entityId: "utcdeleted",
     }),
   );
 
@@ -3526,7 +3539,7 @@ function generateNotificationTestCases(db: MockDb): number {
       description: "Ingreso de stock de prueba.",
       category: rapido.category,
       entityType: "stock",
-      entityId: "se-tc-stock-created",
+      entityId: "setcstockcreated",
     }),
   );
 
@@ -3538,7 +3551,7 @@ function generateNotificationTestCases(db: MockDb): number {
       requiresAction: true,
       actionLabel: "Revisar solicitud",
       entityType: "operation-request",
-      entityId: "rq-tc-merch",
+      entityId: "rqtcmerch",
     }),
   );
   countCreated(() =>
@@ -3549,7 +3562,7 @@ function generateNotificationTestCases(db: MockDb): number {
       requiresAction: true,
       actionLabel: "Revisar solicitud",
       entityType: "operation-request",
-      entityId: "rq-tc-perm",
+      entityId: "rqtcperm",
     }),
   );
   countCreated(() =>
@@ -3558,7 +3571,7 @@ function generateNotificationTestCases(db: MockDb): number {
       title: "Caso prueba solicitud revisada",
       description: "Solicitud de prueba revisada por administrador.",
       entityType: "operation-request",
-      entityId: "rq-tc-reviewed",
+      entityId: "rqtcreviewed",
     }),
   );
 
@@ -3571,7 +3584,7 @@ function generateNotificationTestCases(db: MockDb): number {
       requiresAction: false,
       status: "active",
       entityType: "manual",
-      entityId: "manual-fixed-tc",
+      entityId: "manualfixedtc",
     }),
   );
   countCreated(() =>
@@ -3584,7 +3597,7 @@ function generateNotificationTestCases(db: MockDb): number {
       actionLabel: "Resolver accion",
       status: "active",
       entityType: "manual",
-      entityId: "manual-action-tc",
+      entityId: "manualactiontc",
     }),
   );
   countCreated(() =>
@@ -3597,7 +3610,7 @@ function generateNotificationTestCases(db: MockDb): number {
       requiresAction: false,
       status: "active",
       entityType: "manual",
-      entityId: "manual-due-tc",
+      entityId: "manualduetc",
     }),
   );
 

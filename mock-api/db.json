@@ -1,7 +1,7 @@
 {
   "products": [
     {
-      "id": "p-1771656748439-6090",
+      "id": "p210220260352286090",
       "name": "Glade 360 cm3",
       "price": 3331,
       "costPrice": 2562,
@@ -9,10 +9,10 @@
       "imageUrl": "/images/untitled-70106.png",
       "barcode": "7790520998200",
       "category": "perecedero",
-      "supplyOrderId": "so-1771272572976-1699"
+      "supplyOrderId": "so160220261709321699"
     },
     {
-      "id": "p-tc-rapido",
+      "id": "p160220260439270002",
       "name": "Producto Rotacion Alta",
       "price": 2500,
       "costPrice": 2500,
@@ -20,7 +20,7 @@
       "category": "bebida"
     },
     {
-      "id": "p-tc-pancho",
+      "id": "p160220260439270003",
       "name": "Pancho Caso Test",
       "price": 2500,
       "costPrice": 2500,
@@ -28,7 +28,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p-tc-coca",
+      "id": "p160220260439270004",
       "name": "Coca-Cola Caso Test",
       "price": 2500,
       "costPrice": 2500,
@@ -36,7 +36,7 @@
       "category": "bebida"
     },
     {
-      "id": "p-1770933817509-5022",
+      "id": "p120220261903375022",
       "name": "nuevo producto de prueba a ver si anda",
       "price": 124525,
       "costPrice": 124525,
@@ -45,7 +45,7 @@
       "category": "vivere"
     },
     {
-      "id": "p1",
+      "id": "p200120260900000001",
       "name": "Coca-Cola 500ml",
       "price": 1500,
       "costPrice": 1500,
@@ -54,7 +54,7 @@
       "category": "bebida"
     },
     {
-      "id": "p2",
+      "id": "p220120260630000002",
       "name": "Alfajor",
       "price": 900,
       "costPrice": 900,
@@ -63,7 +63,7 @@
       "category": "golosina"
     },
     {
-      "id": "p3",
+      "id": "p230120261510000003",
       "name": "Agua 1.5L",
       "price": 1200,
       "costPrice": 1200,
@@ -72,7 +72,7 @@
       "category": "bebida"
     },
     {
-      "id": "p4",
+      "id": "p050120260715000004",
       "name": "Pan lactal",
       "price": 2200,
       "costPrice": 2200,
@@ -81,7 +81,7 @@
       "category": "vivere"
     },
     {
-      "id": "p5",
+      "id": "p060120260500000005",
       "name": "Leche entera 1L",
       "price": 1800,
       "costPrice": 1800,
@@ -90,7 +90,7 @@
       "category": "vivere"
     },
     {
-      "id": "p6",
+      "id": "p190120260507120006",
       "name": "Gaseosa naranja 1.5L",
       "price": 2594,
       "costPrice": 2594,
@@ -99,7 +99,7 @@
       "category": "bebida"
     },
     {
-      "id": "p7",
+      "id": "p180120261351050007",
       "name": "Jugo multifruta 1L",
       "price": 9490,
       "costPrice": 9490,
@@ -108,7 +108,7 @@
       "category": "bebida"
     },
     {
-      "id": "p8",
+      "id": "p040120261935280008",
       "name": "Agua saborizada limon 500ml",
       "price": 2143,
       "costPrice": 2143,
@@ -117,7 +117,7 @@
       "category": "bebida"
     },
     {
-      "id": "p9",
+      "id": "p070120260810200009",
       "name": "Soda 1L",
       "price": 835,
       "costPrice": 835,
@@ -126,7 +126,7 @@
       "category": "bebida"
     },
     {
-      "id": "p10",
+      "id": "p170120260341530010",
       "name": "Energetica 473ml",
       "price": 9336,
       "costPrice": 9336,
@@ -135,7 +135,7 @@
       "category": "bebida"
     },
     {
-      "id": "p11",
+      "id": "p090120261158340011",
       "name": "Galletitas chocolate 300g",
       "price": 4791,
       "costPrice": 4791,
@@ -144,7 +144,7 @@
       "category": "chocolate"
     },
     {
-      "id": "p12",
+      "id": "p290120261746560012",
       "name": "Galletitas avena 250g",
       "price": 5168,
       "costPrice": 5168,
@@ -153,7 +153,7 @@
       "category": "golosina"
     },
     {
-      "id": "p13",
+      "id": "p060120261808580013",
       "name": "Bizcochos salados 200g",
       "price": 8817,
       "costPrice": 8817,
@@ -162,7 +162,7 @@
       "category": "golosina"
     },
     {
-      "id": "p14",
+      "id": "p080120260949330014",
       "name": "Tostadas integrales 200g",
       "price": 2279,
       "costPrice": 2279,
@@ -171,7 +171,7 @@
       "category": "vivere"
     },
     {
-      "id": "p15",
+      "id": "p250120262100130015",
       "name": "Pan de hamburguesa x4",
       "price": 4910,
       "costPrice": 4910,
@@ -180,7 +180,7 @@
       "category": "vivere"
     },
     {
-      "id": "p16",
+      "id": "p300120261731520016",
       "name": "Pan de panchos x6",
       "price": 5915,
       "costPrice": 5915,
@@ -189,7 +189,7 @@
       "category": "vivere"
     },
     {
-      "id": "p17",
+      "id": "p220120262153420017",
       "name": "Tapas para tarta x2",
       "price": 9149,
       "costPrice": 9149,
@@ -198,7 +198,7 @@
       "category": "vivere"
     },
     {
-      "id": "p18",
+      "id": "p120220261813150018",
       "name": "Fideos tirabuzon 500g",
       "price": 7162,
       "costPrice": 7162,
@@ -208,7 +208,7 @@
       "category": "vivere"
     },
     {
-      "id": "p19",
+      "id": "p020120260846380019",
       "name": "Fideos spaghetti 500g",
       "price": 8109,
       "costPrice": 8109,
@@ -217,7 +217,7 @@
       "category": "vivere"
     },
     {
-      "id": "p20",
+      "id": "p100120261539000020",
       "name": "Polenta instantanea 500g",
       "price": 6988,
       "costPrice": 6988,
@@ -226,7 +226,7 @@
       "category": "vivere"
     },
     {
-      "id": "p21",
+      "id": "p050120260814590021",
       "name": "Pure instantaneo 125g",
       "price": 1323,
       "costPrice": 1323,
@@ -235,7 +235,7 @@
       "category": "vivere"
     },
     {
-      "id": "p22",
+      "id": "p110220260527000022",
       "name": "Arroz integral 1kg",
       "price": 6501,
       "costPrice": 6501,
@@ -244,7 +244,7 @@
       "category": "vivere"
     },
     {
-      "id": "p23",
+      "id": "p300120260534540023",
       "name": "Arroz largo fino 1kg",
       "price": 3857,
       "costPrice": 3857,
@@ -253,7 +253,7 @@
       "category": "vivere"
     },
     {
-      "id": "p24",
+      "id": "p180120261852240024",
       "name": "Lentejas secas 500g",
       "price": 6505,
       "costPrice": 6505,
@@ -262,7 +262,7 @@
       "category": "vivere"
     },
     {
-      "id": "p25",
+      "id": "p040120260643020025",
       "name": "Garbanzos secos 500g",
       "price": 2593,
       "costPrice": 2593,
@@ -271,7 +271,7 @@
       "category": "vivere"
     },
     {
-      "id": "p26",
+      "id": "p300120260527570026",
       "name": "Porotos negros 500g",
       "price": 8669,
       "costPrice": 8669,
@@ -280,7 +280,7 @@
       "category": "vivere"
     },
     {
-      "id": "p27",
+      "id": "p250120262354260027",
       "name": "Harina leudante 1kg",
       "price": 6826,
       "costPrice": 6826,
@@ -289,7 +289,7 @@
       "category": "vivere"
     },
     {
-      "id": "p28",
+      "id": "p080220260749370028",
       "name": "Harina integral 1kg",
       "price": 3872,
       "costPrice": 3872,
@@ -298,7 +298,7 @@
       "category": "vivere"
     },
     {
-      "id": "p29",
+      "id": "p270120261345290029",
       "name": "Premezcla pizza 1kg",
       "price": 5130,
       "costPrice": 5130,
@@ -307,7 +307,7 @@
       "category": "vivere"
     },
     {
-      "id": "p30",
+      "id": "p010120260756180030",
       "name": "Azucar rubia 1kg",
       "price": 8585,
       "costPrice": 8585,
@@ -316,7 +316,7 @@
       "category": "vivere"
     },
     {
-      "id": "p31",
+      "id": "p250120260432400031",
       "name": "Edulcorante liquido 250ml",
       "price": 8170,
       "costPrice": 8170,
@@ -325,7 +325,7 @@
       "category": "vivere"
     },
     {
-      "id": "p32",
+      "id": "p010220261351420032",
       "name": "Cacao en polvo 180g",
       "price": 2789,
       "costPrice": 2789,
@@ -334,7 +334,7 @@
       "category": "chocolate"
     },
     {
-      "id": "p33",
+      "id": "p130120260532260033",
       "name": "Chocolate para taza 200g",
       "price": 3861,
       "costPrice": 3861,
@@ -343,7 +343,7 @@
       "category": "chocolate"
     },
     {
-      "id": "p34",
+      "id": "p230120262004180034",
       "name": "Cafe instantaneo 170g",
       "price": 6707,
       "costPrice": 6707,
@@ -352,7 +352,7 @@
       "category": "vivere"
     },
     {
-      "id": "p35",
+      "id": "p040120261426100035",
       "name": "Te verde en saquitos",
       "price": 6404,
       "costPrice": 6404,
@@ -361,7 +361,7 @@
       "category": "vivere"
     },
     {
-      "id": "p36",
+      "id": "p100120260326590036",
       "name": "Yerba saborizada 500g",
       "price": 7530,
       "costPrice": 7530,
@@ -370,7 +370,7 @@
       "category": "vivere"
     },
     {
-      "id": "p37",
+      "id": "p030220261336110037",
       "name": "Leche descremada 1L",
       "price": 1258,
       "costPrice": 1258,
@@ -379,7 +379,7 @@
       "category": "vivere"
     },
     {
-      "id": "p38",
+      "id": "p080120261050080038",
       "name": "Leche deslactosada 1L",
       "price": 6807,
       "costPrice": 6807,
@@ -388,7 +388,7 @@
       "category": "vivere"
     },
     {
-      "id": "p39",
+      "id": "p150120261523100039",
       "name": "Yogur bebible frutilla 1L",
       "price": 1672,
       "costPrice": 1672,
@@ -397,7 +397,7 @@
       "category": "vivere"
     },
     {
-      "id": "p40",
+      "id": "p080120260437130040",
       "name": "Queso rallado 150g",
       "price": 4542,
       "costPrice": 4542,
@@ -406,7 +406,7 @@
       "category": "vivere"
     },
     {
-      "id": "p41",
+      "id": "p090220261401140041",
       "name": "Queso en hebras 200g",
       "price": 5772,
       "costPrice": 5772,
@@ -415,7 +415,7 @@
       "category": "vivere"
     },
     {
-      "id": "p42",
+      "id": "p090120262226230042",
       "name": "Mantequilla 100g",
       "price": 5884,
       "costPrice": 5884,
@@ -424,7 +424,7 @@
       "category": "vivere"
     },
     {
-      "id": "p43",
+      "id": "p250120260140340043",
       "name": "Dulce de membrillo 500g",
       "price": 5628,
       "costPrice": 5628,
@@ -433,7 +433,7 @@
       "category": "vivere"
     },
     {
-      "id": "p44",
+      "id": "p300120260111290044",
       "name": "Dulce de batata 500g",
       "price": 7890,
       "costPrice": 7890,
@@ -442,7 +442,7 @@
       "category": "vivere"
     },
     {
-      "id": "p45",
+      "id": "p190120261727180045",
       "name": "Mermelada durazno 450g",
       "price": 2109,
       "costPrice": 2109,
@@ -451,7 +451,7 @@
       "category": "vivere"
     },
     {
-      "id": "p46",
+      "id": "p100220262310150046",
       "name": "Miel de flores 500g",
       "price": 5295,
       "costPrice": 5295,
@@ -460,7 +460,7 @@
       "category": "vivere"
     },
     {
-      "id": "p47",
+      "id": "p120220261619310047",
       "name": "Atun al natural lata",
       "price": 9999,
       "costPrice": 9999,
@@ -470,7 +470,7 @@
       "category": "vivere"
     },
     {
-      "id": "p48",
+      "id": "p020120261351030048",
       "name": "Sardinas en tomate lata",
       "price": 3695,
       "costPrice": 3695,
@@ -479,7 +479,7 @@
       "category": "vivere"
     },
     {
-      "id": "p49",
+      "id": "p100220260749530049",
       "name": "Arvejas secas 500g",
       "price": 3238,
       "costPrice": 3238,
@@ -488,7 +488,7 @@
       "category": "vivere"
     },
     {
-      "id": "p50",
+      "id": "p010220261014060050",
       "name": "Choclo en granos lata",
       "price": 6072,
       "costPrice": 6072,
@@ -497,7 +497,7 @@
       "category": "vivere"
     },
     {
-      "id": "p51",
+      "id": "p120220260851290051",
       "name": "Aceitunas verdes 180g",
       "price": 3110,
       "costPrice": 3110,
@@ -506,7 +506,7 @@
       "category": "vivere"
     },
     {
-      "id": "p52",
+      "id": "p250120261805450052",
       "name": "Pepinillos en vinagre 250g",
       "price": 3691,
       "costPrice": 3691,
@@ -515,7 +515,7 @@
       "category": "vivere"
     },
     {
-      "id": "p53",
+      "id": "p080220261014060053",
       "name": "Pure de tomate 520g",
       "price": 7859,
       "costPrice": 7859,
@@ -524,7 +524,7 @@
       "category": "vivere"
     },
     {
-      "id": "p54",
+      "id": "p040220262110560054",
       "name": "Salsa fileto 340g",
       "price": 6980,
       "costPrice": 6980,
@@ -533,7 +533,7 @@
       "category": "vivere"
     },
     {
-      "id": "p55",
+      "id": "p040120261028250055",
       "name": "Salsa bolognesa 340g",
       "price": 8344,
       "costPrice": 8344,
@@ -542,7 +542,7 @@
       "category": "vivere"
     },
     {
-      "id": "p56",
+      "id": "p100220260259130056",
       "name": "Mayonesa light 500g",
       "price": 8089,
       "costPrice": 8089,
@@ -551,7 +551,7 @@
       "category": "vivere"
     },
     {
-      "id": "p57",
+      "id": "p070220261449260057",
       "name": "Mostaza dijon 200g",
       "price": 2983,
       "costPrice": 2983,
@@ -560,7 +560,7 @@
       "category": "vivere"
     },
     {
-      "id": "p58",
+      "id": "p010220260414000058",
       "name": "Ketchup picante 500g",
       "price": 6262,
       "costPrice": 6262,
@@ -569,7 +569,7 @@
       "category": "vivere"
     },
     {
-      "id": "p59",
+      "id": "p040220260335290059",
       "name": "Salsa golf 250g",
       "price": 2524,
       "costPrice": 2524,
@@ -578,7 +578,7 @@
       "category": "vivere"
     },
     {
-      "id": "p60",
+      "id": "p240120260442120060",
       "name": "Vinagre de manzana 500ml",
       "price": 3417,
       "costPrice": 3417,
@@ -587,7 +587,7 @@
       "category": "vivere"
     },
     {
-      "id": "p61",
+      "id": "p210120261504150061",
       "name": "Aceite mezcla 900ml",
       "price": 3752,
       "costPrice": 3752,
@@ -596,7 +596,7 @@
       "category": "vivere"
     },
     {
-      "id": "p62",
+      "id": "p060120261043510062",
       "name": "Aceite oliva 500ml",
       "price": 3347,
       "costPrice": 3347,
@@ -605,7 +605,7 @@
       "category": "vivere"
     },
     {
-      "id": "p63",
+      "id": "p110220261928320063",
       "name": "Sal parrillera 500g",
       "price": 4238,
       "costPrice": 4238,
@@ -614,7 +614,7 @@
       "category": "vivere"
     },
     {
-      "id": "p64",
+      "id": "p300120260755350064",
       "name": "Pimienta negra molida 100g",
       "price": 1811,
       "costPrice": 1811,
@@ -623,7 +623,7 @@
       "category": "vivere"
     },
     {
-      "id": "p65",
+      "id": "p050220261407340065",
       "name": "Ajo en polvo 50g",
       "price": 1966,
       "costPrice": 1966,
@@ -632,7 +632,7 @@
       "category": "vivere"
     },
     {
-      "id": "p66",
+      "id": "p020120261728450066",
       "name": "Oregano seco 25g",
       "price": 2789,
       "costPrice": 2789,
@@ -641,7 +641,7 @@
       "category": "vivere"
     },
     {
-      "id": "p67",
+      "id": "p210120261054440067",
       "name": "Condimento provenzal 50g",
       "price": 3101,
       "costPrice": 3101,
@@ -650,7 +650,7 @@
       "category": "vivere"
     },
     {
-      "id": "p68",
+      "id": "p060120261555270068",
       "name": "Caldo verduras cubos x12",
       "price": 3082,
       "costPrice": 3082,
@@ -659,7 +659,7 @@
       "category": "vivere"
     },
     {
-      "id": "p69",
+      "id": "p250120262227120069",
       "name": "Caldo carne cubos x12",
       "price": 8606,
       "costPrice": 8606,
@@ -668,7 +668,7 @@
       "category": "vivere"
     },
     {
-      "id": "p70",
+      "id": "p090120260853370070",
       "name": "Sopa instantanea pollo",
       "price": 5366,
       "costPrice": 5366,
@@ -677,7 +677,7 @@
       "category": "vivere"
     },
     {
-      "id": "p71",
+      "id": "p110220260628550071",
       "name": "Cereal chocolate 300g",
       "price": 1913,
       "costPrice": 1913,
@@ -686,7 +686,7 @@
       "category": "chocolate"
     },
     {
-      "id": "p72",
+      "id": "p090120261407550072",
       "name": "Granola con miel 350g",
       "price": 1585,
       "costPrice": 1585,
@@ -695,7 +695,7 @@
       "category": "vivere"
     },
     {
-      "id": "p73",
+      "id": "p100220260744330073",
       "name": "Avena instantanea 400g",
       "price": 8037,
       "costPrice": 8037,
@@ -704,7 +704,7 @@
       "category": "vivere"
     },
     {
-      "id": "p74",
+      "id": "p080120261818030074",
       "name": "Barrita mani x6",
       "price": 9393,
       "costPrice": 9393,
@@ -713,7 +713,7 @@
       "category": "golosina"
     },
     {
-      "id": "p75",
+      "id": "p050120261909290075",
       "name": "Barrita chocolate x6",
       "price": 6952,
       "costPrice": 6952,
@@ -722,7 +722,7 @@
       "category": "chocolate"
     },
     {
-      "id": "p76",
+      "id": "p170120260039230076",
       "name": "Frutos secos mix 200g",
       "price": 5339,
       "costPrice": 5339,
@@ -731,7 +731,7 @@
       "category": "vivere"
     },
     {
-      "id": "p78",
+      "id": "p220120262224080078",
       "name": "Papas fritas clasicas 150g",
       "price": 8574,
       "costPrice": 8574,
@@ -740,7 +740,7 @@
       "category": "golosina"
     },
     {
-      "id": "p79",
+      "id": "p250120261152060079",
       "name": "Palitos salados 140g",
       "price": 3173,
       "costPrice": 3173,
@@ -749,7 +749,7 @@
       "category": "golosina"
     },
     {
-      "id": "p80",
+      "id": "p030220261224470080",
       "name": "Nachos queso 180g",
       "price": 902,
       "costPrice": 902,
@@ -758,7 +758,7 @@
       "category": "golosina"
     },
     {
-      "id": "p81",
+      "id": "p180120260805050081",
       "name": "Caramelos menta 100g",
       "price": 1557,
       "costPrice": 1557,
@@ -767,7 +767,7 @@
       "category": "golosina"
     },
     {
-      "id": "p82",
+      "id": "p020120260102130082",
       "name": "Chicles menta x30",
       "price": 2351,
       "costPrice": 2351,
@@ -776,7 +776,7 @@
       "category": "golosina"
     },
     {
-      "id": "p83",
+      "id": "p200120261441200083",
       "name": "Chocolate relleno 120g",
       "price": 6292,
       "costPrice": 6292,
@@ -785,7 +785,7 @@
       "category": "chocolate"
     },
     {
-      "id": "p84",
+      "id": "p040120262049200084",
       "name": "Alfajor triple chocolate",
       "price": 8271,
       "costPrice": 8271,
@@ -794,7 +794,7 @@
       "category": "chocolate"
     },
     {
-      "id": "p85",
+      "id": "p310120261230500085",
       "name": "Helado crema 1L",
       "price": 2468,
       "costPrice": 2468,
@@ -803,7 +803,7 @@
       "category": "helado"
     },
     {
-      "id": "p86",
+      "id": "p040120262124080086",
       "name": "Postre vainilla 100g",
       "price": 4954,
       "costPrice": 4954,
@@ -812,7 +812,7 @@
       "category": "vivere"
     },
     {
-      "id": "p87",
+      "id": "p080220260016410087",
       "name": "Gelatina frutilla 80g",
       "price": 3549,
       "costPrice": 3549,
@@ -821,7 +821,7 @@
       "category": "vivere"
     },
     {
-      "id": "p88",
+      "id": "p100220262337260088",
       "name": "Detergente limon 750ml",
       "price": 1972,
       "costPrice": 1972,
@@ -830,7 +830,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p89",
+      "id": "p200120261948100089",
       "name": "Lavandina perfumada 1L",
       "price": 8663,
       "costPrice": 8663,
@@ -839,7 +839,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p90",
+      "id": "p120220261743400090",
       "name": "Desinfectante pisos 900ml",
       "price": 1000,
       "costPrice": 1000,
@@ -849,7 +849,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p91",
+      "id": "p170120262234020091",
       "name": "Jabon en polvo 800g",
       "price": 3151,
       "costPrice": 3151,
@@ -858,7 +858,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p92",
+      "id": "p220120260028350092",
       "name": "Suavizante ropa 900ml",
       "price": 1638,
       "costPrice": 1638,
@@ -867,7 +867,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p93",
+      "id": "p100120261211180093",
       "name": "Esponja multiuso x2",
       "price": 2151,
       "costPrice": 2151,
@@ -876,7 +876,7 @@
       "category": "vivere"
     },
     {
-      "id": "p94",
+      "id": "p290120261241430094",
       "name": "Rollo cocina x3",
       "price": 7176,
       "costPrice": 7176,
@@ -885,7 +885,7 @@
       "category": "vivere"
     },
     {
-      "id": "p95",
+      "id": "p010120261205220095",
       "name": "Papel higienico x6",
       "price": 6244,
       "costPrice": 6244,
@@ -894,7 +894,7 @@
       "category": "vivere"
     },
     {
-      "id": "p96",
+      "id": "p040120261909090096",
       "name": "Servilletas x200",
       "price": 1530,
       "costPrice": 1530,
@@ -903,7 +903,7 @@
       "category": "vivere"
     },
     {
-      "id": "p97",
+      "id": "p110220261222320097",
       "name": "Toallas humedas x50",
       "price": 2381,
       "costPrice": 2381,
@@ -912,7 +912,7 @@
       "category": "vivere"
     },
     {
-      "id": "p98",
+      "id": "p060220260024280098",
       "name": "Jabon tocador 125g",
       "price": 2617,
       "costPrice": 2617,
@@ -921,7 +921,7 @@
       "category": "vivere"
     },
     {
-      "id": "p99",
+      "id": "p050220262226390099",
       "name": "Shampoo anticaspa 400ml",
       "price": 1837,
       "costPrice": 1837,
@@ -930,7 +930,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p100",
+      "id": "p210120261637550100",
       "name": "Acondicionador nutricion 400ml",
       "price": 6039,
       "costPrice": 6039,
@@ -939,7 +939,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p101",
+      "id": "p150120260602400101",
       "name": "Pasta dental menta 120g",
       "price": 4341,
       "costPrice": 4341,
@@ -948,7 +948,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p102",
+      "id": "p300120260156190102",
       "name": "Enjuague bucal 500ml",
       "price": 7591,
       "costPrice": 7591,
@@ -957,7 +957,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p103",
+      "id": "p050220261030290103",
       "name": "Desodorante roll-on 60ml",
       "price": 5571,
       "costPrice": 5571,
@@ -966,7 +966,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p104",
+      "id": "p030120260754510104",
       "name": "Crema de manos 100ml",
       "price": 9087,
       "costPrice": 9087,
@@ -975,7 +975,7 @@
       "category": "perecedero"
     },
     {
-      "id": "p105",
+      "id": "p060220261718140105",
       "name": "Repelente aerosol 170g",
       "price": 7496,
       "costPrice": 7496,
@@ -986,23 +986,23 @@
   ],
   "productPrices": [
     {
-      "id": "pp-1771656748439-4342",
-      "productId": "p-1771656748439-6090",
+      "id": "pp210220260352284342",
+      "productId": "p210220260352286090",
       "newPrice": 3331,
       "costPrice": 2562,
       "marginPercent": 30,
       "createdAt": "2026-02-21T06:52:28.439Z"
     },
     {
-      "id": "pp-1771042478110-27",
-      "productId": "p90",
+      "id": "pp140220260114381027",
+      "productId": "p120220261743400090",
       "newPrice": 1000,
       "createdAt": "2026-02-14T04:14:38.110Z"
     }
   ],
   "users": [
     {
-      "id": "u-admin",
+      "id": "u140220260500000001",
       "name": "Administrador",
       "email": "admin@easycommerce.local",
       "username": "admin",
@@ -1013,7 +1013,7 @@
       "endHour": "18:00"
     },
     {
-      "id": "u-user",
+      "id": "u140220260505000002",
       "name": "Operador Base",
       "email": "user@easycommerce.local",
       "username": "user",
@@ -1024,7 +1024,7 @@
       "endHour": "17:00"
     },
     {
-      "id": "u-op1",
+      "id": "u140220260510000001",
       "name": "Operador Uno",
       "email": "operador1@easycommerce.local",
       "username": "operador1",
@@ -1035,7 +1035,7 @@
       "endHour": "17:00"
     },
     {
-      "id": "u-op2",
+      "id": "u140220260515000002",
       "name": "Operador Dos",
       "email": "operador2@easycommerce.local",
       "username": "operador2",
@@ -1046,7 +1046,7 @@
       "endHour": "18:00"
     },
     {
-      "id": "u-op3",
+      "id": "u140220260520000003",
       "name": "Operador Tres",
       "email": "operador3@easycommerce.local",
       "username": "operador3",
@@ -1060,7 +1060,7 @@
   "deleteRequests": [],
   "requests": [
     {
-      "id": "rq-1771271155267-8217",
+      "id": "rq160220261645558217",
       "requestType": "permissions",
       "description": "ma;ana me lo tomo libre",
       "requestedBy": "user",
@@ -1068,7 +1068,7 @@
       "status": "pending"
     },
     {
-      "id": "rq-1771271144497-6154",
+      "id": "rq160220261645446154",
       "requestType": "merchandise",
       "description": "se acaban las golosinas, reponer mas, quedan pocos alfajores y gomitas",
       "requestedBy": "user",
@@ -1076,7 +1076,7 @@
       "status": "pending"
     },
     {
-      "id": "rq-1771267399526-4937",
+      "id": "rq160220261543194937",
       "requestType": "permissions",
       "description": "el miercoles no puedo trabajar, me surgio una emergencia",
       "requestedBy": "admin",
@@ -1087,7 +1087,7 @@
       "reviewComment": "podrias explicar mas"
     },
     {
-      "id": "rq-1771267381364-9813",
+      "id": "rq160220261543019813",
       "requestType": "merchandise",
       "description": "se acaban los refrescos, pedir mas cocacolas, quedan 24 unidades, y aguas solo 10",
       "requestedBy": "admin",
@@ -1095,7 +1095,7 @@
       "status": "pending"
     },
     {
-      "id": "rq-1771267357582-5452",
+      "id": "rq160220261542375452",
       "requestType": "merchandise",
       "description": "se estan acabando los cigarros de tipo belmon y malboro",
       "requestedBy": "admin",
@@ -1103,11 +1103,11 @@
       "status": "approved",
       "reviewedBy": "admin",
       "reviewedAt": "2026-02-16T19:06:44.552Z",
-      "supplyOrderId": "so-1771268804540-5440",
+      "supplyOrderId": "so160220261606445440",
       "supplierMessage": "30 malboro\n20 lucky normal\n30 lucky menta\n10 paquetes filtros\n10 sobres para cigarros\n10 paquetes tabaco"
     },
     {
-      "id": "rq-1771259468107-6245",
+      "id": "rq160220261331086245",
       "requestType": "permissions",
       "description": "el prox viernes no puedo ir a trabajar a las 3pm por cita medica",
       "requestedBy": "admin",
@@ -1118,7 +1118,7 @@
       "reviewComment": "ok"
     },
     {
-      "id": "rq-1771258814082-4373",
+      "id": "rq160220261320144373",
       "requestType": "permissions",
       "description": "maÃ±ana no puedo ir a trabajar a las 3pm por cita medica",
       "requestedBy": "admin",
@@ -1128,7 +1128,7 @@
       "reviewedAt": "2026-02-16T16:27:15.855Z"
     },
     {
-      "id": "rq-1771258791597-8600",
+      "id": "rq160220261319518600",
       "requestType": "merchandise",
       "description": "necesitamos mas cocas, alfajores, y aguas, unas 40 porque quedan apoenas 20 unidades",
       "requestedBy": "admin",
@@ -1136,343 +1136,343 @@
       "status": "approved",
       "reviewedBy": "admin",
       "reviewedAt": "2026-02-16T17:27:45.673Z",
-      "supplyOrderId": "so-1771262865661-522",
+      "supplyOrderId": "so160220261427451522",
       "supplierMessage": "30 panchos\n20 chocolates\n10 cajas de lapices"
     }
   ],
   "stocks": [
     {
-      "id": "se-1771658272959-5364",
-      "productId": "p90",
+      "id": "se210220260417525364",
+      "productId": "p120220261743400090",
       "quantity": -1,
       "description": "Venta orden or-1771658270164-3751",
       "createdAt": "2026-02-21T07:17:52.959Z"
     },
     {
-      "id": "se-1771658272946-1582",
-      "productId": "p35",
+      "id": "se210220260417521582",
+      "productId": "p040120261426100035",
       "quantity": -1,
       "description": "Venta orden or-1771658270164-3751",
       "createdAt": "2026-02-21T07:17:52.946Z"
     },
     {
-      "id": "se-1771656748491-8020",
-      "productId": "p-1771656748439-6090",
+      "id": "se210220260352288020",
+      "productId": "p210220260352286090",
       "expirationDate": "2026-06-27",
       "quantity": 151,
-      "supplyOrderId": "so-1771272572976-1699",
+      "supplyOrderId": "so160220261709321699",
       "costPrice": 2562,
       "salePrice": 3331,
       "createdAt": "2026-02-21T06:52:28.491Z"
     },
     {
-      "id": "se-1771641609099-1705",
-      "productId": "p90",
+      "id": "se200220262340091705",
+      "productId": "p120220261743400090",
       "quantity": -3,
       "description": "Venta orden or-1771641602513-337",
       "createdAt": "2026-02-21T02:40:09.099Z"
     },
     {
-      "id": "se-1771378368710-8558",
-      "productId": "p35",
+      "id": "se170220262232488558",
+      "productId": "p040120261426100035",
       "quantity": -1,
       "description": "Venta orden or-1771378252509-8881",
       "createdAt": "2026-02-18T01:32:48.710Z"
     },
     {
-      "id": "se-tc-p-tc-rapido-8",
-      "productId": "p-tc-rapido",
+      "id": "se160220260439270008",
+      "productId": "p160220260439270002",
       "quantity": 8,
       "createdAt": "2026-02-16T07:39:27.032Z"
     },
     {
-      "id": "se-tc-p-tc-pancho-5",
-      "productId": "p-tc-pancho",
+      "id": "se160220260439270005",
+      "productId": "p160220260439270003",
       "quantity": 5,
       "createdAt": "2026-02-16T07:39:27.032Z",
       "expirationDate": "2026-03-07T07:39:27.032Z"
     },
     {
-      "id": "se-tc-p-tc-coca-12",
-      "productId": "p-tc-coca",
+      "id": "se160220260439270012",
+      "productId": "p160220260439270004",
       "quantity": 12,
       "createdAt": "2026-02-16T07:39:27.032Z"
     },
     {
-      "id": "se-1771296764283-8430",
-      "productId": "p-1770933817509-5022",
+      "id": "se160220262352448430",
+      "productId": "p120220261903375022",
       "quantity": -1,
       "description": "Venta orden or-1771296762765-6848",
       "createdAt": "2026-02-17T02:52:44.283Z"
     },
     {
-      "id": "se-1771296764273-9517",
-      "productId": "p90",
+      "id": "se160220262352449517",
+      "productId": "p120220261743400090",
       "quantity": -1,
       "description": "Venta orden or-1771296762765-6848",
       "createdAt": "2026-02-17T02:52:44.273Z"
     },
     {
-      "id": "se-1771296733015-2457",
-      "productId": "p74",
+      "id": "se160220262352132457",
+      "productId": "p080120261818030074",
       "quantity": -2,
       "description": "Venta orden or-1771296731380-3465",
       "createdAt": "2026-02-17T02:52:13.015Z"
     },
     {
-      "id": "se-1771296733007-6317",
-      "productId": "p90",
+      "id": "se160220262352136317",
+      "productId": "p120220261743400090",
       "quantity": -10,
       "description": "Venta orden or-1771296731380-3465",
       "createdAt": "2026-02-17T02:52:13.007Z"
     },
     {
-      "id": "se-1771296732997-1095",
-      "productId": "p35",
+      "id": "se160220262352121095",
+      "productId": "p040120261426100035",
       "quantity": -1,
       "description": "Venta orden or-1771296731380-3465",
       "createdAt": "2026-02-17T02:52:12.997Z"
     },
     {
-      "id": "se-1771048668548-2269",
-      "productId": "p90",
+      "id": "se140220260257482269",
+      "productId": "p120220261743400090",
       "expirationDate": "2026-02-19",
       "quantity": 345,
       "createdAt": "2026-02-14T05:57:48.548Z"
     },
     {
-      "id": "se-1771048653923-1666",
-      "productId": "p35",
+      "id": "se140220260257331666",
+      "productId": "p040120261426100035",
       "quantity": 23,
       "createdAt": "2026-02-14T05:57:33.923Z"
     },
     {
-      "id": "se-1771048650630-7583",
-      "productId": "p5",
+      "id": "se140220260257307583",
+      "productId": "p060120260500000005",
       "quantity": 35,
       "createdAt": "2026-02-14T05:57:30.630Z"
     },
     {
-      "id": "se-1771048642033-8034",
-      "productId": "p26",
+      "id": "se140220260257228034",
+      "productId": "p300120260527570026",
       "quantity": 23,
       "createdAt": "2026-02-14T05:57:22.033Z"
     },
     {
-      "id": "se-1771048637790-8111",
-      "productId": "p74",
+      "id": "se140220260257178111",
+      "productId": "p080120261818030074",
       "quantity": 34,
       "createdAt": "2026-02-14T05:57:17.790Z"
     },
     {
-      "id": "se-1771045165263-1824",
-      "productId": "p18",
+      "id": "se140220260159251824",
+      "productId": "p120220261813150018",
       "quantity": -1,
       "description": "Venta orden or-1771045164339-4185",
       "createdAt": "2026-02-14T04:59:25.263Z"
     },
     {
-      "id": "se-1771045165253-7040",
-      "productId": "p16",
+      "id": "se140220260159257040",
+      "productId": "p300120261731520016",
       "quantity": -3,
       "description": "Venta orden or-1771045164339-4185",
       "createdAt": "2026-02-14T04:59:25.253Z"
     },
     {
-      "id": "se-1771045158326-1057",
-      "productId": "p-1770933817509-5022",
+      "id": "se140220260159181057",
+      "productId": "p120220261903375022",
       "quantity": -1,
       "description": "Venta orden or-1771045157306-1251",
       "createdAt": "2026-02-14T04:59:18.326Z"
     },
     {
-      "id": "se-1771045153579-9145",
-      "productId": "p74",
+      "id": "se140220260159139145",
+      "productId": "p080120261818030074",
       "quantity": -1,
       "description": "Venta orden or-1771045152411-3099",
       "createdAt": "2026-02-14T04:59:13.579Z"
     },
     {
-      "id": "se-1771045153570-8033",
-      "productId": "p16",
+      "id": "se140220260159138033",
+      "productId": "p300120261731520016",
       "quantity": -1,
       "description": "Venta orden or-1771045152411-3099",
       "createdAt": "2026-02-14T04:59:13.570Z"
     },
     {
-      "id": "se-1771045153561-3334",
-      "productId": "p35",
+      "id": "se140220260159133334",
+      "productId": "p040120261426100035",
       "quantity": -1,
       "description": "Venta orden or-1771045152411-3099",
       "createdAt": "2026-02-14T04:59:13.561Z"
     },
     {
-      "id": "se-1771045153551-9263",
-      "productId": "p-1770933817509-5022",
+      "id": "se140220260159139263",
+      "productId": "p120220261903375022",
       "quantity": -2,
       "description": "Venta orden or-1771045152411-3099",
       "createdAt": "2026-02-14T04:59:13.551Z"
     },
     {
-      "id": "se-1771043456488-197",
-      "productId": "p-1770933817509-5022",
+      "id": "se140220260130568197",
+      "productId": "p120220261903375022",
       "quantity": -3,
       "description": "Venta orden or-1771043455343-6416",
       "createdAt": "2026-02-14T04:30:56.488Z"
     },
     {
-      "id": "se-1771043446964-628",
-      "productId": "p-1770933817509-5022",
+      "id": "se140220260130464628",
+      "productId": "p120220261903375022",
       "quantity": -1,
       "description": "Venta orden or-1771043445759-5953",
       "createdAt": "2026-02-14T04:30:46.964Z"
     },
     {
-      "id": "se-1771025558384-5807",
-      "productId": "p18",
+      "id": "se130220262032385807",
+      "productId": "p120220261813150018",
       "quantity": -3,
       "description": "Venta orden or-1771025557315-7173",
       "createdAt": "2026-02-13T23:32:38.384Z"
     },
     {
-      "id": "se-1771025544260-3821",
-      "productId": "p46",
+      "id": "se130220262032243821",
+      "productId": "p100220262310150046",
       "quantity": -1,
       "description": "Venta orden or-1771025542919-9006",
       "createdAt": "2026-02-13T23:32:24.260Z"
     },
     {
-      "id": "se-1771025544252-4820",
-      "productId": "p26",
+      "id": "se130220262032244820",
+      "productId": "p300120260527570026",
       "quantity": -1,
       "description": "Venta orden or-1771025542919-9006",
       "createdAt": "2026-02-13T23:32:24.252Z"
     },
     {
-      "id": "se-1771025544242-6482",
-      "productId": "p5",
+      "id": "se130220262032246482",
+      "productId": "p060120260500000005",
       "quantity": -1,
       "description": "Venta orden or-1771025542919-9006",
       "createdAt": "2026-02-13T23:32:24.242Z"
     },
     {
-      "id": "se-1771025497648-2213",
-      "productId": "p-1770933817509-5022",
+      "id": "se130220262031372213",
+      "productId": "p120220261903375022",
       "quantity": -2,
       "description": "Venta orden or-1771025496619-3082",
       "createdAt": "2026-02-13T23:31:37.648Z"
     },
     {
-      "id": "se-1771022231989-2490",
-      "productId": "p-1770933817509-5022",
+      "id": "se130220261937112490",
+      "productId": "p120220261903375022",
       "quantity": -1,
       "description": "Venta orden or-1771022228706-7233",
       "createdAt": "2026-02-13T22:37:11.989Z"
     },
     {
-      "id": "se-1771021756927-9756",
-      "productId": "p18",
+      "id": "se130220261929169756",
+      "productId": "p120220261813150018",
       "quantity": -3,
       "description": "Venta orden or-1771021752568-7837",
       "createdAt": "2026-02-13T22:29:16.927Z"
     },
     {
-      "id": "se-1771021732714-4150",
-      "productId": "p18",
+      "id": "se130220261928524150",
+      "productId": "p120220261813150018",
       "quantity": 30,
       "createdAt": "2026-02-13T22:28:52.714Z"
     },
     {
-      "id": "se-1770934040269-2835",
-      "productId": "p-1770933817509-5022",
+      "id": "se120220261907202835",
+      "productId": "p120220261903375022",
       "quantity": 4,
       "createdAt": "2026-02-12T22:07:20.269Z"
     },
     {
-      "id": "se-1770933880093-932",
-      "productId": "p-1770933817509-5022",
+      "id": "se120220261904403932",
+      "productId": "p120220261903375022",
       "quantity": 52,
       "createdAt": "2026-02-12T22:04:40.093Z"
     },
     {
-      "id": "se-1770933850203-7292",
-      "productId": "p-1770933817509-5022",
+      "id": "se120220261904107292",
+      "productId": "p120220261903375022",
       "quantity": 5,
       "createdAt": "2026-02-12T22:04:10.203Z"
     },
     {
-      "id": "se-fix-p75-1770926986149-10",
-      "productId": "p75",
+      "id": "se120220261709464910",
+      "productId": "p050120261909290075",
       "quantity": 9,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p5-1770926986149-9",
-      "productId": "p5",
+      "id": "se120220261709461499",
+      "productId": "p060120260500000005",
       "quantity": 13,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p57-1770926986149-8",
-      "productId": "p57",
+      "id": "se120220261709461498",
+      "productId": "p070220261449260057",
       "quantity": 11,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p37-1770926986149-7",
-      "productId": "p37",
+      "id": "se120220261709461497",
+      "productId": "p030220261336110037",
       "quantity": 8,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p35-1770926986149-6",
-      "productId": "p35",
+      "id": "se120220261709461496",
+      "productId": "p040120261426100035",
       "quantity": 5,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p82-1770926986149-5",
-      "productId": "p82",
+      "id": "se120220261709461495",
+      "productId": "p020120260102130082",
       "quantity": 8,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p26-1770926986149-4",
-      "productId": "p26",
+      "id": "se120220261709461494",
+      "productId": "p300120260527570026",
       "quantity": 8,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p46-1770926986149-3",
-      "productId": "p46",
+      "id": "se120220261709461493",
+      "productId": "p100220262310150046",
       "quantity": 2,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p93-1770926986149-2",
-      "productId": "p93",
+      "id": "se120220261709461492",
+      "productId": "p100120261211180093",
       "quantity": 4,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.149Z"
     },
     {
-      "id": "se-fix-p74-1770926986148-1",
-      "productId": "p74",
+      "id": "se120220261709461481",
+      "productId": "p080120261818030074",
       "quantity": 4,
       "description": "Ajuste automatico para evitar existencia negativa",
       "createdAt": "2026-02-12T20:09:46.148Z"
     },
     {
-      "id": "se-seed-001",
-      "productId": "p31",
+      "id": "se080220261834500001",
+      "productId": "p250120260432400031",
       "manufactureDate": "2026-01-11",
       "expirationDate": "2026-04-05",
       "quantity": 8,
@@ -1480,15 +1480,15 @@
       "createdAt": "2026-02-08T21:34:50.948Z"
     },
     {
-      "id": "se-seed-002",
-      "productId": "p89",
+      "id": "se180120260415120002",
+      "productId": "p200120261948100089",
       "quantity": 8,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-18T07:15:12.393Z"
     },
     {
-      "id": "se-seed-003",
-      "productId": "p74",
+      "id": "se200120262104510003",
+      "productId": "p080120261818030074",
       "manufactureDate": "2026-01-29",
       "expirationDate": "2026-03-07",
       "quantity": -3,
@@ -1496,15 +1496,15 @@
       "createdAt": "2026-01-21T00:04:51.461Z"
     },
     {
-      "id": "se-seed-004",
-      "productId": "p16",
+      "id": "se050220261949470004",
+      "productId": "p300120261731520016",
       "quantity": 17,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-02-05T22:49:47.826Z"
     },
     {
-      "id": "se-seed-005",
-      "productId": "p93",
+      "id": "se030120261543470005",
+      "productId": "p100120261211180093",
       "manufactureDate": "2025-12-16",
       "expirationDate": "2026-03-24",
       "quantity": -3,
@@ -1512,8 +1512,8 @@
       "createdAt": "2026-01-03T18:43:47.293Z"
     },
     {
-      "id": "se-seed-006",
-      "productId": "p86",
+      "id": "se100120260203330006",
+      "productId": "p040120262124080086",
       "manufactureDate": "2025-12-30",
       "expirationDate": "2026-02-25",
       "quantity": 18,
@@ -1521,22 +1521,22 @@
       "createdAt": "2026-01-10T05:03:33.905Z"
     },
     {
-      "id": "se-seed-007",
-      "productId": "p53",
+      "id": "se120220260315140007",
+      "productId": "p080220261014060053",
       "quantity": 4,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-02-12T06:15:14.009Z"
     },
     {
-      "id": "se-seed-008",
-      "productId": "p46",
+      "id": "se100220260359350008",
+      "productId": "p100220262310150046",
       "quantity": -17,
       "description": "Ajuste de inventario demo",
       "createdAt": "2026-02-10T06:59:35.764Z"
     },
     {
-      "id": "se-seed-009",
-      "productId": "p14",
+      "id": "se240120261859130009",
+      "productId": "p080120260949330014",
       "manufactureDate": "2025-12-14",
       "expirationDate": "2026-03-26",
       "quantity": 5,
@@ -1544,8 +1544,8 @@
       "createdAt": "2026-01-24T21:59:13.398Z"
     },
     {
-      "id": "se-seed-010",
-      "productId": "p36",
+      "id": "se010220262058250010",
+      "productId": "p100120260326590036",
       "manufactureDate": "2026-01-28",
       "expirationDate": "2026-02-07",
       "quantity": 1,
@@ -1553,15 +1553,15 @@
       "createdAt": "2026-02-01T23:58:25.940Z"
     },
     {
-      "id": "se-seed-011",
-      "productId": "p68",
+      "id": "se010220261033390011",
+      "productId": "p060120261555270068",
       "quantity": 13,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-02-01T13:33:39.372Z"
     },
     {
-      "id": "se-seed-012",
-      "productId": "p15",
+      "id": "se050120261343030012",
+      "productId": "p250120262100130015",
       "manufactureDate": "2026-01-09",
       "expirationDate": "2026-03-16",
       "quantity": 15,
@@ -1569,29 +1569,29 @@
       "createdAt": "2026-01-05T16:43:03.402Z"
     },
     {
-      "id": "se-seed-013",
-      "productId": "p26",
+      "id": "se160120260151500013",
+      "productId": "p300120260527570026",
       "quantity": -16,
       "description": "Ajuste de inventario demo",
       "createdAt": "2026-01-16T04:51:50.090Z"
     },
     {
-      "id": "se-seed-014",
-      "productId": "p60",
+      "id": "se130120260202500014",
+      "productId": "p240120260442120060",
       "quantity": 1,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-13T05:02:50.545Z"
     },
     {
-      "id": "se-seed-015",
-      "productId": "p87",
+      "id": "se070220261829550015",
+      "productId": "p080220260016410087",
       "quantity": -1,
       "description": "Ajuste de inventario demo",
       "createdAt": "2026-02-07T21:29:55.396Z"
     },
     {
-      "id": "se-seed-016",
-      "productId": "p4",
+      "id": "se070220260536500016",
+      "productId": "p050120260715000004",
       "manufactureDate": "2026-01-31",
       "expirationDate": "2026-03-29",
       "quantity": 15,
@@ -1599,15 +1599,15 @@
       "createdAt": "2026-02-07T08:36:50.470Z"
     },
     {
-      "id": "se-seed-017",
-      "productId": "p82",
+      "id": "se310120261548380017",
+      "productId": "p020120260102130082",
       "quantity": -7,
       "description": "Ajuste de inventario demo",
       "createdAt": "2026-01-31T18:48:38.721Z"
     },
     {
-      "id": "se-seed-018",
-      "productId": "p72",
+      "id": "se310120261942200018",
+      "productId": "p090120261407550072",
       "manufactureDate": "2026-01-07",
       "expirationDate": "2026-03-12",
       "quantity": 7,
@@ -1615,15 +1615,15 @@
       "createdAt": "2026-01-31T22:42:20.202Z"
     },
     {
-      "id": "se-seed-019",
-      "productId": "p102",
+      "id": "se030220260456410019",
+      "productId": "p300120260156190102",
       "quantity": 7,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-02-03T07:56:41.014Z"
     },
     {
-      "id": "se-seed-020",
-      "productId": "p33",
+      "id": "se270120260303230020",
+      "productId": "p130120260532260033",
       "manufactureDate": "2025-12-21",
       "expirationDate": "2026-03-19",
       "quantity": 8,
@@ -1631,15 +1631,15 @@
       "createdAt": "2026-01-27T06:03:23.632Z"
     },
     {
-      "id": "se-seed-021",
-      "productId": "p35",
+      "id": "se170120260841470021",
+      "productId": "p040120261426100035",
       "quantity": -4,
       "description": "Ajuste de inventario demo",
       "createdAt": "2026-01-17T11:41:47.880Z"
     },
     {
-      "id": "se-seed-022",
-      "productId": "p92",
+      "id": "se040220260512160022",
+      "productId": "p220120260028350092",
       "manufactureDate": "2026-01-05",
       "expirationDate": "2026-04-27",
       "quantity": 4,
@@ -1647,22 +1647,22 @@
       "createdAt": "2026-02-04T08:12:16.495Z"
     },
     {
-      "id": "se-seed-023",
-      "productId": "p99",
+      "id": "se290120262029020023",
+      "productId": "p050220262226390099",
       "quantity": 3,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-29T23:29:02.038Z"
     },
     {
-      "id": "se-seed-024",
-      "productId": "p87",
+      "id": "se040120260455500024",
+      "productId": "p080220260016410087",
       "quantity": 10,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-04T07:55:50.010Z"
     },
     {
-      "id": "se-seed-025",
-      "productId": "p86",
+      "id": "se070120260558120025",
+      "productId": "p040120262124080086",
       "manufactureDate": "2025-12-01",
       "expirationDate": "2026-02-22",
       "quantity": -13,
@@ -1670,8 +1670,8 @@
       "createdAt": "2026-01-07T08:58:12.148Z"
     },
     {
-      "id": "se-seed-026",
-      "productId": "p2",
+      "id": "se130120261044300026",
+      "productId": "p220120260630000002",
       "manufactureDate": "2025-12-21",
       "expirationDate": "2026-03-04",
       "quantity": 8,
@@ -1679,8 +1679,8 @@
       "createdAt": "2026-01-13T13:44:30.837Z"
     },
     {
-      "id": "se-seed-027",
-      "productId": "p16",
+      "id": "se120120260605210027",
+      "productId": "p300120261731520016",
       "manufactureDate": "2025-12-17",
       "expirationDate": "2026-03-04",
       "quantity": 14,
@@ -1688,8 +1688,8 @@
       "createdAt": "2026-01-12T09:05:21.926Z"
     },
     {
-      "id": "se-seed-028",
-      "productId": "p59",
+      "id": "se170120260845590028",
+      "productId": "p040220260335290059",
       "manufactureDate": "2026-01-05",
       "expirationDate": "2026-04-09",
       "quantity": 9,
@@ -1697,8 +1697,8 @@
       "createdAt": "2026-01-17T11:45:59.513Z"
     },
     {
-      "id": "se-seed-029",
-      "productId": "p100",
+      "id": "se030220260245280029",
+      "productId": "p210120261637550100",
       "manufactureDate": "2025-12-30",
       "expirationDate": "2026-01-14",
       "quantity": 3,
@@ -1706,8 +1706,8 @@
       "createdAt": "2026-02-03T05:45:28.953Z"
     },
     {
-      "id": "se-seed-030",
-      "productId": "p16",
+      "id": "se120220261344570030",
+      "productId": "p300120261731520016",
       "manufactureDate": "2026-01-10",
       "expirationDate": "2026-03-23",
       "quantity": 16,
@@ -1715,8 +1715,8 @@
       "createdAt": "2026-02-12T16:44:57.286Z"
     },
     {
-      "id": "se-seed-031",
-      "productId": "p78",
+      "id": "se310120262355450031",
+      "productId": "p220120262224080078",
       "manufactureDate": "2026-01-21",
       "expirationDate": "2026-02-27",
       "quantity": 1,
@@ -1724,15 +1724,15 @@
       "createdAt": "2026-02-01T02:55:45.816Z"
     },
     {
-      "id": "se-seed-032",
-      "productId": "p13",
+      "id": "se200120260107590032",
+      "productId": "p060120261808580013",
       "quantity": 12,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-20T04:07:59.431Z"
     },
     {
-      "id": "se-seed-033",
-      "productId": "p46",
+      "id": "se090220261121120033",
+      "productId": "p100220262310150046",
       "manufactureDate": "2025-12-14",
       "expirationDate": "2026-03-14",
       "quantity": 16,
@@ -1740,8 +1740,8 @@
       "createdAt": "2026-02-09T14:21:12.935Z"
     },
     {
-      "id": "se-seed-034",
-      "productId": "p34",
+      "id": "se110220260558190034",
+      "productId": "p230120262004180034",
       "manufactureDate": "2025-12-10",
       "expirationDate": "2026-04-08",
       "quantity": 5,
@@ -1749,8 +1749,8 @@
       "createdAt": "2026-02-11T08:58:19.100Z"
     },
     {
-      "id": "se-seed-035",
-      "productId": "p84",
+      "id": "se250120260252240035",
+      "productId": "p040120262049200084",
       "manufactureDate": "2025-12-13",
       "expirationDate": "2026-04-07",
       "quantity": 6,
@@ -1758,15 +1758,15 @@
       "createdAt": "2026-01-25T05:52:24.451Z"
     },
     {
-      "id": "se-seed-036",
-      "productId": "p37",
+      "id": "se080220261055460036",
+      "productId": "p030220261336110037",
       "quantity": -7,
       "description": "Ajuste de inventario demo",
       "createdAt": "2026-02-08T13:55:46.709Z"
     },
     {
-      "id": "se-seed-037",
-      "productId": "p105",
+      "id": "se040120262310040037",
+      "productId": "p060220261718140105",
       "manufactureDate": "2026-01-13",
       "expirationDate": "2026-01-20",
       "quantity": 17,
@@ -1774,29 +1774,29 @@
       "createdAt": "2026-01-05T02:10:04.819Z"
     },
     {
-      "id": "se-seed-038",
-      "productId": "p49",
+      "id": "se070120261716050038",
+      "productId": "p100220260749530049",
       "quantity": 12,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-07T20:16:05.697Z"
     },
     {
-      "id": "se-seed-039",
-      "productId": "p57",
+      "id": "se030120261824590039",
+      "productId": "p070220261449260057",
       "quantity": -10,
       "description": "Ajuste de inventario demo",
       "createdAt": "2026-01-03T21:24:59.297Z"
     },
     {
-      "id": "se-seed-040",
-      "productId": "p5",
+      "id": "se310120260032370040",
+      "productId": "p060120260500000005",
       "quantity": -12,
       "description": "Ajuste de inventario demo",
       "createdAt": "2026-01-31T03:32:37.906Z"
     },
     {
-      "id": "se-seed-041",
-      "productId": "p75",
+      "id": "se250120260728260041",
+      "productId": "p050120261909290075",
       "manufactureDate": "2025-12-19",
       "expirationDate": "2026-01-01",
       "quantity": -8,
@@ -1804,29 +1804,29 @@
       "createdAt": "2026-01-25T10:28:26.412Z"
     },
     {
-      "id": "se-seed-042",
-      "productId": "p24",
+      "id": "se300120260701160042",
+      "productId": "p180120261852240024",
       "quantity": 15,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-30T10:01:16.328Z"
     },
     {
-      "id": "se-seed-043",
-      "productId": "p76",
+      "id": "se170120260106280043",
+      "productId": "p170120260039230076",
       "quantity": 12,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-17T04:06:28.141Z"
     },
     {
-      "id": "se-seed-044",
-      "productId": "p105",
+      "id": "se210120261746250044",
+      "productId": "p060220261718140105",
       "quantity": 7,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-21T20:46:25.748Z"
     },
     {
-      "id": "se-seed-045",
-      "productId": "p86",
+      "id": "se170120261459060045",
+      "productId": "p040120262124080086",
       "manufactureDate": "2025-12-14",
       "expirationDate": "2026-03-30",
       "quantity": 9,
@@ -1834,22 +1834,22 @@
       "createdAt": "2026-01-17T17:59:06.860Z"
     },
     {
-      "id": "se-seed-046",
-      "productId": "p26",
+      "id": "se080220260854060046",
+      "productId": "p300120260527570026",
       "quantity": 9,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-02-08T11:54:06.063Z"
     },
     {
-      "id": "se-seed-047",
-      "productId": "p94",
+      "id": "se020120260703160047",
+      "productId": "p290120261241430094",
       "quantity": 7,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-01-02T10:03:16.048Z"
     },
     {
-      "id": "se-seed-048",
-      "productId": "p42",
+      "id": "se070220261437430048",
+      "productId": "p090120262226230042",
       "manufactureDate": "2025-12-25",
       "expirationDate": "2026-03-04",
       "quantity": 12,
@@ -1857,15 +1857,15 @@
       "createdAt": "2026-02-07T17:37:43.450Z"
     },
     {
-      "id": "se-seed-049",
-      "productId": "p39",
+      "id": "se080220261530500049",
+      "productId": "p150120261523100039",
       "quantity": 12,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-02-08T18:30:50.162Z"
     },
     {
-      "id": "se-seed-050",
-      "productId": "p27",
+      "id": "se110220260020090050",
+      "productId": "p250120262354260027",
       "quantity": 9,
       "description": "Ingreso inicial de demo",
       "createdAt": "2026-02-11T03:20:09.806Z"
@@ -1873,16 +1873,16 @@
   ],
   "orders": [
     {
-      "id": "or-1771798269001-9039",
+      "id": "or220220261911099039",
       "items": [
         {
-          "productId": "p-1771656748439-6090",
+          "productId": "p210220260352286090",
           "productName": "Glade 360 cm3",
           "unitPrice": 3331,
           "quantity": 1
         },
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
@@ -1895,22 +1895,22 @@
       "cancelledAt": "2026-02-23T05:15:39.851Z"
     },
     {
-      "id": "or-1771797065271-3325",
+      "id": "or220220261851053325",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 2
         },
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 2
         },
         {
-          "productId": "p-1771656748439-6090",
+          "productId": "p210220260352286090",
           "productName": "Glade 360 cm3",
           "unitPrice": 3331,
           "quantity": 2
@@ -1923,10 +1923,10 @@
       "cancelledAt": "2026-02-22T22:11:09.000Z"
     },
     {
-      "id": "or-1771795221731-7835",
+      "id": "or220220261820217835",
       "items": [
         {
-          "productId": "p-1771656748439-6090",
+          "productId": "p210220260352286090",
           "productName": "Glade 360 cm3",
           "unitPrice": 3331,
           "quantity": 2
@@ -1939,16 +1939,16 @@
       "cancelledAt": "2026-02-22T21:51:05.271Z"
     },
     {
-      "id": "or-1771658270164-3751",
+      "id": "or210220260417503751",
       "items": [
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
         },
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 1
@@ -1961,10 +1961,10 @@
       "paymentMethod": "tarjeta credito"
     },
     {
-      "id": "or-1771641602513-337",
+      "id": "or200220262340023337",
       "items": [
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 3
@@ -1977,16 +1977,16 @@
       "paymentMethod": "tarjeta credito"
     },
     {
-      "id": "or-1771640504215-4589",
+      "id": "or200220262321444589",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
         },
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 1
@@ -1999,16 +1999,16 @@
       "cancelledAt": "2026-02-21T02:40:02.513Z"
     },
     {
-      "id": "or-1771379684577-6856",
+      "id": "or170220262254446856",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
         },
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 1
@@ -2021,10 +2021,10 @@
       "cancelledAt": "2026-02-18T02:43:01.813Z"
     },
     {
-      "id": "or-1771378252509-8881",
+      "id": "or170220262230528881",
       "items": [
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
@@ -2037,10 +2037,10 @@
       "paymentMethod": "tarjeta credito"
     },
     {
-      "id": "or-1771377619426-5993",
+      "id": "or170220262220195993",
       "items": [
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 2
@@ -2053,10 +2053,10 @@
       "cancelledAt": "2026-02-18T01:54:40.192Z"
     },
     {
-      "id": "or-1771377294529-9028",
+      "id": "or170220262214549028",
       "items": [
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
@@ -2069,10 +2069,10 @@
       "cancelledAt": "2026-02-18T01:30:52.509Z"
     },
     {
-      "id": "or-1771377190667-9437",
+      "id": "or170220262213109437",
       "items": [
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 1
@@ -2085,22 +2085,22 @@
       "cancelledAt": "2026-02-18T01:30:52.509Z"
     },
     {
-      "id": "or-1771377072650-35",
+      "id": "or170220262211125035",
       "items": [
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 1
         },
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 2
         },
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
@@ -2113,22 +2113,22 @@
       "cancelledAt": "2026-02-18T01:30:52.509Z"
     },
     {
-      "id": "or-1771376978111-7461",
+      "id": "or170220262209387461",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
         },
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 1
         },
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 1
@@ -2141,22 +2141,22 @@
       "cancelledAt": "2026-02-18T01:30:52.509Z"
     },
     {
-      "id": "or-1771376740228-1994",
+      "id": "or170220262205401994",
       "items": [
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 1
         },
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 1
         },
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
@@ -2169,22 +2169,22 @@
       "cancelledAt": "2026-02-18T01:30:52.509Z"
     },
     {
-      "id": "or-1771376194706-7505",
+      "id": "or170220262156347505",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
         },
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 1
         },
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
@@ -2197,22 +2197,22 @@
       "cancelledAt": "2026-02-18T01:13:10.667Z"
     },
     {
-      "id": "or-1771366974235-8614",
+      "id": "or170220261922548614",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
         },
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 1
         },
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
@@ -2225,16 +2225,16 @@
       "cancelledAt": "2026-02-18T00:54:48.471Z"
     },
     {
-      "id": "or-1771296762765-6848",
+      "id": "or160220262352426848",
       "items": [
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 1
         },
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
@@ -2247,22 +2247,22 @@
       "paymentMethod": "mercadopago"
     },
     {
-      "id": "or-1771296731380-3465",
+      "id": "or160220262352113465",
       "items": [
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
         },
         {
-          "productId": "p90",
+          "productId": "p120220261743400090",
           "productName": "Desinfectante pisos 900ml",
           "unitPrice": 1000,
           "quantity": 10
         },
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 2
@@ -2275,16 +2275,16 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771045164339-4185",
+      "id": "or140220260159244185",
       "items": [
         {
-          "productId": "p16",
+          "productId": "p300120261731520016",
           "productName": "Pan de panchos x6",
           "unitPrice": 5915,
           "quantity": 3
         },
         {
-          "productId": "p18",
+          "productId": "p120220261813150018",
           "productName": "Fideos tirabuzon 500g",
           "unitPrice": 7162,
           "quantity": 1
@@ -2297,10 +2297,10 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771045157306-1251",
+      "id": "or140220260159171251",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
@@ -2313,28 +2313,28 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771045152411-3099",
+      "id": "or140220260159123099",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 2
         },
         {
-          "productId": "p35",
+          "productId": "p040120261426100035",
           "productName": "Te verde en saquitos",
           "unitPrice": 6404,
           "quantity": 1
         },
         {
-          "productId": "p16",
+          "productId": "p300120261731520016",
           "productName": "Pan de panchos x6",
           "unitPrice": 5915,
           "quantity": 1
         },
         {
-          "productId": "p74",
+          "productId": "p080120261818030074",
           "productName": "Barrita mani x6",
           "unitPrice": 9393,
           "quantity": 1
@@ -2347,10 +2347,10 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771043455343-6416",
+      "id": "or140220260130556416",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 3
@@ -2363,10 +2363,10 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771043445759-5953",
+      "id": "or140220260130455953",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
@@ -2379,10 +2379,10 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771025557315-7173",
+      "id": "or130220262032377173",
       "items": [
         {
-          "productId": "p18",
+          "productId": "p120220261813150018",
           "productName": "Fideos tirabuzon 500g",
           "unitPrice": 7162,
           "quantity": 3
@@ -2395,22 +2395,22 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771025542919-9006",
+      "id": "or130220262032229006",
       "items": [
         {
-          "productId": "p5",
+          "productId": "p060120260500000005",
           "productName": "Leche entera 1L",
           "unitPrice": 1800,
           "quantity": 1
         },
         {
-          "productId": "p26",
+          "productId": "p300120260527570026",
           "productName": "Porotos negros 500g",
           "unitPrice": 8669,
           "quantity": 1
         },
         {
-          "productId": "p46",
+          "productId": "p100220262310150046",
           "productName": "Miel de flores 500g",
           "unitPrice": 5295,
           "quantity": 1
@@ -2423,10 +2423,10 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771025496619-3082",
+      "id": "or130220262031363082",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 2
@@ -2439,10 +2439,10 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771022228706-7233",
+      "id": "or130220261937087233",
       "items": [
         {
-          "productId": "p-1770933817509-5022",
+          "productId": "p120220261903375022",
           "productName": "nuevo producto de prueba a ver si anda",
           "unitPrice": 124525,
           "quantity": 1
@@ -2455,10 +2455,10 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771021752568-7837",
+      "id": "or130220261929127837",
       "items": [
         {
-          "productId": "p18",
+          "productId": "p120220261813150018",
           "productName": "Fideos tirabuzon 500g",
           "unitPrice": 7162,
           "quantity": 3
@@ -2471,16 +2471,16 @@
       "paymentMethod": "efectivo"
     },
     {
-      "id": "or-1771017841584-1141",
+      "id": "or130220261824011141",
       "items": [
         {
-          "productId": "p5",
+          "productId": "p060120260500000005",
           "productName": "Leche entera 1L",
           "unitPrice": 1800,
           "quantity": 1
         },
         {
-          "productId": "p26",
+          "productId": "p300120260527570026",
           "productName": "Porotos negros 500g",
           "unitPrice": 8669,
           "quantity": 1
@@ -2495,120 +2495,120 @@
   ],
   "invoices": [
     {
-      "id": "fc-1771658272969-6020",
-      "orderId": "or-1771658270164-3751",
+      "id": "fc210220260417526020",
+      "orderId": "or210220260417503751",
       "createdAt": "2026-02-21T07:17:52.969Z",
       "total": 7996,
       "paymentMethod": "tarjeta credito",
       "operator": "admin"
     },
     {
-      "id": "fc-1771641609110-3536",
-      "orderId": "or-1771641602513-337",
+      "id": "fc200220262340093536",
+      "orderId": "or200220262340023337",
       "createdAt": "2026-02-21T02:40:09.110Z",
       "total": 3240,
       "paymentMethod": "tarjeta credito",
       "operator": "admin"
     },
     {
-      "id": "fc-1771378368720-8177",
-      "orderId": "or-1771378252509-8881",
+      "id": "fc170220262232488177",
+      "orderId": "or170220262230528881",
       "createdAt": "2026-02-18T01:32:48.720Z",
       "total": 6916,
       "paymentMethod": "tarjeta credito",
       "operator": "admin"
     },
     {
-      "id": "fc-1771296764292-8026",
-      "orderId": "or-1771296762765-6848",
+      "id": "fc160220262352448026",
+      "orderId": "or160220262352426848",
       "createdAt": "2026-02-17T02:52:44.292Z",
       "total": 125525,
       "paymentMethod": "mercadopago",
       "operator": "admin"
     },
     {
-      "id": "fc-1771296733023-6022",
-      "orderId": "or-1771296731380-3465",
+      "id": "fc160220262352136022",
+      "orderId": "or160220262352113465",
       "createdAt": "2026-02-17T02:52:13.023Z",
       "total": 35190,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771045165271-7007",
-      "orderId": "or-1771045164339-4185",
+      "id": "fc140220260159257007",
+      "orderId": "or140220260159244185",
       "createdAt": "2026-02-14T04:59:25.271Z",
       "total": 24907,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771045158336-6734",
-      "orderId": "or-1771045157306-1251",
+      "id": "fc140220260159186734",
+      "orderId": "or140220260159171251",
       "createdAt": "2026-02-14T04:59:18.336Z",
       "total": 124525,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771045153587-4197",
-      "orderId": "or-1771045152411-3099",
+      "id": "fc140220260159134197",
+      "orderId": "or140220260159123099",
       "createdAt": "2026-02-14T04:59:13.587Z",
       "total": 270762,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771043456498-8543",
-      "orderId": "or-1771043455343-6416",
+      "id": "fc140220260130568543",
+      "orderId": "or140220260130556416",
       "createdAt": "2026-02-14T04:30:56.498Z",
       "total": 373575,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771043446975-2135",
-      "orderId": "or-1771043445759-5953",
+      "id": "fc140220260130462135",
+      "orderId": "or140220260130455953",
       "createdAt": "2026-02-14T04:30:46.975Z",
       "total": 124525,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771025558394-1853",
-      "orderId": "or-1771025557315-7173",
+      "id": "fc130220262032381853",
+      "orderId": "or130220262032377173",
       "createdAt": "2026-02-13T23:32:38.394Z",
       "total": 21486,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771025544268-5871",
-      "orderId": "or-1771025542919-9006",
+      "id": "fc130220262032245871",
+      "orderId": "or130220262032229006",
       "createdAt": "2026-02-13T23:32:24.268Z",
       "total": 15764,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771025497658-3077",
-      "orderId": "or-1771025496619-3082",
+      "id": "fc130220262031373077",
+      "orderId": "or130220262031363082",
       "createdAt": "2026-02-13T23:31:37.658Z",
       "total": 249050,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771022231999-2496",
-      "orderId": "or-1771022228706-7233",
+      "id": "fc130220261937112496",
+      "orderId": "or130220261937087233",
       "createdAt": "2026-02-13T22:37:11.999Z",
       "total": 124525,
       "paymentMethod": "efectivo",
       "operator": "admin"
     },
     {
-      "id": "fc-1771021756936-9850",
-      "orderId": "or-1771021752568-7837",
+      "id": "fc130220261929169850",
+      "orderId": "or130220261929127837",
       "createdAt": "2026-02-13T22:29:16.936Z",
       "total": 21486,
       "paymentMethod": "efectivo",
@@ -2617,7 +2617,7 @@
   ],
   "workdays": [
     {
-      "id": "wd-1771795208464-9113",
+      "id": "wd220220261820089113",
       "operator": "admin",
       "startedAt": "2026-02-22T21:20:08.464Z",
       "orderIds": [],
@@ -2626,7 +2626,7 @@
       "openingDifferenceAmount": 0
     },
     {
-      "id": "wd-1771751653463-145",
+      "id": "wd220220260614133145",
       "operator": "admin",
       "startedAt": "2026-02-22T09:14:13.463Z",
       "endedAt": "2026-02-22T09:14:37.668Z",
@@ -2664,7 +2664,7 @@
       }
     },
     {
-      "id": "wd-1771749620481-4062",
+      "id": "wd220220260540204062",
       "operator": "user",
       "startedAt": "2026-02-22T08:40:20.481Z",
       "endedAt": "2026-02-22T09:14:04.485Z",
@@ -2703,7 +2703,7 @@
       }
     },
     {
-      "id": "wd-1771749319381-949",
+      "id": "wd220220260535191949",
       "operator": "admin",
       "startedAt": "2026-02-22T08:35:19.381Z",
       "endedAt": "2026-02-22T09:14:02.775Z",
@@ -2741,7 +2741,7 @@
       }
     },
     {
-      "id": "wd-1771719418042-5697",
+      "id": "wd210220262116585697",
       "operator": "user",
       "startedAt": "2026-02-22T00:16:58.042Z",
       "endedAt": "2026-02-22T00:17:32.230Z",
@@ -2779,7 +2779,7 @@
       }
     },
     {
-      "id": "wd-1771658311444-5242",
+      "id": "wd210220260418315242",
       "operator": "admin",
       "startedAt": "2026-02-21T07:18:31.444Z",
       "endedAt": "2026-02-22T00:17:30.735Z",
@@ -2818,7 +2818,7 @@
       }
     },
     {
-      "id": "wd-1771379680181-1460",
+      "id": "wd170220262254401460",
       "operator": "admin",
       "startedAt": "2026-02-18T01:54:40.181Z",
       "endedAt": "2026-02-18T02:45:18.256Z",
@@ -2854,28 +2854,28 @@
       }
     },
     {
-      "id": "wd-1771376164518-8755",
+      "id": "wd170220262156048755",
       "operator": "admin",
       "startedAt": "2026-02-18T00:56:04.518Z",
       "endedAt": "2026-02-18T01:33:03.614Z",
       "orderIds": [
-        "or-1771378252509-8881"
+        "or170220262230528881"
       ],
       "status": "closed"
     },
     {
-      "id": "wd-1771271929690-8443",
+      "id": "wd160220261658498443",
       "operator": "admin",
       "startedAt": "2026-02-16T19:58:49.690Z",
       "endedAt": "2026-02-18T00:55:13.154Z",
       "orderIds": [
-        "or-1771296762765-6848",
-        "or-1771296731380-3465"
+        "or160220262352426848",
+        "or160220262352113465"
       ],
       "status": "closed"
     },
     {
-      "id": "wd-1771271109867-674",
+      "id": "wd160220261645097674",
       "operator": "user",
       "startedAt": "2026-02-16T19:45:09.867Z",
       "endedAt": "2026-02-18T02:45:15.757Z",
@@ -2911,7 +2911,7 @@
       }
     },
     {
-      "id": "wd-1771078761135-9457",
+      "id": "wd140220261119219457",
       "operator": "admin",
       "startedAt": "2026-02-14T14:19:21.135Z",
       "endedAt": "2026-02-16T19:45:06.886Z",
@@ -2919,7 +2919,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771049075445-1318",
+      "id": "wd140220260304351318",
       "operator": "admin",
       "startedAt": "2026-02-14T06:04:35.445Z",
       "endedAt": "2026-02-14T07:02:38.663Z",
@@ -2927,7 +2927,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771048747368-3660",
+      "id": "wd140220260259073660",
       "operator": "operador2",
       "startedAt": "2026-02-14T05:59:07.369Z",
       "endedAt": "2026-02-14T06:00:47.131Z",
@@ -2935,7 +2935,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771048623715-6642",
+      "id": "wd140220260257036642",
       "operator": "operador2",
       "startedAt": "2026-02-14T05:57:03.715Z",
       "endedAt": "2026-02-14T05:58:57.852Z",
@@ -2943,7 +2943,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771048020247-8783",
+      "id": "wd140220260247008783",
       "operator": "admin",
       "startedAt": "2026-02-14T05:47:00.247Z",
       "endedAt": "2026-02-14T05:57:01.230Z",
@@ -2951,7 +2951,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771047369121-3512",
+      "id": "wd140220260236093512",
       "operator": "admin",
       "startedAt": "2026-02-14T05:36:09.121Z",
       "endedAt": "2026-02-14T05:46:58.917Z",
@@ -2959,7 +2959,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771045614726-6377",
+      "id": "wd140220260206546377",
       "operator": "admin",
       "startedAt": "2026-02-14T05:06:54.726Z",
       "endedAt": "2026-02-14T05:36:07.751Z",
@@ -2967,19 +2967,19 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771044771380-4242",
+      "id": "wd140220260152514242",
       "operator": "admin",
       "startedAt": "2026-02-14T04:52:51.380Z",
       "endedAt": "2026-02-14T05:05:49.158Z",
       "orderIds": [
-        "or-1771045164339-4185",
-        "or-1771045157306-1251",
-        "or-1771045152411-3099"
+        "or140220260159244185",
+        "or140220260159171251",
+        "or140220260159123099"
       ],
       "status": "closed"
     },
     {
-      "id": "wd-1771043468705-1884",
+      "id": "wd140220260131081884",
       "operator": "admin",
       "startedAt": "2026-02-14T04:31:08.705Z",
       "endedAt": "2026-02-14T04:33:19.536Z",
@@ -2987,18 +2987,18 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771042449318-1808",
+      "id": "wd140220260114091808",
       "operator": "admin",
       "startedAt": "2026-02-14T04:14:09.318Z",
       "endedAt": "2026-02-14T04:31:06.922Z",
       "orderIds": [
-        "or-1771043455343-6416",
-        "or-1771043445759-5953"
+        "or140220260130556416",
+        "or140220260130455953"
       ],
       "status": "closed"
     },
     {
-      "id": "wd-1771042425582-617",
+      "id": "wd140220260113452617",
       "operator": "admin",
       "startedAt": "2026-02-14T04:13:45.582Z",
       "endedAt": "2026-02-14T04:13:59.543Z",
@@ -3006,7 +3006,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771026295431-1322",
+      "id": "wd130220262044551322",
       "operator": "admin",
       "startedAt": "2026-02-13T23:44:55.431Z",
       "endedAt": "2026-02-14T04:09:01.636Z",
@@ -3014,7 +3014,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771026291596-3307",
+      "id": "wd130220262044513307",
       "operator": "admin",
       "startedAt": "2026-02-13T23:44:51.596Z",
       "endedAt": "2026-02-13T23:44:55.110Z",
@@ -3022,7 +3022,7 @@
       "status": "closed"
     },
     {
-      "id": "wd-1771024671518-9944",
+      "id": "wd130220262017519944",
       "operator": "admin",
       "startedAt": "2026-02-13T23:17:51.518Z",
       "endedAt": "2026-02-13T23:44:49.505Z",
@@ -3043,7 +3043,7 @@
   ],
   "supplyOrders": [
     {
-      "id": "so-1771272589092-4427",
+      "id": "so160220261709494427",
       "supplierName": "chucherias s.a",
       "description": "50 alfajores varios",
       "expectedTotal": 70000,
@@ -3052,7 +3052,7 @@
       "status": "pending"
     },
     {
-      "id": "so-1771272572976-1699",
+      "id": "so160220261709321699",
       "supplierName": "tabaqueria gaona s.a.",
       "description": "20 cigarros\n30 filtros",
       "expectedTotal": 60000,
@@ -3068,7 +3068,7 @@
       "receiveComment": "llegaron menos alfajores"
     },
     {
-      "id": "so-1771268804540-5440",
+      "id": "so160220261606445440",
       "supplierName": "tabaqueria gaona s.a.",
       "description": "30 malboro\n20 lucky normal\n30 lucky menta\n10 paquetes filtros\n10 sobres para cigarros\n10 paquetes tabaco",
       "expectedTotal": 1200000,
@@ -3083,7 +3083,7 @@
       "invoiceImageUrl": "/images/login-bg-78009.jpg"
     },
     {
-      "id": "so-1771262865661-522",
+      "id": "so160220261427451522",
       "supplierName": "chucherias s.a",
       "description": "30 panchos\n20 chocolates\n10 cajas de lapices",
       "expectedTotal": 352000,
@@ -3098,7 +3098,7 @@
       "invoiceImageUrl": "/images/360_f_318606217_hk8jo2mvoi33sqokyrfof929j7jgip0p-4608.jpg"
     },
     {
-      "id": "so-1771221643581-5406",
+      "id": "so160220260300435406",
       "supplierName": "chucherias s.a",
       "description": "50 uni cocacolas\n20 uni panchos\n10 cigarros50 uni cocacolas\n20 uni panchos\n10 cigarros50 uni cocacolas\n20 uni panchos\n10 cigarros50 uni cocacolas\n20 uni panchos\n10 cigarros",
       "expectedTotal": 890000,
@@ -3113,7 +3113,7 @@
       "invoiceImageUrl": "/images/360_f_318606217_hk8jo2mvoi33sqokyrfof929j7jgip0p-38007.jpg"
     },
     {
-      "id": "so-1771221632178-4131",
+      "id": "so160220260300324131",
       "supplierName": "chucherias s.a",
       "description": "50 uni cocacolas\n20 uni panchos\n10 cigarros\n50 uni cocacolas\n20 uni panchos\n10 cigarros",
       "expectedTotal": 400000,
@@ -3128,7 +3128,7 @@
       "invoiceImageUrl": "/images/login-bg-66024.jpg"
     },
     {
-      "id": "so-1771219686241-4417",
+      "id": "so160220260228064417",
       "supplierName": "chucherias s.a",
       "description": "50 uni cocacolas\n20 uni panchos\n10 cigarros",
       "expectedTotal": 35600,
@@ -3145,7 +3145,7 @@
   ],
   "expenses": [
     {
-      "id": "ex-1771278753360-2565",
+      "id": "ex160220261852332565",
       "description": "destapado de ba;o con maquina",
       "amount": 20000,
       "expenseType": "unexpected",
@@ -3153,7 +3153,7 @@
       "createdAt": "2026-02-16T21:52:33.360Z"
     },
     {
-      "id": "ex-1771278732604-2590",
+      "id": "ex160220261852122590",
       "description": "mantenimiento aire acond",
       "amount": 15000,
       "expenseType": "recurrent",
@@ -3161,7 +3161,7 @@
       "createdAt": "2026-02-16T21:52:12.604Z"
     },
     {
-      "id": "ex-1771278711789-1551",
+      "id": "ex160220261851511551",
       "description": "fimigacion mensual",
       "amount": 120002,
       "expenseType": "unexpected",
@@ -3171,7 +3171,7 @@
   ],
   "licenses": [
     {
-      "id": "lc-tc-expiring",
+      "id": "lc230420250439270001",
       "name": "Bromatologia (caso por vencer)",
       "description": "Caso de prueba: licencia con vencimiento proximo.",
       "category": "perecedero",
@@ -3187,7 +3187,7 @@
       "issuances": []
     },
     {
-      "id": "lc-tc-required",
+      "id": "lc070220260439270002",
       "name": "Manipulacion de alimentos (caso pendiente)",
       "description": "Caso de prueba: permiso requerido para categoria vive res/panchos.",
       "category": "vivere",
@@ -3202,7 +3202,7 @@
   ],
   "notifications": [
     {
-      "id": "nt-1771795208465-8800",
+      "id": "nt220220261820088800",
       "type": "cash-opened",
       "title": "Caja abierta: admin",
       "description": "Se abrio caja para admin con 50000.",
@@ -3211,11 +3211,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771795208464-9113",
+      "entityId": "wd220220261820089113",
       "status": "active"
     },
     {
-      "id": "nt-1771751677668-1499",
+      "id": "nt220220260614371499",
       "type": "cash-closed",
       "title": "Caja cerrada: admin",
       "description": "Se cerro la jornada wd-1771751653463-145.",
@@ -3224,11 +3224,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771751653463-145",
+      "entityId": "wd220220260614133145",
       "status": "active"
     },
     {
-      "id": "nt-1771751664593-2032",
+      "id": "nt220220260614242032",
       "type": "cash",
       "title": "Cierre de caja pendiente: admin",
       "description": "La jornada wd-1771751653463-145 fue enviada para auditoria.",
@@ -3238,12 +3238,12 @@
       "requiresAction": true,
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
-      "entityId": "wd-1771751653463-145",
+      "entityId": "wd220220260614133145",
       "status": "received",
       "receivedAt": "2026-02-22T09:14:37.668Z"
     },
     {
-      "id": "nt-1771751653463-3971",
+      "id": "nt220220260614133971",
       "type": "cash-opened",
       "title": "Caja abierta: admin",
       "description": "Se abrio caja para admin con 2500.",
@@ -3252,12 +3252,12 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771751653463-145",
+      "entityId": "wd220220260614133145",
       "status": "received",
       "receivedAt": "2026-02-22T09:14:37.668Z"
     },
     {
-      "id": "nt-1771751644485-5312",
+      "id": "nt220220260614045312",
       "type": "cash-closed",
       "title": "Caja cerrada: user",
       "description": "Se cerro la jornada wd-1771749620481-4062.",
@@ -3266,11 +3266,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771749620481-4062",
+      "entityId": "wd220220260540204062",
       "status": "active"
     },
     {
-      "id": "nt-1771751642775-5522",
+      "id": "nt220220260614025522",
       "type": "cash-closed",
       "title": "Caja cerrada: admin",
       "description": "Se cerro la jornada wd-1771749319381-949.",
@@ -3279,11 +3279,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771749319381-949",
+      "entityId": "wd220220260535191949",
       "status": "active"
     },
     {
-      "id": "nt-1771749644868-8990",
+      "id": "nt220220260540448990",
       "type": "cash",
       "title": "Cierre de caja pendiente: user",
       "description": "La jornada wd-1771749620481-4062 fue enviada para auditoria.",
@@ -3293,12 +3293,12 @@
       "requiresAction": true,
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
-      "entityId": "wd-1771749620481-4062",
+      "entityId": "wd220220260540204062",
       "status": "received",
       "receivedAt": "2026-02-22T09:14:04.485Z"
     },
     {
-      "id": "nt-1771749620481-6445",
+      "id": "nt220220260540206445",
       "type": "cash-opened",
       "title": "Caja abierta: user",
       "description": "Se abrio caja para user con 5000.",
@@ -3307,12 +3307,12 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771749620481-4062",
+      "entityId": "wd220220260540204062",
       "status": "received",
       "receivedAt": "2026-02-22T09:14:04.485Z"
     },
     {
-      "id": "nt-1771749323228-8224",
+      "id": "nt220220260535238224",
       "type": "cash",
       "title": "Cierre de caja pendiente: admin",
       "description": "La jornada wd-1771749319381-949 fue enviada para auditoria.",
@@ -3322,12 +3322,12 @@
       "requiresAction": true,
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
-      "entityId": "wd-1771749319381-949",
+      "entityId": "wd220220260535191949",
       "status": "received",
       "receivedAt": "2026-02-22T09:14:02.775Z"
     },
     {
-      "id": "nt-1771749319381-1115",
+      "id": "nt220220260535191115",
       "type": "cash-opened",
       "title": "Caja abierta: admin",
       "description": "Se abrio caja para admin con 2500.",
@@ -3336,12 +3336,12 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771749319381-949",
+      "entityId": "wd220220260535191949",
       "status": "received",
       "receivedAt": "2026-02-22T09:14:02.775Z"
     },
     {
-      "id": "nt-1771719452230-9204",
+      "id": "nt210220262117329204",
       "type": "cash-closed",
       "title": "Caja cerrada: user",
       "description": "Se cerro la jornada wd-1771719418042-5697.",
@@ -3350,11 +3350,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771719418042-5697",
+      "entityId": "wd210220262116585697",
       "status": "active"
     },
     {
-      "id": "nt-1771719450735-2401",
+      "id": "nt210220262117302401",
       "type": "cash",
       "title": "Diferencias detectadas en cierre: admin",
       "description": "El operador admin, en la jornada wd-1771658311444-5242, presenta diferencias. Cierre en efectivo: esperado $ 2.000, declarado $ 3.000 (sobra $ 1.000).",
@@ -3363,11 +3363,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771658311444-5242",
+      "entityId": "wd210220260418315242",
       "status": "active"
     },
     {
-      "id": "nt-1771719450735-4767",
+      "id": "nt210220262117304767",
       "type": "cash-closed",
       "title": "Caja cerrada: admin",
       "description": "Se cerro la jornada wd-1771658311444-5242.",
@@ -3376,11 +3376,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771658311444-5242",
+      "entityId": "wd210220260418315242",
       "status": "active"
     },
     {
-      "id": "nt-1771719426577-6072",
+      "id": "nt210220262117066072",
       "type": "cash",
       "title": "Cierre de caja pendiente: user",
       "description": "La jornada wd-1771719418042-5697 fue enviada para auditoria.",
@@ -3390,12 +3390,12 @@
       "requiresAction": true,
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
-      "entityId": "wd-1771719418042-5697",
+      "entityId": "wd210220262116585697",
       "status": "received",
       "receivedAt": "2026-02-22T00:17:32.230Z"
     },
     {
-      "id": "nt-1771719418043-8088",
+      "id": "nt210220262116588088",
       "type": "cash-opened",
       "title": "Caja abierta: user",
       "description": "Se abrio caja para user con 2500.",
@@ -3404,12 +3404,12 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771719418042-5697",
+      "entityId": "wd210220262116585697",
       "status": "received",
       "receivedAt": "2026-02-22T00:17:32.230Z"
     },
     {
-      "id": "nt-1771658337769-3180",
+      "id": "nt210220260418573180",
       "type": "cash",
       "title": "Cierre de caja pendiente: admin",
       "description": "La jornada wd-1771658311444-5242 fue enviada para auditoria.",
@@ -3419,12 +3419,12 @@
       "requiresAction": true,
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
-      "entityId": "wd-1771658311444-5242",
+      "entityId": "wd210220260418315242",
       "status": "received",
       "receivedAt": "2026-02-22T00:17:30.735Z"
     },
     {
-      "id": "nt-1771658311444-6493",
+      "id": "nt210220260418316493",
       "type": "cash-opened",
       "title": "Caja abierta: admin",
       "description": "Se abrio caja para admin con 2000.",
@@ -3433,12 +3433,12 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771658311444-5242",
+      "entityId": "wd210220260418315242",
       "status": "received",
       "receivedAt": "2026-02-22T00:17:30.735Z"
     },
     {
-      "id": "nt-1771658272959-5772",
+      "id": "nt210220260417525772",
       "type": "stock-created",
       "title": "Ingreso de stock: Desinfectante pisos 900ml",
       "description": "Se registro un ingreso de -1 unidades para Desinfectante pisos 900ml.",
@@ -3448,11 +3448,11 @@
       "requiresAction": false,
       "category": "perecedero",
       "entityType": "stock",
-      "entityId": "se-1771658272959-5364",
+      "entityId": "se210220260417525364",
       "status": "active"
     },
     {
-      "id": "nt-1771658272946-8438",
+      "id": "nt210220260417528438",
       "type": "stock-created",
       "title": "Ingreso de stock: Te verde en saquitos",
       "description": "Se registro un ingreso de -1 unidades para Te verde en saquitos.",
@@ -3462,11 +3462,11 @@
       "requiresAction": false,
       "category": "vivere",
       "entityType": "stock",
-      "entityId": "se-1771658272946-1582",
+      "entityId": "se210220260417521582",
       "status": "active"
     },
     {
-      "id": "nt-1771658272917-7910",
+      "id": "nt210220260417527910",
       "type": "sale-created",
       "title": "Venta registrada: or-1771658270164-3751",
       "description": "Venta por 7996 (admin).",
@@ -3475,11 +3475,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "order",
-      "entityId": "or-1771658270164-3751",
+      "entityId": "or210220260417503751",
       "status": "active"
     },
     {
-      "id": "nt-1771656748491-56",
+      "id": "nt210220260352289156",
       "type": "product-expiring",
       "title": "Producto por vencer: glade 360 cm3",
       "description": "Lote con vencimiento 2026-06-27 para glade 360 cm3.",
@@ -3490,11 +3490,11 @@
       "actionLabel": "Gestionar vencimiento",
       "category": "perecedero",
       "entityType": "stock",
-      "entityId": "se-1771656748491-8020",
+      "entityId": "se210220260352288020",
       "status": "active"
     },
     {
-      "id": "nt-1771656748491-4401",
+      "id": "nt210220260352284401",
       "type": "stock-created",
       "title": "Ingreso de stock: glade 360 cm3",
       "description": "Se registro un ingreso de 151 unidades para glade 360 cm3.",
@@ -3504,11 +3504,11 @@
       "requiresAction": false,
       "category": "perecedero",
       "entityType": "stock",
-      "entityId": "se-1771656748491-8020",
+      "entityId": "se210220260352288020",
       "status": "active"
     },
     {
-      "id": "nt-1771656748440-2644",
+      "id": "nt210220260352282644",
       "type": "product-low-stock",
       "title": "Stock bajo: glade 360 cm3",
       "description": "Stock actual 0. Minimo configurado 10. Reponer producto.",
@@ -3518,12 +3518,12 @@
       "actionLabel": "Reponer stock",
       "category": "perecedero",
       "entityType": "product",
-      "entityId": "p-1771656748439-6090",
+      "entityId": "p210220260352286090",
       "status": "received",
       "receivedAt": "2026-02-21T06:52:28.491Z"
     },
     {
-      "id": "nt-1771656748440-6209",
+      "id": "nt210220260352286209",
       "type": "product-created",
       "title": "Nuevo producto: glade 360 cm3",
       "description": "Se registro el producto glade 360 cm3.",
@@ -3533,11 +3533,11 @@
       "requiresAction": false,
       "category": "perecedero",
       "entityType": "product",
-      "entityId": "p-1771656748439-6090",
+      "entityId": "p210220260352286090",
       "status": "active"
     },
     {
-      "id": "nt-1771641609099-173",
+      "id": "nt200220262340099173",
       "type": "stock-created",
       "title": "Ingreso de stock: Desinfectante pisos 900ml",
       "description": "Se registro un ingreso de -3 unidades para Desinfectante pisos 900ml.",
@@ -3547,11 +3547,11 @@
       "requiresAction": false,
       "category": "perecedero",
       "entityType": "stock",
-      "entityId": "se-1771641609099-1705",
+      "entityId": "se200220262340091705",
       "status": "active"
     },
     {
-      "id": "nt-1771641609065-2337",
+      "id": "nt200220262340092337",
       "type": "sale-created",
       "title": "Venta registrada: or-1771641602513-337",
       "description": "Venta por 3240 (admin).",
@@ -3560,11 +3560,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "order",
-      "entityId": "or-1771641602513-337",
+      "entityId": "or200220262340023337",
       "status": "active"
     },
     {
-      "id": "nt-1771382718256-6197",
+      "id": "nt170220262345186197",
       "type": "cash-closed",
       "title": "Caja cerrada: admin",
       "description": "Se cerro la jornada wd-1771379680181-1460.",
@@ -3573,11 +3573,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771379680181-1460",
+      "entityId": "wd170220262254401460",
       "status": "active"
     },
     {
-      "id": "nt-1771382715757-4700",
+      "id": "nt170220262345154700",
       "type": "cash-closed",
       "title": "Caja cerrada: user",
       "description": "Se cerro la jornada wd-1771271109867-674.",
@@ -3586,11 +3586,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771271109867-674",
+      "entityId": "wd160220261645097674",
       "status": "active"
     },
     {
-      "id": "nt-1771382681304-2726",
+      "id": "nt170220262344412726",
       "type": "cash",
       "title": "Cierre de caja pendiente: user",
       "description": "La jornada wd-1771271109867-674 fue enviada para auditoria.",
@@ -3600,12 +3600,12 @@
       "requiresAction": true,
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
-      "entityId": "wd-1771271109867-674",
+      "entityId": "wd160220261645097674",
       "status": "received",
       "receivedAt": "2026-02-18T02:45:15.757Z"
     },
     {
-      "id": "nt-1771382602409-8141",
+      "id": "nt170220262343228141",
       "type": "cash",
       "title": "Cierre de caja pendiente: admin",
       "description": "La jornada wd-1771379680181-1460 fue enviada para auditoria.",
@@ -3615,12 +3615,12 @@
       "requiresAction": true,
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
-      "entityId": "wd-1771379680181-1460",
+      "entityId": "wd170220262254401460",
       "status": "received",
       "receivedAt": "2026-02-18T02:45:18.256Z"
     },
     {
-      "id": "nt-1771379680181-6992",
+      "id": "nt170220262254406992",
       "type": "cash-opened",
       "title": "Caja abierta: admin",
       "description": "Se abrio caja para admin.",
@@ -3629,12 +3629,12 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771379680181-1460",
+      "entityId": "wd170220262254401460",
       "status": "received",
       "receivedAt": "2026-02-18T02:45:18.256Z"
     },
     {
-      "id": "nt-1771378383616-4875",
+      "id": "nt170220262233034875",
       "type": "cash-closed",
       "title": "Caja cerrada: admin",
       "description": "Se cerro la jornada wd-1771376164518-8755.",
@@ -3643,11 +3643,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771376164518-8755",
+      "entityId": "wd170220262156048755",
       "status": "active"
     },
     {
-      "id": "nt-1771378368710-3023",
+      "id": "nt170220262232483023",
       "type": "stock-created",
       "title": "Ingreso de stock: Te verde en saquitos",
       "description": "Se registro un ingreso de -1 unidades para Te verde en saquitos.",
@@ -3657,11 +3657,11 @@
       "requiresAction": false,
       "category": "vivere",
       "entityType": "stock",
-      "entityId": "se-1771378368710-8558",
+      "entityId": "se170220262232488558",
       "status": "active"
     },
     {
-      "id": "nt-1771378368690-7343",
+      "id": "nt170220262232487343",
       "type": "sale-created",
       "title": "Venta registrada: or-1771378252509-8881",
       "description": "Venta por 6916 (admin).",
@@ -3670,11 +3670,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "order",
-      "entityId": "or-1771378252509-8881",
+      "entityId": "or170220262230528881",
       "status": "active"
     },
     {
-      "id": "nt-1771376164518-9999",
+      "id": "nt170220262156049999",
       "type": "cash-opened",
       "title": "Caja abierta: admin",
       "description": "Se abrio caja para admin.",
@@ -3683,11 +3683,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771376164518-8755",
+      "entityId": "wd170220262156048755",
       "status": "active"
     },
     {
-      "id": "nt-1771376113156-317",
+      "id": "nt170220262155136317",
       "type": "cash-closed",
       "title": "Caja cerrada: admin",
       "description": "Se cerro la jornada wd-1771271929690-8443.",
@@ -3696,11 +3696,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-1771271929690-8443",
+      "entityId": "wd160220261658498443",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-3638",
+      "id": "nt170220260439273638",
       "type": "manual-due",
       "title": "Caso prueba manual vencimiento",
       "description": "Notificacion manual con fecha de vencimiento de prueba.",
@@ -3709,11 +3709,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "manual",
-      "entityId": "manual-due-tc",
+      "entityId": "manualduetc",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-156",
+      "id": "nt170220260439273156",
       "type": "manual-action",
       "title": "Caso prueba manual accion",
       "description": "Notificacion manual con accion de prueba.",
@@ -3722,11 +3722,11 @@
       "requiresAction": true,
       "actionLabel": "Resolver accion",
       "entityType": "manual",
-      "entityId": "manual-action-tc",
+      "entityId": "manualactiontc",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-5342",
+      "id": "nt170220260439275342",
       "type": "manual-fixed",
       "title": "Caso prueba manual fija",
       "description": "Notificacion fija manual de prueba.",
@@ -3734,11 +3734,11 @@
       "isFixed": true,
       "requiresAction": false,
       "entityType": "manual",
-      "entityId": "manual-fixed-tc",
+      "entityId": "manualfixedtc",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-2013",
+      "id": "nt170220260439272013",
       "type": "operation-request-reviewed",
       "title": "Caso prueba solicitud revisada",
       "description": "Solicitud de prueba revisada por administrador.",
@@ -3747,11 +3747,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "operation-request",
-      "entityId": "rq-tc-reviewed",
+      "entityId": "rqtcreviewed",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-7780",
+      "id": "nt170220260439277780",
       "type": "operation-request-permissions",
       "title": "Caso prueba solicitud operador permisos",
       "description": "Operador solicita permiso de prueba.",
@@ -3761,11 +3761,11 @@
       "requiresAction": true,
       "actionLabel": "Revisar solicitud",
       "entityType": "operation-request",
-      "entityId": "rq-tc-perm",
+      "entityId": "rqtcperm",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-8248",
+      "id": "nt170220260439278248",
       "type": "operation-request-merchandise",
       "title": "Caso prueba solicitud operador mercancia",
       "description": "Operador solicita mercancia de prueba.",
@@ -3775,11 +3775,11 @@
       "requiresAction": true,
       "actionLabel": "Revisar solicitud",
       "entityType": "operation-request",
-      "entityId": "rq-tc-merch",
+      "entityId": "rqtcmerch",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-782",
+      "id": "nt170220260439273782",
       "type": "stock-created",
       "title": "Caso prueba ingreso stock",
       "description": "Ingreso de stock de prueba.",
@@ -3789,11 +3789,11 @@
       "requiresAction": false,
       "category": "bebida",
       "entityType": "stock",
-      "entityId": "se-tc-stock-created",
+      "entityId": "setcstockcreated",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-9588",
+      "id": "nt170220260439279588",
       "type": "product-created",
       "title": "Caso prueba producto creado",
       "description": "Alta de producto de prueba.",
@@ -3803,11 +3803,11 @@
       "requiresAction": false,
       "category": "bebida",
       "entityType": "product",
-      "entityId": "p-tc-rapido",
+      "entityId": "p160220260439270002",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-2139",
+      "id": "nt170220260439272139",
       "type": "price-changed",
       "title": "Caso prueba precio modificado: Coca-Cola Caso Test",
       "description": "Cambio de precio de prueba.",
@@ -3817,11 +3817,11 @@
       "requiresAction": false,
       "category": "bebida",
       "entityType": "product",
-      "entityId": "p-tc-coca",
+      "entityId": "p160220260439270004",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-381",
+      "id": "nt170220260439273381",
       "type": "user-deleted",
       "title": "Caso prueba usuario eliminado",
       "description": "Usuario de prueba eliminado.",
@@ -3830,11 +3830,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "user",
-      "entityId": "u-tc-deleted",
+      "entityId": "utcdeleted",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-4694",
+      "id": "nt170220260439274694",
       "type": "user-updated",
       "title": "Caso prueba usuario modificado",
       "description": "Usuario de prueba modificado.",
@@ -3843,11 +3843,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "user",
-      "entityId": "u-tc-updated",
+      "entityId": "utcupdated",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-3369",
+      "id": "nt170220260439273369",
       "type": "user-created",
       "title": "Caso prueba usuario creado",
       "description": "Usuario de prueba creado.",
@@ -3856,11 +3856,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "user",
-      "entityId": "u-tc-created",
+      "entityId": "utccreated",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-1173",
+      "id": "nt170220260439271173",
       "type": "cash-closed",
       "title": "Caso prueba caja cerrada",
       "description": "Cierre de caja de prueba.",
@@ -3869,11 +3869,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-tc-close",
+      "entityId": "wdtcclose",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-6620",
+      "id": "nt170220260439276620",
       "type": "cash-opened",
       "title": "Caso prueba caja abierta",
       "description": "Apertura de caja de prueba.",
@@ -3882,11 +3882,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "workday",
-      "entityId": "wd-tc-open",
+      "entityId": "wdtcopen",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-9588",
+      "id": "nt170220260439279589",
       "type": "supply-received",
       "title": "Caso prueba mercancia recibida",
       "description": "Mercancia de prueba recibida correctamente.",
@@ -3895,11 +3895,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "supply-order",
-      "entityId": "so-tc-1",
+      "entityId": "sotc1",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-7404",
+      "id": "nt170220260439277404",
       "type": "supply-approved",
       "title": "Caso prueba solicitud aprobada",
       "description": "Solicitud de mercancia aprobada por administrador.",
@@ -3908,11 +3908,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "operation-request",
-      "entityId": "rq-tc-approved",
+      "entityId": "rqtcapproved",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-1162",
+      "id": "nt170220260439271162",
       "type": "supply-pending-receive",
       "title": "Caso prueba pendiente recepcion proveedor",
       "description": "Pedido de prueba pendiente hasta recibir mercancia.",
@@ -3921,11 +3921,11 @@
       "requiresAction": true,
       "actionLabel": "Registrar recepcion",
       "entityType": "supply-order",
-      "entityId": "so-tc-1",
+      "entityId": "sotc1",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-4130",
+      "id": "nt170220260439274130",
       "type": "supply-requested",
       "title": "Caso prueba solicitud a proveedor",
       "description": "Se solicito mercancia al proveedor de prueba.",
@@ -3934,11 +3934,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "supply-order",
-      "entityId": "so-tc-1",
+      "entityId": "sotc1",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-8488",
+      "id": "nt170220260439278488",
       "type": "sale-created",
       "title": "Caso prueba venta",
       "description": "Se registro venta diaria de prueba.",
@@ -3947,11 +3947,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "order",
-      "entityId": "or-tc-1",
+      "entityId": "ortc1",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-6035",
+      "id": "nt170220260439276035",
       "type": "expense-created",
       "title": "Caso prueba gasto",
       "description": "Se registro gasto operativo de prueba.",
@@ -3960,11 +3960,11 @@
       "isFixed": false,
       "requiresAction": false,
       "entityType": "expense",
-      "entityId": "ex-tc-1",
+      "entityId": "extc1",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-4809",
+      "id": "nt170220260439274809",
       "type": "product-expiring",
       "title": "Producto por vencer: Pancho Caso Test",
       "description": "Caso de prueba: Pancho Caso Test vence en menos de 3 semanas.",
@@ -3975,11 +3975,11 @@
       "actionLabel": "Gestionar vencimiento",
       "category": "perecedero",
       "entityType": "stock",
-      "entityId": "se-tc-p-tc-pancho-5",
+      "entityId": "se160220260439270005",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-498",
+      "id": "nt170220260439273498",
       "type": "product-low-stock",
       "title": "Stock bajo: Producto Rotacion Alta",
       "description": "Stock actual 8. Minimo configurado 10. Reponer producto.",
@@ -3989,11 +3989,11 @@
       "actionLabel": "Reponer stock",
       "category": "bebida",
       "entityType": "product",
-      "entityId": "p-tc-rapido",
+      "entityId": "p160220260439270002",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-5162",
+      "id": "nt170220260439275162",
       "type": "product-low-stock",
       "title": "Stock bajo: Coca-Cola Caso Test",
       "description": "Stock actual 12. Minimo configurado 30. Reponer producto.",
@@ -4003,11 +4003,11 @@
       "actionLabel": "Reponer stock",
       "category": "bebida",
       "entityType": "product",
-      "entityId": "p-tc-coca",
+      "entityId": "p160220260439270004",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-1300",
+      "id": "nt170220260439271300",
       "type": "license-expiring",
       "title": "Permiso por vencer: Bromatologia (caso por vencer)",
       "description": "El permiso/licencia Bromatologia (caso por vencer) vence el 2026-03-03T07:39:27.032Z.",
@@ -4018,11 +4018,11 @@
       "actionLabel": "Gestionar vencimiento",
       "category": "perecedero",
       "entityType": "license",
-      "entityId": "lc-tc-expiring",
+      "entityId": "lc230420250439270001",
       "status": "active"
     },
     {
-      "id": "nt-1771313967033-7942",
+      "id": "nt170220260439277942",
       "type": "license-required",
       "title": "Gestionar permiso: Manipulacion de alimentos (caso pendiente)",
       "description": "El permiso/licencia Manipulacion de alimentos (caso pendiente) esta pendiente por renovar.",
@@ -4032,7 +4032,7 @@
       "actionLabel": "Renovar permiso",
       "category": "vivere",
       "entityType": "license",
-      "entityId": "lc-tc-required",
+      "entityId": "lc070220260439270002",
       "status": "active"
     }
   ],
@@ -4175,7 +4175,7 @@
     },
     "productThresholds": [
       {
-        "productId": "p-tc-coca",
+        "productId": "p160220260439270004",
         "minUnits": 30
       }
     ]
@@ -4192,13 +4192,13 @@
     },
     "productMargins": [
       {
-        "productId": "p-1771656748439-6090",
+        "productId": "p210220260352286090",
         "marginPercent": 30
       }
     ],
     "categoryMarginHistory": [
       {
-        "id": "cmh-1771361802530-9483",
+        "id": "cmh170220261756429483",
         "category": "vivere",
         "previousMarginPercent": 37,
         "marginPercent": 40,
@@ -4207,15 +4207,15 @@
     ],
     "productMarginHistory": [
       {
-        "id": "pmh-1771656748481-1557",
-        "productId": "p-1771656748439-6090",
+        "id": "pmh210220260352281557",
+        "productId": "p210220260352286090",
         "previousMarginPercent": null,
         "marginPercent": 30,
         "createdAt": "2026-02-21T06:52:28.481Z"
       },
       {
-        "id": "pmh-1771361809254-2127",
-        "productId": "p-1770933817509-5022",
+        "id": "pmh170220261756492127",
+        "productId": "p120220261903375022",
         "previousMarginPercent": 36,
         "marginPercent": null,
         "createdAt": "2026-02-17T20:56:49.254Z"

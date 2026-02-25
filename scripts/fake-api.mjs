@@ -8,6 +8,21 @@ const DB_PATH = resolve(process.cwd(), "mock-api", "db.json");
 const IMAGE_DIR = resolve(process.cwd(), process.env.FAKE_API_IMAGE_DIR || "images");
 const IMAGE_BASE_URL = process.env.FAKE_API_IMAGE_BASE_URL || `http://localhost:${PORT}/images`;
 
+function padIdPart(value) {
+  return String(value).padStart(2, "0");
+}
+
+function formatIdDatePart(input) {
+  return `${padIdPart(input.getDate())}${padIdPart(input.getMonth() + 1)}${input.getFullYear()}${padIdPart(input.getHours())}${padIdPart(input.getMinutes())}${padIdPart(input.getSeconds())}`;
+}
+
+function buildEntityId(prefix, inputDate = new Date()) {
+  const suffix = Math.floor(Math.random() * 10_000)
+    .toString()
+    .padStart(4, "0");
+  return `${prefix}${formatIdDatePart(inputDate)}${suffix}`;
+}
+
 const defaultDb = {
   products: [
     {
@@ -246,7 +261,7 @@ function getEffectiveProductPriceMarginPercent(db, productId, category) {
 const MAX_MARGIN_HISTORY = 300;
 
 function buildMarginHistoryId(prefix) {
-  return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  return buildEntityId(prefix);
 }
 
 function pushCategoryMarginHistory(db, category, previousMarginPercent, marginPercent) {
@@ -465,7 +480,7 @@ const server = http.createServer(async (req, res) => {
       const salePrice = Math.max(1, Math.trunc(hasCostPrice ? calculateSalePriceFromCost(costPrice, effectiveMarginPercent) : draft.price));
       const now = new Date().toISOString();
       const product = {
-        id: `p-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: buildEntityId("p"),
         name: draft.name,
         price: salePrice,
         costPrice,
@@ -477,7 +492,7 @@ const server = http.createServer(async (req, res) => {
       };
       db.products.unshift(product);
       db.productPrices.unshift({
-        id: `pp-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: buildEntityId("pp"),
         productId: product.id,
         newPrice: product.price,
         costPrice: product.costPrice,
@@ -529,7 +544,7 @@ const server = http.createServer(async (req, res) => {
         costPrice: nextCostPrice,
       };
       const record = {
-        id: `pp-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: buildEntityId("pp"),
         productId,
         newPrice,
         costPrice: nextCostPrice,
@@ -729,7 +744,7 @@ const server = http.createServer(async (req, res) => {
       const db = await readDb();
       const body = await readBody(req);
       const request = {
-        id: `dr-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+        id: buildEntityId("dr"),
         productId: String(body?.productId || ""),
         productName: String(body?.productName || ""),
         requestedBy: String(body?.requestedBy || "operator"),

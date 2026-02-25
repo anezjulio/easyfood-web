@@ -15,6 +15,19 @@ const DELETE_REQUEST_KEY = "easycommerce_product_delete_requests_v1";
 const PRICE_MARGIN_SETTINGS_KEY = "easycommerce_price_margin_settings_v1";
 const MAX_MARGIN_HISTORY = 300;
 
+function padIdPart(value: number): string {
+  return String(value).padStart(2, "0");
+}
+
+function formatIdDatePart(input: Date): string {
+  return `${padIdPart(input.getDate())}${padIdPart(input.getMonth() + 1)}${input.getFullYear()}${padIdPart(input.getHours())}${padIdPart(input.getMinutes())}${padIdPart(input.getSeconds())}`;
+}
+
+function buildEntityId(prefix: string, inputDate = new Date()): string {
+  const suffix = Math.floor(Math.random() * 10_000).toString().padStart(4, "0");
+  return `${prefix}${formatIdDatePart(inputDate)}${suffix}`;
+}
+
 export type ProductDraft = {
   name: string;
   price?: number;
@@ -226,7 +239,7 @@ export function createProduct(draft: ProductDraft): Product {
 
   const now = new Date().toISOString();
   const product: Product = {
-    id: `p-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    id: buildEntityId("p"),
     name: draft.name.trim(),
     price: Math.max(1, Math.trunc(salePrice)),
     costPrice: Math.max(1, Math.trunc(costPrice)),
@@ -354,7 +367,7 @@ export function createProductPriceRecord(input: {
   const now = input.createdAt || new Date().toISOString();
   const prices = loadProductPrices();
   const record: ProductPrice = {
-    id: `pp-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    id: buildEntityId("pp"),
     productId: input.productId,
     newPrice: nextPrice,
     costPrice: nextCostPrice,
@@ -414,7 +427,7 @@ function resolvePriceMarginSettings(input: unknown): PriceMarginSettings {
           const marginPercent = Number(draft.marginPercent);
           if (!Number.isFinite(previousMarginPercent) || !Number.isFinite(marginPercent)) return null;
           return {
-            id: String(draft.id || `cmh-${Date.now()}-${Math.floor(Math.random() * 10000)}`),
+            id: String(draft.id || buildEntityId("cmh")),
             category: category as Product["category"],
             previousMarginPercent: normalizeMarginPercent(previousMarginPercent),
             marginPercent: normalizeMarginPercent(marginPercent),
@@ -465,7 +478,7 @@ function resolvePriceMarginSettings(input: unknown): PriceMarginSettings {
           if (previousRaw !== null && typeof previousRaw !== "undefined" && previousMarginPercent === null) return null;
           if (nextRaw !== null && typeof nextRaw !== "undefined" && marginPercent === null) return null;
           return {
-            id: String(draft.id || `pmh-${Date.now()}-${Math.floor(Math.random() * 10000)}`),
+            id: String(draft.id || buildEntityId("pmh")),
             productId,
             previousMarginPercent,
             marginPercent,
@@ -512,7 +525,7 @@ function savePriceMarginSettings(settings: PriceMarginSettings) {
 }
 
 function buildMarginHistoryId(prefix: "cmh" | "pmh"): string {
-  return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  return buildEntityId(prefix);
 }
 
 function pushCategoryMarginHistory(
@@ -620,7 +633,7 @@ function saveDeleteRequests(requests: ProductDeleteRequest[]) {
 export function requestProductDeletion(product: Product, requestedBy: string): ProductDeleteRequest {
   const requests = loadDeleteRequests();
   const request: ProductDeleteRequest = {
-    id: `dr-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
+    id: buildEntityId("dr"),
     productId: product.id,
     productName: product.name,
     requestedBy,

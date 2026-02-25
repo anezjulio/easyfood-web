@@ -46,9 +46,11 @@ type CartItem = {
 
 function generateOrderCode() {
   const now = new Date();
-  const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
-  const rand = Math.floor(1000 + Math.random() * 9000);
-  return `ORD-${stamp}-${rand}`;
+  const stamp = `${String(now.getDate()).padStart(2, "0")}${String(now.getMonth() + 1).padStart(2, "0")}${now.getFullYear()}${String(now.getHours()).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
+  const rand = Math.floor(Math.random() * 10_000)
+    .toString()
+    .padStart(4, "0");
+  return `ORD${stamp}${rand}`;
 }
 
 function getPendingTimeoutMinutes() {
