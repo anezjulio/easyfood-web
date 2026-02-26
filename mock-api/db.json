@@ -3534,7 +3534,8 @@
       "category": "perecedero",
       "entityType": "product",
       "entityId": "p210220260352286090",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-02-25T23:15:32.696Z"
     },
     {
       "id": "nt200220262340099173",
@@ -3976,7 +3977,8 @@
       "category": "perecedero",
       "entityType": "stock",
       "entityId": "se160220260439270005",
-      "status": "active"
+      "status": "disabled",
+      "disabledAt": "2026-02-25T23:15:10.771Z"
     },
     {
       "id": "nt170220260439273498",

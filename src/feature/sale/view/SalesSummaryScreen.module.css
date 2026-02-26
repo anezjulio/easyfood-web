@@ -96,6 +96,31 @@
   color: #0f172a;
 }
 
+.receiptCard {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 14px;
+}
+
+.receiptActions {
+  display: grid;
+  gap: 8px;
+}
+
+.receiptMessage,
+.receiptError {
+  margin: 0;
+  font-weight: 700;
+}
+
+.receiptMessage {
+  color: #166534;
+}
+
+.receiptError {
+  color: #991b1b;
+}
+
 .actions {
   display: flex;
   justify-content: flex-end;
@@ -127,6 +152,12 @@
   border-bottom: 2px solid #000000;
   background: white;
   color: #0f172a;
+}
+
+.primaryBtn:disabled,
+.secondaryBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 @media (max-width: 860px) {

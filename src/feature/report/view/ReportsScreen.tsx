@@ -25,6 +25,19 @@ type OperatorGroup = {
   hasOpen: boolean;
 };
 
+type WorkdayChartPoint = {
+  id: string;
+  label: string;
+  helper: string;
+  total: number;
+};
+
+type WorkdayChartModel = {
+  title: string;
+  subtitle: string;
+  points: WorkdayChartPoint[];
+};
+
 function formatDateOnly(iso?: string) {
   if (!iso) return "-";
   const d = new Date(iso);
@@ -139,6 +152,46 @@ function computeWorkdaySummary(workdayList: Workday[], ordersById: Map<string, O
   };
 }
 
+function countUniqueOperators(workdayList: Workday[]) {
+  return new Set(workdayList.map((item) => normalizeText(item.operator)).filter((item) => item.length > 0)).size;
+}
+
+function WorkdayTotalsChart({ model }: { model: WorkdayChartModel }) {
+  const maxTotal = model.points.reduce((max, point) => Math.max(max, point.total), 0);
+
+  return (
+    <section className={styles.chartBlock} aria-label={model.title}>
+      <header className={styles.chartHeader}>
+        <h3 className={styles.chartTitle}>{model.title}</h3>
+        <p className={styles.chartSubtitle}>{model.subtitle}</p>
+      </header>
+
+      {model.points.length === 0 ? (
+        <p className={styles.chartEmpty}>Sin datos para graficar en este periodo.</p>
+      ) : (
+        <div className={styles.chartScroller}>
+          <div className={styles.chartGrid}>
+            {model.points.map((point) => {
+              const ratio = maxTotal > 0 ? point.total / maxTotal : 0;
+              const fillHeight = `${Math.max(8, Math.round(ratio * 100))}%`;
+              return (
+                <article key={point.id} className={styles.chartItem} title={`${point.label} - ${formatMoneyARS(point.total)}`}>
+                  <p className={styles.chartValue}>{formatMoneyARS(point.total)}</p>
+                  <div className={styles.chartTrack}>
+                    <div className={styles.chartFill} style={{ height: fillHeight }} />
+                  </div>
+                  <p className={styles.chartLabel}>{point.label}</p>
+                  <p className={styles.chartHelper}>{point.helper}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
 export default function ReportsScreen() {
   const auth = useAuth();
   const nav = useNavigate();
@@ -240,6 +293,19 @@ export default function ReportsScreen() {
 
   const weeklyGroups = useMemo(() => buildOperatorGroups(weeklyWorkdays, ordersById), [ordersById, weeklyWorkdays]);
   const monthlyGroups = useMemo(() => buildOperatorGroups(monthlyWorkdays, ordersById), [monthlyWorkdays, ordersById]);
+  const dailyWorkdayRows = useMemo(
+    () =>
+      sortedWorkdays.map((workday) => {
+        const dayOrders = workday.orderIds.map((id) => ordersById.get(id)).filter((item): item is Order => !!item);
+        const dayTotal = dayOrders.reduce((acc, item) => acc + paidOrderTotal(item), 0);
+        return {
+          workday,
+          dayOrders,
+          dayTotal,
+        };
+      }),
+    [ordersById, sortedWorkdays],
+  );
 
   const dailySummary = useMemo(() => computeWorkdaySummary(sortedWorkdays, ordersById), [ordersById, sortedWorkdays]);
   const weeklySummary = useMemo(() => computeWorkdaySummary(weeklyWorkdays, ordersById), [ordersById, weeklyWorkdays]);
@@ -250,6 +316,76 @@ export default function ReportsScreen() {
     if (workdayTab === "weekly") return weeklySummary;
     return monthlySummary;
   }, [dailySummary, monthlySummary, weeklySummary, workdayTab]);
+  const dailyUsersCount = useMemo(() => countUniqueOperators(sortedWorkdays), [sortedWorkdays]);
+  const weeklyUsersCount = useMemo(() => countUniqueOperators(weeklyWorkdays), [weeklyWorkdays]);
+  const monthlyUsersCount = useMemo(() => countUniqueOperators(monthlyWorkdays), [monthlyWorkdays]);
+
+  const dailyChartPoints = useMemo<WorkdayChartPoint[]>(
+    () =>
+      dailyWorkdayRows.map(({ workday, dayTotal }) => ({
+        id: workday.id,
+        label: formatDateOnly(workday.startedAt),
+        helper: workday.operator,
+        total: dayTotal,
+      })),
+    [dailyWorkdayRows],
+  );
+  const weeklyChartPoints = useMemo<WorkdayChartPoint[]>(
+    () =>
+      weeklyGroups.map((group) => ({
+        id: group.operator,
+        label: group.operator,
+        helper: `${group.workdays.length} jornadas`,
+        total: group.totalSales,
+      })),
+    [weeklyGroups],
+  );
+  const monthlyChartPoints = useMemo<WorkdayChartPoint[]>(
+    () =>
+      monthlyGroups.map((group) => ({
+        id: group.operator,
+        label: group.operator,
+        helper: `${group.workdays.length} jornadas`,
+        total: group.totalSales,
+      })),
+    [monthlyGroups],
+  );
+
+  const activeWorkdayChart = useMemo<WorkdayChartModel>(() => {
+    if (workdayTab === "daily") {
+      return {
+        title: "Grafico diario de jornadas",
+        subtitle: `${dailySummary.workdays} jornadas, ${dailyUsersCount} usuarios y ${formatMoneyARS(dailySummary.totalSales)} generados.`,
+        points: dailyChartPoints,
+      };
+    }
+    if (workdayTab === "weekly") {
+      return {
+        title: "Grafico semanal por usuario",
+        subtitle: `${weeklySummary.workdays} jornadas, ${weeklyUsersCount} usuarios y ${formatMoneyARS(weeklySummary.totalSales)} generados.`,
+        points: weeklyChartPoints,
+      };
+    }
+    return {
+      title: "Grafico mensual por usuario",
+      subtitle: `${monthlySummary.workdays} jornadas, ${monthlyUsersCount} usuarios y ${formatMoneyARS(monthlySummary.totalSales)} generados.`,
+      points: monthlyChartPoints,
+    };
+  }, [
+    dailyChartPoints,
+    dailySummary.totalSales,
+    dailySummary.workdays,
+    dailyUsersCount,
+    monthlyChartPoints,
+    monthlySummary.totalSales,
+    monthlySummary.workdays,
+    monthlyUsersCount,
+    weeklyChartPoints,
+    weeklySummary.totalSales,
+    weeklySummary.workdays,
+    weeklyUsersCount,
+    workdayTab,
+  ]);
 
   const expensesTotal = useMemo(() => expenses.reduce((acc, item) => acc + safeMoney(item.amount), 0), [expenses]);
   const recurrentExpensesTotal = useMemo(
@@ -526,17 +662,17 @@ export default function ReportsScreen() {
                 </article>
               </section>
 
+              <WorkdayTotalsChart model={activeWorkdayChart} />
+
               {workdayTab === "daily" ? (
                 loading ? (
                   <p className={styles.empty}>Cargando jornadas...</p>
                 ) : error ? (
                   <p className={styles.empty}>{error}</p>
-                ) : sortedWorkdays.length === 0 ? (
+                ) : dailyWorkdayRows.length === 0 ? (
                   <p className={styles.empty}>No hay jornadas registradas.</p>
                 ) : (
-                  sortedWorkdays.map((wd, index) => {
-                    const dayOrders = wd.orderIds.map((id) => ordersById.get(id)).filter((item): item is Order => !!item);
-                    const dayTotal = dayOrders.reduce((acc, item) => acc + paidOrderTotal(item), 0);
+                  dailyWorkdayRows.map(({ workday: wd, dayOrders, dayTotal }, index) => {
                     const expanded = expandedWorkdays.includes(wd.id);
 
                     return (
@@ -557,6 +693,12 @@ export default function ReportsScreen() {
                               <span className={styles.operatorText}>{wd.operator}</span>
                             </div>
                             <div className={styles.headerMetric}>
+                              <span className={styles.headerMetricLabel}>Total</span>
+                              <span className={dayTotal === 0 ? styles.totalZeroValue : styles.totalHeaderValue}>
+                                {formatMoneyARS(dayTotal)}
+                              </span>
+                            </div>
+                            <div className={styles.headerMetric}>
                               <span className={styles.headerMetricLabel}>Fecha</span>
                               <span>{formatDateOnly(wd.startedAt)}</span>
                             </div>
@@ -573,12 +715,6 @@ export default function ReportsScreen() {
                             <div className={styles.headerMetric}>
                               <span className={styles.headerMetricLabel}>Horas</span>
                               <span>{formatDuration(wd.startedAt, wd.endedAt)}</span>
-                            </div>
-                            <div className={styles.headerMetric}>
-                              <span className={styles.headerMetricLabel}>Total</span>
-                              <span className={dayTotal === 0 ? styles.totalZeroValue : styles.totalHeaderValue}>
-                                {formatMoneyARS(dayTotal)}
-                              </span>
                             </div>
                           </div>
                         </button>

@@ -27,6 +27,26 @@ type CreateInvoiceDraft = {
   operator: string;
 };
 
+type CreateSaleReceiptDraft = {
+  orderId: string;
+  orderCode?: string;
+  invoiceId?: string;
+  createdAt: string;
+  operator: string;
+  paymentMethod: PaymentMethod;
+  items: OrderItem[];
+  total: number;
+};
+
+type SaleReceipt = {
+  id: string;
+  orderId: string;
+  invoiceId?: string;
+  createdAt: string;
+  filePath: string;
+  html: string;
+};
+
 export async function createOrderApi(draft: CreateOrderDraft): Promise<Order> {
   const response = await fetch("/orders", {
     method: "POST",
@@ -57,6 +77,15 @@ export async function createInvoiceApi(draft: CreateInvoiceDraft): Promise<Invoi
     body: JSON.stringify(draft),
   });
   return await readJsonOrThrow<Invoice>(response);
+}
+
+export async function createSaleReceiptApi(draft: CreateSaleReceiptDraft): Promise<SaleReceipt> {
+  const response = await fetch("/receipts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  return await readJsonOrThrow<SaleReceipt>(response);
 }
 
 export async function fetchPaymentMethodSettingsApi(): Promise<PaymentMethodSettings> {

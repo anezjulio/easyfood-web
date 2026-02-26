@@ -690,6 +690,7 @@ export default function SalesScreen() {
       const summaryState = {
         orderId: pendingOrder.id,
         orderCode: pendingOrder.id,
+        invoiceId: createdInvoice.id,
         createdAt: createdInvoice.createdAt || paid.createdAt,
         operator: auth.user?.username || "operator",
         paymentMethod,

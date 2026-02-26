@@ -7,6 +7,7 @@ import react from "@vitejs/plugin-react";
 
 const DB_PATH = resolve(process.cwd(), "mock-api", "db.json");
 const IMAGE_DIR = resolve(process.cwd(), "images");
+const RECEIPTS_DIR = resolveReceiptsDir();
 
 type Product = {
   id: string;
@@ -124,6 +125,27 @@ type Invoice = {
   total: number;
   paymentMethod: PaymentMethod;
   operator: string;
+};
+
+type ReceiptItem = {
+  productId: string;
+  productName: string;
+  unitPrice: number;
+  quantity: number;
+};
+
+type Receipt = {
+  id: string;
+  orderId: string;
+  orderCode: string;
+  invoiceId?: string;
+  createdAt: string;
+  operator: string;
+  paymentMethod: PaymentMethod;
+  items: ReceiptItem[];
+  total: number;
+  filePath: string;
+  html: string;
 };
 
 type Workday = {
@@ -458,6 +480,12 @@ function parsePendingTimeoutMinutes() {
   const fromGeneric = Math.trunc(Number(process.env.ORDER_PENDING_TIMEOUT_MINUTES));
   if (Number.isFinite(fromGeneric) && fromGeneric > 0) return fromGeneric;
   return 15;
+}
+
+function resolveReceiptsDir() {
+  const configured = String(process.env.VITE_RECEIPTS_DIR || process.env.RECEIPTS_DIR || "").trim();
+  if (!configured) return resolve(process.cwd(), "mock-api", "receipts");
+  return resolve(process.cwd(), configured);
 }
 
 function padIdPart(value: number): string {
@@ -1185,6 +1213,62 @@ function mockDbPlugin(): Plugin {
             db.invoices.unshift(invoice);
             await writeDb(db);
             return sendJson(res, 201, invoice);
+          }
+
+          if (pathname === "/receipts" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeReceiptDraft(await readJsonBody(req));
+            if (!draft.orderId) {
+              return sendJson(res, 400, { message: "Invalid receipt draft: orderId is required" });
+            }
+
+            const order = db.orders.find((item) => item.id === draft.orderId);
+            if (!order) {
+              return sendJson(res, 404, { message: "Order not found for receipt" });
+            }
+            if (order.status !== "pagada") {
+              return sendJson(res, 409, { message: "Receipt can only be created for paid orders" });
+            }
+
+            const invoice =
+              (draft.invoiceId ? db.invoices.find((item) => item.id === draft.invoiceId) : undefined) ||
+              db.invoices.find((item) => item.orderId === order.id);
+            if (draft.invoiceId && !invoice) {
+              return sendJson(res, 404, { message: "Invoice not found for receipt" });
+            }
+
+            const items = draft.items.length ? draft.items : order.items;
+            if (!items.length) {
+              return sendJson(res, 400, { message: "Invalid receipt draft: items are required" });
+            }
+
+            const paymentMethod = draft.paymentMethod || order.paymentMethod || invoice?.paymentMethod;
+            if (!paymentMethod) {
+              return sendJson(res, 400, { message: "Invalid receipt draft: paymentMethod is required" });
+            }
+
+            const computedItemsTotal = items.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
+            const fallbackTotal = Number.isFinite(order.total) && order.total > 0 ? order.total : computedItemsTotal;
+            const total =
+              Number.isFinite(draft.total) && draft.total > 0 ? Math.trunc(draft.total) : Math.max(0, Math.trunc(fallbackTotal));
+
+            const receipt: Receipt = {
+              id: buildEntityId("rc"),
+              orderId: order.id,
+              orderCode: draft.orderCode || order.id,
+              invoiceId: invoice?.id,
+              createdAt: draft.createdAt || invoice?.createdAt || order.createdAt || new Date().toISOString(),
+              operator: draft.operator || order.operator || invoice?.operator || "operator",
+              paymentMethod,
+              items,
+              total,
+              filePath: "",
+              html: "",
+            };
+
+            receipt.html = buildSaleReceiptHtml(receipt);
+            receipt.filePath = await writeReceiptCopy(receipt.id, receipt.html);
+            return sendJson(res, 201, receipt);
           }
 
           if (pathname === "/cash-opening-assignments" && method === "GET") {
@@ -3621,6 +3705,138 @@ async function ensureImageDir() {
   await mkdir(IMAGE_DIR, { recursive: true });
 }
 
+async function ensureReceiptsDir() {
+  await mkdir(RECEIPTS_DIR, { recursive: true });
+}
+
+async function writeReceiptCopy(receiptId: string, html: string) {
+  await ensureReceiptsDir();
+  const filePath = resolve(RECEIPTS_DIR, `${receiptId}.html`);
+  await writeFile(filePath, html, "utf8");
+  return filePath;
+}
+
+function buildSaleReceiptHtml(receipt: Receipt): string {
+  const rows = receipt.items
+    .map((item) => {
+      const subtotal = Math.max(0, Math.trunc(item.unitPrice * item.quantity));
+      return [
+        "<tr>",
+        `<td>${escapeHtml(item.productName)}</td>`,
+        `<td class=\"num\">${item.quantity}</td>`,
+        `<td class=\"num\">${formatReceiptMoney(item.unitPrice)}</td>`,
+        `<td class=\"num\">${formatReceiptMoney(subtotal)}</td>`,
+        "</tr>",
+      ].join("");
+    })
+    .join("");
+
+  const computedTotal = receipt.items.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
+  const subtotalLabel = formatReceiptMoney(computedTotal);
+  const totalLabel = formatReceiptMoney(receipt.total);
+
+  return [
+    "<!doctype html>",
+    "<html lang=\"es\">",
+    "<head>",
+    "  <meta charset=\"utf-8\" />",
+    "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />",
+    `  <title>Recibo ${escapeHtml(receipt.id)}</title>`,
+    "  <style>",
+    "    :root { color-scheme: light; }",
+    "    * { box-sizing: border-box; }",
+    "    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f8fafc; color: #0f172a; }",
+    "    .wrap { width: 100%; max-width: 760px; margin: 24px auto; padding: 0 12px; }",
+    "    .receipt { border: 1px solid #e2e8f0; background: white; padding: 20px; }",
+    "    .header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }",
+    "    .title { margin: 0; font-size: 24px; line-height: 1.2; }",
+    "    .hint { margin: 4px 0 0; color: #475569; font-size: 13px; }",
+    "    .meta { margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; font-size: 14px; }",
+    "    .meta p { margin: 0; }",
+    "    table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }",
+    "    th, td { border: 1px solid #e2e8f0; padding: 8px; text-align: left; }",
+    "    th { background: #f1f5f9; }",
+    "    .num { text-align: right; white-space: nowrap; }",
+    "    .totals { margin-top: 12px; display: grid; justify-content: end; gap: 6px; }",
+    "    .totals p { margin: 0; font-size: 14px; }",
+    "    .copy-path { margin-top: 14px; color: #334155; font-size: 12px; word-break: break-all; }",
+    "    @media print {",
+    "      body { background: white; }",
+    "      .wrap { margin: 0; max-width: 100%; padding: 0; }",
+    "      .receipt { border: none; padding: 0; }",
+    "    }",
+    "  </style>",
+    "</head>",
+    "<body>",
+    "  <div class=\"wrap\">",
+    "    <main class=\"receipt\">",
+    "      <header class=\"header\">",
+    "        <div>",
+    "          <h1 class=\"title\">Recibo de venta</h1>",
+    `          <p class=\"hint\">Comprobante ${escapeHtml(receipt.id)}</p>`,
+    "        </div>",
+    `        <p class=\"hint\">${escapeHtml(formatReceiptDateTime(receipt.createdAt))}</p>`,
+    "      </header>",
+    "      <section class=\"meta\">",
+    `        <p><strong>Orden:</strong> ${escapeHtml(receipt.orderCode)}</p>`,
+    `        <p><strong>ID orden:</strong> ${escapeHtml(receipt.orderId)}</p>`,
+    `        <p><strong>Factura:</strong> ${escapeHtml(receipt.invoiceId || "-")}</p>`,
+    `        <p><strong>Operador:</strong> ${escapeHtml(receipt.operator)}</p>`,
+    `        <p><strong>Metodo pago:</strong> ${escapeHtml(formatReceiptPaymentMethod(receipt.paymentMethod))}</p>`,
+    "      </section>",
+    "      <table>",
+    "        <thead>",
+    "          <tr>",
+    "            <th>Producto</th>",
+    "            <th class=\"num\">Cant.</th>",
+    "            <th class=\"num\">Precio</th>",
+    "            <th class=\"num\">Subtotal</th>",
+    "          </tr>",
+    "        </thead>",
+    "        <tbody>",
+    rows,
+    "        </tbody>",
+    "      </table>",
+    "      <section class=\"totals\">",
+    `        <p><strong>Subtotal:</strong> ${subtotalLabel}</p>`,
+    `        <p><strong>Total:</strong> ${totalLabel}</p>`,
+    "      </section>",
+    `      <p class=\"copy-path\"><strong>Copia guardada en:</strong> ${escapeHtml(resolve(RECEIPTS_DIR, `${receipt.id}.html`))}</p>`,
+    "    </main>",
+    "  </div>",
+    "</body>",
+    "</html>",
+  ].join("\n");
+}
+
+function formatReceiptPaymentMethod(method: PaymentMethod): string {
+  if (method === "efectivo") return "Efectivo";
+  if (method === "tarjeta debito") return "Tarjeta Debito";
+  if (method === "tarjeta credito") return "Tarjeta Credito";
+  if (method === "mercadopago") return "Mercado Pago";
+  return method;
+}
+
+function formatReceiptMoney(value: number): string {
+  const amount = Number.isFinite(value) ? Math.trunc(value) : 0;
+  return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(amount);
+}
+
+function formatReceiptDateTime(value: string): string {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return value || "-";
+  return `${padIdPart(date.getDate())}/${padIdPart(date.getMonth() + 1)}/${date.getFullYear()} ${padIdPart(date.getHours())}:${padIdPart(date.getMinutes())}:${padIdPart(date.getSeconds())}`;
+}
+
+function escapeHtml(value: string): string {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll("\"", "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function sendJson(res: { statusCode: number; setHeader: (name: string, value: string) => void; end: (chunk?: string) => void }, status: number, payload: unknown) {
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -4055,6 +4271,52 @@ function sanitizeInvoiceDraft(input: unknown): {
     total: Number(obj.total),
     paymentMethod,
     operator: String(obj.operator || "").trim(),
+  };
+}
+
+function sanitizeReceiptDraft(input: unknown): {
+  orderId: string;
+  orderCode: string;
+  invoiceId?: string;
+  createdAt: string;
+  operator: string;
+  paymentMethod?: PaymentMethod;
+  items: ReceiptItem[];
+  total: number;
+} {
+  const obj = (input || {}) as {
+    orderId?: unknown;
+    orderCode?: unknown;
+    invoiceId?: unknown;
+    createdAt?: unknown;
+    operator?: unknown;
+    paymentMethod?: unknown;
+    items?: unknown[];
+    total?: unknown;
+  };
+  const paymentValue = String(obj.paymentMethod || "").trim().toLowerCase();
+  const paymentMethod = isPaymentMethodValue(paymentValue) ? paymentValue : undefined;
+  const items = Array.isArray(obj.items)
+    ? obj.items
+        .map((item) => sanitizeOrderItem(item))
+        .filter((item): item is OrderItem => !!item)
+        .map((item) => ({
+          productId: item.productId,
+          productName: item.productName,
+          unitPrice: item.unitPrice,
+          quantity: item.quantity,
+        }))
+    : [];
+
+  return {
+    orderId: String(obj.orderId || "").trim(),
+    orderCode: String(obj.orderCode || "").trim(),
+    invoiceId: String(obj.invoiceId || "").trim() || undefined,
+    createdAt: String(obj.createdAt || "").trim(),
+    operator: String(obj.operator || "").trim(),
+    paymentMethod,
+    items,
+    total: Number(obj.total),
   };
 }
 

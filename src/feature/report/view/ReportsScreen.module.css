@@ -90,6 +90,107 @@
   margin-bottom: 12px;
 }
 
+.chartBlock {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 10px;
+  margin-bottom: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.chartHeader {
+  display: grid;
+  gap: 4px;
+}
+
+.chartTitle {
+  margin: 0;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.chartSubtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chartEmpty {
+  margin: 0;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.chartScroller {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.chartGrid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(120px, 1fr);
+  align-items: end;
+  gap: 8px;
+  min-width: max-content;
+}
+
+.chartItem {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 6px;
+  display: grid;
+  gap: 6px;
+}
+
+.chartValue {
+  margin: 0;
+  text-align: center;
+  color: #166534;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.chartTrack {
+  height: 120px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  display: flex;
+  align-items: end;
+  padding: 4px;
+}
+
+.chartFill {
+  width: 100%;
+  min-height: 6px;
+  background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+}
+
+.chartLabel {
+  margin: 0;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chartHelper {
+  margin: 0;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .summaryTile {
   border: 1px solid #e2e8f0;
   background: #f8fafc;
@@ -399,7 +500,7 @@
 
 .workdayHeaderRight {
   display: grid;
-  grid-template-columns: repeat(6, minmax(110px, 1fr));
+  grid-template-columns: minmax(120px, 1.1fr) minmax(170px, 1.2fr) repeat(4, minmax(100px, 1fr));
   align-items: center;
   justify-items: start;
   column-gap: 2%;
@@ -608,6 +709,10 @@
 @media (max-width: 980px) {
   .workdaySummaryRow {
     grid-template-columns: 1fr;
+  }
+
+  .chartItem {
+    min-width: 120px;
   }
 
   .splitPanels {
