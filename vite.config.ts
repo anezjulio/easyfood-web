@@ -3733,7 +3733,6 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
   const computedTotal = receipt.items.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
   const subtotalLabel = formatReceiptMoney(computedTotal);
   const totalLabel = formatReceiptMoney(receipt.total);
-  const receiptPath = resolve(RECEIPTS_DIR, `${receipt.id}.html`);
 
   return [
     "<!doctype html>",
@@ -3755,9 +3754,9 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     "    .small { margin: 2px 0 0; font-size: 11px; }",
     "    .sep { border: 0; border-top: 1px dashed #0f172a; margin: 8px 0; }",
     "    .meta { display: grid; gap: 2px; }",
-    "    .line { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }",
+    "    .line { display: flex; justify-content: flex-start; align-items: baseline; gap: 6px; }",
     "    .label { font-weight: 700; white-space: nowrap; }",
-    "    .value { text-align: right; word-break: break-word; }",
+    "    .value { text-align: left; word-break: break-word; }",
     "    .items { display: grid; gap: 6px; }",
     "    .item-name { margin: 0; font-weight: 700; word-break: break-word; }",
     "    .item-meta { margin: 2px 0 0; display: flex; align-items: center; gap: 6px; white-space: nowrap; }",
@@ -3765,12 +3764,10 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     "    .totals { display: grid; gap: 4px; }",
     "    .total { font-size: 14px; font-weight: 700; }",
     "    .thanks { margin: 10px 0 0; text-align: center; font-weight: 700; letter-spacing: 0.03em; }",
-    "    .copy-path { margin-top: 8px; color: #334155; font-size: 10px; word-break: break-all; }",
     "    @media print {",
     "      body { background: white; }",
     "      .wrap { padding: 0; }",
     "      .ticket { width: 100%; max-width: none; border: none; padding: 0; }",
-    "      .copy-path { display: none; }",
     "    }",
     "  </style>",
     "</head>",
@@ -3785,9 +3782,7 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     "      </header>",
     "      <hr class=\"sep\" />",
     "      <section class=\"meta\">",
-    `        <p class=\"line\"><span class=\"label\">Orden:</span><span class=\"value\">${escapeHtml(receipt.orderCode)}</span></p>`,
-    `        <p class=\"line\"><span class=\"label\">ID orden:</span><span class=\"value\">${escapeHtml(receipt.orderId)}</span></p>`,
-    `        <p class=\"line\"><span class=\"label\">Factura:</span><span class=\"value\">${escapeHtml(receipt.invoiceId || "-")}</span></p>`,
+    `        <p class=\"line\"><span class=\"label\">Codigo factura:</span><span class=\"value\">${escapeHtml(receipt.invoiceId || "-")}</span></p>`,
     `        <p class=\"line\"><span class=\"label\">Operador:</span><span class=\"value\">${escapeHtml(receipt.operator)}</span></p>`,
     `        <p class=\"line\"><span class=\"label\">Pago:</span><span class=\"value\">${escapeHtml(formatReceiptPaymentMethod(receipt.paymentMethod))}</span></p>`,
     "      </section>",
@@ -3801,7 +3796,6 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     `        <p class=\"line total\"><span class=\"label\">Total</span><span class=\"value\">${escapeHtml(totalLabel)}</span></p>`,
     "      </section>",
     "      <p class=\"thanks\">Gracias por su compra</p>",
-    `      <p class=\"copy-path\">Copia guardada en: ${escapeHtml(receiptPath)}</p>`,
     "    </main>",
     "  </div>",
     "</body>",
