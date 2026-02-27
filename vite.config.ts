@@ -5,9 +5,14 @@ import type { IncomingMessage } from "node:http";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
-const DB_PATH = resolve(process.cwd(), "mock-api", "db.json");
-const IMAGE_DIR = resolve(process.cwd(), "images");
-const RECEIPTS_DIR = resolveReceiptsDir();
+const LEGACY_DB_PATH = resolve(process.cwd(), "mock-api", "db.json");
+const LEGACY_IMAGE_DIR = resolve(process.cwd(), "images");
+const LEGACY_RECEIPTS_DIR = resolveReceiptsDir();
+const DATA_STORES_PATH = resolve(process.cwd(), "mock-api", "data-stores.json");
+const DATA_STORES_ROOT_DIR = resolve(process.cwd(), "mock-api", "data-stores");
+const DATA_STORES_IMAGES_ROOT_DIR = resolve(process.cwd(), "images");
+const DATA_STORES_RECEIPTS_ROOT_DIR = resolve(LEGACY_RECEIPTS_DIR, "stores");
+const DEFAULT_DATA_STORE_ID = "default";
 
 type Product = {
   id: string;
@@ -387,6 +392,20 @@ type MockDb = {
   taxSettings: TaxSettings;
 };
 
+type DataStoreRecord = {
+  id: string;
+  name: string;
+  dbPath: string;
+  imagesDir: string;
+  receiptsDir: string;
+  createdAt: string;
+};
+
+type DataStoresState = {
+  activeStoreId: string;
+  stores: DataStoreRecord[];
+};
+
 const defaultDb: MockDb = {
   products: [],
   productPrices: [],
@@ -488,6 +507,155 @@ function resolveReceiptsDir() {
   return resolve(process.cwd(), configured);
 }
 
+function normalizeDataStoreId(value: unknown): string {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40);
+}
+
+function buildDefaultDataStoreRecord(createdAt = new Date().toISOString()): DataStoreRecord {
+  return {
+    id: DEFAULT_DATA_STORE_ID,
+    name: "Base principal",
+    dbPath: LEGACY_DB_PATH,
+    imagesDir: LEGACY_IMAGE_DIR,
+    receiptsDir: LEGACY_RECEIPTS_DIR,
+    createdAt,
+  };
+}
+
+function buildDataStorePaths(storeId: string) {
+  const safeId = normalizeDataStoreId(storeId);
+  return {
+    dbPath: resolve(DATA_STORES_ROOT_DIR, safeId, "db.js"),
+    imagesDir: resolve(DATA_STORES_IMAGES_ROOT_DIR, safeId),
+    receiptsDir: resolve(DATA_STORES_RECEIPTS_ROOT_DIR, safeId),
+  };
+}
+
+function normalizeDataStoreRecord(input: unknown): DataStoreRecord | null {
+  const obj = (input || {}) as {
+    id?: unknown;
+    name?: unknown;
+    createdAt?: unknown;
+  };
+  const id = normalizeDataStoreId(obj.id);
+  if (!id) return null;
+  const createdAt = String(obj.createdAt || "").trim() || new Date().toISOString();
+  if (id === DEFAULT_DATA_STORE_ID) {
+    const base = buildDefaultDataStoreRecord(createdAt);
+    const name = String(obj.name || "").trim();
+    return {
+      ...base,
+      name: name || base.name,
+    };
+  }
+  const name = String(obj.name || "").trim() || id;
+  const paths = buildDataStorePaths(id);
+  return {
+    id,
+    name,
+    ...paths,
+    createdAt,
+  };
+}
+
+async function ensureDataStoresFile() {
+  await mkdir(dirname(DATA_STORES_PATH), { recursive: true });
+  if (!existsSync(DATA_STORES_PATH)) {
+    const base = buildDefaultDataStoreRecord();
+    const initial: DataStoresState = {
+      activeStoreId: base.id,
+      stores: [base],
+    };
+    await writeFile(DATA_STORES_PATH, JSON.stringify(initial, null, 2) + "\n", "utf8");
+  }
+}
+
+async function readDataStoresState(): Promise<DataStoresState> {
+  await ensureDataStoresFile();
+  let parsed: Partial<DataStoresState> = {};
+  try {
+    parsed = JSON.parse(await readFile(DATA_STORES_PATH, "utf8")) as Partial<DataStoresState>;
+  } catch {
+    parsed = {};
+  }
+
+  const stores: DataStoreRecord[] = [];
+  const seen = new Set<string>();
+  for (const raw of Array.isArray(parsed.stores) ? parsed.stores : []) {
+    const normalized = normalizeDataStoreRecord(raw);
+    if (!normalized || seen.has(normalized.id)) continue;
+    stores.push(normalized);
+    seen.add(normalized.id);
+  }
+
+  if (!seen.has(DEFAULT_DATA_STORE_ID)) {
+    const fallback = buildDefaultDataStoreRecord();
+    stores.push(fallback);
+    seen.add(fallback.id);
+  }
+
+  const activeStoreIdRaw = normalizeDataStoreId(parsed.activeStoreId);
+  const activeStoreId = seen.has(activeStoreIdRaw) ? activeStoreIdRaw : stores[0].id;
+
+  return { activeStoreId, stores };
+}
+
+async function writeDataStoresState(state: DataStoresState) {
+  await mkdir(dirname(DATA_STORES_PATH), { recursive: true });
+  await writeFile(DATA_STORES_PATH, JSON.stringify(state, null, 2) + "\n", "utf8");
+}
+
+async function getActiveDataStore(): Promise<DataStoreRecord> {
+  const state = await readDataStoresState();
+  const active = state.stores.find((item) => item.id === state.activeStoreId);
+  return active || state.stores[0] || buildDefaultDataStoreRecord();
+}
+
+async function ensureDataStoreDbFile(store: DataStoreRecord) {
+  await mkdir(dirname(store.dbPath), { recursive: true });
+  if (!existsSync(store.dbPath)) {
+    await writeFile(store.dbPath, JSON.stringify(defaultDb, null, 2) + "\n", "utf8");
+  }
+}
+
+async function ensureDataStoreMediaDirs(store: DataStoreRecord) {
+  await mkdir(store.imagesDir, { recursive: true });
+  await mkdir(store.receiptsDir, { recursive: true });
+}
+
+function validateAdminCredentials(db: MockDb, requestedBy: string, adminPasswordHash: string) {
+  if (!requestedBy || requestedBy.trim().toLowerCase() !== "admin") {
+    return { ok: false as const, status: 403, message: "Solo admin puede ejecutar esta accion." };
+  }
+  if (!adminPasswordHash || !/^[0-9a-f]{32}$/i.test(adminPasswordHash)) {
+    return { ok: false as const, status: 400, message: "Clave admin invalida." };
+  }
+  const adminUser = db.users.find((item) => item.username.trim().toLowerCase() === "admin");
+  if (!adminUser) {
+    return { ok: false as const, status: 404, message: "Usuario admin no encontrado." };
+  }
+  if (adminUser.password.trim().toLowerCase() !== adminPasswordHash.trim().toLowerCase()) {
+    return { ok: false as const, status: 401, message: "Clave admin invalida." };
+  }
+  return { ok: true as const };
+}
+
+function mapDataStoreForApi(store: DataStoreRecord) {
+  return {
+    id: store.id,
+    name: store.name,
+    dbPath: store.dbPath,
+    imagesDir: store.imagesDir,
+    receiptsDir: store.receiptsDir,
+    createdAt: store.createdAt,
+  };
+}
+
 function padIdPart(value: number): string {
   return String(value).padStart(2, "0");
 }
@@ -512,27 +680,91 @@ function mockDbPlugin(): Plugin {
           const url = new URL(req.url || "/", "http://localhost");
           const pathname = url.pathname;
 
+          if (pathname === "/admin/data/stores" && method === "GET") {
+            const state = await readDataStoresState();
+            return sendJson(res, 200, {
+              activeStoreId: state.activeStoreId,
+              stores: state.stores.map((item) => mapDataStoreForApi(item)),
+            });
+          }
+
+          if (pathname === "/admin/data/stores" && method === "POST") {
+            const activeDb = await readDb();
+            const draft = sanitizeAdminDataStoreCreateDraft(await readJsonBody(req));
+            const credential = validateAdminCredentials(activeDb, draft.requestedBy, draft.adminPasswordHash);
+            if (!credential.ok) {
+              return sendJson(res, credential.status, { message: credential.message });
+            }
+            const nextStoreId = normalizeDataStoreId(draft.storeId || draft.name);
+            if (!nextStoreId || nextStoreId === DEFAULT_DATA_STORE_ID) {
+              return sendJson(res, 400, { message: "Debes indicar un identificador valido para la nueva base." });
+            }
+            const state = await readDataStoresState();
+            if (state.stores.some((item) => item.id === nextStoreId)) {
+              return sendJson(res, 409, { message: "Ya existe una base con ese identificador." });
+            }
+            const createdAt = new Date().toISOString();
+            const newStore: DataStoreRecord = {
+              id: nextStoreId,
+              name: draft.name || nextStoreId,
+              ...buildDataStorePaths(nextStoreId),
+              createdAt,
+            };
+            await ensureDataStoreDbFile(newStore);
+            await writeDb(buildClearedOperationalDb(activeDb), newStore);
+            await ensureDataStoreMediaDirs(newStore);
+            state.stores.push(newStore);
+            await writeDataStoresState(state);
+            return sendJson(res, 201, {
+              ok: true,
+              message: "Nueva base creada correctamente.",
+              activeStoreId: state.activeStoreId,
+              store: mapDataStoreForApi(newStore),
+            });
+          }
+
+          if (pathname === "/admin/data/stores/active" && method === "PUT") {
+            const activeDb = await readDb();
+            const draft = sanitizeAdminDataStoreSwitchDraft(await readJsonBody(req));
+            const credential = validateAdminCredentials(activeDb, draft.requestedBy, draft.adminPasswordHash);
+            if (!credential.ok) {
+              return sendJson(res, credential.status, { message: credential.message });
+            }
+            const targetStoreId = normalizeDataStoreId(draft.storeId);
+            if (!targetStoreId) {
+              return sendJson(res, 400, { message: "Base destino invalida." });
+            }
+            const state = await readDataStoresState();
+            const targetStore = state.stores.find((item) => item.id === targetStoreId);
+            if (!targetStore) {
+              return sendJson(res, 404, { message: "Base no encontrada." });
+            }
+            await ensureDataStoreDbFile(targetStore);
+            await ensureDataStoreMediaDirs(targetStore);
+            state.activeStoreId = targetStore.id;
+            await writeDataStoresState(state);
+            return sendJson(res, 200, {
+              ok: true,
+              message: `Base activa cambiada a ${targetStore.name}.`,
+              activeStoreId: targetStore.id,
+              store: mapDataStoreForApi(targetStore),
+            });
+          }
+
           if (pathname === "/admin/data/reset" && method === "POST") {
             const db = await readDb();
             const draft = sanitizeAdminDataResetDraft(await readJsonBody(req));
-            if (!draft.requestedBy || !draft.adminPasswordHash || !/^[0-9a-f]{32}$/i.test(draft.adminPasswordHash)) {
-              return sendJson(res, 400, { message: "Invalid reset request" });
-            }
-            if (draft.requestedBy.toLowerCase() !== "admin") {
-              return sendJson(res, 403, { message: "Solo admin puede limpiar la base de datos." });
-            }
-            const adminUser = db.users.find((item) => item.username.trim().toLowerCase() === "admin");
-            if (!adminUser) {
-              return sendJson(res, 404, { message: "Usuario admin no encontrado." });
-            }
-            if (adminUser.password.trim().toLowerCase() !== draft.adminPasswordHash) {
-              return sendJson(res, 401, { message: "Clave admin invalida." });
+            const credential = validateAdminCredentials(db, draft.requestedBy, draft.adminPasswordHash);
+            if (!credential.ok) {
+              return sendJson(res, credential.status, { message: credential.message });
             }
             const clearedDb = buildClearedOperationalDb(db);
             await writeDb(clearedDb);
+            const activeStore = await getActiveDataStore();
             return sendJson(res, 200, {
               ok: true,
               clearedAt: new Date().toISOString(),
+              activeStoreId: activeStore.id,
               message: "Base de datos limpiada correctamente.",
             });
           }
@@ -2127,7 +2359,8 @@ function mockDbPlugin(): Plugin {
           }
 
           if (pathname === "/uploads/images" && method === "POST") {
-            await ensureImageDir();
+            const activeStore = await getActiveDataStore();
+            await ensureImageDir(activeStore);
             const contentType = String(req.headers["content-type"] || "").toLowerCase();
             if (!contentType.startsWith("image/")) {
               return sendJson(res, 400, { message: "Invalid image content-type" });
@@ -2143,8 +2376,8 @@ function mockDbPlugin(): Plugin {
             const ext = requestedExt || guessExtFromContentType(contentType);
             const baseName = requestedExt ? requestedName.slice(0, -requestedExt.length) : requestedName;
             const finalName = `${baseName || `img-${Date.now()}`}-${Math.floor(Math.random() * 100000)}${ext}`;
-            const filePath = resolve(IMAGE_DIR, finalName);
-            if (!filePath.startsWith(IMAGE_DIR)) {
+            const filePath = resolve(activeStore.imagesDir, finalName);
+            if (!filePath.startsWith(activeStore.imagesDir)) {
               return sendJson(res, 400, { message: "Invalid image path" });
             }
 
@@ -2156,11 +2389,12 @@ function mockDbPlugin(): Plugin {
           }
 
           if (pathname.startsWith("/images/") && method === "GET") {
-            await ensureImageDir();
+            const activeStore = await getActiveDataStore();
+            await ensureImageDir(activeStore);
             const rel = pathname.slice("/images/".length);
             const safeName = safeFileName(rel);
-            const filePath = resolve(IMAGE_DIR, safeName);
-            if (!filePath.startsWith(IMAGE_DIR) || !existsSync(filePath)) {
+            const filePath = resolve(activeStore.imagesDir, safeName);
+            if (!filePath.startsWith(activeStore.imagesDir) || !existsSync(filePath)) {
               return sendJson(res, 404, { message: "Image not found" });
             }
             const buffer = await readFile(filePath);
@@ -2179,16 +2413,15 @@ function mockDbPlugin(): Plugin {
   };
 }
 
-async function ensureDbFile() {
-  await mkdir(dirname(DB_PATH), { recursive: true });
-  if (!existsSync(DB_PATH)) {
-    await writeFile(DB_PATH, JSON.stringify(defaultDb, null, 2), "utf8");
-  }
+async function ensureDbFile(store?: DataStoreRecord) {
+  const targetStore = store || (await getActiveDataStore());
+  await ensureDataStoreDbFile(targetStore);
 }
 
-async function readDb(): Promise<MockDb> {
-  await ensureDbFile();
-  const raw = await readFile(DB_PATH, "utf8");
+async function readDb(store?: DataStoreRecord): Promise<MockDb> {
+  const targetStore = store || (await getActiveDataStore());
+  await ensureDbFile(targetStore);
+  const raw = await readFile(targetStore.dbPath, "utf8");
   const parsed = JSON.parse(raw) as Partial<MockDb>;
   return {
     products: Array.isArray(parsed.products)
@@ -2345,8 +2578,10 @@ async function readDb(): Promise<MockDb> {
   };
 }
 
-async function writeDb(db: MockDb) {
-  await writeFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "utf8");
+async function writeDb(db: MockDb, store?: DataStoreRecord) {
+  const targetStore = store || (await getActiveDataStore());
+  await ensureDbFile(targetStore);
+  await writeFile(targetStore.dbPath, JSON.stringify(db, null, 2) + "\n", "utf8");
 }
 
 function buildClearedOperationalDb(db: MockDb): MockDb {
@@ -3744,17 +3979,20 @@ function generateNotificationTestCases(db: MockDb): number {
   return createdCases;
 }
 
-async function ensureImageDir() {
-  await mkdir(IMAGE_DIR, { recursive: true });
+async function ensureImageDir(store?: DataStoreRecord) {
+  const targetStore = store || (await getActiveDataStore());
+  await mkdir(targetStore.imagesDir, { recursive: true });
 }
 
-async function ensureReceiptsDir() {
-  await mkdir(RECEIPTS_DIR, { recursive: true });
+async function ensureReceiptsDir(store?: DataStoreRecord) {
+  const targetStore = store || (await getActiveDataStore());
+  await mkdir(targetStore.receiptsDir, { recursive: true });
 }
 
 async function writeReceiptCopy(receiptId: string, html: string) {
-  await ensureReceiptsDir();
-  const filePath = resolve(RECEIPTS_DIR, `${receiptId}.html`);
+  const activeStore = await getActiveDataStore();
+  await ensureReceiptsDir(activeStore);
+  const filePath = resolve(activeStore.receiptsDir, `${receiptId}.html`);
   await writeFile(filePath, html, "utf8");
   return filePath;
 }
@@ -3993,6 +4231,43 @@ function sanitizeTaxSettingsDraft(input: unknown): { ivaPercent?: number; mode?:
   return {
     ivaPercent: typeof obj.ivaPercent === "undefined" ? undefined : Number(obj.ivaPercent),
     mode: modeRaw === "add_to_total" || modeRaw === "show_only" ? (modeRaw as TaxMode) : undefined,
+  };
+}
+
+function sanitizeAdminDataStoreCreateDraft(input: unknown): {
+  requestedBy: string;
+  adminPasswordHash: string;
+  name: string;
+  storeId: string;
+} {
+  const obj = (input || {}) as {
+    requestedBy?: unknown;
+    adminPasswordHash?: unknown;
+    name?: unknown;
+    storeId?: unknown;
+  };
+  return {
+    requestedBy: String(obj.requestedBy || "").trim(),
+    adminPasswordHash: String(obj.adminPasswordHash || "").trim().toLowerCase(),
+    name: String(obj.name || "").trim(),
+    storeId: String(obj.storeId || "").trim(),
+  };
+}
+
+function sanitizeAdminDataStoreSwitchDraft(input: unknown): {
+  requestedBy: string;
+  adminPasswordHash: string;
+  storeId: string;
+} {
+  const obj = (input || {}) as {
+    requestedBy?: unknown;
+    adminPasswordHash?: unknown;
+    storeId?: unknown;
+  };
+  return {
+    requestedBy: String(obj.requestedBy || "").trim(),
+    adminPasswordHash: String(obj.adminPasswordHash || "").trim().toLowerCase(),
+    storeId: String(obj.storeId || "").trim(),
   };
 }
 

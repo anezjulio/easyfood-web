@@ -7,7 +7,7 @@
 
 .content {
   width: 100%;
-  max-width: 920px;
+  max-width: 1080px;
   margin: 0 auto;
   padding: 8px;
 }
@@ -65,6 +65,11 @@
   font-size: 13px;
 }
 
+.hint code {
+  background: #f1f5f9;
+  padding: 1px 4px;
+}
+
 .form {
   display: grid;
   gap: 10px;
@@ -89,28 +94,80 @@
   padding: 0 10px;
 }
 
+.primaryButton,
+.secondaryButton,
 .dangerButton {
   width: fit-content;
-  min-width: 230px;
+  min-width: 190px;
   height: 42px;
   border-radius: 0;
-  border: 1px solid #991b1b;
   border-right: 2px solid #000000;
   border-bottom: 2px solid #000000;
-  background: #b91c1c;
-  color: #ffffff;
   font-weight: 900;
   cursor: pointer;
 }
 
+.primaryButton {
+  border: 1px solid #0f172a;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.secondaryButton {
+  border: 1px solid #334155;
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.dangerButton {
+  border: 1px solid #991b1b;
+  background: #b91c1c;
+  color: #ffffff;
+}
+
+.primaryButton:disabled,
+.secondaryButton:disabled,
 .dangerButton:disabled {
   background: #9ca3af;
   border-color: #9ca3af;
+  color: #ffffff;
   cursor: not-allowed;
 }
 
-.success {
+.storeList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.storeCard {
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.storeCardActive {
+  border-color: #0f172a;
+  box-shadow: inset 0 0 0 1px #0f172a;
+  background: #f8fafc;
+}
+
+.storeTitle {
   margin: 0;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.storeMeta {
+  margin: 0;
+  font-size: 12px;
+  color: #334155;
+  word-break: break-word;
+}
+
+.success {
+  margin: 14px 0 0;
   padding: 10px 14px;
   border-radius: 0;
   background: #dcfce7;
@@ -119,11 +176,17 @@
 }
 
 .error {
-  margin: 0;
+  margin: 14px 0 0;
   padding: 10px 14px;
   border-radius: 0;
   background: #fee2e2;
   color: #991b1b;
   font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .storeList {
+    grid-template-columns: 1fr;
+  }
 }
 
