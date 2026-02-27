@@ -18,9 +18,6 @@ export default function LoginScreen() {
     <div className={styles.page}>
       <form className={styles.card} onSubmit={handleSubmit}>
         <h1 className={styles.title}>Iniciar sesión</h1>
-        <p className={styles.subtitle}>
-          Demo: <b>admin</b>/<b>1234</b> (total) o <b>user</b>/<b>1234</b> (operador)
-        </p>
 
         <label className={styles.label}>
           Usuario
@@ -53,6 +50,7 @@ export default function LoginScreen() {
           {vm.loading ? "Ingresando..." : "Entrar"}
         </button>
       </form>
+      <p className={styles.poweredBy}>powerade by easycommerce</p>
     </div>
   );
 }
