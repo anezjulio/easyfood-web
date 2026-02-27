@@ -18,6 +18,7 @@ import ApproveRequestsScreen from "../../feature/request/view/ApproveRequestsScr
 import ExpensesScreen from "../../feature/expense/view/ExpensesScreen";
 import LicensesScreen from "../../feature/license/view/LicensesScreen";
 import NotificationsScreen from "../../feature/notification/view/NotificationsScreen";
+import DataScreen from "../../feature/data/view/DataScreen";
 import RequireAuth from "./RequireAuth";
 
 export default function AppRoutes() {
@@ -46,6 +47,7 @@ export default function AppRoutes() {
         <Route path="/expenses" element={<ExpensesScreen />} />
         <Route path="/licenses" element={<LicensesScreen />} />
         <Route path="/notifications" element={<NotificationsScreen />} />
+        <Route path="/data" element={<DataScreen />} />
       </Route>
 
       {/* default */}

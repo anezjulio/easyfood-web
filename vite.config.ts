@@ -512,6 +512,31 @@ function mockDbPlugin(): Plugin {
           const url = new URL(req.url || "/", "http://localhost");
           const pathname = url.pathname;
 
+          if (pathname === "/admin/data/reset" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeAdminDataResetDraft(await readJsonBody(req));
+            if (!draft.requestedBy || !draft.adminPasswordHash || !/^[0-9a-f]{32}$/i.test(draft.adminPasswordHash)) {
+              return sendJson(res, 400, { message: "Invalid reset request" });
+            }
+            if (draft.requestedBy.toLowerCase() !== "admin") {
+              return sendJson(res, 403, { message: "Solo admin puede limpiar la base de datos." });
+            }
+            const adminUser = db.users.find((item) => item.username.trim().toLowerCase() === "admin");
+            if (!adminUser) {
+              return sendJson(res, 404, { message: "Usuario admin no encontrado." });
+            }
+            if (adminUser.password.trim().toLowerCase() !== draft.adminPasswordHash) {
+              return sendJson(res, 401, { message: "Clave admin invalida." });
+            }
+            const clearedDb = buildClearedOperationalDb(db);
+            await writeDb(clearedDb);
+            return sendJson(res, 200, {
+              ok: true,
+              clearedAt: new Date().toISOString(),
+              message: "Base de datos limpiada correctamente.",
+            });
+          }
+
           if (pathname === "/products" && method === "GET") {
             const db = await readDb();
             return sendJson(res, 200, enrichProductsWithStocks(db.products, db.stocks));
@@ -2324,6 +2349,24 @@ async function writeDb(db: MockDb) {
   await writeFile(DB_PATH, JSON.stringify(db, null, 2) + "\n", "utf8");
 }
 
+function buildClearedOperationalDb(db: MockDb): MockDb {
+  return {
+    ...db,
+    products: [],
+    productPrices: [],
+    deleteRequests: [],
+    requests: [],
+    stocks: [],
+    orders: [],
+    invoices: [],
+    workdays: [],
+    supplyOrders: [],
+    expenses: [],
+    licenses: [],
+    notifications: [],
+  };
+}
+
 function normalizeCategory(value: unknown): Product["category"] | undefined {
   const raw = String(value || "").trim().toLowerCase();
   if (raw === "no perecedero") return "vivere";
@@ -3950,6 +3993,14 @@ function sanitizeTaxSettingsDraft(input: unknown): { ivaPercent?: number; mode?:
   return {
     ivaPercent: typeof obj.ivaPercent === "undefined" ? undefined : Number(obj.ivaPercent),
     mode: modeRaw === "add_to_total" || modeRaw === "show_only" ? (modeRaw as TaxMode) : undefined,
+  };
+}
+
+function sanitizeAdminDataResetDraft(input: unknown): { requestedBy: string; adminPasswordHash: string } {
+  const obj = (input || {}) as { requestedBy?: unknown; adminPasswordHash?: unknown };
+  return {
+    requestedBy: String(obj.requestedBy || "").trim(),
+    adminPasswordHash: String(obj.adminPasswordHash || "").trim().toLowerCase(),
   };
 }
 

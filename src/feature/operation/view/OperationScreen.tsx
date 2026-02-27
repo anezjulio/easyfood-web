@@ -56,6 +56,7 @@ export default function OperationScreen() {
                 onClick={() => nav("/licenses")}
               />
               <BigBtn title="Notificaciones" subtitle="Avisos del sistema" onClick={() => nav("/notifications")} />
+              <BigBtn title="Data" subtitle="Limpieza de base de datos" onClick={() => nav("/data")} />
               <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
               <BigBtn title="Finanzas" subtitle="Margenes, pagos e impuestos" onClick={() => nav("/finances")} />
               <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} />
