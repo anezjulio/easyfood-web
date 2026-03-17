@@ -1142,6 +1142,41 @@
   ],
   "stocks": [
     {
+      "id": "se270220261931569237",
+      "productId": "p120220261903375022",
+      "quantity": -1,
+      "description": "Venta orden or270220261931544446",
+      "createdAt": "2026-02-27T22:31:56.246Z"
+    },
+    {
+      "id": "se270220261930098683",
+      "productId": "p210220260352286090",
+      "quantity": -1,
+      "description": "Venta orden or270220261930035641",
+      "createdAt": "2026-02-27T22:30:09.791Z"
+    },
+    {
+      "id": "se270220261332585498",
+      "productId": "p210220260352286090",
+      "quantity": -1,
+      "description": "Venta orden or270220261332565393",
+      "createdAt": "2026-02-27T16:32:58.068Z"
+    },
+    {
+      "id": "se270220261332249725",
+      "productId": "p040120261426100035",
+      "quantity": -1,
+      "description": "Venta orden or270220261332172483",
+      "createdAt": "2026-02-27T16:32:24.741Z"
+    },
+    {
+      "id": "se270220261332240652",
+      "productId": "p120220261903375022",
+      "quantity": -1,
+      "description": "Venta orden or270220261332172483",
+      "createdAt": "2026-02-27T16:32:24.732Z"
+    },
+    {
       "id": "se210220260417525364",
       "productId": "p120220261743400090",
       "quantity": -1,
@@ -1873,6 +1908,76 @@
   ],
   "orders": [
     {
+      "id": "or270220261931544446",
+      "items": [
+        {
+          "productId": "p120220261903375022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-27T22:31:54.573Z",
+      "status": "pagada",
+      "total": 134487,
+      "operator": "admin",
+      "paymentMethod": "tarjeta credito"
+    },
+    {
+      "id": "or270220261930035641",
+      "items": [
+        {
+          "productId": "p210220260352286090",
+          "productName": "Glade 360 cm3",
+          "unitPrice": 3331,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-27T22:30:03.978Z",
+      "status": "pagada",
+      "total": 3331,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or270220261332565393",
+      "items": [
+        {
+          "productId": "p210220260352286090",
+          "productName": "Glade 360 cm3",
+          "unitPrice": 3331,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-27T16:32:56.506Z",
+      "status": "pagada",
+      "total": 3331,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or270220261332172483",
+      "items": [
+        {
+          "productId": "p120220261903375022",
+          "productName": "nuevo producto de prueba a ver si anda",
+          "unitPrice": 124525,
+          "quantity": 1
+        },
+        {
+          "productId": "p040120261426100035",
+          "productName": "Te verde en saquitos",
+          "unitPrice": 6404,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-02-27T16:32:17.455Z",
+      "status": "pagada",
+      "total": 141403,
+      "operator": "admin",
+      "paymentMethod": "tarjeta credito"
+    },
+    {
       "id": "or220220261911099039",
       "items": [
         {
@@ -2495,6 +2600,38 @@
   ],
   "invoices": [
     {
+      "id": "fc270220261931561574",
+      "orderId": "or270220261931544446",
+      "createdAt": "2026-02-27T22:31:56.256Z",
+      "total": 134487,
+      "paymentMethod": "tarjeta credito",
+      "operator": "admin"
+    },
+    {
+      "id": "fc270220261930090688",
+      "orderId": "or270220261930035641",
+      "createdAt": "2026-02-27T22:30:09.801Z",
+      "total": 3331,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc270220261332583592",
+      "orderId": "or270220261332565393",
+      "createdAt": "2026-02-27T16:32:58.077Z",
+      "total": 3331,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc270220261332247158",
+      "orderId": "or270220261332172483",
+      "createdAt": "2026-02-27T16:32:24.750Z",
+      "total": 141403,
+      "paymentMethod": "tarjeta credito",
+      "operator": "admin"
+    },
+    {
       "id": "fc210220260417526020",
       "orderId": "or210220260417503751",
       "createdAt": "2026-02-21T07:17:52.969Z",
@@ -2620,7 +2757,12 @@
       "id": "wd220220261820089113",
       "operator": "admin",
       "startedAt": "2026-02-22T21:20:08.464Z",
-      "orderIds": [],
+      "orderIds": [
+        "or270220261332172483",
+        "or270220261332565393",
+        "or270220261930035641",
+        "or270220261931544446"
+      ],
       "status": "open",
       "openingDeclaredAmount": 50000,
       "openingDifferenceAmount": 0
@@ -3201,6 +3343,128 @@
     }
   ],
   "notifications": [
+    {
+      "id": "nt270220261931568193",
+      "type": "stock-created",
+      "title": "Ingreso de stock: nuevo producto de prueba a ver si anda",
+      "description": "Se registro un ingreso de -1 unidades para nuevo producto de prueba a ver si anda.",
+      "createdAt": "2026-02-27T22:31:56.246Z",
+      "dueAt": "2026-03-06T22:31:56.246Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se270220261931569237",
+      "status": "active"
+    },
+    {
+      "id": "nt270220261931569963",
+      "type": "sale-created",
+      "title": "Venta registrada: or270220261931544446",
+      "description": "Venta por 134487 (admin).",
+      "createdAt": "2026-02-27T22:31:56.225Z",
+      "dueAt": "2026-02-28T22:31:56.225Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or270220261931544446",
+      "status": "active"
+    },
+    {
+      "id": "nt270220261930096467",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Glade 360 cm3",
+      "description": "Se registro un ingreso de -1 unidades para Glade 360 cm3.",
+      "createdAt": "2026-02-27T22:30:09.791Z",
+      "dueAt": "2026-03-06T22:30:09.791Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se270220261930098683",
+      "status": "active"
+    },
+    {
+      "id": "nt270220261930097304",
+      "type": "sale-created",
+      "title": "Venta registrada: or270220261930035641",
+      "description": "Venta por 3331 (admin).",
+      "createdAt": "2026-02-27T22:30:09.772Z",
+      "dueAt": "2026-02-28T22:30:09.772Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or270220261930035641",
+      "status": "active"
+    },
+    {
+      "id": "nt270220261332585920",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Glade 360 cm3",
+      "description": "Se registro un ingreso de -1 unidades para Glade 360 cm3.",
+      "createdAt": "2026-02-27T16:32:58.068Z",
+      "dueAt": "2026-03-06T16:32:58.068Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se270220261332585498",
+      "status": "active"
+    },
+    {
+      "id": "nt270220261332582329",
+      "type": "sale-created",
+      "title": "Venta registrada: or270220261332565393",
+      "description": "Venta por 3331 (admin).",
+      "createdAt": "2026-02-27T16:32:58.048Z",
+      "dueAt": "2026-02-28T16:32:58.048Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or270220261332565393",
+      "status": "active"
+    },
+    {
+      "id": "nt270220261332241621",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Te verde en saquitos",
+      "description": "Se registro un ingreso de -1 unidades para Te verde en saquitos.",
+      "createdAt": "2026-02-27T16:32:24.741Z",
+      "dueAt": "2026-03-06T16:32:24.741Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se270220261332249725",
+      "status": "active"
+    },
+    {
+      "id": "nt270220261332243370",
+      "type": "stock-created",
+      "title": "Ingreso de stock: nuevo producto de prueba a ver si anda",
+      "description": "Se registro un ingreso de -1 unidades para nuevo producto de prueba a ver si anda.",
+      "createdAt": "2026-02-27T16:32:24.732Z",
+      "dueAt": "2026-03-06T16:32:24.732Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se270220261332240652",
+      "status": "active"
+    },
+    {
+      "id": "nt270220261332243376",
+      "type": "sale-created",
+      "title": "Venta registrada: or270220261332172483",
+      "description": "Venta por 141403 (admin).",
+      "createdAt": "2026-02-27T16:32:24.713Z",
+      "dueAt": "2026-02-28T16:32:24.713Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or270220261332172483",
+      "status": "active"
+    },
     {
       "id": "nt220220261820088800",
       "type": "cash-opened",

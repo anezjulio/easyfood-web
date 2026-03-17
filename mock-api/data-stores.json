@@ -1,0 +1,21 @@
+{
+  "activeStoreId": "nueva-db-1",
+  "stores": [
+    {
+      "id": "default",
+      "name": "Base principal",
+      "dbPath": "C:\\Users\\Tilin\\frontend\\easycommerce-web\\mock-api\\db.json",
+      "imagesDir": "C:\\Users\\Tilin\\frontend\\easycommerce-web\\images",
+      "receiptsDir": "C:\\Users\\Tilin\\frontend\\easycommerce-web\\mock-api\\receipts",
+      "createdAt": "2026-02-27T23:08:46.571Z"
+    },
+    {
+      "id": "nueva-db-1",
+      "name": "nueva db 1",
+      "dbPath": "C:\\Users\\Tilin\\frontend\\easycommerce-web\\mock-api\\data-stores\\nueva-db-1\\db.js",
+      "imagesDir": "C:\\Users\\Tilin\\frontend\\easycommerce-web\\images\\nueva-db-1",
+      "receiptsDir": "C:\\Users\\Tilin\\frontend\\easycommerce-web\\mock-api\\receipts\\stores\\nueva-db-1",
+      "createdAt": "2026-02-27T23:09:22.351Z"
+    }
+  ]
+}

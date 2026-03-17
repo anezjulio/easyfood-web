@@ -210,11 +210,23 @@ type CashOpeningAssignment = {
 
 type SupplyOrderStatus = "pending" | "received";
 
+type SupplyOrderItem = {
+  productId: string;
+  productName: string;
+  quantity: number;
+  barcode?: string;
+  category?: Product["category"];
+  receivedQuantity?: number;
+  missingQuantity?: number;
+  expirationDate?: string;
+};
+
 type SupplyOrder = {
   id: string;
   supplierName: string;
   description: string;
   expectedTotal: number;
+  items: SupplyOrderItem[];
   createdAt: string;
   createdBy: string;
   status: SupplyOrderStatus;
@@ -228,16 +240,90 @@ type SupplyOrder = {
 };
 
 type ExpenseType = "recurrent" | "unexpected";
+type ExpenseStatus = "pending-confirmation" | "confirmed";
+type ExpenseAmountMode = "assigned" | "different";
 
 type Expense = {
   id: string;
   description: string;
   amount: number;
+  assignedAmount: number;
   expenseType: ExpenseType;
   invoiceImageUrl?: string;
   unexpectedImageUrl?: string;
   createdBy: string;
   createdAt: string;
+  status: ExpenseStatus;
+  confirmedAmount?: number;
+  confirmedBy?: string;
+  confirmedAt?: string;
+  confirmationComment?: string;
+  amountMode?: ExpenseAmountMode;
+};
+
+type FeedbackType = "suggestion" | "claim";
+type FeedbackAuthorRole = "admin" | "operator";
+
+type FeedbackEntry = {
+  id: string;
+  type: FeedbackType;
+  message: string;
+  isAnonymous: boolean;
+  createdAt: string;
+  createdBy: string;
+  createdByRole: FeedbackAuthorRole;
+};
+
+type FinancialAccountKind = "asset" | "income" | "expense" | "category";
+
+type FinancialAccount = {
+  id: string;
+  code: string;
+  name: string;
+  kind: FinancialAccountKind;
+  description: string;
+  currentBalance: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type FinancialDirection = "in" | "out";
+type FinancialEntryKind = "debit" | "credit";
+type FinancialReferenceModule = "sale" | "expense" | "cash" | "supply" | "system";
+type FinancialTransactionType =
+  | "sale-income"
+  | "sale-cash"
+  | "sale-tobacco"
+  | "expense-payment"
+  | "expense-cash"
+  | "supply-payment"
+  | "supply-cash"
+  | "supply-return"
+  | "cash-opening"
+  | "cash-close";
+
+type FinancialTransaction = {
+  id: string;
+  createdAt: string;
+  type: FinancialTransactionType;
+  title: string;
+  description: string;
+  amount: number;
+  direction: FinancialDirection;
+  entryKind: FinancialEntryKind;
+  accountId: string;
+  accountCode: string;
+  accountName: string;
+  referenceModule: FinancialReferenceModule;
+  referenceId: string;
+  orderId?: string;
+  workdayId?: string;
+  expenseId?: string;
+  supplyOrderId?: string;
+  invoiceId?: string;
+  paymentMethod?: PaymentMethod;
+  actor?: string;
+  countsInBalance: boolean;
 };
 
 type AppUserRecord = {
@@ -383,6 +469,9 @@ type MockDb = {
   cashOpeningAssignments: CashOpeningAssignment[];
   supplyOrders: SupplyOrder[];
   expenses: Expense[];
+  feedbackEntries: FeedbackEntry[];
+  financialAccounts: FinancialAccount[];
+  financialTransactions: FinancialTransaction[];
   licenses: LicenseRecord[];
   notifications: NotificationRecord[];
   notificationSettings: NotificationSetting[];
@@ -419,6 +508,9 @@ const defaultDb: MockDb = {
   cashOpeningAssignments: [],
   supplyOrders: [],
   expenses: [],
+  feedbackEntries: [],
+  financialAccounts: [],
+  financialTransactions: [],
   licenses: [],
   notifications: [],
   notificationSettings: [],
@@ -461,6 +553,43 @@ const defaultDb: MockDb = {
     mode: "show_only",
   },
 };
+
+const FINANCIAL_ACCOUNT_DEFINITIONS: Array<{
+  id: string;
+  code: string;
+  name: string;
+  kind: FinancialAccountKind;
+  description: string;
+}> = [
+  {
+    id: "account-cash-local",
+    code: "cash-local",
+    name: "Caja fisica local",
+    kind: "asset",
+    description: "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
+  },
+  {
+    id: "account-gains",
+    code: "gains",
+    name: "Ganancias",
+    kind: "income",
+    description: "Ventas pagadas registradas por la plataforma.",
+  },
+  {
+    id: "account-expenses",
+    code: "expenses",
+    name: "Gastos",
+    kind: "expense",
+    description: "Egresos confirmados por gastos y pagos de mercaderia.",
+  },
+  {
+    id: "account-tobacco",
+    code: "tobacco",
+    name: "Tabaqueria",
+    kind: "category",
+    description: "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
+  },
+];
 
 const ORDER_PENDING_TIMEOUT_MINUTES = parsePendingTimeoutMinutes();
 const ORDER_PENDING_TIMEOUT_MS = ORDER_PENDING_TIMEOUT_MINUTES * 60_000;
@@ -782,6 +911,12 @@ function mockDbPlugin(): Plugin {
             if (!draft.name || (!hasPrice && !hasCostPrice)) {
               return sendJson(res, 400, { message: "Invalid product draft" });
             }
+            if (draft.barcode) {
+              const duplicate = findProductByBarcode(db, draft.barcode);
+              if (duplicate) {
+                return sendJson(res, 409, { message: `Barcode already exists: ${duplicate.name}` });
+              }
+            }
             const category = draft.category || "vivere";
             const effectiveMarginPercent =
               Number.isFinite(draft.marginPercent) && draft.marginPercent >= 0
@@ -1000,6 +1135,12 @@ function mockDbPlugin(): Plugin {
               return sendJson(res, 404, { message: "Product not found" });
             }
             const current = db.products[index];
+            if (draft.barcode) {
+              const duplicate = findProductByBarcode(db, draft.barcode, productId);
+              if (duplicate) {
+                return sendJson(res, 409, { message: `Barcode already exists: ${duplicate.name}` });
+              }
+            }
             const category = draft.category || current.category || "vivere";
             const hasPrice = Number.isFinite(draft.price) && draft.price > 0;
             const hasCostPrice = Number.isFinite(draft.costPrice) && draft.costPrice > 0;
@@ -1254,78 +1395,49 @@ function mockDbPlugin(): Plugin {
           if (pathname === "/stocks" && method === "POST") {
             const db = await readDb();
             const body = sanitizeStockEntryDraft(await readJsonBody(req));
-            if (!body.productId) {
-              return sendJson(res, 400, { message: "Invalid stock entry: productId" });
+            try {
+              const entry = createStockEntryRecord(db, body);
+              await writeDb(db);
+              return sendJson(res, 201, entry);
+            } catch (error) {
+              return sendJson(res, 400, { message: error instanceof Error ? error.message : "Invalid stock entry" });
             }
-            if (!Number.isFinite(body.quantity) || body.quantity === 0) {
-              return sendJson(res, 400, { message: "Invalid stock entry: quantity must be non-zero" });
-            }
-            const product = db.products.find((item) => item.id === body.productId);
-            if (body.quantity > 0 && !body.expirationDate) {
-              return sendJson(res, 400, { message: "Invalid stock entry: expirationDate required" });
-            }
-            if (body.supplyOrderId) {
-              const supplyOrder = db.supplyOrders.find((item) => item.id === body.supplyOrderId);
-              if (!supplyOrder || supplyOrder.status !== "received") {
-                return sendJson(res, 400, { message: "Invalid stock entry: supplyOrderId must be a received order" });
-              }
-            }
-
-            const normalizedCostPrice =
-              Number.isFinite(body.costPrice) && body.costPrice > 0 ? Math.trunc(body.costPrice) : undefined;
-            const normalizedSalePrice =
-              Number.isFinite(body.salePrice) && body.salePrice > 0 ? Math.trunc(body.salePrice) : undefined;
-
-            const entry: StockEntry = {
-              id: buildEntityId("se"),
-              productId: body.productId,
-              manufactureDate: body.manufactureDate,
-              expirationDate: body.expirationDate,
-              quantity: Math.trunc(body.quantity),
-              description: body.description,
-              supplyOrderId: body.supplyOrderId,
-              costPrice: normalizedCostPrice,
-              salePrice: normalizedSalePrice,
-              createdAt: new Date().toISOString(),
-            };
-            db.stocks.unshift(entry);
-            if (product && entry.supplyOrderId) {
-              const productIndex = db.products.findIndex((item) => item.id === product.id);
-              if (productIndex >= 0) {
-                db.products[productIndex] = {
-                  ...db.products[productIndex],
-                  supplyOrderId: entry.supplyOrderId,
-                };
-              }
-            }
-            createDurationNotification(db, {
-              type: "stock-created",
-              title: `Ingreso de stock: ${product?.name || entry.productId}`,
-              description: `Se registro un ingreso de ${entry.quantity} unidades para ${product?.name || entry.productId}.`,
-              createdAt: entry.createdAt,
-              category: product?.category,
-              entityType: "stock",
-              entityId: entry.id,
-            });
-            if (entry.expirationDate) {
-              createExpirationNotification(db, {
-                type: "product-expiring",
-                title: `Producto por vencer: ${product?.name || entry.productId}`,
-                description: `Lote con vencimiento ${entry.expirationDate} para ${product?.name || entry.productId}.`,
-                expirationDate: entry.expirationDate,
-                category: product?.category,
-                entityType: "stock",
-                entityId: entry.id,
-              });
-            }
-            syncLowStockNotificationForProduct(db, entry.productId);
-            await writeDb(db);
-            return sendJson(res, 201, entry);
           }
 
           if (pathname === "/expenses" && method === "GET") {
             const db = await readDb();
             return sendJson(res, 200, db.expenses);
+          }
+
+          if (pathname === "/feedback" && method === "GET") {
+            const db = await readDb();
+            return sendJson(
+              res,
+              200,
+              [...db.feedbackEntries].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+            );
+          }
+
+          if (pathname === "/feedback" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeFeedbackDraft(await readJsonBody(req));
+            if (!draft.message || !draft.type || !draft.createdBy || !draft.createdByRole) {
+              return sendJson(res, 400, { message: "Invalid feedback draft" });
+            }
+
+            const entry: FeedbackEntry = {
+              id: buildEntityId("fb"),
+              type: draft.type,
+              message: draft.message,
+              isAnonymous: draft.isAnonymous,
+              createdAt: new Date().toISOString(),
+              createdBy: draft.createdBy,
+              createdByRole: draft.createdByRole,
+            };
+
+            db.feedbackEntries.unshift(entry);
+            await writeDb(db);
+            return sendJson(res, 201, entry);
           }
 
           if (pathname === "/expenses" && method === "POST") {
@@ -1344,23 +1456,81 @@ function mockDbPlugin(): Plugin {
               id: buildEntityId("ex"),
               description: draft.description,
               amount: Math.trunc(draft.amount),
+              assignedAmount: Math.trunc(draft.amount),
               expenseType: draft.expenseType,
               invoiceImageUrl: draft.invoiceImageUrl,
               unexpectedImageUrl: draft.unexpectedImageUrl,
               createdBy: draft.createdBy || "operator",
               createdAt: new Date().toISOString(),
+              status: "pending-confirmation",
             };
             db.expenses.unshift(expense);
             createDurationNotification(db, {
               type: "expense-created",
               title: `Gasto registrado: ${expense.createdBy}`,
-              description: `${expense.description} (${expense.amount}).`,
+              description: `${expense.description} (${expense.assignedAmount}).`,
               createdAt: expense.createdAt,
               entityType: "expense",
               entityId: expense.id,
             });
             await writeDb(db);
             return sendJson(res, 201, expense);
+          }
+
+          const expenseConfirmId = extractExpenseConfirmId(pathname);
+          if (expenseConfirmId && method === "PUT") {
+            const db = await readDb();
+            const body = sanitizeExpenseConfirmDraft(await readJsonBody(req));
+            const index = db.expenses.findIndex((item) => item.id === expenseConfirmId);
+            if (index < 0) {
+              return sendJson(res, 404, { message: "Expense not found" });
+            }
+
+            const current = db.expenses[index];
+            if (current.status === "confirmed") {
+              return sendJson(res, 409, { message: "Expense already confirmed" });
+            }
+
+            if (!body.amountMode) {
+              return sendJson(res, 400, { message: "Amount mode is required" });
+            }
+
+            const confirmedAmount =
+              body.amountMode === "different" ? Math.trunc(Number(body.confirmedAmount)) : Math.trunc(Number(current.assignedAmount));
+
+            if (!Number.isFinite(confirmedAmount) || confirmedAmount <= 0) {
+              return sendJson(res, 400, { message: "Confirmed amount must be a positive number" });
+            }
+            if (body.amountMode === "different" && confirmedAmount === current.assignedAmount) {
+              return sendJson(res, 400, { message: "Different amount must actually change the assigned amount" });
+            }
+            if (body.amountMode === "different" && !body.confirmationComment) {
+              return sendJson(res, 400, { message: "Comment is required when amount is different" });
+            }
+
+            const confirmedAt = new Date().toISOString();
+            db.expenses[index] = {
+              ...current,
+              amount: confirmedAmount,
+              status: "confirmed",
+              confirmedAmount,
+              confirmedBy: body.confirmedBy || "operator",
+              confirmedAt,
+              confirmationComment: body.confirmationComment || undefined,
+              amountMode: body.amountMode,
+            };
+            await writeDb(db);
+            return sendJson(res, 200, db.expenses[index]);
+          }
+
+          if (pathname === "/financial-accounts" && method === "GET") {
+            const db = await readDb();
+            return sendJson(res, 200, db.financialAccounts);
+          }
+
+          if (pathname === "/financial-transactions" && method === "GET") {
+            const db = await readDb();
+            return sendJson(res, 200, db.financialTransactions);
           }
 
           if (pathname === "/orders" && method === "GET") {
@@ -1847,8 +2017,17 @@ function mockDbPlugin(): Plugin {
           if (pathname === "/supply-orders" && method === "POST") {
             const db = await readDb();
             const draft = sanitizeSupplyOrderDraft(await readJsonBody(req));
-            if (!draft.supplierName || !draft.description || !Number.isFinite(draft.expectedTotal) || draft.expectedTotal <= 0) {
+            if (!draft.supplierName || !Number.isFinite(draft.expectedTotal) || draft.expectedTotal <= 0) {
               return sendJson(res, 400, { message: "Invalid supply order draft" });
+            }
+            let items: SupplyOrderItem[] = [];
+            try {
+              items = buildSupplyOrderItemsFromDraft(db, draft.items);
+            } catch (error) {
+              return sendJson(res, 400, { message: error instanceof Error ? error.message : "Invalid supply order item" });
+            }
+            if (!items.length && !draft.description) {
+              return sendJson(res, 400, { message: "Supply order requires items or description" });
             }
 
             const supplyOrder: SupplyOrder = {
@@ -1856,6 +2035,7 @@ function mockDbPlugin(): Plugin {
               supplierName: draft.supplierName,
               description: draft.description,
               expectedTotal: Math.trunc(draft.expectedTotal),
+              items,
               createdAt: new Date().toISOString(),
               createdBy: draft.createdBy || "operator",
               status: "pending",
@@ -1864,7 +2044,7 @@ function mockDbPlugin(): Plugin {
             createDurationNotification(db, {
               type: "supply-requested",
               title: `Pedido a proveedor: ${supplyOrder.supplierName}`,
-              description: `Se genero pedido ${supplyOrder.id} por ${supplyOrder.expectedTotal}.`,
+              description: `Se genero pedido ${supplyOrder.id} por ${supplyOrder.expectedTotal}. Productos: ${supplyOrder.items.length}.`,
               createdAt: supplyOrder.createdAt,
               entityType: "supply-order",
               entityId: supplyOrder.id,
@@ -1888,7 +2068,7 @@ function mockDbPlugin(): Plugin {
           if (supplyOrderEntityId && method === "PUT") {
             const db = await readDb();
             const draft = sanitizeSupplyOrderUpdateDraft(await readJsonBody(req));
-            if (!draft.supplierName || !draft.description || !Number.isFinite(draft.expectedTotal) || draft.expectedTotal <= 0) {
+            if (!draft.supplierName || !Number.isFinite(draft.expectedTotal) || draft.expectedTotal <= 0) {
               return sendJson(res, 400, { message: "Invalid supply order draft" });
             }
 
@@ -1901,12 +2081,22 @@ function mockDbPlugin(): Plugin {
             if (current.status !== "pending") {
               return sendJson(res, 409, { message: "Only pending supply orders can be updated" });
             }
+            let items: SupplyOrderItem[] = [];
+            try {
+              items = buildSupplyOrderItemsFromDraft(db, draft.items);
+            } catch (error) {
+              return sendJson(res, 400, { message: error instanceof Error ? error.message : "Invalid supply order item" });
+            }
+            if (!items.length && !draft.description) {
+              return sendJson(res, 400, { message: "Supply order requires items or description" });
+            }
 
             db.supplyOrders[index] = {
               ...current,
               supplierName: draft.supplierName,
               description: draft.description,
               expectedTotal: Math.trunc(draft.expectedTotal),
+              items,
             };
             await writeDb(db);
             return sendJson(res, 200, db.supplyOrders[index]);
@@ -1963,18 +2153,90 @@ function mockDbPlugin(): Plugin {
             }
 
             const remainingAmount = current.expectedTotal - actualTotal;
+            const receivedAt = new Date().toISOString();
+            let nextItems = current.items;
+
+            if (current.items.length > 0) {
+              const incomingByProductId = new Map(body.items.map((item) => [item.productId, item]));
+              const unknownReceiptItem = body.items.find((item) => !current.items.some((currentItem) => currentItem.productId === item.productId));
+              if (unknownReceiptItem) {
+                return sendJson(res, 400, { message: `Received item does not belong to order: ${unknownReceiptItem.productId}` });
+              }
+
+              for (const item of current.items) {
+                const draftItem = incomingByProductId.get(item.productId);
+                const missingQuantity = draftItem ? Math.max(0, Math.trunc(draftItem.missingQuantity)) : 0;
+                if (missingQuantity > item.quantity) {
+                  return sendJson(res, 400, { message: `Missing quantity exceeds expected quantity for ${item.productName}` });
+                }
+                const receivedQuantity = item.quantity - missingQuantity;
+                if (receivedQuantity > 0 && !draftItem?.expirationDate) {
+                  return sendJson(res, 400, { message: `Expiration date is required for ${item.productName}` });
+                }
+                if (receivedQuantity > 0) {
+                  const product = db.products.find((productNode) => productNode.id === item.productId);
+                  if (!product) {
+                    return sendJson(res, 400, { message: `Product not found while receiving order: ${item.productName}` });
+                  }
+                }
+              }
+
+              nextItems = current.items.map((item) => {
+                const draftItem = incomingByProductId.get(item.productId);
+                const missingQuantity = draftItem ? Math.max(0, Math.trunc(draftItem.missingQuantity)) : 0;
+                const receivedQuantity = Math.max(0, item.quantity - missingQuantity);
+                return {
+                  ...item,
+                  receivedQuantity,
+                  missingQuantity,
+                  expirationDate: receivedQuantity > 0 ? draftItem?.expirationDate : undefined,
+                };
+              });
+            }
 
             db.supplyOrders[index] = {
               ...current,
+              items: nextItems,
               status: "received",
               isExactAmount: body.isExactAmount,
               actualTotal,
               remainingAmount,
-              receivedAt: new Date().toISOString(),
+              receivedAt,
               receivedBy: body.receivedBy || "operator",
               invoiceImageUrl: body.invoiceImageUrl,
               receiveComment: body.receiveComment || undefined,
             };
+
+            if (nextItems.length > 0) {
+              for (const item of nextItems) {
+                const receivedQuantity = Math.max(0, Math.trunc(Number(item.receivedQuantity || 0)));
+                if (receivedQuantity <= 0) continue;
+
+                const product = db.products.find((node) => node.id === item.productId);
+                const fallbackCostPrice =
+                  Number.isFinite(Number(product?.costPrice)) && Number(product?.costPrice) > 0
+                    ? Math.trunc(Number(product?.costPrice))
+                    : Number.isFinite(Number(product?.price)) && Number(product?.price) > 0
+                      ? Math.trunc(Number(product?.price))
+                      : undefined;
+                const fallbackSalePrice =
+                  Number.isFinite(Number(product?.price)) && Number(product?.price) > 0 ? Math.trunc(Number(product?.price)) : undefined;
+
+                createStockEntryRecord(
+                  db,
+                  {
+                    productId: item.productId,
+                    expirationDate: item.expirationDate,
+                    quantity: receivedQuantity,
+                    description: `Ingreso automatico por recepcion del pedido ${current.id}.`,
+                    supplyOrderId: current.id,
+                    costPrice: fallbackCostPrice,
+                    salePrice: fallbackSalePrice,
+                  },
+                  { createdAt: receivedAt },
+                );
+              }
+            }
             markNotificationAsReceived(db, "supply-order", current.id);
             createDurationNotification(db, {
               type: "supply-received",
@@ -2423,7 +2685,7 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
   await ensureDbFile(targetStore);
   const raw = await readFile(targetStore.dbPath, "utf8");
   const parsed = JSON.parse(raw) as Partial<MockDb>;
-  return {
+  const db: MockDb = {
     products: Array.isArray(parsed.products)
       ? parsed.products
           .map((item) => normalizeProductRecord(item))
@@ -2545,10 +2807,25 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
         : [],
     ),
     supplyOrders: Array.isArray((parsed as { supplyOrders?: unknown[] }).supplyOrders)
-      ? ((parsed as { supplyOrders: SupplyOrder[] }).supplyOrders)
+      ? ((parsed as { supplyOrders: unknown[] }).supplyOrders)
+          .map((item) => normalizeSupplyOrderRecord(item))
+          .filter((item): item is SupplyOrder => !!item)
       : [],
     expenses: Array.isArray((parsed as { expenses?: unknown[] }).expenses)
       ? ((parsed as { expenses: Expense[] }).expenses)
+          .map((item) => normalizeExpenseRecord(item))
+          .filter((item): item is Expense => !!item)
+      : [],
+    feedbackEntries: Array.isArray((parsed as { feedbackEntries?: unknown[] }).feedbackEntries)
+      ? ((parsed as { feedbackEntries: unknown[] }).feedbackEntries)
+          .map((item) => normalizeFeedbackEntryRecord(item))
+          .filter((item): item is FeedbackEntry => !!item)
+      : [],
+    financialAccounts: Array.isArray((parsed as { financialAccounts?: unknown[] }).financialAccounts)
+      ? ((parsed as { financialAccounts: FinancialAccount[] }).financialAccounts)
+      : [],
+    financialTransactions: Array.isArray((parsed as { financialTransactions?: unknown[] }).financialTransactions)
+      ? ((parsed as { financialTransactions: FinancialTransaction[] }).financialTransactions)
       : [],
     licenses: Array.isArray((parsed as { licenses?: unknown[] }).licenses)
       ? ((parsed as { licenses: unknown[] }).licenses)
@@ -2576,11 +2853,14 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
     ),
     taxSettings: resolveTaxSettings((parsed as { taxSettings?: unknown }).taxSettings),
   };
+  syncFinancialData(db);
+  return db;
 }
 
 async function writeDb(db: MockDb, store?: DataStoreRecord) {
   const targetStore = store || (await getActiveDataStore());
   await ensureDbFile(targetStore);
+  syncFinancialData(db);
   await writeFile(targetStore.dbPath, JSON.stringify(db, null, 2) + "\n", "utf8");
 }
 
@@ -2597,9 +2877,622 @@ function buildClearedOperationalDb(db: MockDb): MockDb {
     workdays: [],
     supplyOrders: [],
     expenses: [],
+    feedbackEntries: [],
+    financialAccounts: [],
+    financialTransactions: [],
     licenses: [],
     notifications: [],
   };
+}
+
+function normalizeBarcodeValue(value: string | undefined) {
+  return String(value || "").trim();
+}
+
+function findProductByBarcode(db: MockDb, barcode: string, excludeProductId?: string) {
+  const normalized = normalizeBarcodeValue(barcode);
+  if (!normalized) return undefined;
+  return db.products.find(
+    (item) => normalizeBarcodeValue(item.barcode) === normalized && (!excludeProductId || item.id !== excludeProductId),
+  );
+}
+
+function buildSupplyOrderItemsFromDraft(
+  db: MockDb,
+  items: Array<{ productId: string; quantity: number }>,
+): SupplyOrderItem[] {
+  const mergedByProductId = new Map<string, SupplyOrderItem>();
+
+  for (const item of items) {
+    const productId = String(item.productId || "").trim();
+    const quantity = Math.trunc(Number(item.quantity));
+    if (!productId || !Number.isFinite(quantity) || quantity <= 0) {
+      throw new Error("Invalid supply order item");
+    }
+
+    const product = db.products.find((node) => node.id === productId);
+    if (!product) {
+      throw new Error(`Product not found for supply order item: ${productId}`);
+    }
+
+    const existing = mergedByProductId.get(productId);
+    const nextQuantity = (existing?.quantity || 0) + quantity;
+    mergedByProductId.set(productId, {
+      productId: product.id,
+      productName: product.name,
+      quantity: nextQuantity,
+      barcode: product.barcode,
+      category: product.category,
+      receivedQuantity: existing?.receivedQuantity,
+      missingQuantity: existing?.missingQuantity,
+      expirationDate: existing?.expirationDate,
+    });
+  }
+
+  return [...mergedByProductId.values()];
+}
+
+function createStockEntryRecord(
+  db: MockDb,
+  body: {
+    productId: string;
+    manufactureDate?: string;
+    expirationDate?: string;
+    quantity: number;
+    description?: string;
+    supplyOrderId?: string;
+    costPrice?: number;
+    salePrice?: number;
+  },
+  options?: { createdAt?: string },
+): StockEntry {
+  if (!body.productId) {
+    throw new Error("Invalid stock entry: productId");
+  }
+  if (!Number.isFinite(body.quantity) || body.quantity === 0) {
+    throw new Error("Invalid stock entry: quantity must be non-zero");
+  }
+
+  const product = db.products.find((item) => item.id === body.productId);
+  if (body.quantity > 0 && !body.expirationDate) {
+    throw new Error("Invalid stock entry: expirationDate required");
+  }
+  if (body.supplyOrderId) {
+    const supplyOrder = db.supplyOrders.find((item) => item.id === body.supplyOrderId);
+    if (!supplyOrder || supplyOrder.status !== "received") {
+      throw new Error("Invalid stock entry: supplyOrderId must be a received order");
+    }
+  }
+
+  const rawCostPrice = Number(body.costPrice);
+  const rawSalePrice = Number(body.salePrice);
+  const normalizedCostPrice = Number.isFinite(rawCostPrice) && rawCostPrice > 0 ? Math.trunc(rawCostPrice) : undefined;
+  const normalizedSalePrice = Number.isFinite(rawSalePrice) && rawSalePrice > 0 ? Math.trunc(rawSalePrice) : undefined;
+
+  const entry: StockEntry = {
+    id: buildEntityId("se"),
+    productId: body.productId,
+    manufactureDate: body.manufactureDate,
+    expirationDate: body.expirationDate,
+    quantity: Math.trunc(body.quantity),
+    description: body.description,
+    supplyOrderId: body.supplyOrderId,
+    costPrice: normalizedCostPrice,
+    salePrice: normalizedSalePrice,
+    createdAt: options?.createdAt || new Date().toISOString(),
+  };
+
+  db.stocks.unshift(entry);
+  if (product && entry.supplyOrderId) {
+    const productIndex = db.products.findIndex((item) => item.id === product.id);
+    if (productIndex >= 0) {
+      db.products[productIndex] = {
+        ...db.products[productIndex],
+        supplyOrderId: entry.supplyOrderId,
+      };
+    }
+  }
+
+  createDurationNotification(db, {
+    type: "stock-created",
+    title: `Ingreso de stock: ${product?.name || entry.productId}`,
+    description: `Se registro un ingreso de ${entry.quantity} unidades para ${product?.name || entry.productId}.`,
+    createdAt: entry.createdAt,
+    category: product?.category,
+    entityType: "stock",
+    entityId: entry.id,
+  });
+  if (entry.expirationDate) {
+    createExpirationNotification(db, {
+      type: "product-expiring",
+      title: `Producto por vencer: ${product?.name || entry.productId}`,
+      description: `Lote con vencimiento ${entry.expirationDate} para ${product?.name || entry.productId}.`,
+      expirationDate: entry.expirationDate,
+      category: product?.category,
+      entityType: "stock",
+      entityId: entry.id,
+    });
+  }
+  syncLowStockNotificationForProduct(db, entry.productId);
+  return entry;
+}
+
+function normalizeExpenseRecord(input: unknown): Expense | null {
+  const draft = input as Partial<Expense> & {
+    status?: unknown;
+    assignedAmount?: unknown;
+    confirmedAmount?: unknown;
+    confirmedBy?: unknown;
+    confirmedAt?: unknown;
+    confirmationComment?: unknown;
+    amountMode?: unknown;
+  };
+  const id = String(draft.id || "").trim();
+  const description = String(draft.description || "").trim();
+  const rawAmount = Math.trunc(Number(draft.amount));
+  const typeValue = String(draft.expenseType || "").trim().toLowerCase();
+  const expenseType = typeValue === "recurrent" || typeValue === "unexpected" ? (typeValue as ExpenseType) : undefined;
+  if (!id || !description || !expenseType || !Number.isFinite(rawAmount) || rawAmount <= 0) return null;
+
+  const statusValue = String(draft.status || "").trim().toLowerCase();
+  const status =
+    statusValue === "pending-confirmation" || statusValue === "confirmed"
+      ? (statusValue as ExpenseStatus)
+      : "confirmed";
+
+  const assignedAmountRaw = Math.trunc(Number(draft.assignedAmount));
+  const assignedAmount = Number.isFinite(assignedAmountRaw) && assignedAmountRaw > 0 ? assignedAmountRaw : rawAmount;
+  const confirmedAmountRaw = Math.trunc(Number(draft.confirmedAmount));
+  const confirmedAmount =
+    status === "confirmed"
+      ? Number.isFinite(confirmedAmountRaw) && confirmedAmountRaw > 0
+        ? confirmedAmountRaw
+        : rawAmount
+      : undefined;
+
+  const amountModeValue = String(draft.amountMode || "").trim().toLowerCase();
+  const amountMode =
+    amountModeValue === "assigned" || amountModeValue === "different"
+      ? (amountModeValue as ExpenseAmountMode)
+      : confirmedAmount && confirmedAmount !== assignedAmount
+        ? "different"
+        : "assigned";
+
+  return {
+    id,
+    description,
+    amount: status === "confirmed" ? confirmedAmount || rawAmount : assignedAmount,
+    assignedAmount,
+    expenseType,
+    invoiceImageUrl: String(draft.invoiceImageUrl || "").trim() || undefined,
+    unexpectedImageUrl: String(draft.unexpectedImageUrl || "").trim() || undefined,
+    createdBy: String(draft.createdBy || "").trim() || "operator",
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    status,
+    confirmedAmount,
+    confirmedBy:
+      status === "confirmed" ? String(draft.confirmedBy || "").trim() || String(draft.createdBy || "").trim() || "operator" : undefined,
+    confirmedAt: status === "confirmed" ? String(draft.confirmedAt || "").trim() || String(draft.createdAt || "").trim() || new Date().toISOString() : undefined,
+    confirmationComment: String(draft.confirmationComment || "").trim() || undefined,
+    amountMode,
+  };
+}
+
+function normalizeSupplyOrderItemRecord(input: unknown): SupplyOrderItem | null {
+  const draft = input as Partial<SupplyOrderItem> & {
+    quantity?: unknown;
+    receivedQuantity?: unknown;
+    missingQuantity?: unknown;
+  };
+  const productId = String(draft.productId || "").trim();
+  const productName = String(draft.productName || "").trim();
+  const quantity = Math.max(0, Math.trunc(Number(draft.quantity)));
+  if (!productId || !productName || quantity <= 0) return null;
+
+  const receivedQuantityRaw = Math.trunc(Number(draft.receivedQuantity));
+  const missingQuantityRaw = Math.trunc(Number(draft.missingQuantity));
+  const receivedQuantity =
+    Number.isFinite(receivedQuantityRaw) && receivedQuantityRaw >= 0
+      ? Math.min(quantity, receivedQuantityRaw)
+      : undefined;
+  const missingQuantity =
+    Number.isFinite(missingQuantityRaw) && missingQuantityRaw >= 0
+      ? Math.min(quantity, missingQuantityRaw)
+      : typeof receivedQuantity === "number"
+        ? Math.max(0, quantity - receivedQuantity)
+        : undefined;
+
+  return {
+    productId,
+    productName,
+    quantity,
+    barcode: String(draft.barcode || "").trim() || undefined,
+    category: normalizeCategory(draft.category),
+    receivedQuantity,
+    missingQuantity,
+    expirationDate: String(draft.expirationDate || "").trim() || undefined,
+  };
+}
+
+function normalizeSupplyOrderRecord(input: unknown): SupplyOrder | null {
+  const draft = input as Partial<SupplyOrder> & {
+    status?: unknown;
+    actualTotal?: unknown;
+    remainingAmount?: unknown;
+    items?: unknown[];
+  };
+  const id = String(draft.id || "").trim();
+  const supplierName = String(draft.supplierName || "").trim();
+  const expectedTotal = Math.trunc(Number(draft.expectedTotal));
+  if (!id || !supplierName || !Number.isFinite(expectedTotal) || expectedTotal <= 0) return null;
+
+  const statusRaw = String(draft.status || "").trim().toLowerCase();
+  const status = statusRaw === "received" ? "received" : "pending";
+
+  return {
+    id,
+    supplierName,
+    description: String(draft.description || "").trim(),
+    expectedTotal,
+    items: Array.isArray(draft.items)
+      ? draft.items.map((item) => normalizeSupplyOrderItemRecord(item)).filter((item): item is SupplyOrderItem => !!item)
+      : [],
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    createdBy: String(draft.createdBy || "").trim() || "operator",
+    status,
+    isExactAmount: typeof draft.isExactAmount === "boolean" ? draft.isExactAmount : undefined,
+    actualTotal:
+      status === "received" && Number.isFinite(Number(draft.actualTotal))
+        ? Math.max(0, Math.trunc(Number(draft.actualTotal)))
+        : undefined,
+    remainingAmount:
+      status === "received" && Number.isFinite(Number(draft.remainingAmount))
+        ? Math.max(0, Math.trunc(Number(draft.remainingAmount)))
+        : undefined,
+    receivedAt: status === "received" ? String(draft.receivedAt || "").trim() || undefined : undefined,
+    receivedBy: status === "received" ? String(draft.receivedBy || "").trim() || undefined : undefined,
+    invoiceImageUrl: status === "received" ? String(draft.invoiceImageUrl || "").trim() || undefined : undefined,
+    receiveComment: status === "received" ? String(draft.receiveComment || "").trim() || undefined : undefined,
+  };
+}
+
+function normalizeFeedbackEntryRecord(input: unknown): FeedbackEntry | null {
+  const draft = input as Partial<FeedbackEntry> & {
+    type?: unknown;
+    isAnonymous?: unknown;
+    createdByRole?: unknown;
+  };
+  const id = String(draft.id || "").trim();
+  const message = String(draft.message || "").trim();
+  const typeValue = String(draft.type || "").trim().toLowerCase();
+  const type = typeValue === "suggestion" || typeValue === "claim" ? (typeValue as FeedbackType) : undefined;
+  const createdByRoleValue = String(draft.createdByRole || "").trim().toLowerCase();
+  const createdByRole =
+    createdByRoleValue === "admin" || createdByRoleValue === "operator"
+      ? (createdByRoleValue as FeedbackAuthorRole)
+      : "operator";
+
+  if (!id || !message || !type) return null;
+
+  return {
+    id,
+    type,
+    message,
+    isAnonymous: Boolean(draft.isAnonymous),
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    createdBy: String(draft.createdBy || "").trim() || "operator",
+    createdByRole,
+  };
+}
+
+function getFinancialAccountDefinition(accountId: string) {
+  return FINANCIAL_ACCOUNT_DEFINITIONS.find((item) => item.id === accountId) || FINANCIAL_ACCOUNT_DEFINITIONS[0];
+}
+
+function sanitizeMoneyAmount(value: number | undefined) {
+  if (!Number.isFinite(value)) return 0;
+  return Math.max(0, Math.trunc(Number(value || 0)));
+}
+
+function buildFinancialTransactionRecord(
+  draft: Omit<FinancialTransaction, "accountCode" | "accountName">,
+): FinancialTransaction {
+  const account = getFinancialAccountDefinition(draft.accountId);
+  return {
+    ...draft,
+    amount: sanitizeMoneyAmount(draft.amount),
+    accountCode: account.code,
+    accountName: account.name,
+  };
+}
+
+function buildFinancialTransactions(db: MockDb): FinancialTransaction[] {
+  const productsById = new Map(db.products.map((item) => [item.id, item]));
+  const orderToWorkday = new Map<string, string>();
+  const transactions: FinancialTransaction[] = [];
+
+  for (const workday of db.workdays) {
+    for (const orderId of workday.orderIds) {
+      if (!orderToWorkday.has(orderId)) orderToWorkday.set(orderId, workday.id);
+    }
+  }
+
+  for (const order of db.orders) {
+    if (order.status !== "pagada") continue;
+    const workdayId = orderToWorkday.get(order.id);
+    const saleTotal = sanitizeMoneyAmount(order.total);
+    const tobaccoSubtotal = sanitizeMoneyAmount(
+      order.items.reduce((acc, item) => {
+        const product = productsById.get(item.productId);
+        if (product?.category !== "tabaqueria") return acc;
+        return acc + sanitizeMoneyAmount(item.unitPrice * item.quantity);
+      }, 0),
+    );
+
+    transactions.push(
+      buildFinancialTransactionRecord({
+        id: `txn-sale-income-${order.id}`,
+        createdAt: order.createdAt,
+        type: "sale-income",
+        title: `Venta pagada ${order.id}`,
+        description: `Venta registrada por ${order.operator} por ${saleTotal}.`,
+        amount: saleTotal,
+        direction: "in",
+        entryKind: "credit",
+        accountId: "account-gains",
+        referenceModule: "sale",
+        referenceId: order.id,
+        orderId: order.id,
+        workdayId,
+        paymentMethod: order.paymentMethod,
+        actor: order.operator,
+        countsInBalance: true,
+      }),
+    );
+
+    if (order.paymentMethod === "efectivo") {
+      transactions.push(
+        buildFinancialTransactionRecord({
+          id: `txn-sale-cash-${order.id}`,
+          createdAt: order.createdAt,
+          type: "sale-cash",
+          title: `Ingreso en caja por venta ${order.id}`,
+          description: `Venta en efectivo cobrada por ${order.operator}.`,
+          amount: saleTotal,
+          direction: "in",
+          entryKind: "credit",
+          accountId: "account-cash-local",
+          referenceModule: "sale",
+          referenceId: order.id,
+          orderId: order.id,
+          workdayId,
+          paymentMethod: order.paymentMethod,
+          actor: order.operator,
+          countsInBalance: true,
+        }),
+      );
+    }
+
+    if (tobaccoSubtotal > 0) {
+      transactions.push(
+        buildFinancialTransactionRecord({
+          id: `txn-sale-tobacco-${order.id}`,
+          createdAt: order.createdAt,
+          type: "sale-tobacco",
+          title: `Venta tabaqueria ${order.id}`,
+          description: `Subtotal de productos de tabaqueria dentro de la venta ${order.id}.`,
+          amount: tobaccoSubtotal,
+          direction: "in",
+          entryKind: "credit",
+          accountId: "account-tobacco",
+          referenceModule: "sale",
+          referenceId: order.id,
+          orderId: order.id,
+          workdayId,
+          paymentMethod: order.paymentMethod,
+          actor: order.operator,
+          countsInBalance: true,
+        }),
+      );
+    }
+  }
+
+  for (const expense of db.expenses) {
+    if (expense.status !== "confirmed") continue;
+    const confirmedAmount = sanitizeMoneyAmount(expense.confirmedAmount || expense.amount);
+    const actor = expense.confirmedBy || expense.createdBy;
+    const createdAt = expense.confirmedAt || expense.createdAt;
+
+    transactions.push(
+      buildFinancialTransactionRecord({
+        id: `txn-expense-payment-${expense.id}`,
+        createdAt,
+        type: "expense-payment",
+        title: `Gasto confirmado ${expense.id}`,
+        description: expense.description,
+        amount: confirmedAmount,
+        direction: "out",
+        entryKind: "debit",
+        accountId: "account-expenses",
+        referenceModule: "expense",
+        referenceId: expense.id,
+        expenseId: expense.id,
+        actor,
+        countsInBalance: true,
+      }),
+    );
+
+    transactions.push(
+      buildFinancialTransactionRecord({
+        id: `txn-expense-cash-${expense.id}`,
+        createdAt,
+        type: "expense-cash",
+        title: `Salida de caja por gasto ${expense.id}`,
+        description: `Pago asociado al gasto ${expense.description}.`,
+        amount: confirmedAmount,
+        direction: "out",
+        entryKind: "debit",
+        accountId: "account-cash-local",
+        referenceModule: "expense",
+        referenceId: expense.id,
+        expenseId: expense.id,
+        actor,
+        countsInBalance: true,
+      }),
+    );
+  }
+
+  for (const order of db.supplyOrders) {
+    if (order.status !== "received") continue;
+    const actualTotal = sanitizeMoneyAmount(order.actualTotal);
+    const receivedAt = order.receivedAt || order.createdAt;
+
+    if (actualTotal > 0) {
+      transactions.push(
+        buildFinancialTransactionRecord({
+          id: `txn-supply-payment-${order.id}`,
+          createdAt: receivedAt,
+          type: "supply-payment",
+          title: `Pago de mercaderia ${order.id}`,
+          description: `${order.supplierName} - ${order.description}`,
+          amount: actualTotal,
+          direction: "out",
+          entryKind: "debit",
+          accountId: "account-expenses",
+          referenceModule: "supply",
+          referenceId: order.id,
+          supplyOrderId: order.id,
+          actor: order.receivedBy || order.createdBy,
+          countsInBalance: true,
+        }),
+      );
+
+      transactions.push(
+        buildFinancialTransactionRecord({
+          id: `txn-supply-cash-${order.id}`,
+          createdAt: receivedAt,
+          type: "supply-cash",
+          title: `Salida de caja por mercaderia ${order.id}`,
+          description: `Pago en recepcion de mercaderia para ${order.supplierName}.`,
+          amount: actualTotal,
+          direction: "out",
+          entryKind: "debit",
+          accountId: "account-cash-local",
+          referenceModule: "supply",
+          referenceId: order.id,
+          supplyOrderId: order.id,
+          actor: order.receivedBy || order.createdBy,
+          countsInBalance: true,
+        }),
+      );
+    }
+
+    const remainingAmount = sanitizeMoneyAmount(order.remainingAmount);
+    if (remainingAmount > 0) {
+      transactions.push(
+        buildFinancialTransactionRecord({
+          id: `txn-supply-return-${order.id}`,
+          createdAt: receivedAt,
+          type: "supply-return",
+          title: `Vuelto por mercaderia ${order.id}`,
+          description: `Monto devuelto tras la recepcion de ${order.supplierName}.`,
+          amount: remainingAmount,
+          direction: "in",
+          entryKind: "credit",
+          accountId: "account-cash-local",
+          referenceModule: "supply",
+          referenceId: order.id,
+          supplyOrderId: order.id,
+          actor: order.receivedBy || order.createdBy,
+          countsInBalance: true,
+        }),
+      );
+    }
+  }
+
+  for (const workday of db.workdays) {
+    const openingAmount = sanitizeMoneyAmount(workday.openingDeclaredAmount);
+    if (openingAmount > 0) {
+      transactions.push(
+        buildFinancialTransactionRecord({
+          id: `txn-cash-opening-${workday.id}`,
+          createdAt: workday.startedAt,
+          type: "cash-opening",
+          title: `Apertura de caja ${workday.id}`,
+          description: `Apertura declarada por ${workday.operator}.`,
+          amount: openingAmount,
+          direction: "in",
+          entryKind: "credit",
+          accountId: "account-cash-local",
+          referenceModule: "cash",
+          referenceId: workday.id,
+          workdayId: workday.id,
+          actor: workday.operator,
+          countsInBalance: true,
+        }),
+      );
+    }
+
+    const closingAmount = sanitizeMoneyAmount(workday.closeSummary?.declaredClosingCash);
+    const closedAt = workday.endedAt || workday.closeRequestedAt;
+    if (closingAmount > 0 && closedAt) {
+      transactions.push(
+        buildFinancialTransactionRecord({
+          id: `txn-cash-close-${workday.id}`,
+          createdAt: closedAt,
+          type: "cash-close",
+          title: `Cierre de caja ${workday.id}`,
+          description: `Se dejo ${closingAmount} al cerrar la jornada ${workday.id}.`,
+          amount: closingAmount,
+          direction: "out",
+          entryKind: "debit",
+          accountId: "account-cash-local",
+          referenceModule: "cash",
+          referenceId: workday.id,
+          workdayId: workday.id,
+          actor: workday.operator,
+          countsInBalance: false,
+        }),
+      );
+    }
+  }
+
+  return transactions.sort((a, b) => {
+    const timeDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    if (timeDiff !== 0) return timeDiff;
+    return a.id.localeCompare(b.id);
+  });
+}
+
+function syncFinancialData(db: MockDb) {
+  db.expenses = db.expenses.map((item) => normalizeExpenseRecord(item)).filter((item): item is Expense => !!item);
+
+  const previousAccounts = new Map(db.financialAccounts.map((item) => [item.id, item]));
+  const transactions = buildFinancialTransactions(db);
+  const balances = new Map<string, number>();
+  const now = new Date().toISOString();
+
+  for (const definition of FINANCIAL_ACCOUNT_DEFINITIONS) {
+    balances.set(definition.id, 0);
+  }
+
+  for (const transaction of transactions) {
+    if (!transaction.countsInBalance) continue;
+    const current = balances.get(transaction.accountId) || 0;
+    const signedAmount =
+      transaction.direction === "in"
+        ? sanitizeMoneyAmount(transaction.amount)
+        : -sanitizeMoneyAmount(transaction.amount);
+    balances.set(transaction.accountId, current + signedAmount);
+  }
+
+  db.financialAccounts = FINANCIAL_ACCOUNT_DEFINITIONS.map((definition) => ({
+    ...definition,
+    currentBalance: Math.trunc(balances.get(definition.id) || 0),
+    createdAt: previousAccounts.get(definition.id)?.createdAt || now,
+    updatedAt: now,
+  }));
+  db.financialTransactions = transactions;
 }
 
 function normalizeCategory(value: unknown): Product["category"] | undefined {
@@ -3664,315 +4557,200 @@ function generateNotificationTestCases(db: MockDb): number {
   const now = Date.now();
   const iso = (offsetDays: number) => new Date(now + offsetDays * ONE_DAY_MS).toISOString();
 
-  const upsertProduct = (id: string, name: string, category: Product["category"]) => {
-    const existingIndex = db.products.findIndex((item) => item.id === id);
-    const node: Product = {
-      id,
-      name,
-      price: 2500,
-      createdAt: iso(-1),
-      category,
-    };
+  const upsertProduct = (product: Product) => {
+    const existingIndex = db.products.findIndex((item) => item.id === product.id);
     if (existingIndex < 0) {
-      db.products.unshift(node);
-      return node;
+      db.products.unshift(product);
+      return product;
     }
-    db.products[existingIndex] = { ...db.products[existingIndex], ...node };
+    db.products[existingIndex] = { ...db.products[existingIndex], ...product };
     return db.products[existingIndex];
   };
 
-  const upsertLicense = (license: LicenseRecord) => {
-    const index = db.licenses.findIndex((item) => item.id === license.id);
-    if (index < 0) db.licenses.unshift(license);
-    else db.licenses[index] = license;
+  const upsertStockEntry = (entry: StockEntry) => {
+    const existingIndex = db.stocks.findIndex((item) => item.id === entry.id);
+    if (existingIndex < 0) {
+      db.stocks.unshift(entry);
+      return entry;
+    }
+    db.stocks[existingIndex] = { ...db.stocks[existingIndex], ...entry };
+    return db.stocks[existingIndex];
   };
 
-  const coca = upsertProduct("ptccoca", "Coca-Cola Caso Test", "bebida");
-  const pancho = upsertProduct("ptcpancho", "Pancho Caso Test", "perecedero");
-  const rapido = upsertProduct("ptcrapido", "Producto Rotacion Alta", "bebida");
+  const upsertExpense = (expense: Expense) => {
+    const existingIndex = db.expenses.findIndex((item) => item.id === expense.id);
+    if (existingIndex < 0) {
+      db.expenses.unshift(expense);
+      return expense;
+    }
+    db.expenses[existingIndex] = { ...db.expenses[existingIndex], ...expense };
+    return db.expenses[existingIndex];
+  };
 
-  db.stockThresholdSettings.categoryThresholds.bebida = Math.max(10, db.stockThresholdSettings.categoryThresholds.bebida || 10);
-  const overrideIndex = db.stockThresholdSettings.productThresholds.findIndex((item) => item.productId === coca.id);
-  if (overrideIndex < 0) {
-    db.stockThresholdSettings.productThresholds.push({ productId: coca.id, minUnits: 30 });
+  const upsertSupplyOrder = (order: SupplyOrder) => {
+    const existingIndex = db.supplyOrders.findIndex((item) => item.id === order.id);
+    if (existingIndex < 0) {
+      db.supplyOrders.unshift(order);
+      return order;
+    }
+    db.supplyOrders[existingIndex] = { ...db.supplyOrders[existingIndex], ...order };
+    return db.supplyOrders[existingIndex];
+  };
+
+  const lowStockProduct = upsertProduct({
+    id: "ptc-low-stock",
+    name: "Yerba Playadito 500g",
+    price: 3200,
+    costPrice: 2450,
+    createdAt: iso(-5),
+    barcode: "7790001000001",
+    category: "vivere",
+  });
+
+  const expiringProduct = upsertProduct({
+    id: "ptc-expiring",
+    name: "Sandwich frio listo para llevar",
+    price: 4800,
+    costPrice: 3400,
+    createdAt: iso(-3),
+    barcode: "7790001000002",
+    category: "perecedero",
+  });
+
+  const thresholdIndex = db.stockThresholdSettings.productThresholds.findIndex((item) => item.productId === lowStockProduct.id);
+  if (thresholdIndex < 0) {
+    db.stockThresholdSettings.productThresholds.push({ productId: lowStockProduct.id, minUnits: 10 });
   } else {
-    db.stockThresholdSettings.productThresholds[overrideIndex] = { productId: coca.id, minUnits: 30 };
+    db.stockThresholdSettings.productThresholds[thresholdIndex] = { productId: lowStockProduct.id, minUnits: 10 };
   }
 
-  const ensureStock = (id: string, quantity: number, expirationDate?: string) => {
-    const entry: StockEntry = {
-      id: `setc${id}${Math.abs(quantity)}`,
-      productId: id,
-      quantity,
-      createdAt: iso(-1),
-      expirationDate,
-    };
-    const existing = db.stocks.findIndex((item) => item.id === entry.id);
-    if (existing < 0) db.stocks.unshift(entry);
-    else db.stocks[existing] = entry;
-  };
+  upsertStockEntry({
+    id: "setc-low-stock-demo",
+    productId: lowStockProduct.id,
+    quantity: 4,
+    createdAt: iso(-1),
+    expirationDate: iso(40),
+    description: "Carga inicial caso stock bajo",
+  });
 
-  ensureStock(coca.id, 12, iso(40));
-  ensureStock(pancho.id, 5, iso(18));
-  ensureStock(rapido.id, 8, iso(28));
+  const expiringStock = upsertStockEntry({
+    id: "setc-expiring-demo",
+    productId: expiringProduct.id,
+    quantity: 18,
+    createdAt: iso(-1),
+    expirationDate: iso(2),
+    description: "Carga inicial caso producto por vencer",
+  });
 
-  const requiredLicense: LicenseRecord = {
-    id: "lctcrequired",
-    name: "Manipulacion de alimentos (caso pendiente)",
-    description: "Caso de prueba: permiso requerido para categoria vive res/panchos.",
-    category: "vivere",
-    issueDate: undefined,
-    expirationDate: undefined,
-    durationDays: undefined,
-    contactEmail: "permiso@test.local",
-    contactPhone: "1111-1111",
-    sourceAddress: "Oficina municipal - caso test",
-    status: "pending-renewal",
-    createdAt: iso(-10),
-    updatedAt: iso(-1),
-    issuances: [],
-  };
-  upsertLicense(requiredLicense);
+  const fumigationExpense = upsertExpense({
+    id: "extc-fumigacion",
+    description: "Fumigacion mensual aprobada del local",
+    amount: 18500,
+    assignedAmount: 18500,
+    expenseType: "recurrent",
+    createdBy: "admin",
+    createdAt: iso(-1),
+    status: "confirmed",
+    confirmedAmount: 18500,
+    confirmedBy: "admin",
+    confirmedAt: iso(-1),
+    amountMode: "assigned",
+  });
 
-  const expiringLicense: LicenseRecord = {
-    id: "lctcexpiring",
-    name: "Bromatologia (caso por vencer)",
-    description: "Caso de prueba: licencia con vencimiento proximo.",
-    category: "perecedero",
-    issueDate: iso(-300),
-    expirationDate: iso(14),
-    durationDays: 314,
-    contactEmail: "bromatologia@test.local",
-    contactPhone: "2222-2222",
-    sourceAddress: "Centro sanitario - caso test",
-    status: "active",
-    createdAt: iso(-300),
-    updatedAt: iso(-1),
-    issuances: [],
-  };
-  upsertLicense(expiringLicense);
+  const maintenanceExpense = upsertExpense({
+    id: "extc-gasto-programado",
+    description: "Pago programado de mantenimiento electrico",
+    amount: 22400,
+    assignedAmount: 22400,
+    expenseType: "recurrent",
+    createdBy: "admin",
+    createdAt: iso(-1),
+    status: "confirmed",
+    confirmedAmount: 22400,
+    confirmedBy: "admin",
+    confirmedAt: iso(-1),
+    amountMode: "assigned",
+  });
 
-  countCreated(() => ensureLicenseNotifications(db, requiredLicense));
-  countCreated(() => ensureLicenseNotifications(db, expiringLicense));
-  countCreated(() => syncLowStockNotificationForProduct(db, coca.id));
-  countCreated(() => syncLowStockNotificationForProduct(db, rapido.id));
+  const pendingSupplyOrder = upsertSupplyOrder({
+    id: "sotc-pending-receive",
+    supplierName: "Distribuidora Centro",
+    description: "Pedido aprobado listo para recibir bebidas y snacks",
+    expectedTotal: 72000,
+    items: [
+      {
+        productId: lowStockProduct.id,
+        productName: lowStockProduct.name,
+        quantity: 16,
+        barcode: lowStockProduct.barcode,
+        category: lowStockProduct.category,
+      },
+      {
+        productId: expiringProduct.id,
+        productName: expiringProduct.name,
+        quantity: 12,
+        barcode: expiringProduct.barcode,
+        category: expiringProduct.category,
+      },
+    ],
+    createdAt: iso(-1),
+    createdBy: "admin",
+    status: "pending",
+  });
+
+  countCreated(() => syncLowStockNotificationForProduct(db, lowStockProduct.id));
   countCreated(() =>
     createExpirationNotification(db, {
       type: "product-expiring",
-      title: `Producto por vencer: ${pancho.name}`,
-      description: `Caso de prueba: ${pancho.name} vence en menos de 3 semanas.`,
-      expirationDate: iso(18),
-      category: pancho.category,
+      title: `Producto por vencer: ${expiringProduct.name}`,
+      description: `Lote con vencimiento ${expiringStock.expirationDate} para ${expiringProduct.name}.`,
+      expirationDate: expiringStock.expirationDate || iso(2),
+      category: expiringProduct.category,
       entityType: "stock",
-      entityId: `setc${pancho.id}5`,
+      entityId: expiringStock.id,
     }),
   );
-
   countCreated(() =>
     createDurationNotification(db, {
       type: "expense-created",
-      title: "Caso prueba gasto",
-      description: "Se registro gasto operativo de prueba.",
+      title: "Gasto programado: fumigacion",
+      description: `${fumigationExpense.description} (${fumigationExpense.amount}).`,
+      createdAt: fumigationExpense.createdAt,
       entityType: "expense",
-      entityId: "extc1",
+      entityId: fumigationExpense.id,
     }),
   );
   countCreated(() =>
     createDurationNotification(db, {
-      type: "sale-created",
-      title: "Caso prueba venta",
-      description: "Se registro venta diaria de prueba.",
-      entityType: "order",
-      entityId: "ortc1",
+      type: "expense-created",
+      title: "Gasto programado: mantenimiento",
+      description: `${maintenanceExpense.description} (${maintenanceExpense.amount}).`,
+      createdAt: maintenanceExpense.createdAt,
+      entityType: "expense",
+      entityId: maintenanceExpense.id,
     }),
   );
   countCreated(() =>
     createDurationNotification(db, {
       type: "supply-requested",
-      title: "Caso prueba solicitud a proveedor",
-      description: "Se solicito mercancia al proveedor de prueba.",
+      title: `Pedido a proveedor: ${pendingSupplyOrder.supplierName}`,
+      description: `Se genero pedido ${pendingSupplyOrder.id} por ${pendingSupplyOrder.expectedTotal}.`,
+      createdAt: pendingSupplyOrder.createdAt,
       entityType: "supply-order",
-      entityId: "sotc1",
+      entityId: pendingSupplyOrder.id,
     }),
   );
   countCreated(() =>
     createNotificationRecord(db, {
       type: "supply-pending-receive",
-      title: "Caso prueba pendiente recepcion proveedor",
-      description: "Pedido de prueba pendiente hasta recibir mercancia.",
+      title: `Pendiente recepcion: ${pendingSupplyOrder.supplierName}`,
+      description: `Pedido ${pendingSupplyOrder.id} pendiente de recepcion.`,
       isFixed: true,
       requiresAction: true,
       actionLabel: "Registrar recepcion",
+      status: "active",
       entityType: "supply-order",
-      entityId: "sotc1",
-      status: "active",
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "supply-approved",
-      title: "Caso prueba solicitud aprobada",
-      description: "Solicitud de mercancia aprobada por administrador.",
-      entityType: "operation-request",
-      entityId: "rqtcapproved",
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "supply-received",
-      title: "Caso prueba mercancia recibida",
-      description: "Mercancia de prueba recibida correctamente.",
-      entityType: "supply-order",
-      entityId: "sotc1",
-    }),
-  );
-
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "cash-opened",
-      title: "Caso prueba caja abierta",
-      description: "Apertura de caja de prueba.",
-      entityType: "workday",
-      entityId: "wdtcopen",
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "cash-closed",
-      title: "Caso prueba caja cerrada",
-      description: "Cierre de caja de prueba.",
-      entityType: "workday",
-      entityId: "wdtcclose",
-    }),
-  );
-
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "user-created",
-      title: "Caso prueba usuario creado",
-      description: "Usuario de prueba creado.",
-      entityType: "user",
-      entityId: "utccreated",
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "user-updated",
-      title: "Caso prueba usuario modificado",
-      description: "Usuario de prueba modificado.",
-      entityType: "user",
-      entityId: "utcupdated",
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "user-deleted",
-      title: "Caso prueba usuario eliminado",
-      description: "Usuario de prueba eliminado.",
-      entityType: "user",
-      entityId: "utcdeleted",
-    }),
-  );
-
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "price-changed",
-      title: `Caso prueba precio modificado: ${coca.name}`,
-      description: "Cambio de precio de prueba.",
-      category: coca.category,
-      entityType: "product",
-      entityId: coca.id,
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "product-created",
-      title: "Caso prueba producto creado",
-      description: "Alta de producto de prueba.",
-      category: rapido.category,
-      entityType: "product",
-      entityId: rapido.id,
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "stock-created",
-      title: "Caso prueba ingreso stock",
-      description: "Ingreso de stock de prueba.",
-      category: rapido.category,
-      entityType: "stock",
-      entityId: "setcstockcreated",
-    }),
-  );
-
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "operation-request-merchandise",
-      title: "Caso prueba solicitud operador mercancia",
-      description: "Operador solicita mercancia de prueba.",
-      requiresAction: true,
-      actionLabel: "Revisar solicitud",
-      entityType: "operation-request",
-      entityId: "rqtcmerch",
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "operation-request-permissions",
-      title: "Caso prueba solicitud operador permisos",
-      description: "Operador solicita permiso de prueba.",
-      requiresAction: true,
-      actionLabel: "Revisar solicitud",
-      entityType: "operation-request",
-      entityId: "rqtcperm",
-    }),
-  );
-  countCreated(() =>
-    createDurationNotification(db, {
-      type: "operation-request-reviewed",
-      title: "Caso prueba solicitud revisada",
-      description: "Solicitud de prueba revisada por administrador.",
-      entityType: "operation-request",
-      entityId: "rqtcreviewed",
-    }),
-  );
-
-  countCreated(() =>
-    createNotificationRecord(db, {
-      type: "manual-fixed",
-      title: "Caso prueba manual fija",
-      description: "Notificacion fija manual de prueba.",
-      isFixed: true,
-      requiresAction: false,
-      status: "active",
-      entityType: "manual",
-      entityId: "manualfixedtc",
-    }),
-  );
-  countCreated(() =>
-    createNotificationRecord(db, {
-      type: "manual-action",
-      title: "Caso prueba manual accion",
-      description: "Notificacion manual con accion de prueba.",
-      isFixed: false,
-      requiresAction: true,
-      actionLabel: "Resolver accion",
-      status: "active",
-      entityType: "manual",
-      entityId: "manualactiontc",
-    }),
-  );
-  countCreated(() =>
-    createNotificationRecord(db, {
-      type: "manual-due",
-      title: "Caso prueba manual vencimiento",
-      description: "Notificacion manual con fecha de vencimiento de prueba.",
-      dueAt: iso(5),
-      isFixed: false,
-      requiresAction: false,
-      status: "active",
-      entityType: "manual",
-      entityId: "manualduetc",
+      entityId: pendingSupplyOrder.id,
     }),
   );
 
@@ -4195,6 +4973,63 @@ function sanitizeExpenseDraft(input: unknown): {
   };
 }
 
+function sanitizeFeedbackDraft(input: unknown): {
+  type?: FeedbackType;
+  message: string;
+  isAnonymous: boolean;
+  createdBy: string;
+  createdByRole?: FeedbackAuthorRole;
+} {
+  const obj = (input || {}) as {
+    type?: unknown;
+    message?: unknown;
+    isAnonymous?: unknown;
+    createdBy?: unknown;
+    createdByRole?: unknown;
+  };
+  const typeValue = String(obj.type || "").trim().toLowerCase();
+  const type = typeValue === "suggestion" || typeValue === "claim" ? (typeValue as FeedbackType) : undefined;
+  const createdByRoleValue = String(obj.createdByRole || "").trim().toLowerCase();
+  const createdByRole =
+    createdByRoleValue === "admin" || createdByRoleValue === "operator"
+      ? (createdByRoleValue as FeedbackAuthorRole)
+      : undefined;
+
+  return {
+    type,
+    message: String(obj.message || "").trim(),
+    isAnonymous: Boolean(obj.isAnonymous),
+    createdBy: String(obj.createdBy || "").trim(),
+    createdByRole,
+  };
+}
+
+function sanitizeExpenseConfirmDraft(input: unknown): {
+  confirmedAmount: number;
+  amountMode?: ExpenseAmountMode;
+  confirmationComment?: string;
+  confirmedBy: string;
+} {
+  const obj = (input || {}) as {
+    confirmedAmount?: unknown;
+    amountMode?: unknown;
+    confirmationComment?: unknown;
+    confirmedBy?: unknown;
+  };
+  const amountModeValue = String(obj.amountMode || "").trim().toLowerCase();
+  const amountMode =
+    amountModeValue === "assigned" || amountModeValue === "different"
+      ? (amountModeValue as ExpenseAmountMode)
+      : undefined;
+
+  return {
+    confirmedAmount: Number(obj.confirmedAmount),
+    amountMode,
+    confirmationComment: String(obj.confirmationComment || "").trim() || undefined,
+    confirmedBy: String(obj.confirmedBy || "").trim(),
+  };
+}
+
 function sanitizeProductPriceDraft(input: unknown): {
   productId: string;
   newPrice: number;
@@ -4393,6 +5228,12 @@ function extractUserId(pathname: string): string | null {
 function extractOrderId(pathname: string): string | null {
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 3 && parts[0] === "orders" && parts[2] === "status") return parts[1];
+  return null;
+}
+
+function extractExpenseConfirmId(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 3 && parts[0] === "expenses" && parts[2] === "confirm") return parts[1];
   return null;
 }
 
@@ -4828,12 +5669,14 @@ function sanitizeSupplyOrderDraft(input: unknown): {
   description: string;
   expectedTotal: number;
   createdBy: string;
+  items: Array<{ productId: string; quantity: number }>;
 } {
   const obj = (input || {}) as {
     supplierName?: unknown;
     description?: unknown;
     expectedTotal?: unknown;
     createdBy?: unknown;
+    items?: unknown[];
   };
 
   return {
@@ -4841,6 +5684,7 @@ function sanitizeSupplyOrderDraft(input: unknown): {
     description: String(obj.description || "").trim(),
     expectedTotal: Number(obj.expectedTotal),
     createdBy: String(obj.createdBy || "").trim(),
+    items: sanitizeSupplyOrderItemsDraft(obj.items),
   };
 }
 
@@ -4848,17 +5692,20 @@ function sanitizeSupplyOrderUpdateDraft(input: unknown): {
   supplierName: string;
   description: string;
   expectedTotal: number;
+  items: Array<{ productId: string; quantity: number }>;
 } {
   const obj = (input || {}) as {
     supplierName?: unknown;
     description?: unknown;
     expectedTotal?: unknown;
+    items?: unknown[];
   };
 
   return {
     supplierName: String(obj.supplierName || "").trim(),
     description: String(obj.description || "").trim(),
     expectedTotal: Number(obj.expectedTotal),
+    items: sanitizeSupplyOrderItemsDraft(obj.items),
   };
 }
 
@@ -4868,6 +5715,7 @@ function sanitizeSupplyOrderReceiveDraft(input: unknown): {
   receivedBy: string;
   invoiceImageUrl?: string;
   receiveComment?: string;
+  items: Array<{ productId: string; missingQuantity: number; expirationDate?: string }>;
 } {
   const obj = (input || {}) as {
     actualTotal?: unknown;
@@ -4875,6 +5723,7 @@ function sanitizeSupplyOrderReceiveDraft(input: unknown): {
     receivedBy?: unknown;
     invoiceImageUrl?: unknown;
     receiveComment?: unknown;
+    items?: unknown[];
   };
   const invoiceImageUrl = String(obj.invoiceImageUrl || "").trim() || undefined;
   const receiveComment = String(obj.receiveComment || "").trim() || undefined;
@@ -4884,7 +5733,40 @@ function sanitizeSupplyOrderReceiveDraft(input: unknown): {
     receivedBy: String(obj.receivedBy || "").trim(),
     invoiceImageUrl,
     receiveComment,
+    items: sanitizeSupplyOrderReceiptItemsDraft(obj.items),
   };
+}
+
+function sanitizeSupplyOrderItemsDraft(input: unknown): Array<{ productId: string; quantity: number }> {
+  if (!Array.isArray(input)) return [];
+  return input
+    .map((item) => {
+      const node = (item || {}) as { productId?: unknown; quantity?: unknown };
+      const productId = String(node.productId || "").trim();
+      const quantity = Math.trunc(Number(node.quantity));
+      if (!productId || !Number.isFinite(quantity) || quantity <= 0) return null;
+      return { productId, quantity };
+    })
+    .filter((item): item is { productId: string; quantity: number } => !!item);
+}
+
+function sanitizeSupplyOrderReceiptItemsDraft(
+  input: unknown,
+): Array<{ productId: string; missingQuantity: number; expirationDate?: string }> {
+  if (!Array.isArray(input)) return [];
+  const result: Array<{ productId: string; missingQuantity: number; expirationDate?: string }> = [];
+  for (const item of input) {
+    const node = (item || {}) as { productId?: unknown; missingQuantity?: unknown; expirationDate?: unknown };
+    const productId = String(node.productId || "").trim();
+    const missingQuantity = Math.max(0, Math.trunc(Number(node.missingQuantity)));
+    if (!productId || !Number.isFinite(missingQuantity)) continue;
+    result.push({
+      productId,
+      missingQuantity,
+      expirationDate: String(node.expirationDate || "").trim() || undefined,
+    });
+  }
+  return result;
 }
 
 function readJsonBody(req: IncomingMessage): Promise<unknown> {
