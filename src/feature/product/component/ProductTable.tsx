@@ -43,6 +43,7 @@ export default function ProductTable({
   maxHeight = "min(65vh, 640px)",
   dateLabel = "Creación",
   showExistence = false,
+  existenceLabel = "Existencia",
   showDateColumn = true,
   existenceAlign = "left",
   showCategory = false,
@@ -65,6 +66,7 @@ export default function ProductTable({
   maxHeight?: string;
   dateLabel?: string;
   showExistence?: boolean;
+  existenceLabel?: string;
   showDateColumn?: boolean;
   existenceAlign?: "left" | "center" | "right";
   showCategory?: boolean;
@@ -276,7 +278,7 @@ export default function ProductTable({
 
         {showExistence ? (
           <div style={headerCellStyle}>
-            {renderHeaderCell("Existencia", "existencia", existenceAlign)}
+            {renderHeaderCell(existenceLabel, "existencia", existenceAlign)}
             {filters && onFilterChange ? (
               <div style={filterInputWrapStyle}>
                 <input

@@ -8,7 +8,7 @@ import {
   type ProductCategory,
   type ProductSortKey,
 } from "../model/product.types";
-import { generateAutoBarcode } from "../model/product.barcode";
+import { findBarcodeConflict, generateUniqueAutoBarcode, normalizeBarcodeInput } from "../model/product.barcode";
 import {
   createProductApi,
   deleteProductApi,
@@ -23,7 +23,7 @@ import {
 import { useAuth } from "../../../app/provider/useAuth";
 import { uploadImageFromFile } from "../../../shared/image/image.service";
 import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
-import { matchesPriceFilter } from "../../../shared/product/product-filter";
+import { matchesNumericContainsFilter, matchesPriceFilter } from "../../../shared/product/product-filter";
 import { normalizeForSearch } from "../../../shared/search/search";
 
 export function useProductCrudViewModel() {
@@ -38,6 +38,7 @@ export function useProductCrudViewModel() {
   const [nameFilter, setNameFilter] = useState("");
   const [barcodeFilter, setBarcodeFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
+  const [existenciaFilter, setExistenciaFilter] = useState("");
   const [createdAtFilter, setCreatedAtFilter] = useState("");
   const [sortKey, setSortKey] = useState<ProductSortKey>("createdAt");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
@@ -89,6 +90,7 @@ export function useProductCrudViewModel() {
   const filteredProducts = useMemo(() => {
     const q = normalizeForSearch(nameFilter);
     const p = (priceFilter || "").replace(/\D/g, "");
+    const e = (existenciaFilter || "").replace(/\D/g, "");
     let list = products;
 
     if (q) {
@@ -104,6 +106,10 @@ export function useProductCrudViewModel() {
       list = list.filter((item) => matchesPriceFilter(item.price, p));
     }
 
+    if (e) {
+      list = list.filter((item) => matchesNumericContainsFilter(Number(item.existencia || 0), e));
+    }
+
     if (createdAtFilter) {
       list = list.filter((item) => item.createdAt.slice(0, 10) === createdAtFilter);
     }
@@ -117,7 +123,7 @@ export function useProductCrudViewModel() {
       if (sortKey === "existencia") return (Number(a.existencia || 0) - Number(b.existencia || 0)) * dir;
       return (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) * dir;
     });
-  }, [products, nameFilter, barcodeFilter, priceFilter, createdAtFilter, sortKey, sortDir]);
+  }, [products, nameFilter, barcodeFilter, priceFilter, existenciaFilter, createdAtFilter, sortKey, sortDir]);
 
   const activeCategoryMarginPercent = useMemo(
     () => resolveEffectiveMarginPercent(marginSettings, selectedProduct?.category || category, undefined),
@@ -218,6 +224,7 @@ export function useProductCrudViewModel() {
     if (key === "name") setNameFilter(value);
     if (key === "barcode") setBarcodeFilter(value);
     if (key === "price") setPriceFilter(value);
+    if (key === "existencia") setExistenciaFilter(value);
     if (key === "createdAt") setCreatedAtFilter(value);
   }
 
@@ -244,7 +251,7 @@ export function useProductCrudViewModel() {
   function toggleAutoGenerateBarcodeOnSubmit(checked: boolean) {
     setAutoGenerateBarcodeOnSubmit(checked);
     if (checked) {
-      setBarcode(generateAutoBarcode());
+      setBarcode(generateUniqueAutoBarcode(products, selectedProductId));
     }
   }
 
@@ -351,8 +358,14 @@ export function useProductCrudViewModel() {
       return;
     }
     const typedBarcode = barcode.trim();
-    const barcodeForCreate = typedBarcode || (autoGenerateBarcodeOnSubmit ? generateAutoBarcode() : "");
+    const barcodeForCreate = typedBarcode || (autoGenerateBarcodeOnSubmit ? generateUniqueAutoBarcode(products, selectedProductId) : "");
     const nextBarcode = selectedProductId ? typedBarcode : barcodeForCreate;
+    const barcodeConflict = findBarcodeConflict(products, nextBarcode, selectedProductId);
+
+    if (normalizeBarcodeInput(nextBarcode) && barcodeConflict) {
+      setError(`El codigo de barra ya existe en ${barcodeConflict.name}.`);
+      return;
+    }
 
     if (!selectedProductId && isAdmin && newProductUseMarginOverride) {
       const parsed = Math.trunc(Number(newProductMarginDraft));
@@ -362,43 +375,47 @@ export function useProductCrudViewModel() {
       }
     }
 
-    if (selectedProductId) {
-      const updated = await updateProductApi(selectedProductId, {
+    try {
+      if (selectedProductId) {
+        const updated = await updateProductApi(selectedProductId, {
+          name: trimmedName,
+          price: nextSalePrice,
+          costPrice: parsedCost,
+          imageUrl,
+          barcode: nextBarcode,
+          category,
+        });
+
+        if (!updated) {
+          setError("No se pudo actualizar el producto.");
+          return;
+        }
+
+        await reloadProducts(updated.id);
+        setMessage("Producto actualizado correctamente.");
+        return;
+      }
+
+      const created = await createProductApi({
         name: trimmedName,
         price: nextSalePrice,
         costPrice: parsedCost,
+        marginPercent: effectiveMarginPercent,
         imageUrl,
         barcode: nextBarcode,
         category,
       });
 
-      if (!updated) {
-        setError("No se pudo actualizar el producto.");
-        return;
+      if (isAdmin && newProductUseMarginOverride) {
+        const updatedMargins = await upsertProductPriceMarginApi(created.id, newProductMarginPercent);
+        setMarginSettings(updatedMargins);
       }
 
-      await reloadProducts(updated.id);
-      setMessage("Producto actualizado correctamente.");
-      return;
+      await reloadProducts(created.id);
+      setMessage("Producto creado correctamente.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "No se pudo guardar el producto.");
     }
-
-    const created = await createProductApi({
-      name: trimmedName,
-      price: nextSalePrice,
-      costPrice: parsedCost,
-      marginPercent: effectiveMarginPercent,
-      imageUrl,
-      barcode: nextBarcode,
-      category,
-    });
-
-    if (isAdmin && newProductUseMarginOverride) {
-      const updatedMargins = await upsertProductPriceMarginApi(created.id, newProductMarginPercent);
-      setMarginSettings(updatedMargins);
-    }
-
-    await reloadProducts(created.id);
-    setMessage("Producto creado correctamente.");
   }
 
   async function deleteOrRequest() {
@@ -440,6 +457,7 @@ export function useProductCrudViewModel() {
       name: nameFilter,
       barcode: barcodeFilter,
       price: priceFilter,
+      existencia: existenciaFilter,
       createdAt: createdAtFilter,
     },
     handleFilterChange,

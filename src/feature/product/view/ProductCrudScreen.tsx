@@ -267,6 +267,8 @@ export default function ProductCrudScreen() {
               onSortClear={vm.handleClearSort}
               filters={vm.filters}
               onFilterChange={vm.handleFilterChange}
+              showExistence
+              existenceLabel="Stock"
               topMargin={0}
               maxHeight="100%"
             />
