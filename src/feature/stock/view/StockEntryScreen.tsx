@@ -31,7 +31,7 @@ import type { SupplyOrder } from "../../supply/model/supply.types";
 import { fetchSupplyOrdersApi } from "../../supply/service/supply.api";
 import { createStockEntryApi } from "../service/stock.api";
 import { resolveImageUrl, uploadImageFromFile } from "../../../shared/image/image.service";
-import { generateAutoBarcode } from "../../product/model/product.barcode";
+import { findBarcodeConflict, generateUniqueAutoBarcode, normalizeBarcodeInput } from "../../product/model/product.barcode";
 import styles from "./StockEntryScreen.module.css";
 
 type EntryMode = "existing" | "new";
@@ -262,7 +262,7 @@ export default function StockEntryScreen() {
   function handleAutoBarcodeChange(checked: boolean) {
     setAutoGenerateBarcodeOnConfirm(checked);
     if (checked) {
-      setNewBarcode(generateAutoBarcode());
+      setNewBarcode(generateUniqueAutoBarcode(products));
     }
   }
 
@@ -405,7 +405,12 @@ export default function StockEntryScreen() {
           return;
         }
         const typedBarcode = newBarcode.trim();
-        const barcodeToPersist = typedBarcode || (autoGenerateBarcodeOnConfirm ? generateAutoBarcode() : undefined);
+        const barcodeToPersist = typedBarcode || (autoGenerateBarcodeOnConfirm ? generateUniqueAutoBarcode(products) : undefined);
+        const barcodeConflict = findBarcodeConflict(products, barcodeToPersist || "");
+        if (normalizeBarcodeInput(barcodeToPersist || "") && barcodeConflict) {
+          setError(`El codigo de barra ya existe en ${barcodeConflict.name}.`);
+          return;
+        }
 
         const created = await createProductApi({
           name: trimmedName,
@@ -462,8 +467,8 @@ export default function StockEntryScreen() {
       setMessage(
         `Mercaderia ingresada para ${targetProductName || targetProductId}.${generatedBarcode ? ` Codigo generado: ${generatedBarcode}.` : ""}`,
       );
-    } catch {
-      setError("No se pudo registrar el ingreso de mercaderia.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "No se pudo registrar el ingreso de mercaderia.");
     }
   }
 

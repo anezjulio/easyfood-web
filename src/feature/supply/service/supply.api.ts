@@ -17,7 +17,7 @@ export async function createSupplyOrderApi(draft: SupplyOrderDraft): Promise<Sup
 
 export async function updateSupplyOrderApi(
   id: string,
-  draft: { supplierName: string; description: string; expectedTotal: number },
+  draft: Pick<SupplyOrderDraft, "supplierName" | "description" | "expectedTotal" | "items">,
 ): Promise<SupplyOrder> {
   const response = await fetch(`/supply-orders/${encodeURIComponent(id)}`, {
     method: "PUT",

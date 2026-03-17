@@ -3,10 +3,16 @@ import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { useAuth } from "../../../app/provider/useAuth";
+import { formatDateTimeAR as formatDateTime, formatMoneyARS } from "../../../shared/format/locale";
 import { resolveImageUrl, uploadImageFromFile } from "../../../shared/image/image.service";
 import type { SupplyOrder } from "../model/supply.types";
 import { fetchSupplyOrdersApi, receiveSupplyOrderApi } from "../service/supply.api";
 import styles from "./SupplyReceivingScreen.module.css";
+
+type ReceiptItemDraftState = {
+  missingQuantity: string;
+  expirationDate: string;
+};
 
 function formatMoneyMask(value: number) {
   const amount = Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : 0;
@@ -18,6 +24,20 @@ function formatMoneyMaskFromDigits(value: string) {
   const digits = value.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
   if (!digits) return "";
   return `$ ${digits.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}`;
+}
+
+function buildItemDraftState(order: SupplyOrder | null) {
+  const next: Record<string, ReceiptItemDraftState> = {};
+  if (!order) return next;
+
+  for (const item of order.items) {
+    next[item.productId] = {
+      missingQuantity: String(Math.max(0, Math.trunc(Number(item.missingQuantity || 0))) || ""),
+      expirationDate: item.expirationDate || "",
+    };
+  }
+
+  return next;
 }
 
 export default function SupplyReceivingScreen() {
@@ -33,6 +53,7 @@ export default function SupplyReceivingScreen() {
   const [invoiceImageUrl, setInvoiceImageUrl] = useState("");
   const [isUploadingInvoice, setIsUploadingInvoice] = useState(false);
   const [isInvoicePreviewOpen, setIsInvoicePreviewOpen] = useState(false);
+  const [receiptItems, setReceiptItems] = useState<Record<string, ReceiptItemDraftState>>({});
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -86,6 +107,10 @@ export default function SupplyReceivingScreen() {
   );
   const maxDifferentAmount = selectedOrder ? Math.max(selectedOrder.expectedTotal - 1, 0) : 0;
 
+  useEffect(() => {
+    setReceiptItems(buildItemDraftState(selectedOrder));
+  }, [selectedOrder]);
+
   const differentAmountDigits = differentAmount.replace(/\D/g, "");
   const hasDifferentAmount = differentAmountDigits.length > 0;
   const differentAmountValue = hasDifferentAmount ? Math.trunc(Number(differentAmountDigits)) : 0;
@@ -106,6 +131,25 @@ export default function SupplyReceivingScreen() {
 
   const receiveCommentTrimmed = receiveComment.trim();
   const remainingAmount = selectedOrder ? selectedOrder.expectedTotal - paymentTotal : 0;
+  const orderItems = selectedOrder?.items || [];
+
+  const itemValidationError = useMemo(() => {
+    if (!selectedOrder || orderItems.length === 0) return "";
+
+    for (const item of orderItems) {
+      const draft = receiptItems[item.productId] || { missingQuantity: "", expirationDate: "" };
+      const missingQuantity = Math.max(0, Math.trunc(Number(draft.missingQuantity || 0)));
+      if (!Number.isFinite(missingQuantity) || missingQuantity > item.quantity) {
+        return `La cantidad faltante de ${item.productName} no es valida.`;
+      }
+      const receivedQuantity = item.quantity - missingQuantity;
+      if (receivedQuantity > 0 && !draft.expirationDate) {
+        return `Ingresa el vencimiento para ${item.productName}.`;
+      }
+    }
+
+    return "";
+  }, [orderItems, receiptItems, selectedOrder]);
 
   const canConfirm =
     !!selectedOrder &&
@@ -113,15 +157,18 @@ export default function SupplyReceivingScreen() {
     !!invoiceImageUrl &&
     (isExactAmount || isDifferentAmountValid) &&
     (isExactAmount || !!receiveCommentTrimmed) &&
-    paymentTotal > 0;
+    paymentTotal > 0 &&
+    !itemValidationError;
 
   function selectOrder(orderId: string) {
+    const nextOrder = pendingOrders.find((item) => item.id === orderId) || null;
     setSelectedOrderId(orderId);
     setIsExactAmount(true);
     setDifferentAmount("");
     setReceiveComment("");
     setInvoiceImageUrl("");
     setIsInvoicePreviewOpen(false);
+    setReceiptItems(buildItemDraftState(nextOrder));
     setError("");
     setMessage("");
   }
@@ -149,6 +196,58 @@ export default function SupplyReceivingScreen() {
     } finally {
       setIsUploadingInvoice(false);
     }
+  }
+
+  function handlePrintOrder() {
+    if (!selectedOrder || selectedOrder.items.length === 0) return;
+
+    const popup = window.open("", "_blank", "width=900,height=700");
+    if (!popup) {
+      setError("No se pudo abrir la ventana de impresion.");
+      return;
+    }
+
+    const rows = selectedOrder.items
+      .map(
+        (item) =>
+          `<tr><td>${escapeHtml(item.productName)}</td><td>${item.barcode || "-"}</td><td style="text-align:right;">${item.quantity}</td></tr>`,
+      )
+      .join("");
+
+    popup.document.write(`<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Pedido ${escapeHtml(selectedOrder.id)}</title>
+    <style>
+      body { font-family: Arial, sans-serif; padding: 24px; color: #0f172a; }
+      h1 { margin-bottom: 8px; }
+      p { margin: 4px 0; }
+      table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+      th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+      th { background: #f8fafc; }
+    </style>
+  </head>
+  <body>
+    <h1>Listado de pedido ${escapeHtml(selectedOrder.id)}</h1>
+    <p><strong>Proveedor:</strong> ${escapeHtml(selectedOrder.supplierName)}</p>
+    <p><strong>Fecha:</strong> ${escapeHtml(formatDateTime(selectedOrder.createdAt))}</p>
+    <p><strong>Total esperado:</strong> ${escapeHtml(formatMoneyARS(selectedOrder.expectedTotal))}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Codigo</th>
+          <th>Cantidad esperada</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </body>
+</html>`);
+    popup.document.close();
+    popup.focus();
+    popup.print();
   }
 
   async function confirmReception() {
@@ -179,6 +278,11 @@ export default function SupplyReceivingScreen() {
       return;
     }
 
+    if (itemValidationError) {
+      setError(itemValidationError);
+      return;
+    }
+
     try {
       const updated = await receiveSupplyOrderApi(selectedOrder.id, {
         actualTotal: paymentTotal,
@@ -186,6 +290,14 @@ export default function SupplyReceivingScreen() {
         receivedBy: auth.user?.username || "operator",
         invoiceImageUrl,
         receiveComment: receiveCommentTrimmed || undefined,
+        items: selectedOrder.items.map((item) => {
+          const draft = receiptItems[item.productId] || { missingQuantity: "", expirationDate: "" };
+          return {
+            productId: item.productId,
+            missingQuantity: Math.max(0, Math.trunc(Number(draft.missingQuantity || 0))),
+            expirationDate: draft.expirationDate || undefined,
+          };
+        }),
       });
 
       setOrders((current) => current.map((item) => (item.id === updated.id ? updated : item)));
@@ -194,9 +306,14 @@ export default function SupplyReceivingScreen() {
       setReceiveComment("");
       setInvoiceImageUrl("");
       setIsInvoicePreviewOpen(false);
-      setMessage("Recepcion confirmada. Puedes cargar el stock ahora.");
-    } catch {
-      setError("No se pudo confirmar la recepcion del pedido.");
+      setReceiptItems({});
+      setMessage(
+        updated.items.length > 0
+          ? "Recepcion confirmada y stock generado automaticamente."
+          : "Recepcion confirmada. Si el pedido no tiene detalle, carga stock manualmente.",
+      );
+    } catch (nextError) {
+      setError(nextError instanceof Error ? nextError.message : "No se pudo confirmar la recepcion del pedido.");
     }
   }
 
@@ -206,7 +323,7 @@ export default function SupplyReceivingScreen() {
         <header className={styles.header}>
           <div>
             <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Recibir mercancia" }]} asTitle />
-            <p className={styles.subtitle}>Selecciona el pedido esperado y confirma la recepcion con factura.</p>
+            <p className={styles.subtitle}>Confirma el pedido, imprime el listado y registra faltantes y vencimientos.</p>
           </div>
           <SessionStatusBar />
         </header>
@@ -227,14 +344,16 @@ export default function SupplyReceivingScreen() {
                   <button
                     type="button"
                     key={order.id}
-                    className={`${styles.orderBtn} ${selectedOrderId === order.id ? styles.orderBtnActive : ""}`}
+                    className={`${styles.orderBtn} ${selectedOrderId === order.id ? styles.orderBtnActive : ""}`.trim()}
                     onClick={() => selectOrder(order.id)}
                   >
                     <div className={styles.orderTop}>
                       <div className={styles.orderSupplier}>{order.supplierName}</div>
                       <div className={styles.orderTotal}>{formatMoneyMask(order.expectedTotal)}</div>
                     </div>
-                    <div className={styles.orderDescription}>{order.description}</div>
+                    <div className={styles.orderDescription}>
+                      {order.items.length > 0 ? `${order.items.length} productos cargados.` : "Pedido sin detalle de productos."}
+                    </div>
                   </button>
                 ))}
               </div>
@@ -252,15 +371,104 @@ export default function SupplyReceivingScreen() {
                   <strong>Proveedor:</strong> {selectedOrder.supplierName}
                 </p>
                 <p>
-                  <strong>Descripcion:</strong>
+                  <strong>Pedido:</strong> {selectedOrder.id} - {formatDateTime(selectedOrder.createdAt)}
                 </p>
-                <p className={styles.descriptionBox}>{selectedOrder.description}</p>
+                {selectedOrder.description ? (
+                  <>
+                    <p>
+                      <strong>Observaciones:</strong>
+                    </p>
+                    <p className={styles.descriptionBox}>{selectedOrder.description}</p>
+                  </>
+                ) : null}
                 <p>
                   <strong>Monto total esperado:</strong> {formatMoneyMask(selectedOrder.expectedTotal)}
                 </p>
                 <p>
                   <strong>Efectivo asignado al operador:</strong> {formatMoneyMask(selectedOrder.expectedTotal)}
                 </p>
+
+                {selectedOrder.items.length > 0 ? (
+                  <section className={styles.itemsCard}>
+                    <div className={styles.itemsHead}>
+                      <h3 className={styles.subTitle}>Productos del pedido</h3>
+                      <button
+                        type="button"
+                        className={`${styles.secondaryBtn} ${styles.printBtn}`.trim()}
+                        onClick={handlePrintOrder}
+                      >
+                        Imprimir listado
+                      </button>
+                    </div>
+
+                    <div className={styles.itemTable}>
+                      <div className={styles.itemTableHead}>
+                        <div>Producto</div>
+                        <div className={styles.cellRight}>Esperado</div>
+                        <div className={styles.cellRight}>No llego</div>
+                        <div className={styles.cellRight}>Se recibe</div>
+                        <div>Vencimiento</div>
+                      </div>
+
+                      {selectedOrder.items.map((item) => {
+                        const draft = receiptItems[item.productId] || { missingQuantity: "", expirationDate: "" };
+                        const missingQuantity = Math.max(0, Math.trunc(Number(draft.missingQuantity || 0)));
+                        const safeMissing = Math.min(item.quantity, missingQuantity);
+                        const receivedQuantity = Math.max(0, item.quantity - safeMissing);
+
+                        return (
+                          <div key={`${selectedOrder.id}-${item.productId}`} className={styles.itemRow}>
+                            <div>
+                              <strong>{item.productName}</strong>
+                              <p className={styles.itemMeta}>{item.barcode || "-"}</p>
+                            </div>
+                            <div className={styles.cellRight}>{item.quantity}</div>
+                            <div>
+                              <input
+                                className={styles.input}
+                                type="number"
+                                min={0}
+                                max={item.quantity}
+                                value={draft.missingQuantity}
+                                onChange={(event) =>
+                                  setReceiptItems((current) => ({
+                                    ...current,
+                                    [item.productId]: {
+                                      ...(current[item.productId] || { missingQuantity: "", expirationDate: "" }),
+                                      missingQuantity: event.target.value,
+                                    },
+                                  }))
+                                }
+                              />
+                            </div>
+                            <div className={styles.cellRight}>{receivedQuantity}</div>
+                            <div>
+                              <input
+                                className={styles.input}
+                                type="date"
+                                value={draft.expirationDate}
+                                onChange={(event) =>
+                                  setReceiptItems((current) => ({
+                                    ...current,
+                                    [item.productId]: {
+                                      ...(current[item.productId] || { missingQuantity: "", expirationDate: "" }),
+                                      expirationDate: event.target.value,
+                                    },
+                                  }))
+                                }
+                                disabled={receivedQuantity <= 0}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </section>
+                ) : (
+                  <p className={styles.emptyInline}>
+                    Este pedido no tiene detalle de productos. Si lo confirmas, el stock debera cargarse manualmente despues.
+                  </p>
+                )}
 
                 <div className={styles.amountChoiceRow}>
                   <label className={styles.checkboxRow}>
@@ -276,7 +484,7 @@ export default function SupplyReceivingScreen() {
                     <span>Monto exacto</span>
                   </label>
 
-                  <div className={`${styles.differentAmountInline} ${isExactAmount ? styles.differentAmountInlineHidden : ""}`}>
+                  <div className={`${styles.differentAmountInline} ${isExactAmount ? styles.differentAmountInlineHidden : ""}`.trim()}>
                     <span>Monto diferente</span>
                     <input
                       className={styles.input}
@@ -294,14 +502,6 @@ export default function SupplyReceivingScreen() {
                         const numericValue = Math.trunc(Number(digits));
                         if (!Number.isFinite(numericValue)) {
                           setDifferentAmount("");
-                          setError("");
-                          setMessage("");
-                          return;
-                        }
-                        if (!selectedOrder || maxDifferentAmount <= 0) {
-                          setDifferentAmount("");
-                          setError("");
-                          setMessage("");
                           return;
                         }
                         const safeValue = Math.min(numericValue, maxDifferentAmount);
@@ -419,3 +619,11 @@ export default function SupplyReceivingScreen() {
   );
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}

@@ -1,10 +1,24 @@
+import type { ProductCategory } from "../../product/model/product.types";
+
 export type SupplyOrderStatus = "pending" | "received";
+
+export type SupplyOrderItem = {
+  productId: string;
+  productName: string;
+  quantity: number;
+  barcode?: string;
+  category?: ProductCategory;
+  receivedQuantity?: number;
+  missingQuantity?: number;
+  expirationDate?: string;
+};
 
 export type SupplyOrder = {
   id: string;
   supplierName: string;
   description: string;
   expectedTotal: number;
+  items: SupplyOrderItem[];
   createdAt: string;
   createdBy: string;
   status: SupplyOrderStatus;
@@ -17,11 +31,23 @@ export type SupplyOrder = {
   receiveComment?: string;
 };
 
+export type SupplyOrderItemDraft = {
+  productId: string;
+  quantity: number;
+};
+
 export type SupplyOrderDraft = {
   supplierName: string;
-  description: string;
+  description?: string;
+  items?: SupplyOrderItemDraft[];
   expectedTotal: number;
   createdBy?: string;
+};
+
+export type SupplyOrderReceiveItemDraft = {
+  productId: string;
+  missingQuantity: number;
+  expirationDate?: string;
 };
 
 export type SupplyOrderReceiveDraft = {
@@ -30,4 +56,5 @@ export type SupplyOrderReceiveDraft = {
   receivedBy?: string;
   invoiceImageUrl?: string;
   receiveComment?: string;
+  items?: SupplyOrderReceiveItemDraft[];
 };

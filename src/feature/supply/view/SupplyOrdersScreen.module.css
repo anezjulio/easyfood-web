@@ -7,9 +7,10 @@
 
 .content {
   width: 100%;
-  max-width: none;
   margin: 0 auto;
   padding: 8px;
+  display: grid;
+  gap: 16px;
 }
 
 .header {
@@ -26,12 +27,34 @@
   font-weight: 600;
 }
 
-.layout {
-  margin-top: 16px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-  gap: 16px;
-  align-items: start;
+.tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tabBtn,
+.primaryBtn,
+.secondaryBtn,
+.inlineBtn,
+.removeBtn {
+  border: 1px solid #0f172a;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 10px 14px;
+}
+
+.tabBtnActive,
+.primaryBtn {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.removeBtn {
+  border-color: #991b1b;
+  color: #991b1b;
 }
 
 .formCard,
@@ -39,95 +62,365 @@
   border: 1px solid #e2e8f0;
   background: #ffffff;
   padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.form {
+  display: grid;
+  gap: 12px;
 }
 
 .cardTitle {
   margin: 0;
   font-size: 20px;
   font-weight: 900;
-  color: #0f172a;
 }
 
-.form {
-  margin-top: 12px;
+.subTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.editingHint,
+.valueBox,
+.receivedBox,
+.errorBox,
+.successBox,
+.warningBox,
+.emptyInline {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.editingHint,
+.valueBox,
+.receivedBox,
+.emptyInline {
+  background: #f8fafc;
+  color: #334155;
+}
+
+.errorBox {
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: #9f1239;
+}
+
+.successBox {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.warningBox {
+  border-color: #fcd34d;
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.topFields,
+.orderSummaryRow,
+.orderButtons,
+.actions,
+.cardHead,
+.orderTop,
+.orderActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.topFields {
   display: grid;
+  grid-template-columns: minmax(280px, 1.3fr) minmax(220px, 0.7fr);
   gap: 12px;
 }
 
-.editingHint {
-  margin: 0;
-  border: 1px solid #cbd5e1;
-  background: #f8fafc;
-  color: #334155;
-  padding: 8px 10px;
-  font-size: 13px;
+.createLayout {
+  display: grid;
+  grid-template-columns: minmax(340px, 0.95fr) minmax(420px, 1.05fr);
+  grid-template-areas:
+    "new-product new-order"
+    "catalog selected";
+  gap: 14px;
+  align-items: stretch;
 }
 
-.field {
+.panelCard,
+.orderCard {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.newProductCard {
+  grid-area: new-product;
+}
+
+.orderFormCard {
+  grid-area: new-order;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.catalogCard {
+  grid-area: catalog;
+}
+
+.selectedCard {
+  grid-area: selected;
+  align-content: start;
+}
+
+.selectedCard .cardHead {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
+}
+
+.cardHead,
+.orderTop {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.helperText,
+.orderMeta,
+.orderSummaryRow,
+.empty {
+  margin: 0;
+  color: #475569;
+}
+
+.field,
+.fieldCompact {
   display: grid;
   gap: 6px;
   font-weight: 700;
-  color: #0f172a;
 }
 
-.requiredMark {
-  color: #b91c1c;
+.descriptionField {
+  min-height: 0;
+  align-content: stretch;
 }
 
 .input,
-.textarea {
+.textarea,
+.qtyInput {
   width: 100%;
   border: 1px solid #cbd5e1;
   background: #fff;
   color: #0f172a;
   padding: 10px 12px;
   font: inherit;
+  box-sizing: border-box;
 }
 
 .textarea {
   resize: vertical;
 }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
+.descriptionTextarea {
+  min-height: 220px;
+  height: 100%;
+  resize: none;
 }
 
-.primaryBtn,
-.secondaryBtn {
-  border: 1px solid #0f172a;
-  padding: 9px 14px;
-  background: #ffffff;
+.toggleLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
   color: #0f172a;
-  font-weight: 800;
+}
+
+.tableCard,
+.orderList {
+  display: grid;
+  gap: 0;
+}
+
+.tableCard {
+  border: 1px solid #e2e8f0;
+  min-height: 360px;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.tableHead,
+.catalogTableRow,
+.selectedTableRow {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  min-width: 0;
+}
+
+.tableHead {
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 900;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.catalogTableHead,
+.catalogTableRow {
+  grid-template-columns: minmax(140px, 1fr) minmax(0, 1.6fr) minmax(110px, 0.9fr) 92px;
+}
+
+.selectedTableHead,
+.selectedTableRow {
+  grid-template-columns: minmax(0, 1.45fr) minmax(110px, 0.8fr) minmax(140px, 1fr) minmax(210px, 1.1fr);
+}
+
+.tableBody {
+  overflow: auto;
+}
+
+.catalogCard .tableBody {
+  max-height: min(64vh, 708px);
+  overflow: auto;
+}
+
+.selectedCard .tableCard {
+  min-height: auto;
+  overflow: visible;
+  align-self: start;
+}
+
+.selectedCard .tableBody {
+  overflow: visible;
+}
+
+.tableRowButton {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   cursor: pointer;
 }
 
-.primaryBtn {
-  background: #0f172a;
-  color: #ffffff;
+.tableRowButton:first-child {
+  border-top: none;
 }
 
-.errorBox {
-  border: 1px solid #fecaca;
-  background: #fff1f2;
-  color: #9f1239;
-  padding: 10px;
+.selectedTableRow {
+  border-top: 1px solid #e2e8f0;
 }
 
-.successBox {
-  border: 1px solid #bbf7d0;
-  background: #f0fdf4;
-  color: #166534;
-  padding: 10px;
+.selectedTableRow:first-child {
+  border-top: none;
 }
 
-.warningBox {
-  border: 1px solid #fcd34d;
-  background: #fffbeb;
-  color: #92400e;
-  padding: 10px;
+.tableRowOdd {
+  background: #f8fafc;
+}
+
+.tableRowActive {
+  background: #e2e8f0;
+}
+
+.codeCell,
+.categoryCell,
+.nameCell,
+.stockCell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.codeCell,
+.categoryCell {
+  color: #334155;
+  font-weight: 800;
+}
+
+.nameCell,
+.orderTitle {
+  font-size: 15px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.stockCell,
+.cellCenter {
+  text-align: center;
+  font-weight: 900;
+}
+
+.quantityCell {
+  display: flex;
+  justify-content: center;
+}
+
+.qtyInput {
+  width: 90px;
+}
+
+.quantityStepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.stepBtn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #0f172a;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.stepBtn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.stepValue {
+  min-width: 36px;
+  text-align: center;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.stepInput {
+  width: 64px;
+  height: 36px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  text-align: center;
+  font: inherit;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+.miniFormGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.miniFormGrid > .toggleLabel,
+.miniFormGrid > .valueBox,
+.miniFormGrid > .primaryBtn {
+  grid-column: 1 / -1;
 }
 
 .listHead {
@@ -138,58 +431,13 @@
   flex-wrap: wrap;
 }
 
-.pendingHint {
-  color: #334155;
-  font-weight: 700;
-}
-
-.orderList {
-  margin-top: 12px;
-  display: grid;
-  gap: 10px;
-  max-height: min(70vh, 760px);
-  overflow: auto;
-  padding-right: 4px;
-}
-
-.orderCard {
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  padding: 10px;
-  display: grid;
-  gap: 8px;
-}
-
-.orderCardPendingEditable {
-  cursor: pointer;
-}
-
-.orderCardEditing {
-  border-color: #0f172a;
-}
-
-.orderTop {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  align-items: center;
-}
-
-.orderActions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.orderTitle {
-  margin: 0;
-  font-size: 17px;
+.pendingHint,
+.orderAmount {
   font-weight: 900;
-  color: #0f172a;
 }
 
 .badge {
-  padding: 2px 8px;
+  padding: 4px 10px;
   border: 1px solid;
   font-size: 12px;
   font-weight: 800;
@@ -207,61 +455,114 @@
   background: #dcfce7;
 }
 
-.cancelXBtn {
-  border: 1px solid #991b1b;
-  background: #ffffff;
-  color: #991b1b;
-  font-weight: 900;
-  width: 24px;
-  height: 24px;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  padding: 0;
-}
-
 .orderDescription {
   margin: 0;
   color: #334155;
   white-space: pre-wrap;
 }
 
-.orderMeta {
-  margin: 0;
+.orderSummaryRow {
+  color: #334155;
+  font-weight: 700;
+}
+
+.orderItemsTable {
+  display: grid;
+  gap: 0;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.orderItemsHead,
+.orderItemRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+  padding: 10px 12px;
+}
+
+.orderItemsHead {
+  font-weight: 900;
+  color: #0f172a;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.orderItemsHeadReceived,
+.orderItemRowReceived {
+  grid-template-columns: minmax(0, 1.5fr) 110px 110px minmax(140px, 0.9fr);
+}
+
+.orderItemRow {
+  border-top: 1px solid #e2e8f0;
+}
+
+.orderItemRowOdd {
+  background: #f8fafc;
+}
+
+.orderItemLead {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.orderItemName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
   color: #0f172a;
 }
 
-.receivedAmount {
-  color: #166534;
-  font-size: 22px;
-  font-weight: 900;
-  line-height: 1.2;
-}
-
-.remainingAmount {
+.orderItemQtyBadge {
+  flex: 0 0 auto;
+  padding: 3px 8px;
+  border: 1px solid #cbd5e1;
+  background: #e2e8f0;
   color: #0f172a;
-}
-
-.remainingWarnAmount {
-  color: #854d0e;
-  font-weight: 900;
-}
-
-.orderFoot {
-  margin: 0;
-  color: #475569;
   font-size: 12px;
+  font-weight: 900;
 }
 
-.empty {
-  margin: 14px 0 0;
-  color: #475569;
+.cellRight {
+  text-align: right;
+}
+
+.actions {
+  justify-content: flex-end;
 }
 
 @media (max-width: 1100px) {
-  .layout {
+  .createLayout,
+  .topFields,
+  .miniFormGrid {
     grid-template-columns: 1fr;
+  }
+
+  .actions,
+  .orderButtons {
+    flex-wrap: wrap;
+  }
+
+  .createLayout {
+    grid-template-areas:
+      "new-product"
+      "new-order"
+      "catalog"
+      "selected";
+  }
+
+  .orderItemsHeadReceived,
+  .orderItemRowReceived,
+  .orderItemsHead,
+  .orderItemRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

@@ -252,7 +252,7 @@
 .cartHead,
 .cartRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 76px 150px 132px 40px;
+  grid-template-columns: minmax(0, 1fr) 152px 150px 132px 40px;
   gap: 8px;
   align-items: center;
   padding: 10px;
@@ -349,9 +349,34 @@
   justify-content: flex-end;
 }
 
+.cartQtyStepper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.cartQtyStepBtn {
+  height: 32px;
+  width: 32px;
+  border: 1px solid #0f172a;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cartQtyStepBtn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 .cartQtyInput {
   height: 32px;
-  width: 66px;
+  width: 56px;
   border: 1px solid #e2e8f0;
   box-sizing: border-box;
   padding: 0 6px;
@@ -666,11 +691,16 @@
 @media (max-width: 620px) {
   .cartHead,
   .cartRow {
-    grid-template-columns: minmax(0, 1fr) 64px 110px 112px 36px;
+    grid-template-columns: minmax(0, 1fr) 136px 110px 112px 36px;
     font-size: 14px;
   }
 
   .cartRemoveBtn {
+    height: 30px;
+    width: 30px;
+  }
+
+  .cartQtyStepBtn {
     height: 30px;
     width: 30px;
   }

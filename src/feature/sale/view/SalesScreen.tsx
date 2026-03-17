@@ -566,6 +566,49 @@ export default function SalesScreen() {
     );
   }
 
+  function incrementCartItemQuantity(productId: string) {
+    if (hasPendingPayment) {
+      setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
+      return;
+    }
+
+    const product = products.find((item) => item.id === productId);
+    const currentItem = cart.find((item) => item.productId === productId);
+    if (!product || !currentItem) return;
+
+    const productStock = Math.max(0, Math.trunc(Number(product.existencia || 0)));
+    const nextQuantity = currentItem.quantity + 1;
+    if (nextQuantity > productStock) {
+      setError(`No puedes superar la existencia (${productStock}) para ${product.name}.`);
+      return;
+    }
+
+    setError("");
+    setCart((current) =>
+      current.map((item) => (item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item)),
+    );
+  }
+
+  function decrementCartItemQuantity(productId: string) {
+    if (hasPendingPayment) {
+      setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
+      return;
+    }
+
+    const currentItem = cart.find((item) => item.productId === productId);
+    if (!currentItem) return;
+
+    setError("");
+    if (currentItem.quantity <= 1) {
+      setCart((current) => current.filter((item) => item.productId !== productId));
+      return;
+    }
+
+    setCart((current) =>
+      current.map((item) => (item.productId === productId ? { ...item, quantity: item.quantity - 1 } : item)),
+    );
+  }
+
   async function openPaymentModal() {
     setError("");
     setWarning("");
@@ -846,16 +889,36 @@ export default function SalesScreen() {
                     >
                       <div className={styles.cellProduct}>{item.productName}</div>
                       <div className={styles.cellQty}>
-                        <input
-                          type="number"
-                          min={1}
-                          max={Math.max(0, Math.trunc(Number(products.find((p) => p.id === item.productId)?.existencia || 0)))}
-                          value={item.quantity}
-                          onChange={(e) => updateCartItemQuantity(item.productId, e.target.value)}
-                          className={styles.cartQtyInput}
-                          disabled={hasPendingPayment}
-                          aria-label={`Cantidad para ${item.productName}`}
-                        />
+                        <div className={styles.cartQtyStepper}>
+                          <button
+                            type="button"
+                            className={styles.cartQtyStepBtn}
+                            onClick={() => decrementCartItemQuantity(item.productId)}
+                            disabled={hasPendingPayment}
+                            aria-label={`Quitar una unidad de ${item.productName}`}
+                          >
+                            -
+                          </button>
+                          <input
+                            type="number"
+                            min={1}
+                            max={Math.max(0, Math.trunc(Number(products.find((p) => p.id === item.productId)?.existencia || 0)))}
+                            value={item.quantity}
+                            onChange={(e) => updateCartItemQuantity(item.productId, e.target.value)}
+                            className={styles.cartQtyInput}
+                            disabled={hasPendingPayment}
+                            aria-label={`Cantidad para ${item.productName}`}
+                          />
+                          <button
+                            type="button"
+                            className={styles.cartQtyStepBtn}
+                            onClick={() => incrementCartItemQuantity(item.productId)}
+                            disabled={hasPendingPayment}
+                            aria-label={`Agregar una unidad de ${item.productName}`}
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                       <div className={styles.cellPrice}>
                         <span>{formatMoneyARS(item.unitPrice)}</span>

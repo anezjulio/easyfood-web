@@ -63,6 +63,16 @@ function buildDefaultBarcode(id: string, index: number): string {
   return `7790000${suffix}`;
 }
 
+function normalizeBarcode(value: string | undefined) {
+  return String(value || "").trim();
+}
+
+function findProductByBarcode(products: Product[], barcode: string, excludeId?: string) {
+  const normalized = normalizeBarcode(barcode);
+  if (!normalized) return undefined;
+  return products.find((item) => normalizeBarcode(item.barcode) === normalized && (!excludeId || item.id !== excludeId));
+}
+
 const seed: Product[] = [
   { id: "p1", name: "Coca-Cola 500ml", price: 1500, createdAt: "2026-01-20T12:00:00.000Z" },
   { id: "p2", name: "Alfajor", price: 900, createdAt: "2026-01-22T09:30:00.000Z" },
@@ -220,6 +230,12 @@ export function resetProductsToSeed(): Product[] {
 
 export function createProduct(draft: ProductDraft): Product {
   const list = loadProducts();
+  if (draft.barcode?.trim()) {
+    const duplicate = findProductByBarcode(list, draft.barcode);
+    if (duplicate) {
+      throw new Error(`Barcode already exists: ${duplicate.name}`);
+    }
+  }
   const category = draft.category || "vivere";
   const marginSettings = getPriceMarginSettings();
   const effectiveMargin = Number.isFinite(Number(draft.marginPercent))
@@ -264,6 +280,12 @@ export function createProduct(draft: ProductDraft): Product {
 
 export function updateProduct(id: string, draft: ProductDraft): Product | null {
   const list = loadProducts();
+  if (draft.barcode?.trim()) {
+    const duplicate = findProductByBarcode(list, draft.barcode, id);
+    if (duplicate) {
+      throw new Error(`Barcode already exists: ${duplicate.name}`);
+    }
+  }
   const marginSettings = getPriceMarginSettings();
   let updated: Product | null = null;
   const next = list.map((item) => {
