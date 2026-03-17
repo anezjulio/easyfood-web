@@ -33,6 +33,21 @@
   font-weight: 600;
 }
 
+.groupHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.groupTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -54,6 +69,126 @@
   font-weight: 900;
   color: #0f172a;
   text-align: left;
+}
+
+.countBadge {
+  min-width: 30px;
+  height: 30px;
+  padding: 0 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.linkBtn {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  min-height: 42px;
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.alertCarousel {
+  display: block;
+}
+
+.alertCarouselViewport {
+  position: relative;
+  min-width: 0;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.alertCarouselViewportDragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.alertCarouselViewportDragging * {
+  user-select: none;
+}
+
+.carouselBtn {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+}
+
+.carouselBtnPrev {
+  left: 8px;
+}
+
+.carouselBtnNext {
+  right: 8px;
+}
+
+.carouselBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.alertCarouselTrack {
+  --alert-visible-cards: 3;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - (var(--alert-visible-cards) - 1) * 14px) / var(--alert-visible-cards));
+  gap: 14px;
+  overflow-x: auto;
+  padding: 6px 4px 10px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 4px;
+  overscroll-behavior-x: contain;
+  touch-action: pan-y;
+  cursor: inherit;
+}
+
+.alertCarouselTrackWithControls {
+  padding-inline: 58px;
+  scroll-padding-inline: 58px;
+}
+
+.alertCarouselTrackDragging {
+  scroll-snap-type: none;
+}
+
+.alertCarouselTrack::-webkit-scrollbar {
+  height: 8px;
+}
+
+.alertCarouselTrack::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+
+.alertSlide {
+  scroll-snap-align: start;
+  min-height: 100%;
+  pointer-events: none;
 }
 
 .bigBtn {
@@ -86,15 +221,119 @@
   font-weight: 700;
 }
 
+.alertCard {
+  width: 100%;
+  min-height: 142px;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  cursor: inherit;
+  user-select: none;
+  pointer-events: none;
+}
+
+.alertCardNeutral {
+  background: #f8fafc;
+}
+
+.alertCardWarning {
+  background: #fff7ed;
+  border-color: #fdba74;
+  border-right-color: #c2410c;
+  border-bottom-color: #c2410c;
+}
+
+.alertCardCritical {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  border-right-color: #b91c1c;
+  border-bottom-color: #b91c1c;
+}
+
+.alertCardTitle {
+  font-size: 22px;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.alertCardSubtitle {
+  color: #334155;
+  font-weight: 800;
+}
+
+.alertCardDescription {
+  margin: 0;
+  color: #475569;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.alertCardFooter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.alertPill {
+  border: 1px solid #cbd5e1;
+  background: rgba(255, 255, 255, 0.86);
+  color: #334155;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.alertPillWarning {
+  border-color: #fb923c;
+  color: #9a3412;
+}
+
+.alertPillCritical {
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
 @media (max-width: 1024px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .alertCarouselTrack {
+    --alert-visible-cards: 2;
   }
 }
 
 @media (max-width: 640px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+
+  .carouselBtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .alertCarouselTrack {
+    --alert-visible-cards: 1;
+  }
+
+  .alertCarouselTrackWithControls {
+    padding-inline: 44px;
+    scroll-padding-inline: 44px;
   }
 }
 

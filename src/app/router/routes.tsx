@@ -16,9 +16,11 @@ import SupplyReceivingScreen from "../../feature/supply/view/SupplyReceivingScre
 import OperationRequestsScreen from "../../feature/request/view/OperationRequestsScreen";
 import ApproveRequestsScreen from "../../feature/request/view/ApproveRequestsScreen";
 import ExpensesScreen from "../../feature/expense/view/ExpensesScreen";
+import FeedbackScreen from "../../feature/feedback/view/FeedbackScreen";
 import LicensesScreen from "../../feature/license/view/LicensesScreen";
 import NotificationsScreen from "../../feature/notification/view/NotificationsScreen";
 import DataScreen from "../../feature/data/view/DataScreen";
+import TransactionsScreen from "../../feature/transaction/view/TransactionsScreen";
 import RequireAuth from "./RequireAuth";
 
 export default function AppRoutes() {
@@ -45,8 +47,10 @@ export default function AppRoutes() {
         <Route path="/requests" element={<OperationRequestsScreen />} />
         <Route path="/requests/approvals" element={<ApproveRequestsScreen />} />
         <Route path="/expenses" element={<ExpensesScreen />} />
+        <Route path="/feedback" element={<FeedbackScreen />} />
         <Route path="/licenses" element={<LicensesScreen />} />
         <Route path="/notifications" element={<NotificationsScreen />} />
+        <Route path="/transactions" element={<TransactionsScreen />} />
         <Route path="/data" element={<DataScreen />} />
       </Route>
 

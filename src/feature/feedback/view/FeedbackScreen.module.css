@@ -1,0 +1,294 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7efe7 0%, #f3f4f8 100%);
+  padding: 32px 16px 48px;
+}
+
+.content {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  color: #5f6573;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.summaryCard,
+.formCard,
+.listCard {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(28, 37, 56, 0.1);
+  border-radius: 0;
+  box-shadow: 0 20px 40px rgba(28, 37, 56, 0.08);
+}
+
+.summaryCard {
+  padding: 18px 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.summaryLabel {
+  color: #677085;
+  font-size: 0.92rem;
+}
+
+.summaryValue {
+  font-size: 1.65rem;
+  color: #1c2538;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tabBtn {
+  border: 1px solid rgba(28, 37, 56, 0.12);
+  background: rgba(255, 255, 255, 0.82);
+  color: #41506a;
+  border-radius: 0;
+  padding: 10px 16px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tabBtnActive {
+  background: #1c2538;
+  color: #fff;
+  border-color: #1c2538;
+}
+
+.formCard,
+.listCard {
+  padding: 24px;
+}
+
+.cardTitle {
+  margin: 0 0 18px;
+  color: #1c2538;
+}
+
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  color: #33405a;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  border: 1px solid rgba(28, 37, 56, 0.14);
+  border-radius: 0;
+  background: #fff;
+  padding: 13px 14px;
+  font: inherit;
+  color: #1c2538;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 160px;
+}
+
+.checkboxRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #33405a;
+}
+
+.checkboxRow input {
+  width: 18px;
+  height: 18px;
+}
+
+.note {
+  margin: 0;
+  color: #677085;
+  line-height: 1.45;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  border: none;
+  border-radius: 0;
+  padding: 12px 18px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.primaryBtn {
+  background: #b44723;
+  color: #fff;
+}
+
+.secondaryBtn {
+  background: #eef1f7;
+  color: #33405a;
+}
+
+.errorBox,
+.successBox,
+.empty {
+  border-radius: 0;
+  padding: 14px 16px;
+}
+
+.errorBox {
+  background: #fff0ee;
+  color: #a33a1e;
+}
+
+.successBox {
+  background: #edf7ef;
+  color: #25643a;
+}
+
+.listHeader {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 12px;
+}
+
+.entryList {
+  display: grid;
+  gap: 14px;
+}
+
+.entryCard {
+  border: 1px solid rgba(28, 37, 56, 0.08);
+  border-radius: 0;
+  background: #fff;
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.entryTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badgeSuggestion,
+.badgeClaim,
+.badgeAnonymous,
+.badgeNamed {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badgeSuggestion {
+  background: #e9f4ff;
+  color: #24548a;
+}
+
+.badgeClaim {
+  background: #fff0ee;
+  color: #a33a1e;
+}
+
+.badgeAnonymous {
+  background: #f4efe7;
+  color: #73522f;
+}
+
+.badgeNamed {
+  background: #eef1f7;
+  color: #52617a;
+}
+
+.entryDate,
+.metaItem {
+  color: #5f6573;
+}
+
+.entryMessage {
+  margin: 0;
+  color: #1c2538;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px 16px;
+}
+
+.metaItem {
+  margin: 0;
+}
+
+.empty {
+  margin: 0;
+  background: #f5f6fa;
+  color: #5f6573;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding-inline: 12px;
+  }
+
+  .header,
+  .entryTop {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .formCard,
+  .listCard {
+    padding: 18px;
+  }
+}

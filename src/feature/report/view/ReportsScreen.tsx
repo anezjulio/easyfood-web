@@ -12,10 +12,12 @@ import type { Order } from "../../sale/model/sale.types";
 import { fetchOrdersApi } from "../../sale/service/sale.api";
 import type { SupplyOrder } from "../../supply/model/supply.types";
 import { fetchSupplyOrdersApi } from "../../supply/service/supply.api";
+import type { FinancialAccount } from "../../transaction/model/transaction.types";
+import { fetchFinancialAccountsApi } from "../../transaction/service/transaction.api";
 import styles from "./ReportsScreen.module.css";
 
 type WorkdayTab = "daily" | "weekly" | "monthly";
-type BalanceTab = "workdays" | "expenses" | "supplies" | "sales" | "cash";
+type BalanceTab = "workdays" | "expenses" | "supplies" | "sales" | "cash" | "accounts";
 
 type OperatorGroup = {
   operator: string;
@@ -201,6 +203,7 @@ export default function ReportsScreen() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [supplyOrders, setSupplyOrders] = useState<SupplyOrder[]>([]);
+  const [financialAccounts, setFinancialAccounts] = useState<FinancialAccount[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expandedWorkdays, setExpandedWorkdays] = useState<string[]>([]);
@@ -215,17 +218,19 @@ export default function ReportsScreen() {
       setLoading(true);
       setError("");
       try {
-        const [wd, od, ex, so] = await Promise.all([
+        const [wd, od, ex, so, accounts] = await Promise.all([
           fetchWorkdaysApi(),
           fetchOrdersApi(),
           fetchExpensesApi(),
           fetchSupplyOrdersApi(),
+          fetchFinancialAccountsApi(),
         ]);
         if (!alive) return;
         setWorkdays(wd);
         setOrders(od);
         setExpenses(ex);
         setSupplyOrders(so);
+        setFinancialAccounts(accounts);
       } catch {
         if (!alive) return;
         setError("No se pudieron cargar los datos de balance.");
@@ -249,7 +254,10 @@ export default function ReportsScreen() {
     [orders],
   );
   const sortedExpenses = useMemo(
-    () => [...expenses].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+    () =>
+      [...expenses]
+        .filter((item) => item.status === "confirmed")
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
     [expenses],
   );
   const sortedSupplyOrders = useMemo(() => {
@@ -387,14 +395,14 @@ export default function ReportsScreen() {
     workdayTab,
   ]);
 
-  const expensesTotal = useMemo(() => expenses.reduce((acc, item) => acc + safeMoney(item.amount), 0), [expenses]);
+  const expensesTotal = useMemo(() => sortedExpenses.reduce((acc, item) => acc + safeMoney(item.amount), 0), [sortedExpenses]);
   const recurrentExpensesTotal = useMemo(
-    () => expenses.filter((item) => item.expenseType === "recurrent").reduce((acc, item) => acc + safeMoney(item.amount), 0),
-    [expenses],
+    () => sortedExpenses.filter((item) => item.expenseType === "recurrent").reduce((acc, item) => acc + safeMoney(item.amount), 0),
+    [sortedExpenses],
   );
   const unexpectedExpensesTotal = useMemo(
-    () => expenses.filter((item) => item.expenseType === "unexpected").reduce((acc, item) => acc + safeMoney(item.amount), 0),
-    [expenses],
+    () => sortedExpenses.filter((item) => item.expenseType === "unexpected").reduce((acc, item) => acc + safeMoney(item.amount), 0),
+    [sortedExpenses],
   );
 
   const receivedSupplyOrders = useMemo(() => supplyOrders.filter((item) => item.status === "received"), [supplyOrders]);
@@ -416,6 +424,10 @@ export default function ReportsScreen() {
     [pendingSales],
   );
   const salesTotal = useMemo(() => paidSales.reduce((acc, item) => acc + safeMoney(item.total), 0), [paidSales]);
+  const sortedFinancialAccounts = useMemo(
+    () => [...financialAccounts].sort((a, b) => a.name.localeCompare(b.name)),
+    [financialAccounts],
+  );
 
   const defaultCashWorkdayId = useMemo(() => {
     const open = sortedWorkdays.find((item) => isWorkdayOpen(item));
@@ -615,6 +627,13 @@ export default function ReportsScreen() {
             onClick={() => setBalanceTab("cash")}
           >
             Caja
+          </button>
+          <button
+            type="button"
+            className={`${styles.balanceTabBtn} ${balanceTab === "accounts" ? styles.balanceTabBtnActive : ""}`}
+            onClick={() => setBalanceTab("accounts")}
+          >
+            Cuentas
           </button>
         </section>
 
@@ -1006,6 +1025,56 @@ export default function ReportsScreen() {
                       }`}
                     >
                       {formatMoneyARS(item.total)}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </>
+          ) : balanceTab === "accounts" ? (
+            <>
+              <div className={styles.summaryGrid}>
+                <article className={styles.summaryCard}>
+                  <span className={styles.summaryLabel}>Cuentas</span>
+                  <strong className={styles.summaryValue}>{sortedFinancialAccounts.length}</strong>
+                </article>
+                <article className={styles.summaryCard}>
+                  <span className={styles.summaryLabel}>Saldo positivo</span>
+                  <strong className={`${styles.summaryValue} ${styles.summaryValueGreen}`}>
+                    {formatMoneyARS(
+                      sortedFinancialAccounts
+                        .filter((item) => item.currentBalance > 0)
+                        .reduce((acc, item) => acc + safeMoney(item.currentBalance), 0),
+                    )}
+                  </strong>
+                </article>
+                <article className={styles.summaryCard}>
+                  <span className={styles.summaryLabel}>Saldo negativo</span>
+                  <strong className={`${styles.summaryValue} ${styles.summaryValueRed}`}>
+                    {formatMoneyARS(
+                      sortedFinancialAccounts
+                        .filter((item) => item.currentBalance < 0)
+                        .reduce((acc, item) => acc + Math.abs(item.currentBalance), 0),
+                    )}
+                  </strong>
+                </article>
+              </div>
+
+              <div className={styles.compactList}>
+                {sortedFinancialAccounts.map((item) => (
+                  <article key={item.id} className={styles.compactItem}>
+                    <div className={styles.compactTop}>
+                      <strong className={styles.compactMainId}>{item.name}</strong>
+                      <span className={`${styles.tag} ${item.currentBalance >= 0 ? styles.tagGreen : styles.tagRed}`}>
+                        {item.kind}
+                      </span>
+                    </div>
+                    <p className={styles.compactMain}>{item.description}</p>
+                    <p className={`${styles.compactMoney} ${item.currentBalance >= 0 ? styles.compactMoneyGreen : styles.compactMoneyRed}`}>
+                      {formatMoneyARS(Math.abs(item.currentBalance))}
+                      {item.currentBalance < 0 ? " (negativo)" : ""}
+                    </p>
+                    <p className={styles.compactMeta}>
+                      {item.code} | actualizada {formatDateTime(item.updatedAt)}
                     </p>
                   </article>
                 ))}

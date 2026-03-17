@@ -1,0 +1,165 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 16px;
+  color: #0f172a;
+}
+
+.content {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.summaryGrid {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.summaryCard,
+.listCard {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 12px;
+}
+
+.summaryLabel {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.summaryValue {
+  color: #0f172a;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.summaryValueGreen {
+  color: #166534;
+}
+
+.summaryValueRed {
+  color: #991b1b;
+}
+
+.accountTabs {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.accountTabBtn {
+  border: 1px solid #0f172a;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 10px 14px;
+}
+
+.accountTabBtnActive {
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.filters {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.listCard {
+  margin-top: 14px;
+}
+
+.list {
+  display: grid;
+  gap: 10px;
+}
+
+.item {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.itemTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+.itemTitle {
+  color: #0f172a;
+}
+
+.itemDescription,
+.itemMeta,
+.empty {
+  margin: 0;
+  color: #475569;
+}
+
+.itemMeta {
+  font-size: 12px;
+}
+
+.amountGreen,
+.amountRed {
+  font-size: 20px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.amountGreen {
+  color: #166534;
+}
+
+.amountRed {
+  color: #991b1b;
+}
+
+@media (max-width: 900px) {
+  .summaryGrid,
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .itemTop {
+    flex-direction: column;
+  }
+}

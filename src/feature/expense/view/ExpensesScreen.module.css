@@ -63,10 +63,35 @@
 }
 
 .formCard,
-.listCard {
+.listCard,
+.detailCard,
+.sideInfoCard {
   border: 1px solid #e2e8f0;
   background: #ffffff;
   padding: 14px;
+}
+
+.tabs {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tabBtn {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  min-height: 42px;
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.tabBtnActive {
+  border-color: #0f172a;
+  background: #e2e8f0;
 }
 
 .cardTitle {
@@ -74,6 +99,21 @@
   font-size: 20px;
   font-weight: 900;
   color: #0f172a;
+}
+
+.listHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.confirmLayout {
+  margin-top: 16px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 16px;
+  align-items: start;
 }
 
 .form {
@@ -213,7 +253,7 @@
 .filters {
   margin-top: 12px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
+  grid-template-columns: minmax(0, 1fr) 220px 220px;
   gap: 8px;
 }
 
@@ -234,6 +274,23 @@
   gap: 8px;
 }
 
+.pendingBtn {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 10px;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  display: grid;
+  gap: 8px;
+}
+
+.pendingBtnActive {
+  border-color: #0f172a;
+  background: #f8fafc;
+}
+
 .expenseTop {
   display: flex;
   justify-content: space-between;
@@ -241,8 +298,16 @@
   gap: 8px;
 }
 
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .badgeRecurrent,
-.badgeUnexpected {
+.badgeUnexpected,
+.badgePending,
+.badgeConfirmed {
   padding: 2px 8px;
   border: 1px solid;
   font-size: 12px;
@@ -259,6 +324,18 @@
   color: #854d0e;
   border-color: #fde68a;
   background: #fef9c3;
+}
+
+.badgePending {
+  color: #9a3412;
+  border-color: #fdba74;
+  background: #fff7ed;
+}
+
+.badgeConfirmed {
+  color: #166534;
+  border-color: #86efac;
+  background: #dcfce7;
 }
 
 .amount {
@@ -278,6 +355,48 @@
   white-space: pre-wrap;
 }
 
+.descriptionBox {
+  margin: 0;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 10px;
+  color: #334155;
+  white-space: pre-wrap;
+}
+
+.detailBody {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.amountRows {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.amountRows div {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.amountRows span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.amountRows strong {
+  color: #0f172a;
+  font-size: 18px;
+  font-weight: 900;
+}
+
 .cardImageRow {
   display: flex;
   gap: 8px;
@@ -295,6 +414,31 @@
 
 .meta {
   font-size: 12px;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.commentBox {
+  margin: 0;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #334155;
+  padding: 10px;
+}
+
+.infoGrid {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.infoGrid p {
+  margin: 0;
+  color: #334155;
 }
 
 .empty {
@@ -356,7 +500,8 @@
     grid-template-columns: 1fr;
   }
 
-  .layout {
+  .layout,
+  .confirmLayout {
     grid-template-columns: 1fr;
   }
 }
@@ -367,6 +512,11 @@
   }
 
   .typeButtons {
+    grid-template-columns: 1fr;
+  }
+
+  .metaGrid,
+  .amountRows {
     grid-template-columns: 1fr;
   }
 }

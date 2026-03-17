@@ -6,14 +6,8 @@ import { formatDateTimeAR as formatDateTime } from "../../../shared/format/local
 import { normalizeForSearch } from "../../../shared/search/search";
 import type { Product, ProductCategory } from "../../product/model/product.types";
 import { fetchProducts } from "../../product/service/product.api";
-import type {
-  AppNotification,
-  CreateNotificationDraft,
-  NotificationSetting,
-  NotificationStatus,
-  StockThresholdSettings,
-  NotificationType,
-} from "../model/notification.types";
+import type { AppNotification, CreateNotificationDraft, NotificationSetting, NotificationStatus, StockThresholdSettings, NotificationType } from "../model/notification.types";
+import { allNotificationTypes, notificationTypeLabel } from "../model/notification.metadata";
 import {
   fetchStockThresholdSettingsApi,
   generateNotificationExamplesApi,
@@ -28,7 +22,7 @@ import {
 } from "../service/notification.api";
 import styles from "./NotificationsScreen.module.css";
 
-type NotificationTab = "list" | "action" | "due-fixed" | "settings" | "stock-levels" | "create";
+type NotificationTab = "viewer" | "list" | "action" | "due-fixed" | "settings" | "stock-levels" | "create";
 
 const categoryOptions: ProductCategory[] = [
   "bebida",
@@ -40,35 +34,7 @@ const categoryOptions: ProductCategory[] = [
   "perecedero",
 ];
 
-const notificationTypeLabel: Record<NotificationType, string> = {
-  "license-required": "Permiso requerido",
-  "license-expiring": "Permiso por vencer",
-  "product-expiring": "Producto por vencer",
-  "product-low-stock": "Stock bajo por producto",
-  "expense-created": "Gasto generado",
-  "sale-created": "Venta generada",
-  "supply-requested": "Mercancia solicitada",
-  "supply-approved": "Solicitud de mercancia aprobada",
-  "supply-received": "Mercancia recibida",
-  "supply-pending-receive": "Pedido proveedor pendiente de recepcion",
-  "cash-opened": "Caja abierta",
-  "cash-closed": "Caja cerrada",
-  cash: "Caja",
-  "user-created": "Usuario creado",
-  "user-updated": "Usuario modificado",
-  "user-deleted": "Usuario eliminado",
-  "price-changed": "Precio modificado",
-  "product-created": "Producto creado",
-  "stock-created": "Ingreso de stock",
-  "operation-request-merchandise": "Solicitud operador: mercancia",
-  "operation-request-permissions": "Solicitud operador: permisos",
-  "operation-request-reviewed": "Solicitud operador revisada",
-  "manual-fixed": "Manual fija",
-  "manual-action": "Manual con accion",
-  "manual-due": "Manual con vencimiento",
-};
-
-const allTypes = Object.keys(notificationTypeLabel) as NotificationType[];
+const allTypes = allNotificationTypes;
 
 function getTime(value?: string) {
   if (!value) return Number.NaN;
@@ -86,6 +52,7 @@ function buildCategoryThresholdDrafts(settings: StockThresholdSettings | null) {
 
 export default function NotificationsScreen() {
   const auth = useAuth();
+  const isAdmin = auth.user?.role === "admin";
   const [tab, setTab] = useState<NotificationTab>("list");
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [settings, setSettings] = useState<NotificationSetting[]>([]);
@@ -126,28 +93,48 @@ export default function NotificationsScreen() {
     setMessage("");
   }
 
+  useEffect(() => {
+    if (!isAdmin) {
+      setTab("viewer");
+      return;
+    }
+    if (tab === "viewer") {
+      setTab("list");
+    }
+  }, [isAdmin, tab]);
+
   const reload = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
-      const [notificationsList, settingsList, stockThresholdList, productList] = await Promise.all([
-        fetchNotificationsApi(),
-        fetchNotificationSettingsApi(),
-        fetchStockThresholdSettingsApi(),
-        fetchProducts(),
-      ]);
-      setNotifications(notificationsList);
-      setSettings(settingsList);
-      setStockThresholdSettings(stockThresholdList);
-      setCategoryThresholdDrafts(buildCategoryThresholdDrafts(stockThresholdList));
-      setProducts(productList);
-      setSelectedProductIdForThreshold((current) => current || productList[0]?.id || "");
+      if (!isAdmin) {
+        const notificationsList = await fetchNotificationsApi();
+        setNotifications(notificationsList);
+        setSettings([]);
+        setStockThresholdSettings(null);
+        setCategoryThresholdDrafts(buildCategoryThresholdDrafts(null));
+        setProducts([]);
+        setSelectedProductIdForThreshold("");
+      } else {
+        const [notificationsList, settingsList, stockThresholdList, productList] = await Promise.all([
+          fetchNotificationsApi(),
+          fetchNotificationSettingsApi(),
+          fetchStockThresholdSettingsApi(),
+          fetchProducts(),
+        ]);
+        setNotifications(notificationsList);
+        setSettings(settingsList);
+        setStockThresholdSettings(stockThresholdList);
+        setCategoryThresholdDrafts(buildCategoryThresholdDrafts(stockThresholdList));
+        setProducts(productList);
+        setSelectedProductIdForThreshold((current) => current || productList[0]?.id || "");
+      }
     } catch {
       setError("No se pudieron cargar notificaciones.");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAdmin]);
 
   useEffect(() => {
     void reload();
@@ -407,66 +394,64 @@ export default function NotificationsScreen() {
     }
   }
 
-  if (auth.user?.role !== "admin") {
-    return (
-      <div className={styles.page}>
-        <div className={styles.content}>
-          <header className={styles.header}>
-            <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Notificaciones" }]} asTitle />
-            <SessionStatusBar />
-          </header>
-          <p className={styles.empty}>No tienes permisos para ver notificaciones.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.page}>
       <div className={styles.content}>
         <header className={styles.header}>
           <div>
             <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Notificaciones" }]} asTitle />
-            <p className={styles.subtitle}>Centro de avisos, vencimientos, acciones pendientes y configuraciones.</p>
+            <p className={styles.subtitle}>
+              {isAdmin
+                ? "Centro de avisos, vencimientos, acciones pendientes y configuraciones."
+                : "Visualizacion de todas las notificaciones del sistema en modo solo lectura."}
+            </p>
           </div>
           <SessionStatusBar />
         </header>
 
         <section className={styles.tabs}>
-          <button type="button" className={`${styles.tabBtn} ${tab === "list" ? styles.tabBtnActive : ""}`} onClick={() => setTab("list")}>
-            Listado
-          </button>
-          <button type="button" className={`${styles.tabBtn} ${tab === "action" ? styles.tabBtnActive : ""}`} onClick={() => setTab("action")}>
-            Requieren accion
-          </button>
-          <button
-            type="button"
-            className={`${styles.tabBtn} ${tab === "due-fixed" ? styles.tabBtnActive : ""}`}
-            onClick={() => setTab("due-fixed")}
-          >
-            Vencimientos y fijas
-          </button>
-          <button
-            type="button"
-            className={`${styles.tabBtn} ${tab === "settings" ? styles.tabBtnActive : ""}`}
-            onClick={() => setTab("settings")}
-          >
-            Duraciones
-          </button>
-          <button
-            type="button"
-            className={`${styles.tabBtn} ${tab === "stock-levels" ? styles.tabBtnActive : ""}`}
-            onClick={() => setTab("stock-levels")}
-          >
-            Stock minimo
-          </button>
-          <button
-            type="button"
-            className={`${styles.tabBtn} ${tab === "create" ? styles.tabBtnActive : ""}`}
-            onClick={() => setTab("create")}
-          >
-            Crear
-          </button>
+          {!isAdmin ? (
+            <button type="button" className={`${styles.tabBtn} ${styles.tabBtnActive}`}>
+              Visualizar todas
+            </button>
+          ) : (
+            <>
+              <button type="button" className={`${styles.tabBtn} ${tab === "list" ? styles.tabBtnActive : ""}`} onClick={() => setTab("list")}>
+                Listado
+              </button>
+              <button type="button" className={`${styles.tabBtn} ${tab === "action" ? styles.tabBtnActive : ""}`} onClick={() => setTab("action")}>
+                Requieren accion
+              </button>
+              <button
+                type="button"
+                className={`${styles.tabBtn} ${tab === "due-fixed" ? styles.tabBtnActive : ""}`}
+                onClick={() => setTab("due-fixed")}
+              >
+                Vencimientos y fijas
+              </button>
+              <button
+                type="button"
+                className={`${styles.tabBtn} ${tab === "settings" ? styles.tabBtnActive : ""}`}
+                onClick={() => setTab("settings")}
+              >
+                Duraciones
+              </button>
+              <button
+                type="button"
+                className={`${styles.tabBtn} ${tab === "stock-levels" ? styles.tabBtnActive : ""}`}
+                onClick={() => setTab("stock-levels")}
+              >
+                Stock minimo
+              </button>
+              <button
+                type="button"
+                className={`${styles.tabBtn} ${tab === "create" ? styles.tabBtnActive : ""}`}
+                onClick={() => setTab("create")}
+              >
+                Crear
+              </button>
+            </>
+          )}
         </section>
 
         {message ? <p className={styles.success}>{message}</p> : null}
@@ -476,7 +461,7 @@ export default function NotificationsScreen() {
         <section className={styles.panel}>
           {loading ? (
             <p className={styles.empty}>Cargando...</p>
-          ) : tab === "list" ? (
+          ) : !isAdmin || tab === "viewer" || tab === "list" ? (
             <>
               <div className={styles.filters}>
                 <input
@@ -507,7 +492,7 @@ export default function NotificationsScreen() {
                   <option value="type">Orden: tipo</option>
                 </select>
               </div>
-              <NotificationList items={filteredNotifications} onUpdateStatus={updateNotificationStatus} />
+              <NotificationList items={filteredNotifications} onUpdateStatus={updateNotificationStatus} readOnly={!isAdmin} />
             </>
           ) : tab === "action" ? (
             <>
@@ -751,9 +736,11 @@ export default function NotificationsScreen() {
 function NotificationList({
   items,
   onUpdateStatus,
+  readOnly = false,
 }: {
   items: AppNotification[];
-  onUpdateStatus: (id: string, status: NotificationStatus) => Promise<void>;
+  onUpdateStatus?: (id: string, status: NotificationStatus) => Promise<void>;
+  readOnly?: boolean;
 }) {
   if (items.length === 0) {
     return <p className={styles.empty}>No hay notificaciones para mostrar.</p>;
@@ -776,22 +763,24 @@ function NotificationList({
           <p className={styles.meta}>
             Creada: {formatDateTime(item.createdAt)} | Vence: {formatDateTime(item.dueAt)} | Ref: {item.entityType || "-"} {item.entityId || "-"}
           </p>
-          <div className={styles.actions}>
-            {item.status !== "received" ? (
-              <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "received")}>
-                Marcar recibida
-              </button>
-            ) : null}
-            {item.status !== "disabled" ? (
-              <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "disabled")}>
-                Deshabilitar
-              </button>
-            ) : (
-              <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "active")}>
-                Reactivar
-              </button>
-            )}
-          </div>
+          {!readOnly && onUpdateStatus ? (
+            <div className={styles.actions}>
+              {item.status !== "received" ? (
+                <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "received")}>
+                  Marcar recibida
+                </button>
+              ) : null}
+              {item.status !== "disabled" ? (
+                <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "disabled")}>
+                  Deshabilitar
+                </button>
+              ) : (
+                <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "active")}>
+                  Reactivar
+                </button>
+              )}
+            </div>
+          ) : null}
         </article>
       ))}
     </div>
