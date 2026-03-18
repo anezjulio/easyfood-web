@@ -20,6 +20,7 @@ const DATA_STORES_SEED_PATH = resolve(REPO_MOCK_API_DIR, "data-stores.json");
 const DEFAULT_DATA_STORE_ID = "default";
 const DEV_SERVER_PORT = parsePort(process.env.PORT, 5173);
 const PREVIEW_PORT = parsePort(process.env.PORT, 4173);
+const ALLOWED_HOSTS = resolveAllowedHosts();
 
 type Product = {
   id: string;
@@ -650,6 +651,24 @@ function resolveStoragePath(...segments: string[]) {
 function parsePort(input: string | undefined, fallback: number) {
   const parsed = Math.trunc(Number(input));
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function resolveAllowedHosts() {
+  const hosts = new Set<string>();
+  const configured = String(process.env.__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS || "").trim();
+  if (configured) {
+    for (const value of configured.split(",")) {
+      const host = value.trim();
+      if (host) hosts.add(host);
+    }
+  }
+
+  const railwayDomain = String(process.env.RAILWAY_PUBLIC_DOMAIN || "").trim();
+  if (railwayDomain) {
+    hosts.add(railwayDomain);
+  }
+
+  return [...hosts];
 }
 
 function resolveReceiptsDir() {
@@ -5903,11 +5922,13 @@ export default defineConfig({
     host: true,
     port: DEV_SERVER_PORT,
     strictPort: true,
+    allowedHosts: ALLOWED_HOSTS,
   },
   preview: {
     host: true,
     port: PREVIEW_PORT,
     strictPort: true,
+    allowedHosts: ALLOWED_HOSTS,
   },
   plugins: [react(), mockDbPlugin()],
 });
