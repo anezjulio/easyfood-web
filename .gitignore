@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+.dev-server.pid
+mock-api/receipts/
 
 # Editor directories and files
 .vscode/*

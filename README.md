@@ -153,4 +153,15 @@ Con esa configuracion:
 - imagenes y comprobantes quedan en `/data/images` y `/data/mock-api/receipts`
 - si el volumen arranca vacio, se copian como semilla los datos actuales del repo
 
+### Local vs stage
+
+La raiz de datos ahora depende del entorno:
+
+- Si `DATA_ROOT` no esta definido, la app sigue trabajando contra archivos locales del proyecto.
+  Ejemplo: `mock-api/db.json`, `images/`, `mock-api/receipts/`.
+- Si `DATA_ROOT=/data`, la app usa esa raiz persistente del host.
+  Ejemplo: `/data/mock-api/db.json`, `/data/images/`, `/data/mock-api/receipts/`.
+
+En otras palabras, no se fijo `/data` para todos los casos: local y stage pueden convivir cambiando solo la variable de entorno.
+
 Esto esta pensado para demo y validacion rapida con terceros. Para produccion conviene separar frontend/backend y dejar una persistencia mas robusta.
