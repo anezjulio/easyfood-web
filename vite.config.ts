@@ -1,18 +1,25 @@
 import { existsSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, extname, resolve } from "node:path";
+import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, extname, isAbsolute, resolve } from "node:path";
 import type { IncomingMessage } from "node:http";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
-const LEGACY_DB_PATH = resolve(process.cwd(), "mock-api", "db.json");
-const LEGACY_IMAGE_DIR = resolve(process.cwd(), "images");
+const PROJECT_ROOT = process.cwd();
+const CONFIGURED_DATA_ROOT = resolveDataRoot();
+const REPO_MOCK_API_DIR = resolve(PROJECT_ROOT, "mock-api");
+const REPO_IMAGES_DIR = resolve(PROJECT_ROOT, "images");
+const LEGACY_DB_PATH = resolveStoragePath("mock-api", "db.json");
+const LEGACY_IMAGE_DIR = resolveStoragePath("images");
 const LEGACY_RECEIPTS_DIR = resolveReceiptsDir();
-const DATA_STORES_PATH = resolve(process.cwd(), "mock-api", "data-stores.json");
-const DATA_STORES_ROOT_DIR = resolve(process.cwd(), "mock-api", "data-stores");
-const DATA_STORES_IMAGES_ROOT_DIR = resolve(process.cwd(), "images");
+const DATA_STORES_PATH = resolveStoragePath("mock-api", "data-stores.json");
+const DATA_STORES_ROOT_DIR = resolveStoragePath("mock-api", "data-stores");
+const DATA_STORES_IMAGES_ROOT_DIR = resolveStoragePath("images");
 const DATA_STORES_RECEIPTS_ROOT_DIR = resolve(LEGACY_RECEIPTS_DIR, "stores");
+const DATA_STORES_SEED_PATH = resolve(REPO_MOCK_API_DIR, "data-stores.json");
 const DEFAULT_DATA_STORE_ID = "default";
+const DEV_SERVER_PORT = parsePort(process.env.PORT, 5173);
+const PREVIEW_PORT = parsePort(process.env.PORT, 4173);
 
 type Product = {
   id: string;
@@ -630,10 +637,26 @@ function parsePendingTimeoutMinutes() {
   return 15;
 }
 
+function resolveDataRoot() {
+  const configured = String(process.env.DATA_ROOT || "").trim();
+  if (!configured) return null;
+  return isAbsolute(configured) ? configured : resolve(PROJECT_ROOT, configured);
+}
+
+function resolveStoragePath(...segments: string[]) {
+  return resolve(CONFIGURED_DATA_ROOT || PROJECT_ROOT, ...segments);
+}
+
+function parsePort(input: string | undefined, fallback: number) {
+  const parsed = Math.trunc(Number(input));
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
 function resolveReceiptsDir() {
   const configured = String(process.env.VITE_RECEIPTS_DIR || process.env.RECEIPTS_DIR || "").trim();
-  if (!configured) return resolve(process.cwd(), "mock-api", "receipts");
-  return resolve(process.cwd(), configured);
+  if (!configured) return resolveStoragePath("mock-api", "receipts");
+  if (isAbsolute(configured)) return configured;
+  return resolve(CONFIGURED_DATA_ROOT || PROJECT_ROOT, configured);
 }
 
 function normalizeDataStoreId(value: unknown): string {
@@ -663,6 +686,40 @@ function buildDataStorePaths(storeId: string) {
     imagesDir: resolve(DATA_STORES_IMAGES_ROOT_DIR, safeId),
     receiptsDir: resolve(DATA_STORES_RECEIPTS_ROOT_DIR, safeId),
   };
+}
+
+function resolveDataStoreSeedPaths(storeId: string) {
+  const safeId = normalizeDataStoreId(storeId);
+  if (!safeId || safeId === DEFAULT_DATA_STORE_ID) {
+    return {
+      dbPath: resolve(REPO_MOCK_API_DIR, "db.json"),
+      imagesDir: REPO_IMAGES_DIR,
+      receiptsDir: resolve(REPO_MOCK_API_DIR, "receipts"),
+    };
+  }
+  return {
+    dbPath: resolve(REPO_MOCK_API_DIR, "data-stores", safeId, "db.js"),
+    imagesDir: resolve(REPO_IMAGES_DIR, safeId),
+    receiptsDir: resolve(REPO_MOCK_API_DIR, "receipts", "stores", safeId),
+  };
+}
+
+async function seedFileIfMissing(targetPath: string, seedPath: string) {
+  if (existsSync(targetPath)) return true;
+  if (!existsSync(seedPath) || resolve(targetPath) === resolve(seedPath)) return false;
+  await mkdir(dirname(targetPath), { recursive: true });
+  await cp(seedPath, targetPath, { force: false });
+  return true;
+}
+
+async function ensureDirectoryWithOptionalSeed(targetDir: string, seedDir: string) {
+  if (existsSync(targetDir)) return;
+  if (existsSync(seedDir) && resolve(targetDir) !== resolve(seedDir)) {
+    await mkdir(dirname(targetDir), { recursive: true });
+    await cp(seedDir, targetDir, { recursive: true, force: false });
+    return;
+  }
+  await mkdir(targetDir, { recursive: true });
 }
 
 function normalizeDataStoreRecord(input: unknown): DataStoreRecord | null {
@@ -695,6 +752,9 @@ function normalizeDataStoreRecord(input: unknown): DataStoreRecord | null {
 async function ensureDataStoresFile() {
   await mkdir(dirname(DATA_STORES_PATH), { recursive: true });
   if (!existsSync(DATA_STORES_PATH)) {
+    if (await seedFileIfMissing(DATA_STORES_PATH, DATA_STORES_SEED_PATH)) {
+      return;
+    }
     const base = buildDefaultDataStoreRecord();
     const initial: DataStoresState = {
       activeStoreId: base.id,
@@ -748,13 +808,18 @@ async function getActiveDataStore(): Promise<DataStoreRecord> {
 async function ensureDataStoreDbFile(store: DataStoreRecord) {
   await mkdir(dirname(store.dbPath), { recursive: true });
   if (!existsSync(store.dbPath)) {
+    const seedPaths = resolveDataStoreSeedPaths(store.id);
+    if (await seedFileIfMissing(store.dbPath, seedPaths.dbPath)) {
+      return;
+    }
     await writeFile(store.dbPath, JSON.stringify(defaultDb, null, 2) + "\n", "utf8");
   }
 }
 
 async function ensureDataStoreMediaDirs(store: DataStoreRecord) {
-  await mkdir(store.imagesDir, { recursive: true });
-  await mkdir(store.receiptsDir, { recursive: true });
+  const seedPaths = resolveDataStoreSeedPaths(store.id);
+  await ensureDirectoryWithOptionalSeed(store.imagesDir, seedPaths.imagesDir);
+  await ensureDirectoryWithOptionalSeed(store.receiptsDir, seedPaths.receiptsDir);
 }
 
 function validateAdminCredentials(db: MockDb, requestedBy: string, adminPasswordHash: string) {
@@ -801,7 +866,6 @@ function buildEntityId(prefix: string, inputDate = new Date()): string {
 function mockDbPlugin(): Plugin {
   return {
     name: "mock-db-middleware",
-    apply: "serve",
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         try {
@@ -4759,12 +4823,14 @@ function generateNotificationTestCases(db: MockDb): number {
 
 async function ensureImageDir(store?: DataStoreRecord) {
   const targetStore = store || (await getActiveDataStore());
-  await mkdir(targetStore.imagesDir, { recursive: true });
+  const seedPaths = resolveDataStoreSeedPaths(targetStore.id);
+  await ensureDirectoryWithOptionalSeed(targetStore.imagesDir, seedPaths.imagesDir);
 }
 
 async function ensureReceiptsDir(store?: DataStoreRecord) {
   const targetStore = store || (await getActiveDataStore());
-  await mkdir(targetStore.receiptsDir, { recursive: true });
+  const seedPaths = resolveDataStoreSeedPaths(targetStore.id);
+  await ensureDirectoryWithOptionalSeed(targetStore.receiptsDir, seedPaths.receiptsDir);
 }
 
 async function writeReceiptCopy(receiptId: string, html: string) {
@@ -5835,12 +5901,12 @@ function contentTypeFromExt(fileExt: string): string {
 export default defineConfig({
   server: {
     host: true,
-    port: 5173,
+    port: DEV_SERVER_PORT,
     strictPort: true,
   },
   preview: {
     host: true,
-    port: 4173,
+    port: PREVIEW_PORT,
     strictPort: true,
   },
   plugins: [react(), mockDbPlugin()],

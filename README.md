@@ -133,3 +133,24 @@ Para que se aplique en cada encendido de la PC:
 
 - Arquitectura MVVM y criterios de capas: `docs/architecture-mvvm.md`
 - Integracion backend (paginas, servicios y endpoints): `docs/backend-integration.md`
+
+## Demo rapida con URL publica
+
+Para compartir una URL de prueba sin cambiar aun a una base real, este repo puede correr con la fake API actual y persistir archivos en un volumen del host.
+
+### Railway
+
+1. Subir el repo a GitHub.
+2. Crear un proyecto nuevo en Railway desde ese repo.
+3. Crear un `Volume` y montarlo en `/data`.
+4. Definir la variable de entorno `DATA_ROOT=/data`.
+5. Railway puede arrancar con `npm start`.
+
+Con esa configuracion:
+
+- la app levanta con Vite en el puerto que entregue Railway
+- la fake DB queda en `/data/mock-api/...`
+- imagenes y comprobantes quedan en `/data/images` y `/data/mock-api/receipts`
+- si el volumen arranca vacio, se copian como semilla los datos actuales del repo
+
+Esto esta pensado para demo y validacion rapida con terceros. Para produccion conviene separar frontend/backend y dejar una persistencia mas robusta.
