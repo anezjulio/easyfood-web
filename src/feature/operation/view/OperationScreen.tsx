@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { useAuth } from "../../../app/provider/useAuth";
-import { formatDateTimeAR as formatDateTime, formatMoneyARS } from "../../../shared/format/locale";
+import { formatDateTimeAR as formatDateTime, formatMoneyARS, formatTimeRemaining } from "../../../shared/format/locale";
 import { notificationTypeLabel } from "../../notification/model/notification.metadata";
 import type { AppNotification } from "../../notification/model/notification.types";
 import { fetchNotificationsApi } from "../../notification/service/notification.api";
@@ -394,7 +394,10 @@ function getAlertMeta(item: AppNotification) {
   const dueAt = getTime(item.dueAt);
 
   if (Number.isFinite(dueAt)) {
-    return `${dueAt <= Date.now() ? "Vencio" : "Vence"} ${formatDateTime(item.dueAt)}`;
+    const remaining = dueAt > Date.now() ? formatTimeRemaining(item.dueAt) : "";
+    return remaining
+      ? `Vence ${formatDateTime(item.dueAt)} · ${remaining}`
+      : `${dueAt <= Date.now() ? "Vencio" : "Vence"} ${formatDateTime(item.dueAt)}`;
   }
 
   return `Creada ${formatDateTime(item.createdAt)}`;

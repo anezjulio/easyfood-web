@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { useAuth } from "../../../app/provider/useAuth";
-import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
+import { formatDateTimeAR as formatDateTime, formatTimeRemaining } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
 import type { Product, ProductCategory } from "../../product/model/product.types";
 import { fetchProducts } from "../../product/service/product.api";
@@ -48,6 +48,12 @@ function buildCategoryThresholdDrafts(settings: StockThresholdSettings | null) {
     result[category] = String(value);
   }
   return result;
+}
+
+function formatDueMeta(value?: string) {
+  if (!value) return "Vence: -";
+  const remaining = formatTimeRemaining(value);
+  return remaining ? `Vence: ${formatDateTime(value)} | ${remaining}` : `Vence: ${formatDateTime(value)}`;
 }
 
 export default function NotificationsScreen() {
@@ -761,7 +767,7 @@ function NotificationList({
           </div>
           <p className={styles.description}>{item.description}</p>
           <p className={styles.meta}>
-            Creada: {formatDateTime(item.createdAt)} | Vence: {formatDateTime(item.dueAt)} | Ref: {item.entityType || "-"} {item.entityId || "-"}
+            Creada: {formatDateTime(item.createdAt)} | {formatDueMeta(item.dueAt)} | Ref: {item.entityType || "-"} {item.entityId || "-"}
           </p>
           {!readOnly && onUpdateStatus ? (
             <div className={styles.actions}>

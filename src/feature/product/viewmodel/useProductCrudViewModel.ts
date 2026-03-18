@@ -58,6 +58,17 @@ export function useProductCrudViewModel() {
   const [newProductUseMarginOverride, setNewProductUseMarginOverride] = useState(false);
   const [newProductMarginDraft, setNewProductMarginDraft] = useState("30");
 
+  const resetNewProductForm = useCallback(() => {
+    setName("");
+    setCostPrice("");
+    setImageUrl("");
+    setBarcode("");
+    setAutoGenerateBarcodeOnSubmit(false);
+    setCategory("vivere");
+    setNewProductUseMarginOverride(false);
+    setNewProductMarginDraft(String(marginSettings?.categoryMargins?.vivere ?? 30));
+  }, [marginSettings?.categoryMargins?.vivere]);
+
   const reloadProducts = useCallback(async (nextSelectedId?: string | null) => {
     setLoading(true);
     const list = await fetchProducts();
@@ -182,14 +193,7 @@ export function useProductCrudViewModel() {
   }, [effectiveMarginPercent, marginSettings?.productMargins, selectedProduct]);
 
   useEffect(() => {
-    if (!selectedProduct) {
-      setName("");
-      setCostPrice("");
-      setImageUrl("");
-      setBarcode("");
-      setCategory("vivere");
-      return;
-    }
+    if (!selectedProduct) return;
 
     const fallbackCost = inferCostPriceFromSalePrice(selectedProduct.price, effectiveMarginPercent);
     const normalizedCost =
@@ -231,19 +235,17 @@ export function useProductCrudViewModel() {
   function selectProduct(id: string) {
     setError("");
     setMessage("");
-    setSelectedProductId((current) => (current === id ? null : id));
+    if (selectedProductId === id) {
+      setSelectedProductId(null);
+      resetNewProductForm();
+      return;
+    }
+    setSelectedProductId(id);
   }
 
   function clearForm() {
     setSelectedProductId(null);
-    setName("");
-    setCostPrice("");
-    setImageUrl("");
-    setBarcode("");
-    setAutoGenerateBarcodeOnSubmit(false);
-    setCategory("vivere");
-    setNewProductUseMarginOverride(false);
-    setNewProductMarginDraft(String(marginSettings?.categoryMargins?.vivere ?? 30));
+    resetNewProductForm();
     setError("");
     setMessage("");
   }
@@ -435,6 +437,7 @@ export function useProductCrudViewModel() {
       }
 
       await reloadProducts(null);
+      resetNewProductForm();
       setMessage("Producto eliminado correctamente.");
       return;
     }
