@@ -21,6 +21,7 @@ import LicensesScreen from "../../feature/license/view/LicensesScreen";
 import NotificationsScreen from "../../feature/notification/view/NotificationsScreen";
 import DataScreen from "../../feature/data/view/DataScreen";
 import TransactionsScreen from "../../feature/transaction/view/TransactionsScreen";
+import HelpScreen from "../../feature/help/view/HelpScreen";
 import RequireAuth from "./RequireAuth";
 
 export default function AppRoutes() {
@@ -52,6 +53,7 @@ export default function AppRoutes() {
         <Route path="/notifications" element={<NotificationsScreen />} />
         <Route path="/transactions" element={<TransactionsScreen />} />
         <Route path="/data" element={<DataScreen />} />
+        <Route path="/help" element={<HelpScreen />} />
       </Route>
 
       {/* default */}

@@ -50,6 +50,12 @@ export default function SessionStatusBar({ showSalesShortcut = true }: { showSal
 
   return (
     <div className={styles.sessionBar}>
+      <button type="button" onClick={() => nav("/help")} className={styles.helpBtn} aria-label="Abrir ayuda del sistema">
+        <span className={styles.helpIcon} aria-hidden="true">
+          ?
+        </span>
+        <span>Ayuda</span>
+      </button>
       <div className={styles.userLabel}>
         Usuario: <span className={styles.userName}>{auth.user?.username || "-"}</span>
       </div>

@@ -1,11 +1,11 @@
-import { Children, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { useAuth } from "../../../app/provider/useAuth";
-import { formatDateTimeAR as formatDateTime, formatMoneyARS, formatTimeRemaining } from "../../../shared/format/locale";
+import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
 import { notificationTypeLabel } from "../../notification/model/notification.metadata";
-import type { AppNotification } from "../../notification/model/notification.types";
+import type { AppNotification, NotificationType } from "../../notification/model/notification.types";
 import { fetchNotificationsApi } from "../../notification/service/notification.api";
 import styles from "./OperationScreen.module.css";
 
@@ -23,9 +23,6 @@ const WARNING_ALERT_TYPES = new Set([
   "manual-due",
   "supply-requested",
 ]);
-const ISO_DATE_TIME_REGEX = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z/g;
-const MONEY_IN_PARENS_REGEX = /\((\d+(?:[.,]\d+)?)\)/g;
-const MONEY_AFTER_WORD_REGEX = /\b(por|con)\s+(\d+(?:[.,]\d+)?)(?=[\s.,)|]|$)/gi;
 
 export default function OperationScreen() {
   const nav = useNavigate();
@@ -34,6 +31,7 @@ export default function OperationScreen() {
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [alertsLoading, setAlertsLoading] = useState(true);
   const [alertsError, setAlertsError] = useState("");
+  const [selectedAlertType, setSelectedAlertType] = useState<"all" | NotificationType>("all");
 
   useEffect(() => {
     let ignore = false;
@@ -50,8 +48,9 @@ export default function OperationScreen() {
         if (ignore) return;
         setAlertsError("No se pudieron cargar las alertas del sistema.");
       } finally {
-        if (ignore) return;
-        setAlertsLoading(false);
+        if (!ignore) {
+          setAlertsLoading(false);
+        }
       }
     }
 
@@ -86,51 +85,91 @@ export default function OperationScreen() {
       });
   }, [notifications]);
 
+  const alertTypeOptions = useMemo(
+    () =>
+      [...new Set(activeAlerts.map((item) => item.type))].sort((a, b) =>
+        notificationTypeLabel[a].localeCompare(notificationTypeLabel[b]),
+      ),
+    [activeAlerts],
+  );
+
+  const activeSelectedAlertType =
+    selectedAlertType === "all" || alertTypeOptions.includes(selectedAlertType) ? selectedAlertType : "all";
+
+  const filteredAlerts = useMemo(() => {
+    if (activeSelectedAlertType === "all") return activeAlerts;
+    return activeAlerts.filter((item) => item.type === activeSelectedAlertType);
+  }, [activeAlerts, activeSelectedAlertType]);
+
+  const alertCountLabel =
+    activeSelectedAlertType === "all" ? String(activeAlerts.length) : `${filteredAlerts.length}/${activeAlerts.length}`;
+
   return (
     <div className={styles.page}>
       <div className={styles.content}>
         <header className={styles.header}>
           <div>
             <Breadcrumbs items={[{ label: "Menu" }]} asTitle />
-            <p className={styles.subtitle}>Selecciona una opcion</p>
           </div>
 
           <SessionStatusBar />
         </header>
 
-        <section className={styles.groupSection}>
+        <section className={styles.alertsSection}>
           <div className={styles.groupHeading}>
             <div className={styles.groupTitleRow}>
-              <h2 className={styles.groupTitle}>Alertas</h2>
-              {activeAlerts.length > 1 ? <span className={styles.countBadge}>{activeAlerts.length}</span> : null}
+              <button type="button" className={styles.groupTitleLink} onClick={() => nav("/notifications")}>
+                Alertas
+              </button>
+              <span className={styles.countBadge}>{alertCountLabel}</span>
+              {!alertsLoading && !alertsError ? (
+                <div className={styles.alertFilters}>
+                  <button
+                    type="button"
+                    className={`${styles.alertFilterBtn} ${activeSelectedAlertType === "all" ? styles.alertFilterBtnActive : ""}`.trim()}
+                    onClick={() => setSelectedAlertType("all")}
+                  >
+                    Todos
+                  </button>
+                  {alertTypeOptions.map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      className={`${styles.alertFilterBtn} ${activeSelectedAlertType === type ? styles.alertFilterBtnActive : ""}`.trim()}
+                      onClick={() => setSelectedAlertType(type)}
+                    >
+                      {notificationTypeLabel[type]}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
             </div>
-
-            <button type="button" className={styles.linkBtn} onClick={() => nav("/notifications")}>
-              Ver todas
-            </button>
           </div>
 
-          <AlertCarousel>
-            {alertsLoading ? (
-              <InfoCard
-                title="Cargando alertas"
-                subtitle="Sistema"
-                description="Estamos consultando vencimientos, mercancia, stock y otras alertas operativas."
-                tone="neutral"
-              />
-            ) : alertsError ? (
-              <InfoCard title="Alertas no disponibles" subtitle="Sistema" description={alertsError} tone="critical" />
-            ) : activeAlerts.length > 0 ? (
-              activeAlerts.map((item) => <SystemAlertCard key={item.id} item={item} />)
-            ) : (
-              <InfoCard
-                title="Todo en orden"
-                subtitle="Sistema"
-                description="No hay alertas activas de stock, vencimientos, gastos programados o mercancia por recibir."
-                tone="neutral"
-              />
-            )}
-          </AlertCarousel>
+          {alertsLoading ? (
+            <AlertStatusPanel
+              title="Cargando alertas"
+              description="Estamos consultando vencimientos, mercancia, stock y otras alertas operativas."
+              tone="neutral"
+            />
+          ) : alertsError ? (
+            <AlertStatusPanel title="Alertas no disponibles" description={alertsError} tone="critical" />
+          ) : (
+            <section className={styles.alertListPanel}>
+              {filteredAlerts.length === 0 ? (
+                <div className={styles.alertEmptyState}>
+                  <strong>Sin resultados</strong>
+                  <span>No hay alertas activas para el filtro seleccionado.</span>
+                </div>
+              ) : (
+                <div className={styles.alertListCompact}>
+                  {filteredAlerts.map((item) => (
+                    <AlertRailItem key={item.id} item={item} />
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
         </section>
 
         <section className={styles.groupSection}>
@@ -226,267 +265,55 @@ function shouldShowInAlertsMenu(item: AppNotification) {
   return getAlertTone(item) !== "neutral";
 }
 
-function AlertCarousel({ children }: { children: ReactNode }) {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const dragRef = useRef({
-    pointerId: -1,
-    startX: 0,
-    scrollLeft: 0,
-    maxScrollLeft: 0,
-    scrollFactor: 1,
-  });
-  const slides = Children.toArray(children);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(slides.length > 1);
-  const [isDragging, setIsDragging] = useState(false);
-
-  useEffect(() => {
-    updateCarouselState();
-
-    function handleResize() {
-      updateCarouselState();
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [slides.length]);
-
-  function updateCarouselState() {
-    const track = trackRef.current;
-    if (!track) return;
-
-    const maxScrollLeft = Math.max(0, track.scrollWidth - track.clientWidth);
-    setCanScrollPrev(track.scrollLeft > 8);
-    setCanScrollNext(track.scrollLeft < maxScrollLeft - 8);
-  }
-
-  function getScrollStep() {
-    const track = trackRef.current;
-    if (!track) return 0;
-
-    const firstSlide = track.firstElementChild as HTMLElement | null;
-    if (!firstSlide) return track.clientWidth;
-
-    const stylesComputed = window.getComputedStyle(track);
-    const gap = Number.parseFloat(stylesComputed.columnGap || stylesComputed.gap || "0") || 0;
-    return firstSlide.offsetWidth + gap;
-  }
-
-  function scrollByDirection(direction: -1 | 1) {
-    const track = trackRef.current;
-    if (!track) return;
-
-    track.scrollBy({
-      left: getScrollStep() * direction,
-      behavior: "smooth",
-    });
-  }
-
-  function getScrollbarDragMetrics(track: HTMLDivElement) {
-    const maxScrollLeft = Math.max(0, track.scrollWidth - track.clientWidth);
-    const thumbWidth = track.scrollWidth > 0 ? (track.clientWidth * track.clientWidth) / track.scrollWidth : track.clientWidth;
-    const maxThumbTravel = Math.max(1, track.clientWidth - thumbWidth);
-    const scrollFactor = maxScrollLeft > 0 ? maxScrollLeft / maxThumbTravel : 1;
-
-    return {
-      maxScrollLeft,
-      scrollFactor,
-    };
-  }
-
-  function handlePointerDown(event: React.PointerEvent<HTMLDivElement>) {
-    if (event.pointerType === "mouse" && event.button !== 0) return;
-    const track = trackRef.current;
-    if (!track) return;
-
-    event.preventDefault();
-    const { maxScrollLeft, scrollFactor } = getScrollbarDragMetrics(track);
-    dragRef.current = {
-      pointerId: event.pointerId,
-      startX: event.clientX,
-      scrollLeft: track.scrollLeft,
-      maxScrollLeft,
-      scrollFactor,
-    };
-    event.currentTarget.setPointerCapture(event.pointerId);
-    setIsDragging(true);
-  }
-
-  function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
-    const track = trackRef.current;
-    if (!track || dragRef.current.pointerId !== event.pointerId) return;
-
-    event.preventDefault();
-    const delta = event.clientX - dragRef.current.startX;
-    const nextScrollLeft = dragRef.current.scrollLeft + delta * dragRef.current.scrollFactor;
-    track.scrollLeft = Math.min(dragRef.current.maxScrollLeft, Math.max(0, nextScrollLeft));
-  }
-
-  function handlePointerRelease(event: React.PointerEvent<HTMLDivElement>) {
-    const track = trackRef.current;
-    if (!track || dragRef.current.pointerId !== event.pointerId) return;
-
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-
-    dragRef.current.pointerId = -1;
-    setIsDragging(false);
-    updateCarouselState();
-  }
-
-  function handleControlPointerDown(event: React.PointerEvent<HTMLButtonElement>) {
-    event.stopPropagation();
-  }
-
-  return (
-      <div className={styles.alertCarousel}>
-      <div
-        className={`${styles.alertCarouselViewport} ${isDragging ? styles.alertCarouselViewportDragging : ""}`.trim()}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerRelease}
-        onPointerCancel={handlePointerRelease}
-      >
-        {slides.length > 1 ? (
-          <>
-            <button
-              type="button"
-              className={`${styles.carouselBtn} ${styles.carouselBtnPrev}`.trim()}
-              onClick={() => scrollByDirection(-1)}
-              onPointerDown={handleControlPointerDown}
-              disabled={!canScrollPrev}
-              aria-label="Ver alertas anteriores"
-            >
-              <span aria-hidden="true">&lt;</span>
-            </button>
-            <button
-              type="button"
-              className={`${styles.carouselBtn} ${styles.carouselBtnNext}`.trim()}
-              onClick={() => scrollByDirection(1)}
-              onPointerDown={handleControlPointerDown}
-              disabled={!canScrollNext}
-              aria-label="Ver mas alertas"
-            >
-              <span aria-hidden="true">&gt;</span>
-            </button>
-          </>
-        ) : null}
-
-        <div
-          ref={trackRef}
-          className={`${styles.alertCarouselTrack} ${slides.length > 1 ? styles.alertCarouselTrackWithControls : ""} ${isDragging ? styles.alertCarouselTrackDragging : ""}`.trim()}
-          onScroll={updateCarouselState}
-          onDragStart={(event) => event.preventDefault()}
-        >
-          {slides.map((slide, index) => (
-            <div key={index} className={styles.alertSlide}>
-              {slide}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function getAlertMeta(item: AppNotification) {
+function getAlertDateLabel(item: AppNotification) {
   const dueAt = getTime(item.dueAt);
 
-  if (Number.isFinite(dueAt)) {
-    const remaining = dueAt > Date.now() ? formatTimeRemaining(item.dueAt) : "";
-    return remaining
-      ? `Vence ${formatDateTime(item.dueAt)} · ${remaining}`
-      : `${dueAt <= Date.now() ? "Vencio" : "Vence"} ${formatDateTime(item.dueAt)}`;
+  if (Number.isFinite(dueAt) && item.dueAt) {
+    return `${dueAt <= Date.now() ? "Vencio" : "Vence"} ${formatDateTime(item.dueAt)}`;
   }
 
   return `Creada ${formatDateTime(item.createdAt)}`;
 }
 
-function parseNumber(raw: string) {
-  const normalized = raw.replace(/\./g, "").replace(",", ".");
-  const value = Number(normalized);
-  return Number.isFinite(value) ? value : null;
-}
-
-function formatEmbeddedDateTimes(text: string) {
-  return text.replace(ISO_DATE_TIME_REGEX, (value) => formatDateTime(value));
-}
-
-function formatEmbeddedMoney(text: string) {
-  const withParenthesizedMoney = text.replace(MONEY_IN_PARENS_REGEX, (_match, amount) => {
-    const parsed = parseNumber(amount);
-    return parsed === null ? `(${amount})` : `(${formatMoneyARS(parsed)})`;
-  });
-
-  return withParenthesizedMoney.replace(MONEY_AFTER_WORD_REGEX, (_match, keyword, amount) => {
-    const parsed = parseNumber(amount);
-    return parsed === null ? `${keyword} ${amount}` : `${keyword} ${formatMoneyARS(parsed)}`;
-  });
-}
-
-function formatAlertDescription(item: AppNotification) {
-  if (item.type === "product-low-stock") {
-    const currentUnits = item.description.match(/Stock actual\s+(\d+)/i)?.[1];
-    const minUnits = item.description.match(/Minimo configurado\s+(\d+)/i)?.[1];
-
-    if (currentUnits && minUnits) {
-      return `Stock actual: ${currentUnits} u. Minimo configurado: ${minUnits} u. Reponer producto.`;
-    }
-  }
-
-  if (item.type === "expense-created") {
-    const amount = item.description.match(/\((\d+(?:[.,]\d+)?)\)/)?.[1];
-    const parsedAmount = amount ? parseNumber(amount) : null;
-    const baseDescription = item.description.replace(/\s*\((\d+(?:[.,]\d+)?)\)\.?/, "").replace(/\.+$/, "").trim();
-
-    if (parsedAmount !== null && baseDescription) {
-      return `${baseDescription}. Monto: ${formatMoneyARS(parsedAmount)}.`;
-    }
-  }
-
-  return formatEmbeddedMoney(formatEmbeddedDateTimes(item.description));
-}
-
-function SystemAlertCard({ item }: { item: AppNotification }) {
+function getAlertToneClass(item: AppNotification) {
   const tone = getAlertTone(item);
-  const toneClass =
-    tone === "critical" ? styles.alertCardCritical : tone === "warning" ? styles.alertCardWarning : styles.alertCardNeutral;
-  const footerToneClass = tone === "critical" ? styles.alertPillCritical : tone === "warning" ? styles.alertPillWarning : "";
 
-  return (
-    <article className={`${styles.alertCard} ${toneClass}`.trim()}>
-      <div className={styles.alertCardTitle}>{item.title}</div>
-      <div className={styles.alertCardSubtitle}>{notificationTypeLabel[item.type]}</div>
-      <p className={styles.alertCardDescription}>{formatAlertDescription(item)}</p>
-
-      <div className={styles.alertCardFooter}>
-        <span className={`${styles.alertPill} ${footerToneClass}`.trim()}>{getAlertMeta(item)}</span>
-        {item.requiresAction ? <span className={`${styles.alertPill} ${footerToneClass}`.trim()}>Accion requerida</span> : null}
-        {item.requiresAction && item.actionLabel ? <span className={styles.alertPill}>{item.actionLabel}</span> : null}
-      </div>
-    </article>
-  );
+  if (tone === "critical") return styles.alertToneCritical;
+  if (tone === "warning") return styles.alertToneWarning;
+  return styles.alertToneNeutral;
 }
 
-function InfoCard({
+function AlertStatusPanel({
   title,
-  subtitle,
   description,
   tone,
 }: {
   title: string;
-  subtitle: string;
   description: string;
   tone: "neutral" | "critical";
 }) {
-  const className = `${styles.alertCard} ${tone === "critical" ? styles.alertCardCritical : styles.alertCardNeutral}`.trim();
-
   return (
-    <article className={className}>
-      <div className={styles.alertCardTitle}>{title}</div>
-      <div className={styles.alertCardSubtitle}>{subtitle}</div>
-      <p className={styles.alertCardDescription}>{description}</p>
+    <article className={`${styles.alertStatusPanel} ${tone === "critical" ? styles.alertToneCritical : styles.alertToneNeutral}`.trim()}>
+      <h3 className={styles.alertStatusTitle}>{title}</h3>
+      <p className={styles.alertStatusDescription}>{description}</p>
+    </article>
+  );
+}
+
+function AlertRailItem({ item }: { item: AppNotification }) {
+  return (
+    <article className={`${styles.alertRailItem} ${getAlertToneClass(item)}`.trim()}>
+      <span className={styles.alertRailBar} aria-hidden="true" />
+      <div className={styles.alertRailBody}>
+        <div className={styles.alertRailLinePrimary}>
+          <div className={styles.alertRailTitle}>{item.title}</div>
+          <div className={styles.alertRailDate}>{getAlertDateLabel(item)}</div>
+        </div>
+        <div className={styles.alertRailLineSecondary}>
+          <span className={styles.alertRailType}>{notificationTypeLabel[item.type]}</span>
+          <p className={styles.alertRailDescription}>{item.description}</p>
+        </div>
+      </div>
     </article>
   );
 }

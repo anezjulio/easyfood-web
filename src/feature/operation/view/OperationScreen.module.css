@@ -12,6 +12,12 @@
   padding: 8px;
 }
 
+.alertsSection {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -34,18 +40,17 @@
 }
 
 .groupHeading {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .groupTitleRow {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-width: 0;
+  overflow-x: auto;
+  padding-bottom: 2px;
 }
 
 .grid {
@@ -58,7 +63,7 @@
   margin-top: 18px;
   display: grid;
   gap: 12px;
-  background: white;
+  background: #ffffff;
   border: 1px solid #e2e8f0;
   padding: 16px;
 }
@@ -71,124 +76,243 @@
   text-align: left;
 }
 
+.groupTitleLink {
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 900;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+}
+
+.groupTitleLink:hover {
+  text-decoration: underline;
+}
+
 .countBadge {
-  min-width: 30px;
-  height: 30px;
-  padding: 0 9px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #cbd5e1;
-  background: #f8fafc;
-  color: #0f172a;
+  color: #475569;
   font-size: 13px;
   font-weight: 900;
 }
 
-.linkBtn {
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #0f172a;
-  min-height: 42px;
-  padding: 0 14px;
-  font: inherit;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.alertCarousel {
-  display: block;
-}
-
-.alertCarouselViewport {
-  position: relative;
-  min-width: 0;
-  cursor: grab;
-  touch-action: pan-y;
-}
-
-.alertCarouselViewportDragging {
-  cursor: grabbing;
-  user-select: none;
-}
-
-.alertCarouselViewportDragging * {
-  user-select: none;
-}
-
-.carouselBtn {
-  position: absolute;
-  top: 50%;
-  z-index: 2;
-  width: 44px;
-  height: 44px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #0f172a;
-  font: inherit;
-  font-size: 20px;
-  font-weight: 900;
-  line-height: 1;
-  cursor: pointer;
-  border-radius: 999px;
-  transform: translateY(-50%);
+.alertFilters {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+  gap: 6px;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
 }
 
-.carouselBtnPrev {
-  left: 8px;
+.alertToneNeutral {
+  --alert-accent: #64748b;
+  --alert-surface: #f8fafc;
+  --alert-surface-strong: #ffffff;
+  --alert-border: #cbd5e1;
 }
 
-.carouselBtnNext {
-  right: 8px;
+.alertToneWarning {
+  --alert-accent: #ea580c;
+  --alert-surface: #fff7ed;
+  --alert-surface-strong: #ffffff;
+  --alert-border: #fdba74;
 }
 
-.carouselBtn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-  box-shadow: none;
+.alertToneCritical {
+  --alert-accent: #dc2626;
+  --alert-surface: #fef2f2;
+  --alert-surface-strong: #ffffff;
+  --alert-border: #fca5a5;
 }
 
-.alertCarouselTrack {
-  --alert-visible-cards: 3;
+.alertStatusPanel {
+  border: 1px solid var(--alert-border);
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: var(--alert-surface);
+  padding: 16px;
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: calc((100% - (var(--alert-visible-cards) - 1) * 14px) / var(--alert-visible-cards));
-  gap: 14px;
-  overflow-x: auto;
-  padding: 6px 4px 10px;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scroll-padding-inline: 4px;
-  overscroll-behavior-x: contain;
-  touch-action: pan-y;
-  cursor: inherit;
+  gap: 8px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
 }
 
-.alertCarouselTrackWithControls {
-  padding-inline: 58px;
-  scroll-padding-inline: 58px;
+.alertStatusTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f172a;
 }
 
-.alertCarouselTrackDragging {
-  scroll-snap-type: none;
+.alertStatusDescription {
+  margin: 0;
+  color: #475569;
+  line-height: 1.45;
 }
 
-.alertCarouselTrack::-webkit-scrollbar {
-  height: 8px;
+.alertFilterBtn {
+  min-height: 34px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
 }
 
-.alertCarouselTrack::-webkit-scrollbar-thumb {
+.alertFilterBtn {
+  padding: 0 10px;
+  cursor: pointer;
+  line-height: 1.15;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.alertListPanel {
+  min-width: 0;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.alertListCompact {
+  display: grid;
+  gap: 8px;
+  max-height: 176px;
+  overflow: auto;
+  min-width: 0;
+  padding-right: 4px;
+}
+
+.alertListCompact::-webkit-scrollbar {
+  width: 8px;
+}
+
+.alertListCompact::-webkit-scrollbar-thumb {
   background: #cbd5e1;
 }
 
-.alertSlide {
-  scroll-snap-align: start;
-  min-height: 100%;
-  pointer-events: none;
+.alertEmptyState {
+  min-height: 140px;
+  border: 1px dashed #cbd5e1;
+  background: #f8fafc;
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  padding: 16px;
+  text-align: center;
+}
+
+.alertEmptyState strong {
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.alertEmptyState span {
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.alertRailItem {
+  display: grid;
+  grid-template-columns: 4px minmax(0, 1fr);
+  border: 1px solid var(--alert-border);
+  background: var(--alert-surface);
+  min-width: 0;
+}
+
+.alertRailBar {
+  background: var(--alert-accent);
+}
+
+.alertRailBody {
+  padding: 9px 11px;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  min-height: 74px;
+}
+
+.alertRailLinePrimary,
+.alertRailLineSecondary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+}
+
+.alertRailLineSecondary {
+  justify-content: flex-start;
+}
+
+.alertRailType {
+  display: inline-flex;
+  align-items: center;
+  min-height: 18px;
+  padding: 0 6px;
+  border: 1px solid var(--alert-border);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--alert-accent);
+  font-size: 9px;
+  font-weight: 900;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.alertRailTitle {
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  flex: 1 1 auto;
+}
+
+.alertRailDate {
+  flex-shrink: 0;
+  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.8);
+  color: #475569;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+
+.alertRailDescription {
+  margin: 0;
+  color: #475569;
+  font-size: 11px;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  flex: 1 1 auto;
+}
+
+.alertFilterBtnActive {
+  background: #e2e8f0;
+  border-color: #0f172a;
 }
 
 .bigBtn {
@@ -198,7 +322,7 @@
   border: 1px solid #e2e8f0;
   border-right: 2px solid #000000;
   border-bottom: 2px solid #000000;
-  background: white;
+  background: #ffffff;
   padding: 18px;
   text-align: left;
   cursor: pointer;
@@ -221,120 +345,26 @@
   font-weight: 700;
 }
 
-.alertCard {
-  width: 100%;
-  min-height: 142px;
-  border-radius: 0;
-  border: 1px solid #e2e8f0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
-  padding: 18px;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-  display: grid;
-  gap: 8px;
-  align-content: start;
-  cursor: inherit;
-  user-select: none;
-  pointer-events: none;
-}
-
-.alertCardNeutral {
-  background: #f8fafc;
-}
-
-.alertCardWarning {
-  background: #fff7ed;
-  border-color: #fdba74;
-  border-right-color: #c2410c;
-  border-bottom-color: #c2410c;
-}
-
-.alertCardCritical {
-  background: #fef2f2;
-  border-color: #fca5a5;
-  border-right-color: #b91c1c;
-  border-bottom-color: #b91c1c;
-}
-
-.alertCardTitle {
-  font-size: 22px;
-  font-weight: 900;
-  color: #0f172a;
-  line-height: 1.1;
-}
-
-.alertCardSubtitle {
-  color: #334155;
-  font-weight: 800;
-}
-
-.alertCardDescription {
-  margin: 0;
-  color: #475569;
-  font-weight: 600;
-  line-height: 1.35;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-}
-
-.alertCardFooter {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: auto;
-}
-
-.alertPill {
-  border: 1px solid #cbd5e1;
-  background: rgba(255, 255, 255, 0.86);
-  color: #334155;
-  padding: 4px 8px;
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.alertPillWarning {
-  border-color: #fb923c;
-  color: #9a3412;
-}
-
-.alertPillCritical {
-  border-color: #ef4444;
-  color: #991b1b;
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .alertCarouselTrack {
-    --alert-visible-cards: 2;
-  }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   .grid {
     grid-template-columns: 1fr;
   }
 
-  .carouselBtn {
-    width: 38px;
-    height: 38px;
+  .groupTitleRow {
+    gap: 8px;
   }
 
-  .alertCarouselTrack {
-    --alert-visible-cards: 1;
+  .alertRailBody {
+    min-height: 0;
   }
 
-  .alertCarouselTrackWithControls {
-    padding-inline: 44px;
-    scroll-padding-inline: 44px;
+  .alertRailDate {
+    white-space: nowrap;
   }
 }
-
-

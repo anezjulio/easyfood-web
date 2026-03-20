@@ -35,6 +35,11 @@ const categoryOptions: ProductCategory[] = [
 ];
 
 const allTypes = allNotificationTypes;
+const notificationStatusLabel: Record<NotificationStatus, string> = {
+  active: "Activa",
+  disabled: "Deshabilitada",
+  received: "Recibida",
+};
 
 function getTime(value?: string) {
   if (!value) return Number.NaN;
@@ -54,6 +59,17 @@ function formatDueMeta(value?: string) {
   if (!value) return "Vence: -";
   const remaining = formatTimeRemaining(value);
   return remaining ? `Vence: ${formatDateTime(value)} | ${remaining}` : `Vence: ${formatDateTime(value)}`;
+}
+
+function formatNotificationPreviewText(value: string, maxLength = 180) {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (normalized.length <= maxLength) return normalized;
+  return `${normalized.slice(0, maxLength - 3).trimEnd()}...`;
+}
+
+function formatNotificationReference(item: AppNotification) {
+  if (!item.entityType && !item.entityId) return "Sin referencia";
+  return [item.entityType, item.entityId].filter(Boolean).join(" ");
 }
 
 export default function NotificationsScreen() {
@@ -498,7 +514,12 @@ export default function NotificationsScreen() {
                   <option value="type">Orden: tipo</option>
                 </select>
               </div>
-              <NotificationList items={filteredNotifications} onUpdateStatus={updateNotificationStatus} readOnly={!isAdmin} />
+              <NotificationList
+                items={filteredNotifications}
+                onUpdateStatus={updateNotificationStatus}
+                readOnly={!isAdmin}
+                showDetailPanel
+              />
             </>
           ) : tab === "action" ? (
             <>
@@ -743,53 +764,160 @@ function NotificationList({
   items,
   onUpdateStatus,
   readOnly = false,
+  showDetailPanel = false,
 }: {
   items: AppNotification[];
   onUpdateStatus?: (id: string, status: NotificationStatus) => Promise<void>;
   readOnly?: boolean;
+  showDetailPanel?: boolean;
 }) {
+  const [selectedId, setSelectedId] = useState(items[0]?.id ?? "");
+
   if (items.length === 0) {
     return <p className={styles.empty}>No hay notificaciones para mostrar.</p>;
+  }
+
+  const selectedItem = items.find((item) => item.id === selectedId) || items[0];
+
+  if (showDetailPanel) {
+    return (
+      <div className={styles.notificationBrowser}>
+        <div className={styles.list}>
+          {items.map((item) => {
+            const isSelected = item.id === selectedItem.id;
+
+            return (
+              <article key={item.id} className={`${styles.item} ${isSelected ? styles.itemActive : ""}`.trim()}>
+                <button
+                  type="button"
+                  className={styles.itemPreview}
+                  onClick={() => setSelectedId(item.id)}
+                  aria-pressed={isSelected}
+                >
+                  <div className={styles.itemTop}>
+                    <strong>{item.title}</strong>
+                    <NotificationBadges item={item} />
+                  </div>
+                  <p className={styles.description}>{formatNotificationPreviewText(item.description)}</p>
+                  <p className={styles.meta}>
+                    Creada: {formatDateTime(item.createdAt)} | {formatDueMeta(item.dueAt)}
+                  </p>
+                </button>
+              </article>
+            );
+          })}
+        </div>
+
+        <aside className={styles.detailPanel}>
+          <div className={styles.detailHeader}>
+            <p className={styles.detailEyebrow}>Detalle completo</p>
+            <h2 className={styles.detailTitle}>{selectedItem.title}</h2>
+            <NotificationBadges item={selectedItem} />
+          </div>
+
+          <div className={styles.detailMetaGrid}>
+            <div className={styles.detailMetaItem}>
+              <span>Tipo</span>
+              <strong>{notificationTypeLabel[selectedItem.type]}</strong>
+            </div>
+            <div className={styles.detailMetaItem}>
+              <span>Estado</span>
+              <strong>{notificationStatusLabel[selectedItem.status]}</strong>
+            </div>
+            <div className={styles.detailMetaItem}>
+              <span>Creada</span>
+              <strong>{formatDateTime(selectedItem.createdAt)}</strong>
+            </div>
+            <div className={styles.detailMetaItem}>
+              <span>Vencimiento</span>
+              <strong>{formatDueMeta(selectedItem.dueAt).replace("Vence: ", "")}</strong>
+            </div>
+            <div className={styles.detailMetaItem}>
+              <span>Referencia</span>
+              <strong>{formatNotificationReference(selectedItem)}</strong>
+            </div>
+            <div className={styles.detailMetaItem}>
+              <span>Accion</span>
+              <strong>{selectedItem.actionLabel || (selectedItem.requiresAction ? "Requiere accion" : "Sin accion")}</strong>
+            </div>
+          </div>
+
+          <section className={styles.detailDescriptionBlock}>
+            <p className={styles.detailDescription}>{selectedItem.description}</p>
+          </section>
+
+          {!readOnly && onUpdateStatus ? (
+            <div className={styles.detailActions}>
+              <NotificationStatusActions item={selectedItem} onUpdateStatus={onUpdateStatus} />
+            </div>
+          ) : null}
+        </aside>
+      </div>
+    );
   }
 
   return (
     <div className={styles.list}>
       {items.map((item) => (
         <article key={item.id} className={styles.item}>
-          <div className={styles.itemTop}>
-            <strong>{item.title}</strong>
-            <div className={styles.badges}>
-              <span className={styles.badge}>{notificationTypeLabel[item.type]}</span>
-              {item.isFixed ? <span className={`${styles.badge} ${styles.badgeBlue}`}>Fija</span> : null}
-              {item.requiresAction ? <span className={`${styles.badge} ${styles.badgeAmber}`}>Accion</span> : null}
-              {item.status !== "active" ? <span className={`${styles.badge} ${styles.badgeSlate}`}>{item.status}</span> : null}
+          <div className={styles.itemPreview}>
+            <div className={styles.itemTop}>
+              <strong>{item.title}</strong>
+              <NotificationBadges item={item} />
             </div>
+            <p className={styles.description}>{formatNotificationPreviewText(item.description, 200)}</p>
+            <p className={styles.meta}>
+              Creada: {formatDateTime(item.createdAt)} | {formatDueMeta(item.dueAt)} | Ref: {formatNotificationReference(item)}
+            </p>
           </div>
-          <p className={styles.description}>{item.description}</p>
-          <p className={styles.meta}>
-            Creada: {formatDateTime(item.createdAt)} | {formatDueMeta(item.dueAt)} | Ref: {item.entityType || "-"} {item.entityId || "-"}
-          </p>
           {!readOnly && onUpdateStatus ? (
             <div className={styles.actions}>
-              {item.status !== "received" ? (
-                <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "received")}>
-                  Marcar recibida
-                </button>
-              ) : null}
-              {item.status !== "disabled" ? (
-                <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "disabled")}>
-                  Deshabilitar
-                </button>
-              ) : (
-                <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "active")}>
-                  Reactivar
-                </button>
-              )}
+              <NotificationStatusActions item={item} onUpdateStatus={onUpdateStatus} />
             </div>
           ) : null}
         </article>
       ))}
     </div>
+  );
+}
+
+function NotificationBadges({ item }: { item: AppNotification }) {
+  return (
+    <div className={styles.badges}>
+      <span className={styles.badge}>{notificationTypeLabel[item.type]}</span>
+      {item.isFixed ? <span className={`${styles.badge} ${styles.badgeBlue}`}>Fija</span> : null}
+      {item.requiresAction ? <span className={`${styles.badge} ${styles.badgeAmber}`}>Accion</span> : null}
+      {item.status !== "active" ? (
+        <span className={`${styles.badge} ${styles.badgeSlate}`}>{notificationStatusLabel[item.status]}</span>
+      ) : null}
+    </div>
+  );
+}
+
+function NotificationStatusActions({
+  item,
+  onUpdateStatus,
+}: {
+  item: AppNotification;
+  onUpdateStatus: (id: string, status: NotificationStatus) => Promise<void>;
+}) {
+  return (
+    <>
+      {item.status !== "received" ? (
+        <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "received")}>
+          Marcar recibida
+        </button>
+      ) : null}
+      {item.status !== "disabled" ? (
+        <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "disabled")}>
+          Deshabilitar
+        </button>
+      ) : (
+        <button type="button" className={styles.secondaryBtn} onClick={() => void onUpdateStatus(item.id, "active")}>
+          Reactivar
+        </button>
+      )}
+    </>
   );
 }
 
