@@ -8,7 +8,7 @@
       "createdAt": "2026-03-17T03:39:00.634Z",
       "barcode": "7798740631109",
       "category": "vivere",
-      "supplyOrderId": "so170320260039594139"
+      "supplyOrderId": "so170320260117139380"
     },
     {
       "id": "ptc-expiring",
@@ -18,7 +18,7 @@
       "createdAt": "2026-03-14T00:06:19.837Z",
       "barcode": "7790001000002",
       "category": "perecedero",
-      "supplyOrderId": "so170320260039594139"
+      "supplyOrderId": "so170320260117139380"
     },
     {
       "id": "ptc-low-stock",
@@ -28,7 +28,7 @@
       "createdAt": "2026-03-12T00:06:19.837Z",
       "barcode": "7790001000001",
       "category": "vivere",
-      "supplyOrderId": "so170320260039594139"
+      "supplyOrderId": "so170320260117139380"
     },
     {
       "id": "pseed1773718891471001",
@@ -1802,6 +1802,53 @@
   "requests": [],
   "stocks": [
     {
+      "id": "se210320262256081446",
+      "productId": "ptc-low-stock",
+      "expirationDate": "2027-10-06",
+      "quantity": 7,
+      "description": "Ingreso automatico por recepcion del pedido so170320260117139380.",
+      "supplyOrderId": "so170320260117139380",
+      "costPrice": 2450,
+      "salePrice": 3200,
+      "createdAt": "2026-03-22T01:56:08.121Z"
+    },
+    {
+      "id": "se210320262256081367",
+      "productId": "ptc-expiring",
+      "expirationDate": "2026-03-31",
+      "quantity": 12,
+      "description": "Ingreso automatico por recepcion del pedido so170320260117139380.",
+      "supplyOrderId": "so170320260117139380",
+      "costPrice": 3400,
+      "salePrice": 4800,
+      "createdAt": "2026-03-22T01:56:08.121Z"
+    },
+    {
+      "id": "se210320262256082761",
+      "productId": "p170320260039007512",
+      "expirationDate": "2026-06-18",
+      "quantity": 30,
+      "description": "Ingreso automatico por recepcion del pedido so170320260117139380.",
+      "supplyOrderId": "so170320260117139380",
+      "costPrice": 2000,
+      "salePrice": 2800,
+      "createdAt": "2026-03-22T01:56:08.121Z"
+    },
+    {
+      "id": "se210320262249523640",
+      "productId": "p170320260039007512",
+      "quantity": -1,
+      "description": "Venta orden or210320262249294094",
+      "createdAt": "2026-03-22T01:49:52.581Z"
+    },
+    {
+      "id": "se210320262249520027",
+      "productId": "ptc-low-stock",
+      "quantity": -3,
+      "description": "Venta orden or210320262249294094",
+      "createdAt": "2026-03-22T01:49:52.568Z"
+    },
+    {
       "id": "se170320260115497014",
       "productId": "ptc-low-stock",
       "expirationDate": "2026-03-27",
@@ -1860,6 +1907,28 @@
   ],
   "orders": [
     {
+      "id": "or210320262249294094",
+      "items": [
+        {
+          "productId": "ptc-low-stock",
+          "productName": "Yerba Playadito 500g",
+          "unitPrice": 3200,
+          "quantity": 3
+        },
+        {
+          "productId": "p170320260039007512",
+          "productName": "cocacola vainilla 333ml",
+          "unitPrice": 2800,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-03-22T01:49:29.035Z",
+      "status": "pagada",
+      "total": 12400,
+      "operator": "user",
+      "paymentMethod": "efectivo"
+    },
+    {
       "id": "or170320260051350223",
       "items": [
         {
@@ -1878,6 +1947,14 @@
   ],
   "invoices": [
     {
+      "id": "fc210320262249525178",
+      "orderId": "or210320262249294094",
+      "createdAt": "2026-03-22T01:49:52.593Z",
+      "total": 12400,
+      "paymentMethod": "efectivo",
+      "operator": "user"
+    },
+    {
       "id": "fc170320260051377939",
       "orderId": "or170320260051350223",
       "createdAt": "2026-03-17T03:51:37.955Z",
@@ -1888,13 +1965,52 @@
   ],
   "workdays": [
     {
+      "id": "wd230320260055356227",
+      "operator": "admin",
+      "startedAt": "2026-03-23T03:55:35.463Z",
+      "orderIds": [],
+      "status": "open",
+      "openingDeclaredAmount": 5000,
+      "openingDifferenceAmount": 0
+    },
+    {
+      "id": "wd210320262247572547",
+      "operator": "user",
+      "startedAt": "2026-03-22T01:47:57.047Z",
+      "orderIds": [
+        "or210320262249294094"
+      ],
+      "status": "pending-close",
+      "openingAssignedAmount": 5000,
+      "openingDeclaredAmount": 5000,
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-03-22T01:59:05.904Z",
+      "closeSummary": {
+        "totalSales": 12400,
+        "totalByPaymentMethod": {
+          "efectivo": 12400,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 12400,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 20000,
+        "expectedClosingCash": 37400,
+        "declaredClosingCash": 12,
+        "closingDifference": -37388,
+        "balanceTotal": 37400
+      }
+    },
+    {
       "id": "wd270220262009358339",
       "operator": "admin",
       "startedAt": "2026-02-27T23:09:35.373Z",
+      "endedAt": "2026-03-23T03:55:23.769Z",
       "orderIds": [
         "or170320260051350223"
       ],
-      "status": "pending-close",
+      "status": "closed",
       "openingDeclaredAmount": 2000,
       "openingDifferenceAmount": 0,
       "closeRequestedAt": "2026-03-17T04:12:40.159Z",
@@ -1913,6 +2029,18 @@
         "declaredClosingCash": 2000,
         "closingDifference": 31300,
         "balanceTotal": -29300
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-03-23T03:55:23.769Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        },
+        "mismatchReport": "El operador admin, en la jornada wd270220262009358339, presenta diferencias. Cierre en efectivo: esperado -$ 29.300, declarado $ 2.000 (sobra $ 31.300)."
       }
     }
   ],
@@ -1920,14 +2048,39 @@
     {
       "operator": "user",
       "amount": 5000,
-      "shift": "diurno",
-      "startHour": "08:00",
-      "endHour": "19:59",
+      "shift": "nocturno",
+      "startHour": "20:00",
+      "endHour": "07:59",
       "updatedBy": "admin",
-      "updatedAt": "2026-02-22T00:17:20.412Z"
+      "updatedAt": "2026-03-22T01:47:43.922Z"
     }
   ],
   "supplyOrders": [
+    {
+      "id": "so210320262306060373",
+      "supplierName": "Distribuidora Centro",
+      "description": "",
+      "expectedTotal": 450000,
+      "items": [
+        {
+          "productId": "pseed1773718891471015",
+          "productName": "Bebida Isotonica 600ml Serie 03",
+          "quantity": 80,
+          "barcode": "7795000000015",
+          "category": "bebida"
+        },
+        {
+          "productId": "pseed1773718891471032",
+          "productName": "Chocolate Mani 90g Serie 05",
+          "quantity": 70,
+          "barcode": "7795000000032",
+          "category": "chocolate"
+        }
+      ],
+      "createdAt": "2026-03-22T02:06:06.278Z",
+      "createdBy": "admin",
+      "status": "pending"
+    },
     {
       "id": "so170320260117139380",
       "supplierName": "Distribuidora Centro",
@@ -1939,26 +2092,42 @@
           "productName": "cocacola vainilla 333ml",
           "quantity": 50,
           "barcode": "7798740631109",
-          "category": "vivere"
+          "category": "vivere",
+          "receivedQuantity": 30,
+          "missingQuantity": 20,
+          "expirationDate": "2026-06-18"
         },
         {
           "productId": "ptc-expiring",
           "productName": "Sandwich frio listo para llevar",
           "quantity": 12,
           "barcode": "7790001000002",
-          "category": "perecedero"
+          "category": "perecedero",
+          "receivedQuantity": 12,
+          "missingQuantity": 0,
+          "expirationDate": "2026-03-31"
         },
         {
           "productId": "ptc-low-stock",
           "productName": "Yerba Playadito 500g",
           "quantity": 7,
           "barcode": "7790001000001",
-          "category": "vivere"
+          "category": "vivere",
+          "receivedQuantity": 7,
+          "missingQuantity": 0,
+          "expirationDate": "2027-10-06"
         }
       ],
       "createdAt": "2026-03-17T04:17:13.596Z",
       "createdBy": "admin",
-      "status": "pending"
+      "status": "received",
+      "isExactAmount": false,
+      "actualTotal": 30000,
+      "remainingAmount": 20000,
+      "receivedAt": "2026-03-22T01:56:08.121Z",
+      "receivedBy": "user",
+      "invoiceImageUrl": "/images/1770828711342-54606.jpg",
+      "receiveComment": "faltaron cocas"
     },
     {
       "id": "so170320260039594139",
@@ -2047,9 +2216,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": -64500,
+      "currentBalance": -52100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-17T04:17:13.597Z"
+      "updatedAt": "2026-03-23T03:55:35.464Z"
     },
     {
       "id": "account-gains",
@@ -2057,9 +2226,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 9600,
+      "currentBalance": 22000,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-17T04:17:13.597Z"
+      "updatedAt": "2026-03-23T03:55:35.464Z"
     },
     {
       "id": "account-expenses",
@@ -2067,9 +2236,9 @@
       "name": "Gastos",
       "kind": "expense",
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
-      "currentBalance": -76100,
+      "currentBalance": -106100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-17T04:17:13.597Z"
+      "updatedAt": "2026-03-23T03:55:35.464Z"
     },
     {
       "id": "account-tobacco",
@@ -2079,10 +2248,176 @@
       "description": "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-17T04:17:13.597Z"
+      "updatedAt": "2026-03-23T03:55:35.464Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-cash-opening-wd230320260055356227",
+      "createdAt": "2026-03-23T03:55:35.463Z",
+      "type": "cash-opening",
+      "title": "Apertura de caja wd230320260055356227",
+      "description": "Apertura declarada por admin.",
+      "amount": 5000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd230320260055356227",
+      "workdayId": "wd230320260055356227",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-cash-close-wd270220262009358339",
+      "createdAt": "2026-03-23T03:55:23.769Z",
+      "type": "cash-close",
+      "title": "Cierre de caja wd270220262009358339",
+      "description": "Se dejo 2000 al cerrar la jornada wd270220262009358339.",
+      "amount": 2000,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd270220262009358339",
+      "workdayId": "wd270220262009358339",
+      "actor": "admin",
+      "countsInBalance": false,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-cash-close-wd210320262247572547",
+      "createdAt": "2026-03-22T01:59:05.904Z",
+      "type": "cash-close",
+      "title": "Cierre de caja wd210320262247572547",
+      "description": "Se dejo 12 al cerrar la jornada wd210320262247572547.",
+      "amount": 12,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd210320262247572547",
+      "workdayId": "wd210320262247572547",
+      "actor": "user",
+      "countsInBalance": false,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-supply-cash-so170320260117139380",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "type": "supply-cash",
+      "title": "Salida de caja por mercaderia so170320260117139380",
+      "description": "Pago en recepcion de mercaderia para Distribuidora Centro.",
+      "amount": 30000,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "supply",
+      "referenceId": "so170320260117139380",
+      "supplyOrderId": "so170320260117139380",
+      "actor": "user",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-supply-payment-so170320260117139380",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "type": "supply-payment",
+      "title": "Pago de mercaderia so170320260117139380",
+      "description": "Distribuidora Centro - ",
+      "amount": 30000,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-expenses",
+      "referenceModule": "supply",
+      "referenceId": "so170320260117139380",
+      "supplyOrderId": "so170320260117139380",
+      "actor": "user",
+      "countsInBalance": true,
+      "accountCode": "expenses",
+      "accountName": "Gastos"
+    },
+    {
+      "id": "txn-supply-return-so170320260117139380",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "type": "supply-return",
+      "title": "Vuelto por mercaderia so170320260117139380",
+      "description": "Monto devuelto tras la recepcion de Distribuidora Centro.",
+      "amount": 20000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "supply",
+      "referenceId": "so170320260117139380",
+      "supplyOrderId": "so170320260117139380",
+      "actor": "user",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-cash-or210320262249294094",
+      "createdAt": "2026-03-22T01:49:29.035Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or210320262249294094",
+      "description": "Venta en efectivo cobrada por user.",
+      "amount": 12400,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or210320262249294094",
+      "orderId": "or210320262249294094",
+      "workdayId": "wd210320262247572547",
+      "paymentMethod": "efectivo",
+      "actor": "user",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or210320262249294094",
+      "createdAt": "2026-03-22T01:49:29.035Z",
+      "type": "sale-income",
+      "title": "Venta pagada or210320262249294094",
+      "description": "Venta registrada por user por 12400.",
+      "amount": 12400,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or210320262249294094",
+      "orderId": "or210320262249294094",
+      "workdayId": "wd210320262247572547",
+      "paymentMethod": "efectivo",
+      "actor": "user",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-cash-opening-wd210320262247572547",
+      "createdAt": "2026-03-22T01:47:57.047Z",
+      "type": "cash-opening",
+      "title": "Apertura de caja wd210320262247572547",
+      "description": "Apertura declarada por user.",
+      "amount": 5000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd210320262247572547",
+      "workdayId": "wd210320262247572547",
+      "actor": "user",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
     {
       "id": "txn-supply-cash-so170320260039594139",
       "createdAt": "2026-03-17T04:15:49.441Z",
@@ -2118,24 +2453,6 @@
       "countsInBalance": true,
       "accountCode": "expenses",
       "accountName": "Gastos"
-    },
-    {
-      "id": "txn-cash-close-wd270220262009358339",
-      "createdAt": "2026-03-17T04:12:40.159Z",
-      "type": "cash-close",
-      "title": "Cierre de caja wd270220262009358339",
-      "description": "Se dejo 2000 al cerrar la jornada wd270220262009358339.",
-      "amount": 2000,
-      "direction": "out",
-      "entryKind": "debit",
-      "accountId": "account-cash-local",
-      "referenceModule": "cash",
-      "referenceId": "wd270220262009358339",
-      "workdayId": "wd270220262009358339",
-      "actor": "admin",
-      "countsInBalance": false,
-      "accountCode": "cash-local",
-      "accountName": "Caja fisica local"
     },
     {
       "id": "txn-sale-cash-or170320260051350223",
@@ -2271,6 +2588,239 @@
   "licenses": [],
   "notifications": [
     {
+      "id": "nt230320260055355678",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 5000.",
+      "createdAt": "2026-03-23T03:55:35.463Z",
+      "dueAt": "2026-03-24T03:55:35.463Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd230320260055356227",
+      "status": "active"
+    },
+    {
+      "id": "nt230320260055232053",
+      "type": "cash",
+      "title": "Diferencias detectadas en cierre: admin",
+      "description": "El operador admin, en la jornada wd270220262009358339, presenta diferencias. Cierre en efectivo: esperado -$ 29.300, declarado $ 2.000 (sobra $ 31.300).",
+      "createdAt": "2026-03-23T03:55:23.769Z",
+      "dueAt": "2026-03-30T03:55:23.769Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd270220262009358339",
+      "status": "active"
+    },
+    {
+      "id": "nt230320260055236738",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd270220262009358339.",
+      "createdAt": "2026-03-23T03:55:23.769Z",
+      "dueAt": "2026-03-24T03:55:23.769Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd270220262009358339",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262306063983",
+      "type": "supply-pending-receive",
+      "title": "Pendiente recepcion: Distribuidora Centro",
+      "description": "Pedido so210320262306060373 pendiente de recepcion.",
+      "createdAt": "2026-03-22T02:06:06.278Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Registrar recepcion",
+      "entityType": "supply-order",
+      "entityId": "so210320262306060373",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262306062619",
+      "type": "supply-requested",
+      "title": "Pedido a proveedor: Distribuidora Centro",
+      "description": "Se genero pedido so210320262306060373 por 450000. Productos: 2.",
+      "createdAt": "2026-03-22T02:06:06.278Z",
+      "dueAt": "2026-03-29T02:06:06.278Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "supply-order",
+      "entityId": "so210320262306060373",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262259053957",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: user",
+      "description": "La jornada wd210320262247572547 fue enviada para auditoria.",
+      "createdAt": "2026-03-22T01:59:05.904Z",
+      "dueAt": "2026-03-29T01:59:05.904Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd210320262247572547",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262256083955",
+      "type": "supply-received",
+      "title": "Mercancia recibida: Distribuidora Centro",
+      "description": "Pedido so170320260117139380 recibido por user.",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "dueAt": "2026-03-29T01:56:08.121Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "supply-order",
+      "entityId": "so170320260117139380",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262256085903",
+      "type": "product-expiring",
+      "title": "Producto por vencer: Yerba Playadito 500g",
+      "description": "Lote con vencimiento 2027-10-06 para Yerba Playadito 500g.",
+      "createdAt": "2026-03-22T01:56:08.122Z",
+      "dueAt": "2027-09-15T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se210320262256081446",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262256088131",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Yerba Playadito 500g",
+      "description": "Se registro un ingreso de 7 unidades para Yerba Playadito 500g.",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "dueAt": "2026-03-29T01:56:08.121Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se210320262256081446",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262256080107",
+      "type": "product-expiring",
+      "title": "Producto por vencer: Sandwich frio listo para llevar",
+      "description": "Lote con vencimiento 2026-03-31 para Sandwich frio listo para llevar.",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "dueAt": "2026-03-10T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se210320262256081367",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262256082865",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Sandwich frio listo para llevar",
+      "description": "Se registro un ingreso de 12 unidades para Sandwich frio listo para llevar.",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "dueAt": "2026-03-29T01:56:08.121Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se210320262256081367",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262256082962",
+      "type": "product-expiring",
+      "title": "Producto por vencer: cocacola vainilla 333ml",
+      "description": "Lote con vencimiento 2026-06-18 para cocacola vainilla 333ml.",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "dueAt": "2026-05-28T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se210320262256082761",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262256083624",
+      "type": "stock-created",
+      "title": "Ingreso de stock: cocacola vainilla 333ml",
+      "description": "Se registro un ingreso de 30 unidades para cocacola vainilla 333ml.",
+      "createdAt": "2026-03-22T01:56:08.121Z",
+      "dueAt": "2026-03-29T01:56:08.121Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se210320262256082761",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262249529911",
+      "type": "stock-created",
+      "title": "Ingreso de stock: cocacola vainilla 333ml",
+      "description": "Se registro un ingreso de -1 unidades para cocacola vainilla 333ml.",
+      "createdAt": "2026-03-22T01:49:52.581Z",
+      "dueAt": "2026-03-29T01:49:52.581Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se210320262249523640",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262249523983",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Yerba Playadito 500g",
+      "description": "Se registro un ingreso de -3 unidades para Yerba Playadito 500g.",
+      "createdAt": "2026-03-22T01:49:52.568Z",
+      "dueAt": "2026-03-29T01:49:52.568Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "vivere",
+      "entityType": "stock",
+      "entityId": "se210320262249520027",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262249529637",
+      "type": "sale-created",
+      "title": "Venta registrada: or210320262249294094",
+      "description": "Venta por 12400 (user).",
+      "createdAt": "2026-03-22T01:49:52.549Z",
+      "dueAt": "2026-03-23T01:49:52.549Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or210320262249294094",
+      "status": "active"
+    },
+    {
+      "id": "nt210320262247572519",
+      "type": "cash-opened",
+      "title": "Caja abierta: user",
+      "description": "Se abrio caja para user con 5000.",
+      "createdAt": "2026-03-22T01:47:57.047Z",
+      "dueAt": "2026-03-23T01:47:57.047Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd210320262247572547",
+      "status": "active"
+    },
+    {
       "id": "nt170320260117134804",
       "type": "supply-pending-receive",
       "title": "Pendiente recepcion: Distribuidora Centro",
@@ -2281,7 +2831,8 @@
       "actionLabel": "Registrar recepcion",
       "entityType": "supply-order",
       "entityId": "so170320260117139380",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-03-22T01:56:08.122Z"
     },
     {
       "id": "nt170320260117136413",
@@ -2294,7 +2845,8 @@
       "requiresAction": false,
       "entityType": "supply-order",
       "entityId": "so170320260117139380",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-03-22T01:56:08.122Z"
     },
     {
       "id": "nt170320260115498466",
@@ -2408,7 +2960,8 @@
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
       "entityId": "wd270220262009358339",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-03-23T03:55:23.769Z"
     },
     {
       "id": "nt170320260051375558",
@@ -2565,7 +3118,7 @@
       "id": "nt160320262106192210",
       "type": "product-low-stock",
       "title": "Stock bajo: Yerba Playadito 500g",
-      "description": "Stock actual 8. Minimo configurado 10. Reponer producto.",
+      "description": "Stock actual 5. Minimo configurado 10. Reponer producto.",
       "createdAt": "2026-03-17T00:06:19.837Z",
       "isFixed": true,
       "requiresAction": true,
@@ -2573,7 +3126,8 @@
       "category": "vivere",
       "entityType": "product",
       "entityId": "ptc-low-stock",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-03-22T01:56:08.122Z"
     },
     {
       "id": "nt270220262009350428",
@@ -2586,7 +3140,8 @@
       "requiresAction": false,
       "entityType": "workday",
       "entityId": "wd270220262009358339",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-03-23T03:55:23.769Z"
     }
   ],
   "notificationSettings": [
@@ -2739,10 +3294,10 @@
   },
   "priceMarginSettings": {
     "categoryMargins": {
-      "bebida": 30,
+      "bebida": 45,
       "vivere": 40,
       "helado": 30,
-      "chocolate": 30,
+      "chocolate": 60,
       "tabaqueria": 30,
       "golosina": 30,
       "perecedero": 30
@@ -2754,6 +3309,20 @@
       }
     ],
     "categoryMarginHistory": [
+      {
+        "id": "cmh210320262302107464",
+        "category": "bebida",
+        "previousMarginPercent": 30,
+        "marginPercent": 45,
+        "createdAt": "2026-03-22T02:02:10.987Z"
+      },
+      {
+        "id": "cmh210320262301569654",
+        "category": "chocolate",
+        "previousMarginPercent": 30,
+        "marginPercent": 60,
+        "createdAt": "2026-03-22T02:01:56.175Z"
+      },
       {
         "id": "cmh170220261756429483",
         "category": "vivere",

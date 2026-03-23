@@ -205,6 +205,7 @@ type WorkdayAdminReview = {
 };
 
 type CashShift = "diurno" | "nocturno";
+type AppUserRole = "admin" | "operator";
 
 type CashOpeningAssignment = {
   operator: string;
@@ -339,6 +340,7 @@ type AppUserRecord = {
   name: string;
   email: string;
   username: string;
+  role?: AppUserRole;
   password: string;
   createdAt: string;
   updatedAt: string;
@@ -858,6 +860,18 @@ function validateAdminCredentials(db: MockDb, requestedBy: string, adminPassword
   return { ok: true as const };
 }
 
+function resolveAppUserRole(user: Pick<AppUserRecord, "username" | "role"> | null | undefined): AppUserRole {
+  if (!user) return "operator";
+  if (user.role === "admin" || user.role === "operator") return user.role;
+  return String(user.username || "").trim().toLowerCase() === "admin" ? "admin" : "operator";
+}
+
+function findUserByUsername(db: MockDb, username: string): AppUserRecord | undefined {
+  const normalizedUsername = String(username || "").trim().toLowerCase();
+  if (!normalizedUsername) return undefined;
+  return db.users.find((item) => item.username.trim().toLowerCase() === normalizedUsername);
+}
+
 function mapDataStoreForApi(store: DataStoreRecord) {
   return {
     id: store.id,
@@ -1073,6 +1087,7 @@ function mockDbPlugin(): Plugin {
               name: draft.name,
               email: draft.email,
               username: draft.username,
+              role: draft.role || resolveAppUserRole({ username: draft.username }),
               password: draft.password,
               createdAt: now,
               updatedAt: now,
@@ -1112,6 +1127,7 @@ function mockDbPlugin(): Plugin {
               name: draft.name,
               email: draft.email,
               username: draft.username,
+              role: draft.role || db.users[index].role || resolveAppUserRole({ username: draft.username }),
               startHour: draft.startHour,
               endHour: draft.endHour,
               updatedAt: now,
@@ -1849,8 +1865,9 @@ function mockDbPlugin(): Plugin {
               return sendJson(res, 200, existing);
             }
 
-            const assignment = findCashOpeningAssignment(db, body.operator);
-            const isAdminOperator = body.operator.trim().toLowerCase() === "admin";
+            const userRecord = findUserByUsername(db, body.operator);
+            const isAdminOperator = resolveAppUserRole(userRecord || { username: body.operator }) === "admin";
+            const assignment = isAdminOperator ? undefined : findCashOpeningAssignment(db, body.operator);
             if (!assignment && !isAdminOperator) {
               return sendJson(res, 403, {
                 message: "No tienes un turno y monto de apertura asignados. Contacta al administrador.",
@@ -5203,6 +5220,7 @@ function sanitizeUserDraft(input: unknown): {
   name: string;
   email: string;
   username: string;
+  role?: AppUserRole;
   password: string;
   startHour: string;
   endHour: string;
@@ -5211,6 +5229,7 @@ function sanitizeUserDraft(input: unknown): {
     name?: unknown;
     email?: unknown;
     username?: unknown;
+    role?: unknown;
     password?: unknown;
     startHour?: unknown;
     endHour?: unknown;
@@ -5220,6 +5239,7 @@ function sanitizeUserDraft(input: unknown): {
     name: String(obj.name || "").trim(),
     email: String(obj.email || "").trim().toLowerCase(),
     username: String(obj.username || "").trim(),
+    role: obj.role === "admin" || obj.role === "operator" ? obj.role : undefined,
     password: String(obj.password || "").trim().toLowerCase(),
     startHour: String(obj.startHour || "").trim(),
     endHour: String(obj.endHour || "").trim(),
@@ -5230,6 +5250,7 @@ function sanitizeUserUpdateDraft(input: unknown): {
   name: string;
   email: string;
   username: string;
+  role?: AppUserRole;
   password?: string;
   startHour: string;
   endHour: string;
@@ -5238,6 +5259,7 @@ function sanitizeUserUpdateDraft(input: unknown): {
     name?: unknown;
     email?: unknown;
     username?: unknown;
+    role?: unknown;
     password?: unknown;
     startHour?: unknown;
     endHour?: unknown;
@@ -5248,6 +5270,7 @@ function sanitizeUserUpdateDraft(input: unknown): {
     name: String(obj.name || "").trim(),
     email: String(obj.email || "").trim().toLowerCase(),
     username: String(obj.username || "").trim(),
+    role: obj.role === "admin" || obj.role === "operator" ? obj.role : undefined,
     password: password || undefined,
     startHour: String(obj.startHour || "").trim(),
     endHour: String(obj.endHour || "").trim(),

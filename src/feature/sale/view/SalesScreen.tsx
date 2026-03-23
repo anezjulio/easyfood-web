@@ -125,6 +125,7 @@ export default function SalesScreen() {
   const [paymentModalWidth, setPaymentModalWidth] = useState<number | null>(null);
   const [pendingPaymentRemainingMs, setPendingPaymentRemainingMs] = useState(0);
   const currentUsername = auth.user?.username ?? "";
+  const isAdmin = auth.user?.role === "admin";
   const isCashOpenForSession = isCashOpen;
 
   async function reloadProducts() {
@@ -159,6 +160,10 @@ export default function SalesScreen() {
       setAssignedOpeningAmount(null);
       return;
     }
+    if (isAdmin) {
+      setAssignedOpeningAmount(null);
+      return;
+    }
 
     let alive = true;
     (async () => {
@@ -178,7 +183,7 @@ export default function SalesScreen() {
     return () => {
       alive = false;
     };
-  }, [currentUsername]);
+  }, [currentUsername, isAdmin]);
 
   useEffect(() => {
     if (!currentUsername) {
@@ -1116,7 +1121,11 @@ export default function SalesScreen() {
             <p className={`${styles.modalHint} ${styles.modalStatusLine}`}>
               Estado: <span className={styles.modalHintError}>Cerrada</span>
             </p>
-            {typeof assignedOpeningAmount === "number" && assignedOpeningAmount > 0 ? (
+            {isAdmin ? (
+              <p className={styles.modalHint}>
+                Perfil administrador: puedes abrir caja con el monto real ingresado, sin monto ni horario asignados.
+              </p>
+            ) : typeof assignedOpeningAmount === "number" && assignedOpeningAmount > 0 ? (
               <p className={styles.modalHint}>
                 Monto asignado por administracion:{" "}
                 <span className={styles.assignedAmount}>{formatMoneyARS(assignedOpeningAmount)}</span>.

@@ -1,10 +1,11 @@
-import type { AppUserRecord } from "../model/user.types";
+import type { AppUserRecord, AppUserRole } from "../model/user.types";
 import { readJsonOrThrow } from "../../../shared/http/http";
 
 export type UserDraft = {
   name: string;
   email: string;
   username: string;
+  role?: AppUserRole;
   password: string;
   startHour: string;
   endHour: string;
@@ -14,6 +15,7 @@ export type UserUpdateDraft = {
   name: string;
   email: string;
   username: string;
+  role?: AppUserRole;
   password?: string;
   startHour: string;
   endHour: string;

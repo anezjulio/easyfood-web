@@ -1,5 +1,6 @@
 import type { User } from "../model/auth.types";
 import { md5 } from "../../../shared/crypto/md5";
+import { resolveAppUserRole } from "../../user/model/user.types";
 import { fetchUsersApi } from "../../user/service/user.api";
 
 export async function fakeLogin(username: string, password: string): Promise<User> {
@@ -17,6 +18,6 @@ export async function fakeLogin(username: string, password: string): Promise<Use
 
   return {
     username: found.username,
-    role: found.username === "admin" ? "admin" : "operator",
+    role: resolveAppUserRole(found),
   };
 }

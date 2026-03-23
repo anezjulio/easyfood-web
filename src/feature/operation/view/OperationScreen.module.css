@@ -77,22 +77,17 @@
 }
 
 .groupTitleLink {
-  min-height: 34px;
-  padding: 0 12px;
-  border: 1px solid #cbd5e1;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
-  background: #ffffff;
+  padding: 0;
+  border: none;
+  background: transparent;
   color: #0f172a;
   font: inherit;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 900;
   text-align: left;
   cursor: pointer;
   white-space: nowrap;
   flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
 }
 
 .groupTitleLink:hover {

@@ -105,7 +105,7 @@ export const helpSections: HelpSection[] = [
         audience: "all",
         steps: [
           "Entra en Caja al iniciar tu jornada.",
-          "Si tienes un monto asignado, revisalo antes de escribir nada.",
+          "Si tienes un monto asignado, revisalo antes de escribir nada. Si eres administrador, puedes abrir con el monto real aunque no tengas asignacion.",
           "Escribe el efectivo real que recibiste para abrir.",
           "Pulsa Abrir caja.",
           "Confirma que el estado cambie a Caja abierta antes de vender.",
@@ -134,7 +134,7 @@ export const helpSections: HelpSection[] = [
           "Busca la tarjeta o fila del usuario al que vas a asignar apertura.",
           "Elige el turno correcto y escribe el monto a entregar.",
           "Pulsa Guardar.",
-          "Pide al operador que abra caja usando ese monto.",
+          "Pide al operador que abra caja usando ese monto. Si cubres un turno, puedes abrir tu propia caja sin asignacion.",
         ],
       },
       {

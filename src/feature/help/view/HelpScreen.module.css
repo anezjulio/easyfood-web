@@ -33,7 +33,8 @@
 
 .sectionEyebrow,
 .screenEyebrow,
-.actionEyebrow {
+.actionEyebrow,
+.contextEyebrow {
   margin: 0;
   color: #64748b;
   font-size: 12px;
@@ -42,27 +43,64 @@
   text-transform: uppercase;
 }
 
-.indexSection,
-.groupSection {
+.helpLayout {
+  display: grid;
+  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.sidebar,
+.detailPanel {
   border: 1px solid #e2e8f0;
   border-right: 2px solid #000000;
   border-bottom: 2px solid #000000;
   background: #ffffff;
-  padding: 18px;
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
 }
 
-.indexSection {
+.sidebar {
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  padding: 18px;
   display: grid;
   gap: 16px;
 }
 
+.detailPanel {
+  min-height: 720px;
+  padding: 18px;
+  display: grid;
+  gap: 18px;
+}
+
+.sidebarIntro,
+.navGroup,
+.screenPanel,
+.relatedSection,
+.tutorialCard,
+.contextCard,
+.emptyState {
+  border: 1px solid #dbe3ee;
+  background: #ffffff;
+  padding: 16px;
+}
+
+.sidebarIntro,
+.navGroup,
+.tutorialCard,
+.emptyState {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
 .indexHeader,
 .groupHeader,
-.sectionHeader,
+.detailHeader,
 .screenPanelHeader,
 .actionHeader,
-.indexCardHeader {
+.relatedHeader {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -72,38 +110,27 @@
 
 .indexTitle,
 .groupTitle,
-.menuButtonTitle,
 .screenTitle,
-.actionIntroTitle,
 .actionTitle,
-.indexGroupTitle {
+.detailTitle,
+.contextTitle,
+.relatedTitle {
   margin: 0;
   color: #0f172a;
 }
 
 .indexTitle {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 900;
 }
 
 .groupTitle {
-  font-size: 24px;
-  font-weight: 900;
-}
-
-.menuButtonTitle {
-  margin-top: 4px;
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 900;
 }
 
 .screenTitle {
   margin-top: 4px;
-  font-size: 18px;
-  font-weight: 900;
-}
-
-.actionIntroTitle {
   font-size: 18px;
   font-weight: 900;
 }
@@ -114,8 +141,15 @@
   font-weight: 900;
 }
 
-.indexGroupTitle {
-  font-size: 18px;
+.detailTitle {
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 900;
+}
+
+.contextTitle {
+  margin-top: 6px;
+  font-size: 20px;
   font-weight: 900;
 }
 
@@ -130,7 +164,8 @@
 .summaryBadge,
 .groupCount,
 .routeChip,
-.audienceBadge {
+.audienceBadge,
+.navSectionCount {
   min-height: 30px;
   padding: 0 10px;
   display: inline-flex;
@@ -144,7 +179,8 @@
 
 .summaryBadge,
 .groupCount,
-.routeChip {
+.routeChip,
+.navSectionCount {
   background: #f8fafc;
   color: #334155;
 }
@@ -153,67 +189,124 @@
   min-width: 34px;
 }
 
-.indexGrid {
+.sidebarText,
+.groupDescription,
+.detailSummary,
+.contextText {
+  margin: 6px 0 0;
+  color: #475569;
+  line-height: 1.55;
+}
+
+.sidebarGroups,
+.navSectionList {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
-.indexCard {
+.navGroup {
+  display: grid;
+  gap: 14px;
+}
+
+.navSection {
   border: 1px solid #dbe3ee;
   background: #f8fafc;
-  padding: 14px;
-  display: grid;
-  gap: 12px;
-}
-
-.indexGroupDescription,
-.groupDescription,
-.sectionSummary,
-.actionIntroText {
-  margin: 6px 0 0;
-  color: #475569;
-  line-height: 1.5;
-}
-
-.indexList,
-.sectionsColumn,
-.sectionList {
-  display: grid;
-  gap: 12px;
-}
-
-.sectionsColumn {
-  gap: 18px;
-}
-
-.indexLink {
-  border: 1px solid #dbe3ee;
-  background: #ffffff;
   padding: 12px;
   display: grid;
-  gap: 4px;
+  gap: 10px;
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
+}
+
+.navSectionActive {
+  border-color: #94a3b8;
+  box-shadow: inset 0 0 0 1px #cbd5e1;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.navSectionButton,
+.navActionButton,
+.relatedActionButton {
+  width: 100%;
+  border: 1px solid #dbe3ee;
+  background: #ffffff;
   color: #0f172a;
-  text-decoration: none;
+  text-align: left;
+  cursor: pointer;
 }
 
-.indexLink:hover,
-.openScreenLink:hover,
-.backToIndex:hover {
-  text-decoration: underline;
+.navSectionButton {
+  padding: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.indexLinkTitle {
+.navSectionButtonMain {
+  display: grid;
+  gap: 4px;
+}
+
+.navSectionTitle,
+.navActionTitle,
+.relatedActionTitle {
   font-weight: 900;
 }
 
-.indexLinkMeta {
+.navSectionMeta,
+.navActionMeta,
+.relatedActionMeta {
   color: #64748b;
   font-size: 12px;
   font-weight: 700;
+  line-height: 1.45;
 }
 
-.backToIndex,
+.navActionList,
+.relatedActions {
+  display: grid;
+  gap: 8px;
+}
+
+.navActionButton,
+.relatedActionButton {
+  padding: 10px 12px;
+  display: grid;
+  gap: 4px;
+}
+
+.navSectionButton:hover,
+.navActionButton:hover,
+.relatedActionButton:hover,
+.openScreenLink:hover {
+  border-color: #94a3b8;
+}
+
+.navActionButtonActive,
+.relatedActionButtonActive {
+  border-color: #0f172a;
+  background: #eff6ff;
+  box-shadow: inset 3px 0 0 #0f172a;
+}
+
+.detailPanel {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.contextGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.contextCard {
+  background: #f8fafc;
+}
+
 .openScreenLink {
   min-height: 42px;
   padding: 0 14px;
@@ -227,25 +320,8 @@
   text-decoration: none;
 }
 
-.sectionCard {
-  scroll-margin-top: 18px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  padding: 18px;
-  display: grid;
-  gap: 16px;
-}
-
-.sectionHeaderMain {
-  display: grid;
-  gap: 0;
-  min-width: min(100%, 760px);
-}
-
 .screenPanel {
-  border: 1px solid #dbe3ee;
   background: #f8fafc;
-  padding: 14px;
   display: grid;
   gap: 12px;
 }
@@ -268,23 +344,9 @@
   font-weight: 800;
 }
 
-.actionGrid {
+.tutorialCard {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
-}
-
-.actionIntro {
-  display: grid;
-  gap: 4px;
-}
-
-.actionCard {
-  border: 1px solid #dbe3ee;
-  background: #ffffff;
-  padding: 16px;
-  display: grid;
-  gap: 12px;
 }
 
 .actionArea {
@@ -384,21 +446,26 @@
   line-height: 1.5;
 }
 
+.emptyState {
+  display: grid;
+  gap: 8px;
+}
+
 @media (max-width: 1200px) {
-  .indexGrid,
-  .actionGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .helpLayout {
+    grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
   }
 }
 
-@media (max-width: 860px) {
-  .indexGrid,
-  .actionGrid {
+@media (max-width: 980px) {
+  .helpLayout,
+  .contextGrid {
     grid-template-columns: 1fr;
   }
 
-  .routeChip {
-    white-space: normal;
+  .sidebar {
+    position: static;
+    max-height: none;
   }
 }
 
@@ -407,19 +474,33 @@
     padding: 12px;
   }
 
-  .indexSection,
-  .groupSection,
-  .sectionCard {
+  .sidebar,
+  .detailPanel,
+  .sidebarIntro,
+  .navGroup,
+  .screenPanel,
+  .relatedSection,
+  .tutorialCard,
+  .contextCard,
+  .emptyState {
     padding: 14px;
   }
 
-  .menuButtonTitle {
+  .indexTitle,
+  .detailTitle {
     font-size: 22px;
   }
 
-  .indexTitle,
-  .groupTitle {
-    font-size: 22px;
+  .groupTitle,
+  .contextTitle,
+  .actionTitle,
+  .screenTitle,
+  .relatedTitle {
+    font-size: 18px;
+  }
+
+  .routeChip {
+    white-space: normal;
   }
 
   .stepItem {

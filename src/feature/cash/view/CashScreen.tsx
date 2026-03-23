@@ -11,7 +11,7 @@ import { PAYMENT_METHODS, formatPaymentMethodLabel, type Order, type PaymentMeth
 import { fetchOrdersApi } from "../../sale/service/sale.api";
 import type { SupplyOrder } from "../../supply/model/supply.types";
 import { fetchSupplyOrdersApi } from "../../supply/service/supply.api";
-import type { AppUserRecord } from "../../user/model/user.types";
+import { resolveAppUserRole, type AppUserRecord } from "../../user/model/user.types";
 import { fetchUsersApi } from "../../user/service/user.api";
 import type { CashOpeningAssignment, CashShift, Workday, WorkdayAuditChecks, WorkdayCloseSummary } from "../model/cash.types";
 import {
@@ -247,7 +247,9 @@ export default function CashScreen() {
       setSupplyOrders(allSupplyOrders);
       setAssignments(allAssignments);
       setUsers(allUsers);
-      const ownAssignment = allAssignments.find((item) => normalizeForSearch(item.operator) === normalizeForSearch(username));
+      const ownAssignment = isAdmin
+        ? null
+        : allAssignments.find((item) => normalizeForSearch(item.operator) === normalizeForSearch(username));
       if (!currentWorkday) {
         setOpeningAmountInput(ownAssignment ? String(ownAssignment.amount) : "");
         setDeclaredClosingCashInput("");
@@ -262,13 +264,18 @@ export default function CashScreen() {
       const nextDrafts: Record<string, AssignmentDraft> = {};
       for (const user of allUsers) {
         if (!user.username) continue;
-        if (normalizeForSearch(user.username) === "admin") continue;
+        if (resolveAppUserRole(user) === "admin") continue;
         nextDrafts[user.username] = {
           amount: "",
           shift: inferShiftFromHours(user.startHour, user.endHour),
         };
       }
       for (const assignment of allAssignments) {
+        const matchedUser = allUsers.find(
+          (user) => normalizeForSearch(user.username) === normalizeForSearch(assignment.operator),
+        );
+        if (matchedUser && resolveAppUserRole(matchedUser) === "admin") continue;
+        if (!matchedUser && resolveAppUserRole({ username: assignment.operator }) === "admin") continue;
         nextDrafts[assignment.operator] = {
           amount: String(assignment.amount),
           shift: assignment.shift || nextDrafts[assignment.operator]?.shift || "diurno",
@@ -338,20 +345,23 @@ export default function CashScreen() {
   }, [declaredClosingCashInput, expenses, orders, supplyOrders, workday]);
 
   const ownAssignment = useMemo(() => {
-    if (!auth.user?.username) return null;
+    if (!auth.user?.username || isAdmin) return null;
     return assignments.find((item) => normalizeForSearch(item.operator) === normalizeForSearch(auth.user?.username || "")) || null;
-  }, [assignments, auth.user?.username]);
+  }, [assignments, auth.user?.username, isAdmin]);
 
   const assignmentRows = useMemo(() => {
     const byUsername = new Map<string, AppUserRecord>();
     for (const user of users) {
       const key = String(user.username || "").trim();
-      if (!key || normalizeForSearch(key) === "admin") continue;
+      if (!key || resolveAppUserRole(user) === "admin") continue;
       byUsername.set(key, user);
     }
     for (const assignment of assignments) {
       const key = String(assignment.operator || "").trim();
-      if (!key || normalizeForSearch(key) === "admin") continue;
+      if (!key) continue;
+      const matchedUser = users.find((user) => normalizeForSearch(user.username) === normalizeForSearch(key));
+      if (matchedUser && resolveAppUserRole(matchedUser) === "admin") continue;
+      if (!matchedUser && resolveAppUserRole({ username: key }) === "admin") continue;
       if (byUsername.has(key)) continue;
       byUsername.set(key, {
         id: key,
@@ -563,6 +573,7 @@ export default function CashScreen() {
   const openingAssigned = ownAssignment ? ownAssignment.amount : workday?.openingAssignedAmount;
   const openingDeclared = workday?.openingDeclaredAmount;
   const openingDifference = Math.trunc(Number(workday?.openingDifferenceAmount || 0));
+  const hasOpeningAssignment = typeof openingAssigned === "number";
   const clearHeaderNotice = () => {
     setError("");
     setWarning("");
@@ -612,7 +623,11 @@ export default function CashScreen() {
               {!workday ? (
                 <>
                   <h2 className={styles.sectionTitle}>Apertura de caja</h2>
-                  {ownAssignment && ownAssignment.amount > 0 ? (
+                  {isAdmin ? (
+                    <p className={styles.helpText}>
+                      Perfil administrador: puedes abrir caja con cualquier monto real, sin monto ni horario asignados.
+                    </p>
+                  ) : ownAssignment && ownAssignment.amount > 0 ? (
                     <p className={styles.helpText}>
                       Monto asignado por administracion:{" "}
                       <span className={styles.assignedAmount}>{formatMoneyARS(ownAssignment.amount)}</span>.
@@ -681,10 +696,20 @@ export default function CashScreen() {
               <p><strong>Total vendido:</strong> {formatMoneyARS(dayTotal)}</p>
               <p>
                 <strong>Monto asignado:</strong>{" "}
-                {typeof openingAssigned === "number" ? <span className={styles.assignedAmount}>{formatMoneyARS(openingAssigned)}</span> : "-"}
+                {hasOpeningAssignment ? (
+                  <span className={styles.assignedAmount}>{formatMoneyARS(openingAssigned)}</span>
+                ) : isAdmin ? (
+                  "No aplica (admin)"
+                ) : (
+                  "-"
+                )}
               </p>
               <p><strong>Monto declarado:</strong> {typeof openingDeclared === "number" ? formatMoneyARS(openingDeclared) : "-"}</p>
-              <p><strong>Diferencia apertura:</strong> {workday ? formatMoneyARS(Math.abs(openingDifference)) : "-"} {workday && openingDifference !== 0 ? `(${openingDifference > 0 ? "sobra" : "falta"})` : ""}</p>
+              <p>
+                <strong>Diferencia apertura:</strong>{" "}
+                {workday && hasOpeningAssignment ? formatMoneyARS(Math.abs(openingDifference)) : "-"}{" "}
+                {workday && hasOpeningAssignment && openingDifference !== 0 ? `(${openingDifference > 0 ? "sobra" : "falta"})` : ""}
+              </p>
             </section>
 
             {isAdmin ? (
