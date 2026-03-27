@@ -177,16 +177,16 @@ export default function OperationScreen() {
           <div className={styles.grid}>
             <BigBtn title="Ventas" subtitle="Cobros y tickets" onClick={() => nav("/sales")} variant="sales" />
             <BigBtn title="Caja" subtitle="Apertura y cierre de turno" onClick={() => nav("/cash")} />
+            <BigBtn
+              title="Confirmar Gasto"
+              subtitle="Validar gastos asignados"
+              onClick={() => nav("/expenses", { state: { tab: "confirm" } })}
+            />
             <BigBtn title="Solicitudes" subtitle="Gestion de solicitudes" onClick={() => nav("/requests")} />
             <BigBtn
               title="Sugerencias y reclamos"
               subtitle="Libro de sugerencias y reclamos"
               onClick={() => nav("/feedback")}
-            />
-            <BigBtn
-              title="Confirmar Gasto"
-              subtitle="Validar gastos asignados"
-              onClick={() => nav("/expenses", { state: { tab: "confirm" } })}
             />
           </div>
         </section>
@@ -196,6 +196,12 @@ export default function OperationScreen() {
           <div className={styles.grid}>
             <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} />
             <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} />
+            {isAdmin ? (
+              <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} />
+            ) : null}
+            {isAdmin ? (
+              <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
+            ) : null}
           </div>
         </section>
 
@@ -205,24 +211,22 @@ export default function OperationScreen() {
             <div className={styles.grid}>
               <BigBtn title="Balance" subtitle="Cierres y totales" onClick={() => nav("/balance")} />
               <BigBtn title="Finanzas" subtitle="Margenes, pagos e impuestos" onClick={() => nav("/finances")} />
-              <BigBtn title="Transacciones" subtitle="Entradas y salidas" onClick={() => nav("/transactions")} />
-              <BigBtn title="Notificaciones" subtitle="Avisos del sistema" onClick={() => nav("/notifications")} />
               <BigBtn title="Jornadas" subtitle="Historial de jornadas" onClick={() => nav("/workdays")} />
               <BigBtn title="Gastos" subtitle="Registro y asignacion" onClick={() => nav("/expenses", { state: { tab: "create" } })} />
-              <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} />
-              <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
+              <BigBtn title="Usuarios" subtitle="Gestion de usuarios" onClick={() => nav("/users")} />
+              <BigBtn title="Transacciones" subtitle="Entradas y salidas" onClick={() => nav("/transactions")} />
+              <BigBtn title="Notificaciones" subtitle="Avisos del sistema" onClick={() => nav("/notifications")} />
               <BigBtn
                 title="Aprobar Solicitudes"
                 subtitle="Flujo de aprobacion"
                 onClick={() => nav("/requests/approvals")}
               />
-              <BigBtn title="Usuarios" subtitle="Gestion de usuarios" onClick={() => nav("/users")} />
-              <BigBtn title="Data" subtitle="Limpieza de base de datos" onClick={() => nav("/data")} />
               <BigBtn
                 title="Permisos/Licencias"
                 subtitle="Control de accesos"
                 onClick={() => nav("/licenses")}
               />
+              <BigBtn title="Data" subtitle="Limpieza de base de datos" onClick={() => nav("/data")} />
             </div>
           </section>
         ) : null}

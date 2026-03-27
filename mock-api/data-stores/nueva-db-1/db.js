@@ -1799,7 +1799,113 @@
     }
   ],
   "deleteRequests": [],
-  "requests": [],
+  "requests": [
+    {
+      "id": "rq240320260216288626",
+      "requestType": "merchandise",
+      "description": "se acaban",
+      "items": [
+        {
+          "productId": "pseed1773718891471094",
+          "productName": "Copa Helada pack x4 Serie 14",
+          "quantity": 10,
+          "barcode": "7795000000094",
+          "category": "helado"
+        },
+        {
+          "productId": "pseed1773718891471044",
+          "productName": "Esponja Multiuso pack x2 Serie 07",
+          "quantity": 20,
+          "barcode": "7795000000044",
+          "category": "vivere"
+        }
+      ],
+      "requestedBy": "admin",
+      "requestedAt": "2026-03-24T05:16:28.474Z",
+      "status": "approved",
+      "reviewedBy": "admin",
+      "reviewedAt": "2026-03-24T05:16:57.751Z",
+      "supplyOrderId": "so240320260216570089",
+      "supplierMessage": "si se acaban"
+    },
+    {
+      "id": "rq240320260149210205",
+      "requestType": "merchandise",
+      "description": "mas alfojes de los que pedimos",
+      "items": [
+        {
+          "productId": "pseed1773718891471002",
+          "productName": "Desinfectante Floral 900ml Serie 01",
+          "quantity": 2,
+          "barcode": "7795000000002",
+          "category": "vivere"
+        },
+        {
+          "productId": "pseed1773718891471005",
+          "productName": "Tabaco Vanilla 30g Serie 01",
+          "quantity": 2,
+          "barcode": "7795000000005",
+          "category": "tabaqueria"
+        },
+        {
+          "productId": "pseed1773718891471006",
+          "productName": "Caramelos Mix 25g Serie 01",
+          "quantity": 2,
+          "barcode": "7795000000006",
+          "category": "golosina"
+        },
+        {
+          "productId": "pseed1773718891471011",
+          "productName": "Tableta Cacao 30g Serie 02",
+          "quantity": 1,
+          "barcode": "7795000000011",
+          "category": "chocolate"
+        },
+        {
+          "productId": "pseed1773718891471016",
+          "productName": "Detergente Limon 250ml Serie 03",
+          "quantity": 1,
+          "barcode": "7795000000016",
+          "category": "vivere"
+        },
+        {
+          "productId": "pseed1773718891471018",
+          "productName": "Bombones Mix 45g Serie 03",
+          "quantity": 1,
+          "barcode": "7795000000018",
+          "category": "chocolate"
+        }
+      ],
+      "requestedBy": "admin",
+      "requestedAt": "2026-03-24T04:49:21.281Z",
+      "status": "approved",
+      "reviewedBy": "admin",
+      "reviewedAt": "2026-03-24T05:05:32.229Z",
+      "supplyOrderId": "so240320260205321935",
+      "supplierMessage": "a ver si llega todo"
+    },
+    {
+      "id": "rq240320260123258738",
+      "requestType": "merchandise",
+      "description": "mas alfajores",
+      "items": [
+        {
+          "productId": "pseed1773718891471017",
+          "productName": "Bombon Helado 250g Serie 03",
+          "quantity": 20,
+          "barcode": "7795000000017",
+          "category": "helado"
+        }
+      ],
+      "requestedBy": "admin",
+      "requestedAt": "2026-03-24T04:23:25.947Z",
+      "status": "approved",
+      "reviewedBy": "admin",
+      "reviewedAt": "2026-03-24T05:05:54.501Z",
+      "supplyOrderId": "so240320260205543924",
+      "supplierMessage": "mas"
+    }
+  ],
   "stocks": [
     {
       "id": "se210320262256081446",
@@ -1965,22 +2071,90 @@
   ],
   "workdays": [
     {
+      "id": "wd240320261457131148",
+      "operator": "admin",
+      "startedAt": "2026-03-24T17:57:13.242Z",
+      "endedAt": "2026-03-24T18:01:25.171Z",
+      "orderIds": [],
+      "status": "closed",
+      "openingDeclaredAmount": 5000,
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-03-24T18:01:20.429Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 5000,
+        "declaredClosingCash": 5000,
+        "closingDifference": 0,
+        "balanceTotal": 5000
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-03-24T18:01:25.171Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
+    },
+    {
       "id": "wd230320260055356227",
       "operator": "admin",
       "startedAt": "2026-03-23T03:55:35.463Z",
+      "endedAt": "2026-03-24T03:09:50.196Z",
       "orderIds": [],
-      "status": "open",
+      "status": "closed",
       "openingDeclaredAmount": 5000,
-      "openingDifferenceAmount": 0
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-03-24T03:09:46.620Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 5000,
+        "declaredClosingCash": 5000,
+        "closingDifference": 0,
+        "balanceTotal": 5000
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-03-24T03:09:50.196Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
     },
     {
       "id": "wd210320262247572547",
       "operator": "user",
       "startedAt": "2026-03-22T01:47:57.047Z",
+      "endedAt": "2026-03-24T03:09:52.295Z",
       "orderIds": [
         "or210320262249294094"
       ],
-      "status": "pending-close",
+      "status": "closed",
       "openingAssignedAmount": 5000,
       "openingDeclaredAmount": 5000,
       "openingDifferenceAmount": 0,
@@ -2000,6 +2174,18 @@
         "declaredClosingCash": 12,
         "closingDifference": -37388,
         "balanceTotal": 37400
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-03-24T03:09:52.295Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        },
+        "mismatchReport": "El operador user, en la jornada wd210320262247572547, presenta diferencias. Cierre en efectivo: esperado $ 37.400, declarado $ 12 (falta $ 37.388)."
       }
     },
     {
@@ -2056,6 +2242,102 @@
     }
   ],
   "supplyOrders": [
+    {
+      "id": "so240320260216570089",
+      "supplierName": "Distribuidora Centro",
+      "description": "si se acaban",
+      "expectedTotal": 32000,
+      "items": [
+        {
+          "productId": "pseed1773718891471094",
+          "productName": "Copa Helada pack x4 Serie 14",
+          "quantity": 10,
+          "barcode": "7795000000094",
+          "category": "helado"
+        },
+        {
+          "productId": "pseed1773718891471044",
+          "productName": "Esponja Multiuso pack x2 Serie 07",
+          "quantity": 20,
+          "barcode": "7795000000044",
+          "category": "vivere"
+        }
+      ],
+      "createdAt": "2026-03-24T05:16:57.735Z",
+      "createdBy": "admin",
+      "status": "pending"
+    },
+    {
+      "id": "so240320260205543924",
+      "supplierName": "Distribuidora Centro",
+      "description": "mas",
+      "expectedTotal": 59996,
+      "items": [
+        {
+          "productId": "pseed1773718891471017",
+          "productName": "Bombon Helado 250g Serie 03",
+          "quantity": 20,
+          "barcode": "7795000000017",
+          "category": "helado"
+        }
+      ],
+      "createdAt": "2026-03-24T05:05:54.485Z",
+      "createdBy": "admin",
+      "status": "pending"
+    },
+    {
+      "id": "so240320260205321935",
+      "supplierName": "Distribuidora Centro",
+      "description": "a ver si llega todo",
+      "expectedTotal": 562000,
+      "items": [
+        {
+          "productId": "pseed1773718891471002",
+          "productName": "Desinfectante Floral 900ml Serie 01",
+          "quantity": 2,
+          "barcode": "7795000000002",
+          "category": "vivere"
+        },
+        {
+          "productId": "pseed1773718891471005",
+          "productName": "Tabaco Vanilla 30g Serie 01",
+          "quantity": 2,
+          "barcode": "7795000000005",
+          "category": "tabaqueria"
+        },
+        {
+          "productId": "pseed1773718891471006",
+          "productName": "Caramelos Mix 25g Serie 01",
+          "quantity": 2,
+          "barcode": "7795000000006",
+          "category": "golosina"
+        },
+        {
+          "productId": "pseed1773718891471011",
+          "productName": "Tableta Cacao 30g Serie 02",
+          "quantity": 1,
+          "barcode": "7795000000011",
+          "category": "chocolate"
+        },
+        {
+          "productId": "pseed1773718891471016",
+          "productName": "Detergente Limon 250ml Serie 03",
+          "quantity": 1,
+          "barcode": "7795000000016",
+          "category": "vivere"
+        },
+        {
+          "productId": "pseed1773718891471018",
+          "productName": "Bombones Mix 45g Serie 03",
+          "quantity": 1,
+          "barcode": "7795000000018",
+          "category": "chocolate"
+        }
+      ],
+      "createdAt": "2026-03-24T05:05:32.206Z",
+      "createdBy": "admin",
+      "status": "pending"
+    },
     {
       "id": "so210320262306060373",
       "supplierName": "Distribuidora Centro",
@@ -2216,9 +2498,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": -52100,
+      "currentBalance": -47100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-23T03:55:35.464Z"
+      "updatedAt": "2026-03-24T18:01:25.172Z"
     },
     {
       "id": "account-gains",
@@ -2228,7 +2510,7 @@
       "description": "Ventas pagadas registradas por la plataforma.",
       "currentBalance": 22000,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-23T03:55:35.464Z"
+      "updatedAt": "2026-03-24T18:01:25.172Z"
     },
     {
       "id": "account-expenses",
@@ -2238,7 +2520,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": -106100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-23T03:55:35.464Z"
+      "updatedAt": "2026-03-24T18:01:25.172Z"
     },
     {
       "id": "account-tobacco",
@@ -2248,10 +2530,82 @@
       "description": "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-23T03:55:35.464Z"
+      "updatedAt": "2026-03-24T18:01:25.172Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-cash-close-wd240320261457131148",
+      "createdAt": "2026-03-24T18:01:25.171Z",
+      "type": "cash-close",
+      "title": "Cierre de caja wd240320261457131148",
+      "description": "Se dejo 5000 al cerrar la jornada wd240320261457131148.",
+      "amount": 5000,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd240320261457131148",
+      "workdayId": "wd240320261457131148",
+      "actor": "admin",
+      "countsInBalance": false,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-cash-opening-wd240320261457131148",
+      "createdAt": "2026-03-24T17:57:13.242Z",
+      "type": "cash-opening",
+      "title": "Apertura de caja wd240320261457131148",
+      "description": "Apertura declarada por admin.",
+      "amount": 5000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd240320261457131148",
+      "workdayId": "wd240320261457131148",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-cash-close-wd210320262247572547",
+      "createdAt": "2026-03-24T03:09:52.295Z",
+      "type": "cash-close",
+      "title": "Cierre de caja wd210320262247572547",
+      "description": "Se dejo 12 al cerrar la jornada wd210320262247572547.",
+      "amount": 12,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd210320262247572547",
+      "workdayId": "wd210320262247572547",
+      "actor": "user",
+      "countsInBalance": false,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-cash-close-wd230320260055356227",
+      "createdAt": "2026-03-24T03:09:50.196Z",
+      "type": "cash-close",
+      "title": "Cierre de caja wd230320260055356227",
+      "description": "Se dejo 5000 al cerrar la jornada wd230320260055356227.",
+      "amount": 5000,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd230320260055356227",
+      "workdayId": "wd230320260055356227",
+      "actor": "admin",
+      "countsInBalance": false,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
     {
       "id": "txn-cash-opening-wd230320260055356227",
       "createdAt": "2026-03-23T03:55:35.463Z",
@@ -2284,24 +2638,6 @@
       "referenceId": "wd270220262009358339",
       "workdayId": "wd270220262009358339",
       "actor": "admin",
-      "countsInBalance": false,
-      "accountCode": "cash-local",
-      "accountName": "Caja fisica local"
-    },
-    {
-      "id": "txn-cash-close-wd210320262247572547",
-      "createdAt": "2026-03-22T01:59:05.904Z",
-      "type": "cash-close",
-      "title": "Cierre de caja wd210320262247572547",
-      "description": "Se dejo 12 al cerrar la jornada wd210320262247572547.",
-      "amount": 12,
-      "direction": "out",
-      "entryKind": "debit",
-      "accountId": "account-cash-local",
-      "referenceModule": "cash",
-      "referenceId": "wd210320262247572547",
-      "workdayId": "wd210320262247572547",
-      "actor": "user",
       "countsInBalance": false,
       "accountCode": "cash-local",
       "accountName": "Caja fisica local"
@@ -2588,6 +2924,303 @@
   "licenses": [],
   "notifications": [
     {
+      "id": "nt240320261501251517",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd240320261457131148.",
+      "createdAt": "2026-03-24T18:01:25.171Z",
+      "dueAt": "2026-03-25T18:01:25.171Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd240320261457131148",
+      "status": "active"
+    },
+    {
+      "id": "nt240320261501206645",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd240320261457131148 fue enviada para auditoria.",
+      "createdAt": "2026-03-24T18:01:20.429Z",
+      "dueAt": "2026-03-31T18:01:20.429Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd240320261457131148",
+      "status": "received",
+      "receivedAt": "2026-03-24T18:01:25.171Z"
+    },
+    {
+      "id": "nt240320261457139975",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 5000.",
+      "createdAt": "2026-03-24T17:57:13.242Z",
+      "dueAt": "2026-03-25T17:57:13.242Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd240320261457131148",
+      "status": "received",
+      "receivedAt": "2026-03-24T18:01:25.171Z"
+    },
+    {
+      "id": "nt240320260216573639",
+      "type": "supply-approved",
+      "title": "Solicitud de mercancia aprobada",
+      "description": "La solicitud rq240320260216288626 fue aprobada y genero pedido so240320260216570089.",
+      "createdAt": "2026-03-24T05:16:57.751Z",
+      "dueAt": "2026-03-31T05:16:57.751Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "operation-request",
+      "entityId": "rq240320260216288626",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260216577996",
+      "type": "operation-request-reviewed",
+      "title": "Solicitud revisada: admin",
+      "description": "La solicitud rq240320260216288626 fue aprobada.",
+      "createdAt": "2026-03-24T05:16:57.751Z",
+      "dueAt": "2026-03-31T05:16:57.751Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "operation-request",
+      "entityId": "rq240320260216288626",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260216574804",
+      "type": "supply-pending-receive",
+      "title": "Pendiente recepcion: Distribuidora Centro",
+      "description": "Pedido so240320260216570089 pendiente de recepcion.",
+      "createdAt": "2026-03-24T05:16:57.735Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Registrar recepcion",
+      "entityType": "supply-order",
+      "entityId": "so240320260216570089",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260216570619",
+      "type": "supply-requested",
+      "title": "Pedido a proveedor: Distribuidora Centro",
+      "description": "Se genero pedido so240320260216570089 por 32000. Productos: 2.",
+      "createdAt": "2026-03-24T05:16:57.735Z",
+      "dueAt": "2026-03-31T05:16:57.735Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "supply-order",
+      "entityId": "so240320260216570089",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260216289074",
+      "type": "operation-request-merchandise",
+      "title": "Solicitud de mercancia: admin",
+      "description": "se acaban",
+      "createdAt": "2026-03-24T05:16:28.474Z",
+      "dueAt": "2026-03-31T05:16:28.474Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Revisar solicitud",
+      "entityType": "operation-request",
+      "entityId": "rq240320260216288626",
+      "status": "received",
+      "receivedAt": "2026-03-24T05:16:57.751Z"
+    },
+    {
+      "id": "nt240320260205540115",
+      "type": "supply-approved",
+      "title": "Solicitud de mercancia aprobada",
+      "description": "La solicitud rq240320260123258738 fue aprobada y genero pedido so240320260205543924.",
+      "createdAt": "2026-03-24T05:05:54.501Z",
+      "dueAt": "2026-03-31T05:05:54.501Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "operation-request",
+      "entityId": "rq240320260123258738",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260205547388",
+      "type": "operation-request-reviewed",
+      "title": "Solicitud revisada: admin",
+      "description": "La solicitud rq240320260123258738 fue aprobada.",
+      "createdAt": "2026-03-24T05:05:54.501Z",
+      "dueAt": "2026-03-31T05:05:54.501Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "operation-request",
+      "entityId": "rq240320260123258738",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260205541765",
+      "type": "supply-pending-receive",
+      "title": "Pendiente recepcion: Distribuidora Centro",
+      "description": "Pedido so240320260205543924 pendiente de recepcion.",
+      "createdAt": "2026-03-24T05:05:54.485Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Registrar recepcion",
+      "entityType": "supply-order",
+      "entityId": "so240320260205543924",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260205542539",
+      "type": "supply-requested",
+      "title": "Pedido a proveedor: Distribuidora Centro",
+      "description": "Se genero pedido so240320260205543924 por 59996. Productos: 1.",
+      "createdAt": "2026-03-24T05:05:54.485Z",
+      "dueAt": "2026-03-31T05:05:54.485Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "supply-order",
+      "entityId": "so240320260205543924",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260205321573",
+      "type": "supply-approved",
+      "title": "Solicitud de mercancia aprobada",
+      "description": "La solicitud rq240320260149210205 fue aprobada y genero pedido so240320260205321935.",
+      "createdAt": "2026-03-24T05:05:32.229Z",
+      "dueAt": "2026-03-31T05:05:32.229Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "operation-request",
+      "entityId": "rq240320260149210205",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260205324933",
+      "type": "operation-request-reviewed",
+      "title": "Solicitud revisada: admin",
+      "description": "La solicitud rq240320260149210205 fue aprobada.",
+      "createdAt": "2026-03-24T05:05:32.229Z",
+      "dueAt": "2026-03-31T05:05:32.229Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "operation-request",
+      "entityId": "rq240320260149210205",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260205327502",
+      "type": "supply-pending-receive",
+      "title": "Pendiente recepcion: Distribuidora Centro",
+      "description": "Pedido so240320260205321935 pendiente de recepcion.",
+      "createdAt": "2026-03-24T05:05:32.206Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Registrar recepcion",
+      "entityType": "supply-order",
+      "entityId": "so240320260205321935",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260205329146",
+      "type": "supply-requested",
+      "title": "Pedido a proveedor: Distribuidora Centro",
+      "description": "Se genero pedido so240320260205321935 por 562000. Productos: 6.",
+      "createdAt": "2026-03-24T05:05:32.206Z",
+      "dueAt": "2026-03-31T05:05:32.206Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "supply-order",
+      "entityId": "so240320260205321935",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260149212409",
+      "type": "operation-request-merchandise",
+      "title": "Solicitud de mercancia: admin",
+      "description": "mas alfojes de los que pedimos",
+      "createdAt": "2026-03-24T04:49:21.281Z",
+      "dueAt": "2026-03-31T04:49:21.281Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Revisar solicitud",
+      "entityType": "operation-request",
+      "entityId": "rq240320260149210205",
+      "status": "received",
+      "receivedAt": "2026-03-24T05:05:32.229Z"
+    },
+    {
+      "id": "nt240320260123251921",
+      "type": "operation-request-merchandise",
+      "title": "Solicitud de mercancia: admin",
+      "description": "mas alfajores",
+      "createdAt": "2026-03-24T04:23:25.947Z",
+      "dueAt": "2026-03-31T04:23:25.947Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Revisar solicitud",
+      "entityType": "operation-request",
+      "entityId": "rq240320260123258738",
+      "status": "received",
+      "receivedAt": "2026-03-24T05:05:54.501Z"
+    },
+    {
+      "id": "nt240320260009527336",
+      "type": "cash",
+      "title": "Diferencias detectadas en cierre: user",
+      "description": "El operador user, en la jornada wd210320262247572547, presenta diferencias. Cierre en efectivo: esperado $ 37.400, declarado $ 12 (falta $ 37.388).",
+      "createdAt": "2026-03-24T03:09:52.295Z",
+      "dueAt": "2026-03-31T03:09:52.295Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd210320262247572547",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260009522112",
+      "type": "cash-closed",
+      "title": "Caja cerrada: user",
+      "description": "Se cerro la jornada wd210320262247572547.",
+      "createdAt": "2026-03-24T03:09:52.295Z",
+      "dueAt": "2026-03-25T03:09:52.295Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd210320262247572547",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260009501487",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd230320260055356227.",
+      "createdAt": "2026-03-24T03:09:50.196Z",
+      "dueAt": "2026-03-25T03:09:50.196Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd230320260055356227",
+      "status": "active"
+    },
+    {
+      "id": "nt240320260009466661",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd230320260055356227 fue enviada para auditoria.",
+      "createdAt": "2026-03-24T03:09:46.620Z",
+      "dueAt": "2026-03-31T03:09:46.620Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd230320260055356227",
+      "status": "received",
+      "receivedAt": "2026-03-24T03:09:50.196Z"
+    },
+    {
       "id": "nt230320260055355678",
       "type": "cash-opened",
       "title": "Caja abierta: admin",
@@ -2598,7 +3231,8 @@
       "requiresAction": false,
       "entityType": "workday",
       "entityId": "wd230320260055356227",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-03-24T03:09:50.196Z"
     },
     {
       "id": "nt230320260055232053",
@@ -2664,7 +3298,8 @@
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
       "entityId": "wd210320262247572547",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-03-24T03:09:52.295Z"
     },
     {
       "id": "nt210320262256083955",
@@ -2818,7 +3453,8 @@
       "requiresAction": false,
       "entityType": "workday",
       "entityId": "wd210320262247572547",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-03-24T03:09:52.295Z"
     },
     {
       "id": "nt170320260117134804",

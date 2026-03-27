@@ -1,0 +1,53 @@
+.layout {
+  display: grid;
+  gap: 14px;
+}
+
+.layoutSplit {
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.95fr);
+  align-items: start;
+}
+
+.catalogCard {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.meta,
+.helperText {
+  margin: 4px 0 0;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.errorBox {
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #9f1239;
+  padding: 10px;
+}
+
+@media (max-width: 1100px) {
+  .layoutSplit {
+    grid-template-columns: 1fr;
+  }
+}

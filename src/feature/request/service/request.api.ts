@@ -1,6 +1,7 @@
 import type {
   CreateOperationRequestDraft,
   OperationRequest,
+  OperationRequestItemDraft,
   OperationRequestStatus,
   OperationRequestType,
 } from "../model/request.types";
@@ -22,7 +23,7 @@ export async function createOperationRequestApi(draft: CreateOperationRequestDra
 
 export async function updateOperationRequestApi(
   id: string,
-  draft: { requestType: OperationRequestType; description: string },
+  draft: { requestType: OperationRequestType; description: string; items?: OperationRequestItemDraft[] },
 ): Promise<OperationRequest> {
   const response = await fetch(`/operation-requests/${encodeURIComponent(id)}`, {
     method: "PUT",
@@ -43,7 +44,7 @@ export async function updateOperationRequestStatusApi(
   id: string,
   status: Exclude<OperationRequestStatus, "pending">,
   reviewedBy: string,
-  options?: { supplyOrderId?: string; supplierMessage?: string; reviewComment?: string },
+  options?: { supplyOrderId?: string; supplierMessage?: string; reviewComment?: string; items?: OperationRequestItemDraft[] },
 ): Promise<OperationRequest> {
   const response = await fetch(`/operation-requests/${encodeURIComponent(id)}/status`, {
     method: "PUT",
@@ -54,6 +55,7 @@ export async function updateOperationRequestStatusApi(
       supplyOrderId: options?.supplyOrderId,
       supplierMessage: options?.supplierMessage,
       reviewComment: options?.reviewComment,
+      items: options?.items,
     }),
   });
   return await readJsonOrThrow<OperationRequest>(response);

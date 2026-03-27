@@ -65,10 +65,19 @@ type OperationRequestType = "merchandise" | "permissions";
 
 type OperationRequestStatus = "pending" | "approved" | "rejected";
 
+type OperationRequestItem = {
+  productId: string;
+  productName: string;
+  quantity: number;
+  barcode?: string;
+  category?: Product["category"];
+};
+
 type OperationRequest = {
   id: string;
   requestType: OperationRequestType;
   description: string;
+  items?: OperationRequestItem[];
   requestedBy: string;
   requestedAt: string;
   status: OperationRequestStatus;
@@ -872,6 +881,52 @@ function findUserByUsername(db: MockDb, username: string): AppUserRecord | undef
   return db.users.find((item) => item.username.trim().toLowerCase() === normalizedUsername);
 }
 
+function isProductCategoryValue(value: string): value is NonNullable<Product["category"]> {
+  return (
+    value === "bebida" ||
+    value === "vivere" ||
+    value === "helado" ||
+    value === "chocolate" ||
+    value === "tabaqueria" ||
+    value === "golosina" ||
+    value === "perecedero"
+  );
+}
+
+function normalizeOperationRequestItems(items: unknown, products: Product[]): OperationRequestItem[] {
+  if (!Array.isArray(items)) return [];
+
+  const itemsByProductId = new Map<string, OperationRequestItem>();
+
+  for (const rawItem of items) {
+    const draft = rawItem as {
+      productId?: unknown;
+      productName?: unknown;
+      quantity?: unknown;
+      barcode?: unknown;
+      category?: unknown;
+    };
+    const productId = String(draft.productId || "").trim();
+    const quantity = Math.max(0, Math.trunc(Number(draft.quantity || 0)));
+    if (!productId || quantity <= 0) continue;
+
+    const existing = itemsByProductId.get(productId);
+    const product = products.find((entry) => entry.id === productId);
+    const rawCategory = String(draft.category || "").trim().toLowerCase();
+    const category = product?.category || (isProductCategoryValue(rawCategory) ? rawCategory : existing?.category);
+
+    itemsByProductId.set(productId, {
+      productId,
+      productName: product?.name || String(draft.productName || "").trim() || existing?.productName || productId,
+      quantity: quantity + (existing?.quantity || 0),
+      barcode: product?.barcode || String(draft.barcode || "").trim() || existing?.barcode || undefined,
+      category,
+    });
+  }
+
+  return [...itemsByProductId.values()];
+}
+
 function mapDataStoreForApi(store: DataStoreRecord) {
   return {
     id: store.id,
@@ -1352,14 +1407,20 @@ function mockDbPlugin(): Plugin {
           if (pathname === "/operation-requests" && method === "POST") {
             const db = await readDb();
             const body = sanitizeOperationRequestDraft(await readJsonBody(req));
+            const requestItems =
+              body.requestType === "merchandise" ? normalizeOperationRequestItems(body.items || [], db.products) : [];
             if (!body.description) {
               return sendJson(res, 400, { message: "Request description is required" });
+            }
+            if (body.requestType === "merchandise" && requestItems.length === 0) {
+              return sendJson(res, 400, { message: "Merchandise request items are required" });
             }
 
             const request: OperationRequest = {
               id: buildEntityId("rq"),
               requestType: body.requestType,
               description: body.description,
+              items: requestItems,
               requestedBy: body.requestedBy || "operator",
               requestedAt: new Date().toISOString(),
               status: "pending",
@@ -1396,6 +1457,8 @@ function mockDbPlugin(): Plugin {
           if (operationRequestEntityId && method === "PUT") {
             const db = await readDb();
             const body = sanitizeOperationRequestUpdateDraft(await readJsonBody(req));
+            const requestItems =
+              body.requestType === "merchandise" ? normalizeOperationRequestItems(body.items || [], db.products) : [];
             if (!body.description) {
               return sendJson(res, 400, { message: "Request description is required" });
             }
@@ -1409,11 +1472,15 @@ function mockDbPlugin(): Plugin {
             if (current.status !== "pending") {
               return sendJson(res, 409, { message: "Only pending requests can be updated" });
             }
+            if (body.requestType === "merchandise" && requestItems.length === 0) {
+              return sendJson(res, 400, { message: "Merchandise request items are required" });
+            }
 
             db.requests[index] = {
               ...current,
               requestType: body.requestType,
               description: body.description,
+              items: requestItems,
             };
 
             await writeDb(db);
@@ -1452,12 +1519,17 @@ function mockDbPlugin(): Plugin {
             if (current.status !== "pending") {
               return sendJson(res, 409, { message: "Request is already resolved" });
             }
+            const nextItems =
+              current.requestType === "merchandise" || body.items
+                ? normalizeOperationRequestItems(body.items ?? current.items ?? [], db.products)
+                : [];
 
             db.requests[index] = {
               ...current,
               status: body.status,
               reviewedBy: body.reviewedBy || "admin",
               reviewedAt: new Date().toISOString(),
+              items: nextItems,
               supplyOrderId: body.supplyOrderId || current.supplyOrderId,
               supplierMessage: body.supplierMessage || current.supplierMessage,
               reviewComment: body.reviewComment || current.reviewComment,
@@ -2852,6 +2924,10 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
               id: String(draft.id || ""),
               requestType,
               description,
+              items: normalizeOperationRequestItems(
+                (draft as { items?: unknown }).items,
+                Array.isArray(parsed.products) ? (parsed.products as Product[]) : [],
+              ),
               requestedBy: String(draft.requestedBy || "").trim() || "operator",
               requestedAt: String(draft.requestedAt || "").trim() || new Date().toISOString(),
               status,
@@ -5714,8 +5790,9 @@ function sanitizeOperationRequestDraft(input: unknown): {
   requestType: OperationRequestType;
   description: string;
   requestedBy: string;
+  items: OperationRequestItem[];
 } {
-  const obj = (input || {}) as { requestType?: unknown; description?: unknown; requestedBy?: unknown };
+  const obj = (input || {}) as { requestType?: unknown; description?: unknown; requestedBy?: unknown; items?: unknown };
   const requestTypeValue = String(obj.requestType || "").trim().toLowerCase();
   const requestType: OperationRequestType =
     requestTypeValue === "merchandise" || requestTypeValue === "permissions"
@@ -5725,14 +5802,16 @@ function sanitizeOperationRequestDraft(input: unknown): {
     requestType,
     description: String(obj.description || "").trim(),
     requestedBy: String(obj.requestedBy || "").trim(),
+    items: normalizeOperationRequestItems(obj.items, []),
   };
 }
 
 function sanitizeOperationRequestUpdateDraft(input: unknown): {
   requestType: OperationRequestType;
   description: string;
+  items: OperationRequestItem[];
 } {
-  const obj = (input || {}) as { requestType?: unknown; description?: unknown };
+  const obj = (input || {}) as { requestType?: unknown; description?: unknown; items?: unknown };
   const requestTypeValue = String(obj.requestType || "").trim().toLowerCase();
   const requestType: OperationRequestType =
     requestTypeValue === "merchandise" || requestTypeValue === "permissions"
@@ -5741,6 +5820,7 @@ function sanitizeOperationRequestUpdateDraft(input: unknown): {
   return {
     requestType,
     description: String(obj.description || "").trim(),
+    items: normalizeOperationRequestItems(obj.items, []),
   };
 }
 
@@ -5750,6 +5830,7 @@ function sanitizeOperationRequestStatusDraft(input: unknown): {
   supplyOrderId?: string;
   supplierMessage?: string;
   reviewComment?: string;
+  items?: OperationRequestItem[];
 } {
   const obj = (input || {}) as {
     status?: unknown;
@@ -5757,6 +5838,7 @@ function sanitizeOperationRequestStatusDraft(input: unknown): {
     supplyOrderId?: unknown;
     supplierMessage?: unknown;
     reviewComment?: unknown;
+    items?: unknown;
   };
   const statusValue = String(obj.status || "").trim().toLowerCase();
   const status =
@@ -5769,6 +5851,7 @@ function sanitizeOperationRequestStatusDraft(input: unknown): {
     supplyOrderId: String(obj.supplyOrderId || "").trim() || undefined,
     supplierMessage: String(obj.supplierMessage || "").trim() || undefined,
     reviewComment: String(obj.reviewComment || "").trim() || undefined,
+    items: Array.isArray(obj.items) ? normalizeOperationRequestItems(obj.items, []) : undefined,
   };
 }
 

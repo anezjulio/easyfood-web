@@ -1,95 +1,131 @@
-# React + TypeScript + Vite
+# EasyCommerce Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+EasyCommerce Web es el frontend React + TypeScript de una operacion comercial con ventas, caja, productos, stock, mercaderia, gastos, notificaciones y administracion. El repo incluye la UI y tambien un mock backend montado dentro de `vite.config.ts`, con persistencia en archivos, subida de imagenes, generacion de recibos HTML, libro financiero derivado y soporte de multiples bases.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19
+- TypeScript 5.9
+- Vite 7
+- React Router 7
+- CSS Modules
+- Mock REST backend embebido en Vite
 
-## React Compiler
+## Modulos principales
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Login y control de sesion
+- Menu operativo con alertas
+- Ventas, resumen e impresion de recibos
+- Caja, cierre y auditoria administrativa
+- Jornadas, balance y transacciones
+- Productos, precios, finanzas y carga de stock
+- Pedidos a proveedor y recepcion de mercaderia
+- Solicitudes operativas y aprobacion administrativa
+- Gastos, sugerencias/reclamos, licencias y notificaciones
+- Administracion de bases de datos y ayuda funcional
 
-## Expanding the ESLint configuration
+## Ejecucion local
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+La app levanta por defecto en `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Login demo
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- La pantalla de login arranca en desarrollo con `admin / 1234` precargado.
+- La autenticacion es de demo: consulta `GET /users` y compara el password hasheado con MD5 desde el frontend.
+- Los roles actuales son `admin` y `operator`.
+
+## Variables de entorno relevantes
+
+| Variable | Default | Uso |
+| --- | --- | --- |
+| `VITE_USE_FAKE_API` | `true` | Cuando esta en `true`, el dominio de productos/precios/margenes usa HTTP contra el mock backend. Cuando esta en `false`, solo ese dominio cae a `localStorage`; el resto de modulos sigue usando endpoints HTTP relativos. |
+| `VITE_FAKE_API_URL` | vacio | Permite apuntar productos e imagenes a otra base URL si no se usa la ruta relativa del mismo servidor Vite. |
+| `VITE_IMAGE_BASE_URL` | vacio | Base URL explicita para servir imagenes. |
+| `VITE_IMAGE_UPLOAD_URL` | vacio | URL explicita para subir imagenes. |
+| `VITE_ORDER_PENDING_TIMEOUT_MINUTES` | `15` | Tiempo maximo para aprobar o rechazar un pago pendiente en ventas. |
+| `DATA_ROOT` | vacio | Si se define, mueve `mock-api`, `images` y `receipts` a una raiz persistente externa al repo. |
+| `VITE_RECEIPTS_DIR` / `RECEIPTS_DIR` | `mock-api/receipts` | Carpeta base para los recibos HTML generados. |
+| `PORT` | `5173` en dev / `4173` en preview | Puerto de Vite. |
+
+## Persistencia y multiples bases
+
+- La base activa se define en `mock-api/data-stores.json`.
+- La base principal usa los paths del repo: `mock-api/db.json`, `images/` y `mock-api/receipts/`.
+- Las bases adicionales viven en:
+  - `mock-api/data-stores/<id>/db.js`
+  - `images/<id>/`
+  - `mock-api/receipts/stores/<id>/`
+- La pantalla `Data` permite:
+  - crear una nueva base
+  - cambiar la base activa
+  - limpiar la base activa
+- Al crear una base nueva se copian usuarios y configuraciones de la base activa, pero sin datos operativos.
+- Al limpiar una base activa se vacian colecciones operativas como productos, stock, ventas, pedidos, gastos, feedback, licencias, notificaciones y libro financiero derivado. Se conservan usuarios, asignaciones de apertura y configuraciones globales.
+
+## Backend mock incluido
+
+El backend real de desarrollo vive en `vite.config.ts` y no en un servicio aparte. Desde ahi se exponen, entre otros:
+
+- CRUD de productos, precios, margenes, usuarios y licencias
+- Ventas, facturas, recibos y stock
+- Caja, jornadas y asignaciones de apertura
+- Pedidos a proveedor, recepcion y solicitudes operativas
+- Gastos, feedback y notificaciones
+- Cuentas y transacciones financieras derivadas
+- Administracion de bases (`/admin/data/*`)
+
+## Archivos y medios
+
+- Las imagenes suben por `POST /uploads/images` y se sirven por `GET /images/:filename`.
+- Los recibos de venta se generan por `POST /receipts` y se guardan como HTML en la carpeta de recibos de la base activa.
+- El frontend resuelve rutas de imagen con `src/shared/image/image.service.ts`.
+
+## Estructura general
+
+```text
+src/
+  app/
+    component/
+    provider/
+    router/
+  feature/
+    <feature>/
+      model/
+      service/
+      view/
+      viewmodel/   # solo donde hace falta
+      component/   # componentes reutilizables por feature
+  shared/
+    format/
+    http/
+    image/
+    product/
+    search/
+mock-api/
+docs/
 ```
 
-## Configuracion de Pistola Scanner en Chrome (Windows)
+## Documentacion del repo
 
-Esta configuracion aplica para la pantalla de ventas (`/sales`) cuando el scanner envia `Ctrl+J` despues de leer un codigo y Chrome abre `chrome://downloads/`.
+- `docs/architecture-mvvm.md`
+- `docs/backend-integration.md`
+- `docs/backend-services-db-operations.md`
+- `docs/notification-test-cases.md`
+- `docs/notification-channels-roadmap.md`
+- `docs/functional-flows-by-module.md`
 
-### Objetivo
+## Notas operativas
 
-- Permitir escanear codigo + Enter en la app.
-- Evitar que Chrome abra Descargas por el atajo `Ctrl+J`.
+### Scanner en Chrome
 
-### 1) Instalar AutoHotkey
+Si la pistola de scanner dispara `Ctrl+J` y Chrome abre `chrome://downloads/`, la salida practica sigue siendo bloquear ese atajo con AutoHotkey solo para Chrome.
 
-1. Descargar desde el sitio oficial: `https://www.autohotkey.com/`
-2. Instalar **AutoHotkey v2** (no v1).
-
-### 2) Crear script para bloquear Ctrl+J solo en Chrome
-
-1. Crear archivo en el escritorio: `bloquear-ctrl-j-chrome.ahk`
-2. Pegar este contenido:
+Script recomendado:
 
 ```ahk
 #Requires AutoHotkey v2.0
@@ -100,68 +136,6 @@ Esta configuracion aplica para la pantalla de ventas (`/sales`) cuando el scanne
 #HotIf
 ```
 
-3. Guardar y ejecutar con doble clic.
-4. Verificar que aparezca el icono verde de AutoHotkey en la bandeja del sistema.
+### Demo o stage con datos persistentes
 
-### 3) Validacion
-
-1. Abrir Chrome y presionar `Ctrl+J`.
-2. No debe abrirse la pagina de Descargas.
-3. Ir a la pantalla de ventas (`/sales`) y escanear productos.
-4. Debe agregar productos sin redirigir a `chrome://downloads/`.
-
-### 4) Inicio automatico en Windows
-
-Para que se aplique en cada encendido de la PC:
-
-1. Presionar `Win + R`.
-2. Ejecutar: `shell:startup`
-3. Crear/copy un acceso directo de `bloquear-ctrl-j-chrome.ahk` dentro de esa carpeta.
-4. Reiniciar la PC y confirmar que AutoHotkey se inicie solo.
-
-### Notas operativas
-
-- Este bloqueo solo afecta Chrome cuando la ventana de Chrome esta activa.
-- No cambia configuraciones internas de la pistola.
-- Si se cierra AutoHotkey, vuelve el comportamiento normal de `Ctrl+J`.
-
-### Enlaces adicionales
-
-- Manual scanner 1100L/1200L (V2.3): `https://v6-file.globalso.com/upload/p/827/file/2024-11/1100l-1200l-user-manual-v2-3.pdf`
-
-## Documentacion tecnica
-
-- Arquitectura MVVM y criterios de capas: `docs/architecture-mvvm.md`
-- Integracion backend (paginas, servicios y endpoints): `docs/backend-integration.md`
-
-## Demo rapida con URL publica
-
-Para compartir una URL de prueba sin cambiar aun a una base real, este repo puede correr con la fake API actual y persistir archivos en un volumen del host.
-
-### Railway
-
-1. Subir el repo a GitHub.
-2. Crear un proyecto nuevo en Railway desde ese repo.
-3. Crear un `Volume` y montarlo en `/data`.
-4. Definir la variable de entorno `DATA_ROOT=/data`.
-5. Railway puede arrancar con `npm start`.
-
-Con esa configuracion:
-
-- la app levanta con Vite en el puerto que entregue Railway
-- la fake DB queda en `/data/mock-api/...`
-- imagenes y comprobantes quedan en `/data/images` y `/data/mock-api/receipts`
-- si el volumen arranca vacio, se copian como semilla los datos actuales del repo
-
-### Local vs stage
-
-La raiz de datos ahora depende del entorno:
-
-- Si `DATA_ROOT` no esta definido, la app sigue trabajando contra archivos locales del proyecto.
-  Ejemplo: `mock-api/db.json`, `images/`, `mock-api/receipts/`.
-- Si `DATA_ROOT=/data`, la app usa esa raiz persistente del host.
-  Ejemplo: `/data/mock-api/db.json`, `/data/images/`, `/data/mock-api/receipts/`.
-
-En otras palabras, no se fijo `/data` para todos los casos: local y stage pueden convivir cambiando solo la variable de entorno.
-
-Esto esta pensado para demo y validacion rapida con terceros. Para produccion conviene separar frontend/backend y dejar una persistencia mas robusta.
+Para demos o validaciones rapidas se puede montar `DATA_ROOT` en un volumen persistente y dejar base activa, imagenes y recibos fuera del repo. Eso sirve para stage, pero no reemplaza una arquitectura separada de frontend y backend para produccion.

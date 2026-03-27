@@ -1,90 +1,69 @@
-# Roadmap de Notificaciones: WhatsApp, Email y Telegram
+# Roadmap de notificaciones por canal
 
-## Objetivo
+## Punto de partida real del proyecto
 
-Documentar una implementacion futura para enviar notificaciones de EasyCommerce por varios canales:
+EasyCommerce ya tiene un canal in-app funcionando. No se parte de cero.
 
-- notificacion dentro de la plataforma
-- email
-- Telegram
-- WhatsApp
+Hoy existen:
 
-La idea es que, cuando se retome este trabajo, exista una base clara de arquitectura, requisitos y pasos de implementacion.
+- registros persistidos en `notifications`
+- estados `active`, `disabled`, `received`
+- configuraciones por tipo en `notificationSettings`
+- minimos de stock por categoria y por producto en `stockThresholdSettings`
+- generacion automatica desde ventas, caja, gastos, stock, pedidos, usuarios, licencias y solicitudes
+- autocierre de algunos avisos fijos cuando la entidad relacionada deja de requerir accion
 
-## Principio de diseno
+Por eso, el trabajo futuro de email, Telegram o WhatsApp no debe reinventar el modelo base. Debe extenderlo.
 
-Las notificaciones no deben salir desde el frontend React/Vite.
+## Regla de arquitectura
 
-La razon:
+El envio por canales externos no debe salir desde el frontend React ni desde codigo pensado solo para Vite dev server.
 
-- las credenciales de proveedores no pueden vivir en el navegador
-- los webhooks deben resolverse del lado servidor
-- hace falta auditoria, reintentos y control de errores
+Motivos:
 
-Por lo tanto, el envio real debe ocurrir en un backend, worker o funcion serverless.
+- credenciales y tokens no deben vivir en navegador
+- hacen falta reintentos y auditoria
+- hacen falta webhooks o estados asincronicos
+- los proveedores externos requieren logica server-side
 
-## Arquitectura recomendada
+La salida correcta es mover el despacho multicanal a un backend real, worker o funcion serverless.
 
-### Flujo general
+## Modelo recomendado
 
-1. Ocurre un evento de negocio.
-2. El sistema crea una notificacion base en base de datos.
-3. Un dispatcher decide por que canales se debe enviar.
-4. Cada canal genera una entrega independiente.
-5. Cada entrega se envia por su proveedor.
-6. El sistema actualiza estado de entrega, errores y auditoria.
+### Mantener `notification` como evento base
 
-### Ejemplos de eventos
+La entidad actual ya representa correctamente el hecho de negocio:
 
-- stock bajo
-- pedido creado
-- pedido pagado
-- cierre de caja solicitado
-- licencia por vencer
-- error operativo critico
+- tipo
+- titulo
+- descripcion
+- referencia a entidad
+- fecha de creacion
+- fecha de vencimiento opcional
+- si es fija
+- si requiere accion
+- estado funcional dentro de la app
 
-### Modelo conceptual
+### Agregar una capa de entregas
 
-- `notification`
-  - representa el evento de negocio
+Sugerencia minima:
+
 - `notification_delivery`
-  - representa el envio por canal y destinatario
-- `notification_channel_config`
-  - representa configuraciones por canal
+  - `id`
+  - `notificationId`
+  - `channel`
+  - `recipient`
+  - `provider`
+  - `providerMessageId`
+  - `status`
+  - `attemptCount`
+  - `lastError`
+  - `createdAt`
+  - `sentAt`
+  - `deliveredAt`
+  - `readAt`
 
-## Modelo de datos sugerido
-
-### `notification`
-
-- `id`
-- `type`
-- `title`
-- `message`
-- `severity`
-- `entityType`
-- `entityId`
-- `payloadJson`
-- `createdAt`
-- `createdBy`
-
-### `notification_delivery`
-
-- `id`
-- `notificationId`
-- `channel`
-- `recipient`
-- `provider`
-- `providerMessageId`
-- `status`
-- `attemptCount`
-- `lastError`
-- `sentAt`
-- `deliveredAt`
-- `readAt`
-- `failedAt`
-- `createdAt`
-
-Estados sugeridos:
+Estados sugeridos para la entrega:
 
 - `pending`
 - `queued`
@@ -94,339 +73,124 @@ Estados sugeridos:
 - `failed`
 - `cancelled`
 
-### `notification_channel_config`
+## Separacion de responsabilidades
 
-- `id`
-- `channel`
-- `enabled`
-- `defaultRecipient`
-- `settingsJson`
-- `createdAt`
-- `updatedAt`
+### Backend de negocio
 
-## Servicio sugerido
+Responsable de:
 
-### `NotificationService`
-
-Responsabilidades:
-
-- crear notificaciones
-- normalizar el payload
+- crear la notificacion base
+- resolver destinatarios
 - decidir canales habilitados
-- crear entregas
-- delegar envio a adapters por canal
+- persistir entregas
 
-### `NotificationDispatcher`
+### Dispatcher o worker
 
-Responsabilidades:
+Responsable de:
 
 - tomar entregas pendientes
-- aplicar reintentos
-- registrar auditoria
+- aplicar reintentos con backoff
+- ejecutar adapters por canal
+- guardar auditoria y errores
 - evitar duplicados
 
 ### Adapters por canal
 
-- `EmailNotificationChannel`
-- `TelegramNotificationChannel`
-- `WhatsAppNotificationChannel`
+Responsables de:
 
-Cada adapter debe implementar una interfaz comun, por ejemplo:
+- transformar el mensaje al formato del proveedor
+- enviar
+- devolver metadata tecnica del proveedor
 
-```ts
-type NotificationChannel = {
-  send(input: {
-    notificationId: string;
-    recipient: string;
-    title: string;
-    message: string;
-    payload?: Record<string, unknown>;
-  }): Promise<{
-    providerMessageId?: string;
-    status: "sent" | "failed" | "queued";
-    raw?: unknown;
-  }>;
-};
-```
+## Como aprovechar lo que ya existe
+
+La evolucion correcta seria:
+
+1. Mantener `notifications` como fuente de verdad funcional.
+2. Crear `notification_delivery` para email, Telegram y WhatsApp.
+3. Mapear que tipos deben disparar entregas externas.
+4. No mezclar el estado funcional in-app con el estado tecnico de una entrega.
+
+Ejemplo:
+
+- una notificacion puede quedar `active` en la app
+- y al mismo tiempo tener entregas `sent` en Telegram y `failed` en email
+
+## Eventos actuales que ya podrian despacharse
+
+Entre los tipos existentes con mejor valor para canales externos:
+
+- `product-low-stock`
+- `license-expiring`
+- `license-required`
+- `cash`
+- `supply-pending-receive`
+- `operation-request-merchandise`
+- `operation-request-permissions`
+
+Los tipos mas informativos, como `sale-created` o `price-changed`, probablemente no merecen salir por todos los canales desde el dia uno.
+
+## Configuracion recomendada
+
+Separar configuracion funcional de configuracion tecnica:
+
+### Ya existe hoy
+
+- `notificationSettings`: lead days y duration days por tipo
+- `stockThresholdSettings`: umbrales que disparan ciertos avisos
+
+### Faltaria agregar
+
+- `notificationChannelConfig`
+  - `channel`
+  - `enabled`
+  - `defaultRecipient`
+  - `settingsJson`
+
+- `notificationRoutingRule`
+  - `notificationType`
+  - `channels[]`
+  - `severity`
+  - `recipientStrategy`
+
+## Orden sugerido de implementacion
+
+### Fase 1
+
+- extraer el despacho de notificaciones a backend real
+- conservar el modelo actual de `notifications`
+- crear `notification_delivery`
+- agregar email como primer canal externo
+
+### Fase 2
+
+- agregar Telegram para alertas internas
+- sumar historial de entregas y test de envio
+
+### Fase 3
+
+- evaluar WhatsApp solo si existe necesidad real de lectura inmediata o contacto externo
 
 ## Reglas operativas recomendadas
 
-- no enviar desde UI
-- todo envio debe quedar auditado
+- no despachar desde frontend
+- cada entrega debe quedar auditada
 - cada canal debe tener su propio estado
-- aplicar reintentos con backoff
-- hacer idempotencia para evitar dobles envios
-- permitir desactivar canales por configuracion
-- permitir distintos destinatarios por tipo de alerta
-
-## Implementacion por canal
-
-## Email
-
-### Cuando conviene
-
-- alertas formales
-- multiples destinatarios
-- auditoria sencilla
-- reportes o contenido mas largo
-
-### Requisitos
-
-- dominio propio o subdominio para envio
-- configuracion DNS
-- proveedor de email transaccional o SMTP
-- credenciales seguras del lado servidor
-
-### Opciones tecnicas
-
-- API de proveedor de email
-- SMTP con libreria como Nodemailer
-
-### Flujo
-
-1. Se resuelve el destinatario.
-2. Se arma asunto y cuerpo.
-3. Se envia por API o SMTP.
-4. Se guarda `providerMessageId`.
-5. Se escuchan webhooks de entrega o rechazo si el proveedor los soporta.
-
-### Datos utiles a guardar
-
-- email destino
-- subject
-- provider
-- providerMessageId
-- estado
-- ultimo error
-
-### Variables de entorno posibles
-
-```env
-EMAIL_ENABLED=true
-EMAIL_PROVIDER=resend
-EMAIL_FROM=alertas@notificaciones.tudominio.com
-EMAIL_REPLY_TO=soporte@tudominio.com
-EMAIL_API_KEY=
-SMTP_HOST=
-SMTP_PORT=
-SMTP_USER=
-SMTP_PASS=
-```
-
-### Observaciones
-
-- si se necesita resolver rapido, email suele ser el canal mas simple y robusto
-- para alertas internas, puede convivir con Telegram
-
-## Telegram
-
-### Cuando conviene
-
-- alertas internas
-- mensajes rapidos
-- costo bajo
-- grupos de operadores o admins
-
-### Requisitos
-
-- crear un bot con BotFather
-- obtener el bot token
-- obtener el `chat_id` del usuario o grupo
-
-### Flujo recomendado
-
-1. Crear bot.
-2. Hacer que el usuario le escriba al bot o agregarlo a un grupo.
-3. Capturar el `chat_id`.
-4. Guardar ese `chat_id` en configuracion.
-5. Enviar mensajes usando `sendMessage`.
-
-### Implementacion sugerida
-
-Para alertas internas, lo mas practico es un grupo privado, por ejemplo:
-
-- `Alertas EasyCommerce`
-
-Ventajas:
-
-- un solo `chat_id`
-- varias personas reciben la alerta
-- menos configuracion por usuario
-
-### Variables de entorno posibles
-
-```env
-TELEGRAM_ENABLED=true
-TELEGRAM_BOT_TOKEN=
-TELEGRAM_DEFAULT_CHAT_ID=
-```
-
-### Payload base de envio
-
-```json
-{
-  "chat_id": "-1001234567890",
-  "text": "<b>Stock bajo</b>\nEl producto Yerba 500g quedo debajo del minimo.",
-  "parse_mode": "HTML"
-}
-```
-
-### Endpoint esperado
-
-```text
-POST https://api.telegram.org/bot<TOKEN>/sendMessage
-```
-
-### Observaciones
-
-- es excelente para alertas operativas internas
-- si solo se quiere enviar y no recibir comandos, el webhook no es obligatorio
-
-## WhatsApp
-
-### Cuando conviene
-
-- contacto directo con operadores o clientes
-- notificaciones con mayor probabilidad de lectura
-- alertas criticas donde ese canal tiene valor real
-
-### Consideraciones
-
-Es un canal mas pesado de implementar que email o Telegram.
-
-Se recomienda usar la via oficial de Meta.
-
-### Requisitos principales
-
-- Meta Business Portfolio
-- WhatsApp Business Account
-- numero emisor
-- app de Meta
-- token de acceso
-- webhook HTTPS publico
-- templates aprobados
-
-### Flujo recomendado
-
-1. Configurar cuenta de negocio y numero emisor.
-2. Definir templates por tipo de alerta.
-3. Guardar numero destino.
-4. Enviar por la API oficial.
-5. Procesar webhooks de estado.
-
-### Variables de entorno posibles
-
-```env
-WHATSAPP_ENABLED=false
-WHATSAPP_ACCESS_TOKEN=
-WHATSAPP_PHONE_NUMBER_ID=
-WHATSAPP_VERIFY_TOKEN=
-WHATSAPP_DEFAULT_TO=
-```
-
-### Observaciones
-
-- no es ideal como primer canal para una implementacion simple
-- para alertas internas, Telegram suele ser mas facil
-- para clientes o notificaciones con valor comercial, WhatsApp puede tener sentido
-
-## Enrutamiento por tipo de evento
-
-Se recomienda definir una tabla o configuracion por evento.
-
-Ejemplo:
-
-```json
-{
-  "stock_low": ["in_app", "telegram", "email"],
-  "cash_close_requested": ["in_app", "telegram"],
-  "license_expiring": ["in_app", "email"],
-  "payment_failure": ["in_app", "telegram", "whatsapp"]
-}
-```
-
-## Configuracion por destinatario
-
-Conviene soportar dos modos:
-
-### Modo fijo
-
-Un destinatario general por canal.
-
-Ejemplo:
-
-- Telegram grupo de alertas
-- email del administrador
-- WhatsApp del encargado
-
-### Modo por usuario
-
-Cada usuario puede configurar:
-
-- email
-- chat de Telegram
-- numero de WhatsApp
-- canales habilitados
-
-## Backend minimo sugerido
-
-Si se implementa rapido, alcanza con un backend pequeno con estos endpoints:
-
-- `POST /notification-dispatch`
-- `GET /notification-deliveries`
-- `PUT /notification-channel-config/:channel`
-- `POST /webhooks/telegram` si se reciben comandos
-- `POST /webhooks/whatsapp`
-- `POST /webhooks/email-provider`
-
-## Pantalla futura sugerida en EasyCommerce
-
-Una pantalla de configuracion podria incluir:
-
-- canales habilitados
-- destinatario default por canal
-- templates basicos
-- test de envio
-- historial de entregas
-
-Posibles rutas:
+- aplicar idempotencia para evitar dobles envios
+- permitir desactivar canales por tipo o por destinatario
+- no bloquear la transaccion principal del negocio por una falla en el proveedor externo
+
+## Pantallas futuras razonables
 
 - `/notifications/channels`
+  - configuracion por canal
+
 - `/notifications/deliveries`
+  - historial tecnico de entregas
 
-## Orden recomendado de implementacion
+- `/notifications/routing`
+  - reglas por tipo de evento
 
-1. Unificar modelo de notificaciones y entregas.
-2. Implementar adapter de email.
-3. Implementar adapter de Telegram.
-4. Agregar pantalla de configuracion.
-5. Agregar historial y estados.
-6. Evaluar WhatsApp cuando el flujo base ya este estable.
+## Conclusion practica
 
-## Recomendacion practica
-
-Si se retoma esta idea con foco en velocidad:
-
-1. usar email para respaldo y auditoria
-2. usar Telegram para alertas internas inmediatas
-3. dejar WhatsApp para una segunda etapa
-
-## Checklist para retomar luego
-
-- definir backend o serverless para envios
-- crear tablas de notificaciones y entregas
-- decidir proveedor de email
-- crear bot de Telegram
-- definir eventos que disparan alertas
-- definir destinatarios iniciales
-- definir politicas de reintentos
-- agregar test de envio por canal
-
-## Referencias utiles
-
-- Telegram Bot API: https://core.telegram.org/bots/api
-- Telegram Bots Intro: https://core.telegram.org/bots
-- Nodemailer Usage: https://nodemailer.com/usage
-- Resend Send Email: https://resend.com/docs/api-reference/emails/send-email
-- Resend Domain Setup: https://resend.com/docs/dashboard/domains/introduction
-- Meta WhatsApp Cloud API Overview: https://meta-preview.mintlify.io/docs/whatsapp/cloud-api/overview
+La base funcional de notificaciones ya existe y esta bastante avanzada. Lo que falta no es "hacer notificaciones", sino sumar una capa de despacho multicanal server-side encima del modelo actual, sin romper el flujo in-app que ya usa la operacion diaria.
