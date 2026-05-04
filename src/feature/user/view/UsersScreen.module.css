@@ -131,6 +131,7 @@
     minmax(130px, 1.2fr)
     minmax(180px, 1.45fr)
     minmax(110px, 1fr)
+    minmax(110px, 0.95fr)
     minmax(85px, 0.75fr)
     minmax(85px, 0.75fr)
     minmax(130px, 1fr)
@@ -140,7 +141,7 @@
   padding: 10px;
   background: #f1f5f9;
   border-bottom: 1px solid #e2e8f0;
-  min-width: 980px;
+  min-width: 1090px;
 }
 
 .headerCol {
@@ -161,6 +162,7 @@
     minmax(130px, 1.2fr)
     minmax(180px, 1.45fr)
     minmax(110px, 1fr)
+    minmax(110px, 0.95fr)
     minmax(85px, 0.75fr)
     minmax(85px, 0.75fr)
     minmax(130px, 1fr)
@@ -168,7 +170,7 @@
   gap: 8px;
   align-items: center;
   padding: 10px;
-  min-width: 980px;
+  min-width: 1090px;
 }
 
 .tableRow > div {

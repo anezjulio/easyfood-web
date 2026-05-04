@@ -22,7 +22,9 @@ import NotificationsScreen from "../../feature/notification/view/NotificationsSc
 import DataScreen from "../../feature/data/view/DataScreen";
 import TransactionsScreen from "../../feature/transaction/view/TransactionsScreen";
 import HelpScreen from "../../feature/help/view/HelpScreen";
+import AutoSaleScreen from "../../feature/autosale/view/AutoSaleScreen";
 import RequireAuth from "./RequireAuth";
+import RequireRole from "./RequireRole";
 
 export default function AppRoutes() {
   return (
@@ -31,29 +33,38 @@ export default function AppRoutes() {
 
       <Route element={<RequireAuth />}>
         <Route path="/operation" element={<OperationScreen />} />
-        <Route path="/products" element={<Navigate to="/products/new" replace />} />
-        <Route path="/products/new" element={<ProductCrudScreen />} />
-        <Route path="/prices" element={<PriceScreen />} />
-        <Route path="/finances" element={<FinanceScreen />} />
-        <Route path="/users" element={<UsersScreen />} />
-        <Route path="/stock" element={<StockEntryScreen />} />
-        <Route path="/cash" element={<CashScreen />} />
-        <Route path="/workdays" element={<WorkdaysScreen />} />
-        <Route path="/balance" element={<ReportsScreen />} />
-        <Route path="/reports" element={<Navigate to="/balance" replace />} />
-        <Route path="/sales" element={<SalesScreen />} />
-        <Route path="/sales/summary" element={<SalesSummaryScreen />} />
-        <Route path="/supplies/orders" element={<SupplyOrdersScreen />} />
-        <Route path="/supplies/receiving" element={<SupplyReceivingScreen />} />
-        <Route path="/requests" element={<OperationRequestsScreen />} />
-        <Route path="/requests/approvals" element={<ApproveRequestsScreen />} />
-        <Route path="/expenses" element={<ExpensesScreen />} />
-        <Route path="/feedback" element={<FeedbackScreen />} />
-        <Route path="/licenses" element={<LicensesScreen />} />
-        <Route path="/notifications" element={<NotificationsScreen />} />
-        <Route path="/transactions" element={<TransactionsScreen />} />
-        <Route path="/data" element={<DataScreen />} />
-        <Route path="/help" element={<HelpScreen />} />
+        <Route element={<RequireRole allowedRoles={["admin", "operator"]} />}>
+          <Route path="/products" element={<Navigate to="/products/new" replace />} />
+          <Route path="/products/new" element={<ProductCrudScreen />} />
+          <Route path="/stock" element={<StockEntryScreen />} />
+          <Route path="/cash" element={<CashScreen />} />
+          <Route path="/sales" element={<SalesScreen />} />
+          <Route path="/sales/summary" element={<SalesSummaryScreen />} />
+          <Route path="/supplies/receiving" element={<SupplyReceivingScreen />} />
+          <Route path="/requests" element={<OperationRequestsScreen />} />
+          <Route path="/expenses" element={<ExpensesScreen />} />
+          <Route path="/feedback" element={<FeedbackScreen />} />
+          <Route path="/notifications" element={<NotificationsScreen />} />
+          <Route path="/help" element={<HelpScreen />} />
+        </Route>
+
+        <Route element={<RequireRole allowedRoles={["admin"]} />}>
+          <Route path="/prices" element={<PriceScreen />} />
+          <Route path="/finances" element={<FinanceScreen />} />
+          <Route path="/users" element={<UsersScreen />} />
+          <Route path="/workdays" element={<WorkdaysScreen />} />
+          <Route path="/balance" element={<ReportsScreen />} />
+          <Route path="/reports" element={<Navigate to="/balance" replace />} />
+          <Route path="/supplies/orders" element={<SupplyOrdersScreen />} />
+          <Route path="/requests/approvals" element={<ApproveRequestsScreen />} />
+          <Route path="/licenses" element={<LicensesScreen />} />
+          <Route path="/transactions" element={<TransactionsScreen />} />
+          <Route path="/data" element={<DataScreen />} />
+        </Route>
+
+        <Route element={<RequireRole allowedRoles={["admin", "terminal"]} />}>
+          <Route path="/autoventa" element={<AutoSaleScreen />} />
+        </Route>
       </Route>
 
       {/* default */}

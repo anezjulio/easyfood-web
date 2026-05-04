@@ -1,4 +1,4 @@
-export type AppUserRole = "admin" | "operator";
+export type AppUserRole = "admin" | "operator" | "terminal";
 
 export type AppUserRecord = {
   id: string;
@@ -17,6 +17,10 @@ export function resolveAppUserRole(
   user: Pick<AppUserRecord, "username" | "role"> | null | undefined,
 ): AppUserRole {
   if (!user) return "operator";
-  if (user.role === "admin" || user.role === "operator") return user.role;
-  return String(user.username || "").trim().toLowerCase() === "admin" ? "admin" : "operator";
+  if (user.role === "admin" || user.role === "operator" || user.role === "terminal") return user.role;
+
+  const normalizedUsername = String(user.username || "").trim().toLowerCase();
+  if (normalizedUsername === "admin") return "admin";
+  if (normalizedUsername === "terminal") return "terminal";
+  return "operator";
 }

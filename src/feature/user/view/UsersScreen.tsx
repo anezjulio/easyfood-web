@@ -5,11 +5,19 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { md5 } from "../../../shared/crypto/md5";
 import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
-import type { AppUserRecord } from "../model/user.types";
+import { resolveAppUserRole, type AppUserRecord, type AppUserRole } from "../model/user.types";
 import { createUserApi, deleteUserApi, fetchUsersApi, updateUserApi } from "../service/user.api";
 import styles from "./UsersScreen.module.css";
 
-type UserSortKey = "name" | "email" | "username" | "createdAt" | "updatedAt" | "startHour" | "endHour";
+type UserSortKey = "name" | "email" | "username" | "role" | "createdAt" | "updatedAt" | "startHour" | "endHour";
+
+const USER_ROLE_OPTIONS: AppUserRole[] = ["operator", "terminal", "admin"];
+
+function getRoleLabel(role: AppUserRole) {
+  if (role === "admin") return "Administrativo";
+  if (role === "terminal") return "Terminal";
+  return "Operador";
+}
 
 export default function UsersScreen() {
   const auth = useAuth();
@@ -20,6 +28,7 @@ export default function UsersScreen() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [role, setRole] = useState<AppUserRole>("operator");
   const [password, setPassword] = useState("");
   const [startHour, setStartHour] = useState("08:00");
   const [endHour, setEndHour] = useState("17:00");
@@ -29,6 +38,7 @@ export default function UsersScreen() {
   const [nameFilter, setNameFilter] = useState("");
   const [emailFilter, setEmailFilter] = useState("");
   const [usernameFilter, setUsernameFilter] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
   const [startHourFilter, setStartHourFilter] = useState("");
   const [endHourFilter, setEndHourFilter] = useState("");
   const [createdAtFilter, setCreatedAtFilter] = useState("");
@@ -42,6 +52,7 @@ export default function UsersScreen() {
       setName("");
       setEmail("");
       setUsername("");
+      setRole("operator");
       setPassword("");
       setStartHour("08:00");
       setEndHour("17:00");
@@ -51,6 +62,7 @@ export default function UsersScreen() {
     setName(user.name);
     setEmail(user.email);
     setUsername(user.username);
+    setRole(resolveAppUserRole(user));
     setPassword("");
     setStartHour(user.startHour);
     setEndHour(user.endHour);
@@ -95,12 +107,19 @@ export default function UsersScreen() {
     const n = normalizeForSearch(nameFilter);
     const e = normalizeForSearch(emailFilter);
     const u = normalizeForSearch(usernameFilter);
+    const r = normalizeForSearch(roleFilter);
     const sh = normalizeForSearch(startHourFilter);
     const eh = normalizeForSearch(endHourFilter);
     let list = users;
     if (n) list = list.filter((item) => normalizeForSearch(item.name).includes(n));
     if (e) list = list.filter((item) => normalizeForSearch(item.email).includes(e));
     if (u) list = list.filter((item) => normalizeForSearch(item.username).includes(u));
+    if (r) {
+      list = list.filter((item) => {
+        const resolvedRole = resolveAppUserRole(item);
+        return normalizeForSearch(`${resolvedRole} ${getRoleLabel(resolvedRole)}`).includes(r);
+      });
+    }
     if (sh) list = list.filter((item) => normalizeForSearch(item.startHour).includes(sh));
     if (eh) list = list.filter((item) => normalizeForSearch(item.endHour).includes(eh));
     if (createdAtFilter) list = list.filter((item) => item.createdAt.slice(0, 10) === createdAtFilter);
@@ -111,12 +130,13 @@ export default function UsersScreen() {
       if (sortKey === "name") return a.name.localeCompare(b.name) * dir;
       if (sortKey === "email") return a.email.localeCompare(b.email) * dir;
       if (sortKey === "username") return a.username.localeCompare(b.username) * dir;
+      if (sortKey === "role") return getRoleLabel(resolveAppUserRole(a)).localeCompare(getRoleLabel(resolveAppUserRole(b))) * dir;
       if (sortKey === "updatedAt") return (new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()) * dir;
       if (sortKey === "startHour") return a.startHour.localeCompare(b.startHour) * dir;
       if (sortKey === "endHour") return a.endHour.localeCompare(b.endHour) * dir;
       return (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) * dir;
     });
-  }, [users, nameFilter, emailFilter, usernameFilter, startHourFilter, endHourFilter, createdAtFilter, updatedAtFilter, sortKey, sortDir]);
+  }, [users, nameFilter, emailFilter, usernameFilter, roleFilter, startHourFilter, endHourFilter, createdAtFilter, updatedAtFilter, sortKey, sortDir]);
 
   function handleSortChange(nextKey: UserSortKey) {
     setHasUserSorted(true);
@@ -187,6 +207,7 @@ export default function UsersScreen() {
           name: trimmedName,
           email: trimmedEmail,
           username: trimmedUsername,
+          role,
           password: password ? md5(password) : undefined,
           startHour,
           endHour,
@@ -198,6 +219,7 @@ export default function UsersScreen() {
           name: trimmedName,
           email: trimmedEmail,
           username: trimmedUsername,
+          role,
           password: md5(password),
           startHour,
           endHour,
@@ -269,6 +291,16 @@ export default function UsersScreen() {
                 <input value={username} onChange={(e) => setUsername(e.target.value)} className={styles.input} />
               </label>
               <label className={styles.field}>
+                <span>Rol</span>
+                <select value={role} onChange={(e) => setRole(e.target.value as AppUserRole)} className={styles.input}>
+                  {USER_ROLE_OPTIONS.map((option) => (
+                    <option key={option} value={option}>
+                      {getRoleLabel(option)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className={styles.field}>
                 <span>{selectedUser ? "Cambiar contrasena" : "Contrasena"}</span>
                 <input value={password} onChange={(e) => setPassword(e.target.value)} className={styles.input} type="password" />
               </label>
@@ -313,6 +345,10 @@ export default function UsersScreen() {
                 <Filter value={usernameFilter} onChange={setUsernameFilter} />
               </div>
               <div className={styles.headerCol}>
+                <SortCell label="Rol" active={hasUserSorted && sortKey === "role"} onSort={() => handleSortChange("role")} onClear={clearSort} />
+                <RoleFilter value={roleFilter} onChange={setRoleFilter} />
+              </div>
+              <div className={styles.headerCol}>
                 <SortCell label="Entrada" active={hasUserSorted && sortKey === "startHour"} onSort={() => handleSortChange("startHour")} onClear={clearSort} />
                 <Filter value={startHourFilter} onChange={setStartHourFilter} />
               </div>
@@ -345,6 +381,7 @@ export default function UsersScreen() {
                   <div>{item.name}</div>
                   <div>{item.email}</div>
                   <div>{item.username}</div>
+                  <div>{getRoleLabel(resolveAppUserRole(item))}</div>
                   <div>{item.startHour}</div>
                   <div>{item.endHour}</div>
                   <div>{formatDateTime(item.createdAt)}</div>
@@ -390,6 +427,26 @@ function Filter({ value, onChange }: { value: string; onChange: (value: string) 
       <input className={styles.filterInput} value={value} onChange={(e) => onChange(e.target.value)} />
       {value ? (
         <button type="button" className={styles.clearBtn} onClick={() => onChange("")} aria-label="Limpiar filtro">
+          x
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+function RoleFilter({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  return (
+    <div className={styles.filterWrap}>
+      <select className={styles.filterInput} value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="">Todos</option>
+        {USER_ROLE_OPTIONS.map((option) => (
+          <option key={option} value={option}>
+            {getRoleLabel(option)}
+          </option>
+        ))}
+      </select>
+      {value ? (
+        <button type="button" className={styles.clearBtn} onClick={() => onChange("")} aria-label="Limpiar filtro rol">
           x
         </button>
       ) : null}

@@ -11,10 +11,11 @@ export default function SessionStatusBar({ showSalesShortcut = true }: { showSal
   const auth = useAuth();
   const [isCashOpen, setIsCashOpen] = useState(false);
   const username = auth.user?.username ?? "";
+  const isTerminal = auth.user?.role === "terminal";
   const isCashOpenForSession = isCashOpen;
 
   useEffect(() => {
-    if (!username) {
+    if (!username || isTerminal) {
       return;
     }
 
@@ -37,7 +38,7 @@ export default function SessionStatusBar({ showSalesShortcut = true }: { showSal
       alive = false;
       off();
     };
-  }, [username]);
+  }, [isTerminal, username]);
 
   function handleLogout() {
     if (auth.user?.username) {
@@ -50,26 +51,32 @@ export default function SessionStatusBar({ showSalesShortcut = true }: { showSal
 
   return (
     <div className={styles.sessionBar}>
-      <button type="button" onClick={() => nav("/help")} className={styles.helpBtn} aria-label="Abrir ayuda del sistema">
-        <span className={styles.helpIcon} aria-hidden="true">
-          ?
-        </span>
-        <span>Ayuda</span>
-      </button>
+      {!isTerminal ? (
+        <button type="button" onClick={() => nav("/help")} className={styles.helpBtn} aria-label="Abrir ayuda del sistema">
+          <span className={styles.helpIcon} aria-hidden="true">
+            ?
+          </span>
+          <span>Ayuda</span>
+        </button>
+      ) : null}
       <div className={styles.userLabel}>
         Usuario: <span className={styles.userName}>{auth.user?.username || "-"}</span>
       </div>
-      <div className={`${styles.cashState} ${isCashOpenForSession ? styles.cashOpen : styles.cashClosed}`}>
-        {isCashOpenForSession ? "Caja abierta" : "Caja cerrada"}
-      </div>
-      {showSalesShortcut && isCashOpenForSession ? (
+      {!isTerminal ? (
+        <div className={`${styles.cashState} ${isCashOpenForSession ? styles.cashOpen : styles.cashClosed}`}>
+          {isCashOpenForSession ? "Caja abierta" : "Caja cerrada"}
+        </div>
+      ) : null}
+      {!isTerminal && showSalesShortcut && isCashOpenForSession ? (
         <button type="button" onClick={() => nav("/sales")} className={styles.salesBtn}>
           Ventas
         </button>
       ) : null}
-      <button type="button" onClick={() => nav("/cash")} className={styles.cashActionBtn}>
-        {isCashOpenForSession ? "Cerrar caja" : "Abrir caja"}
-      </button>
+      {!isTerminal ? (
+        <button type="button" onClick={() => nav("/cash")} className={styles.cashActionBtn}>
+          {isCashOpenForSession ? "Cerrar caja" : "Abrir caja"}
+        </button>
+      ) : null}
       <button type="button" onClick={handleLogout} className={styles.logoutBtn}>
         Cerrar sesion
       </button>

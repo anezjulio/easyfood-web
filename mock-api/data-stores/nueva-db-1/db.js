@@ -1765,6 +1765,18 @@
       "endHour": "17:00"
     },
     {
+      "id": "u040520260300000010",
+      "name": "Terminal Principal",
+      "email": "terminal@easycommerce.local",
+      "username": "terminal",
+      "role": "terminal",
+      "password": "81dc9bdb52d04dc20036dbd8313ed055",
+      "createdAt": "2026-05-04T03:00:00.000Z",
+      "updatedAt": "2026-05-04T03:00:00.000Z",
+      "startHour": "00:00",
+      "endHour": "23:59"
+    },
+    {
       "id": "u140220260510000001",
       "name": "Operador Uno",
       "email": "operador1@easycommerce.local",
@@ -1908,6 +1920,58 @@
   ],
   "stocks": [
     {
+      "id": "se040520260612000001",
+      "productId": "pseed1773718891471001",
+      "quantity": 18,
+      "description": "Carga inicial para terminal de autoventa.",
+      "costPrice": 700,
+      "salePrice": 945,
+      "createdAt": "2026-05-04T06:12:00.000Z"
+    },
+    {
+      "id": "se040520260612000002",
+      "productId": "pseed1773718891471003",
+      "quantity": 12,
+      "description": "Carga inicial para terminal de autoventa.",
+      "costPrice": 1040,
+      "salePrice": 1508,
+      "createdAt": "2026-05-04T06:12:10.000Z"
+    },
+    {
+      "id": "se040520260612000003",
+      "productId": "pseed1773718891471004",
+      "quantity": 10,
+      "description": "Carga inicial para terminal de autoventa.",
+      "costPrice": 885,
+      "salePrice": 1328,
+      "createdAt": "2026-05-04T06:12:20.000Z"
+    },
+    {
+      "id": "se040520260612000004",
+      "productId": "pseed1773718891471005",
+      "quantity": 9,
+      "description": "Carga inicial para terminal de autoventa.",
+      "costPrice": 1580,
+      "salePrice": 2133,
+      "createdAt": "2026-05-04T06:12:30.000Z"
+    },
+    {
+      "id": "se040520260612000005",
+      "productId": "pseed1773718891471006",
+      "quantity": 16,
+      "description": "Carga inicial para terminal de autoventa.",
+      "costPrice": 825,
+      "salePrice": 1155,
+      "createdAt": "2026-05-04T06:12:40.000Z"
+    },
+    {
+      "id": "se040520260149371129",
+      "productId": "ptc-expiring",
+      "quantity": -2,
+      "description": "Venta orden or040520260148484121",
+      "createdAt": "2026-05-04T04:49:37.204Z"
+    },
+    {
       "id": "se210320262256081446",
       "productId": "ptc-low-stock",
       "expirationDate": "2027-10-06",
@@ -2013,6 +2077,22 @@
   ],
   "orders": [
     {
+      "id": "or040520260148484121",
+      "items": [
+        {
+          "productId": "ptc-expiring",
+          "productName": "Sandwich frio listo para llevar",
+          "unitPrice": 4800,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-05-04T04:48:48.318Z",
+      "status": "pagada",
+      "total": 9600,
+      "operator": "terminal",
+      "paymentMethod": "mercadopago"
+    },
+    {
       "id": "or210320262249294094",
       "items": [
         {
@@ -2052,6 +2132,14 @@
     }
   ],
   "invoices": [
+    {
+      "id": "fc040520260149378944",
+      "orderId": "or040520260148484121",
+      "createdAt": "2026-05-04T04:49:37.218Z",
+      "total": 9600,
+      "paymentMethod": "mercadopago",
+      "operator": "terminal"
+    },
     {
       "id": "fc210320262249525178",
       "orderId": "or210320262249294094",
@@ -2500,7 +2588,7 @@
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
       "currentBalance": -47100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-24T18:01:25.172Z"
+      "updatedAt": "2026-05-04T04:49:37.219Z"
     },
     {
       "id": "account-gains",
@@ -2508,9 +2596,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 22000,
+      "currentBalance": 31600,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-24T18:01:25.172Z"
+      "updatedAt": "2026-05-04T04:49:37.219Z"
     },
     {
       "id": "account-expenses",
@@ -2520,7 +2608,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": -106100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-24T18:01:25.172Z"
+      "updatedAt": "2026-05-04T04:49:37.219Z"
     },
     {
       "id": "account-tobacco",
@@ -2530,10 +2618,29 @@
       "description": "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-03-24T18:01:25.172Z"
+      "updatedAt": "2026-05-04T04:49:37.219Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-sale-income-or040520260148484121",
+      "createdAt": "2026-05-04T04:48:48.318Z",
+      "type": "sale-income",
+      "title": "Venta pagada or040520260148484121",
+      "description": "Venta registrada por terminal por 9600.",
+      "amount": 9600,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or040520260148484121",
+      "orderId": "or040520260148484121",
+      "paymentMethod": "mercadopago",
+      "actor": "terminal",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
     {
       "id": "txn-cash-close-wd240320261457131148",
       "createdAt": "2026-03-24T18:01:25.171Z",
@@ -2923,6 +3030,33 @@
   ],
   "licenses": [],
   "notifications": [
+    {
+      "id": "nt040520260149373522",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Sandwich frio listo para llevar",
+      "description": "Se registro un ingreso de -2 unidades para Sandwich frio listo para llevar.",
+      "createdAt": "2026-05-04T04:49:37.204Z",
+      "dueAt": "2026-05-11T04:49:37.204Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "perecedero",
+      "entityType": "stock",
+      "entityId": "se040520260149371129",
+      "status": "active"
+    },
+    {
+      "id": "nt040520260149377942",
+      "type": "sale-created",
+      "title": "Venta registrada: or040520260148484121",
+      "description": "Venta por 9600 (terminal).",
+      "createdAt": "2026-05-04T04:49:37.186Z",
+      "dueAt": "2026-05-05T04:49:37.186Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or040520260148484121",
+      "status": "active"
+    },
     {
       "id": "nt240320261501251517",
       "type": "cash-closed",

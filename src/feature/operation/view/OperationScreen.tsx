@@ -28,12 +28,21 @@ export default function OperationScreen() {
   const nav = useNavigate();
   const auth = useAuth();
   const isAdmin = auth.user?.role === "admin";
+  const isTerminal = auth.user?.role === "terminal";
+  const showAutoSale = isAdmin || isTerminal;
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [alertsLoading, setAlertsLoading] = useState(true);
   const [alertsError, setAlertsError] = useState("");
   const [selectedAlertType, setSelectedAlertType] = useState<"all" | NotificationType>("all");
 
   useEffect(() => {
+    if (isTerminal) {
+      setNotifications([]);
+      setAlertsLoading(false);
+      setAlertsError("");
+      return;
+    }
+
     let ignore = false;
 
     async function loadAlerts() {
@@ -59,7 +68,7 @@ export default function OperationScreen() {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [isTerminal]);
 
   const activeAlerts = useMemo(() => {
     const now = Date.now();
@@ -115,95 +124,106 @@ export default function OperationScreen() {
           <SessionStatusBar />
         </header>
 
-        <section className={styles.alertsSection}>
-          <div className={styles.groupHeading}>
-            <div className={styles.groupTitleRow}>
-              <button type="button" className={styles.groupTitleLink} onClick={() => nav("/notifications")}>
-                Alertas
-              </button>
-              <span className={styles.countBadge}>{alertCountLabel}</span>
-              {!alertsLoading && !alertsError ? (
-                <div className={styles.alertFilters}>
-                  <button
-                    type="button"
-                    className={`${styles.alertFilterBtn} ${activeSelectedAlertType === "all" ? styles.alertFilterBtnActive : ""}`.trim()}
-                    onClick={() => setSelectedAlertType("all")}
-                  >
-                    Todos
-                  </button>
-                  {alertTypeOptions.map((type) => (
+        {!isTerminal ? (
+          <section className={styles.alertsSection}>
+            <div className={styles.groupHeading}>
+              <div className={styles.groupTitleRow}>
+                <button type="button" className={styles.groupTitleLink} onClick={() => nav("/notifications")}>
+                  Alertas
+                </button>
+                <span className={styles.countBadge}>{alertCountLabel}</span>
+                {!alertsLoading && !alertsError ? (
+                  <div className={styles.alertFilters}>
                     <button
-                      key={type}
                       type="button"
-                      className={`${styles.alertFilterBtn} ${activeSelectedAlertType === type ? styles.alertFilterBtnActive : ""}`.trim()}
-                      onClick={() => setSelectedAlertType(type)}
+                      className={`${styles.alertFilterBtn} ${activeSelectedAlertType === "all" ? styles.alertFilterBtnActive : ""}`.trim()}
+                      onClick={() => setSelectedAlertType("all")}
                     >
-                      {notificationTypeLabel[type]}
+                      Todos
                     </button>
-                  ))}
-                </div>
-              ) : null}
+                    {alertTypeOptions.map((type) => (
+                      <button
+                        key={type}
+                        type="button"
+                        className={`${styles.alertFilterBtn} ${activeSelectedAlertType === type ? styles.alertFilterBtnActive : ""}`.trim()}
+                        onClick={() => setSelectedAlertType(type)}
+                      >
+                        {notificationTypeLabel[type]}
+                      </button>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             </div>
-          </div>
 
-          {alertsLoading ? (
-            <AlertStatusPanel
-              title="Cargando alertas"
-              description="Estamos consultando vencimientos, mercancia, stock y otras alertas operativas."
-              tone="neutral"
-            />
-          ) : alertsError ? (
-            <AlertStatusPanel title="Alertas no disponibles" description={alertsError} tone="critical" />
-          ) : (
-            <section className={styles.alertListPanel}>
-              {filteredAlerts.length === 0 ? (
-                <div className={styles.alertEmptyState}>
-                  <strong>Sin resultados</strong>
-                  <span>No hay alertas activas para el filtro seleccionado.</span>
-                </div>
-              ) : (
-                <div className={styles.alertListCompact}>
-                  {filteredAlerts.map((item) => (
-                    <AlertRailItem key={item.id} item={item} />
-                  ))}
-                </div>
-              )}
-            </section>
-          )}
-        </section>
+            {alertsLoading ? (
+              <AlertStatusPanel
+                title="Cargando alertas"
+                description="Estamos consultando vencimientos, mercancia, stock y otras alertas operativas."
+                tone="neutral"
+              />
+            ) : alertsError ? (
+              <AlertStatusPanel title="Alertas no disponibles" description={alertsError} tone="critical" />
+            ) : (
+              <section className={styles.alertListPanel}>
+                {filteredAlerts.length === 0 ? (
+                  <div className={styles.alertEmptyState}>
+                    <strong>Sin resultados</strong>
+                    <span>No hay alertas activas para el filtro seleccionado.</span>
+                  </div>
+                ) : (
+                  <div className={styles.alertListCompact}>
+                    {filteredAlerts.map((item) => (
+                      <AlertRailItem key={item.id} item={item} />
+                    ))}
+                  </div>
+                )}
+              </section>
+            )}
+          </section>
+        ) : null}
 
         <section className={styles.groupSection}>
           <h2 className={styles.groupTitle}>Operaciones</h2>
           <div className={styles.grid}>
-            <BigBtn title="Ventas" subtitle="Cobros y tickets" onClick={() => nav("/sales")} variant="sales" />
-            <BigBtn title="Caja" subtitle="Apertura y cierre de turno" onClick={() => nav("/cash")} />
-            <BigBtn
-              title="Confirmar Gasto"
-              subtitle="Validar gastos asignados"
-              onClick={() => nav("/expenses", { state: { tab: "confirm" } })}
-            />
-            <BigBtn title="Solicitudes" subtitle="Gestion de solicitudes" onClick={() => nav("/requests")} />
-            <BigBtn
-              title="Sugerencias y reclamos"
-              subtitle="Libro de sugerencias y reclamos"
-              onClick={() => nav("/feedback")}
-            />
+            {!isTerminal ? (
+              <>
+                <BigBtn title="Ventas" subtitle="Cobros y tickets" onClick={() => nav("/sales")} variant="sales" />
+                <BigBtn title="Caja" subtitle="Apertura y cierre de turno" onClick={() => nav("/cash")} />
+                <BigBtn
+                  title="Confirmar Gasto"
+                  subtitle="Validar gastos asignados"
+                  onClick={() => nav("/expenses", { state: { tab: "confirm" } })}
+                />
+                <BigBtn title="Solicitudes" subtitle="Gestion de solicitudes" onClick={() => nav("/requests")} />
+                <BigBtn
+                  title="Sugerencias y reclamos"
+                  subtitle="Libro de sugerencias y reclamos"
+                  onClick={() => nav("/feedback")}
+                />
+              </>
+            ) : null}
+            {showAutoSale ? (
+              <BigBtn title="Autoventa" subtitle="Operacion exclusiva para terminales" onClick={() => nav("/autoventa")} />
+            ) : null}
           </div>
         </section>
 
-        <section className={styles.groupSection}>
-          <h2 className={styles.groupTitle}>Productos</h2>
-          <div className={styles.grid}>
-            <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} />
-            <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} />
-            {isAdmin ? (
-              <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} />
-            ) : null}
-            {isAdmin ? (
-              <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
-            ) : null}
-          </div>
-        </section>
+        {!isTerminal ? (
+          <section className={styles.groupSection}>
+            <h2 className={styles.groupTitle}>Productos</h2>
+            <div className={styles.grid}>
+              <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} />
+              <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} />
+              {isAdmin ? (
+                <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} />
+              ) : null}
+              {isAdmin ? (
+                <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
+              ) : null}
+            </div>
+          </section>
+        ) : null}
 
         {isAdmin ? (
           <section className={styles.groupSection}>
