@@ -110,3 +110,52 @@ button:focus-visible {
 .table-date-filter-input::-webkit-calendar-picker-indicator {
   transform: translateX(-4px);
 }
+
+@media (max-height: 820px) {
+  [class*="_layout_"],
+  [class*="_gridTwo_"],
+  [class*="_marginsPanel_"],
+  [class*="_reportPanel_"],
+  [class*="_createLayout_"],
+  [class*="_helpLayout_"],
+  [class*="_browserShell_"],
+  [class*="_stepShell_"],
+  [class*="_summaryShell_"],
+  [class*="_paymentLayout_"],
+  [class*="_auditLayout_"] {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  [class*="_formCard_"],
+  [class*="_listCard_"],
+  [class*="_subPanel_"],
+  [class*="_detailCard_"],
+  [class*="_tableCard_"],
+  [class*="_panelCard_"],
+  [class*="_orderCard_"],
+  [class*="_catalogCard_"],
+  [class*="_selectedCard_"],
+  [class*="_sidebar_"],
+  [class*="_detailPanel_"],
+  [class*="_paymentModalCard_"] {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  [class*="_sidebar_"] {
+    position: static !important;
+  }
+
+  [class*="_modalOverlay_"] {
+    align-items: start !important;
+    overflow: auto !important;
+  }
+
+  [class*="_modalCard_"] {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
