@@ -170,13 +170,15 @@ export default function MerchandiseRequestEditor({
   }
 
   function decreaseItem(productId: string) {
-    onChange(
-      items.flatMap((item) => {
-        if (item.productId !== productId) return [item];
-        if (item.quantity <= 1) return [];
-        return [{ ...item, quantity: item.quantity - 1 }];
-      }),
-    );
+    const nextItems: OperationRequestItem[] = [];
+    for (const item of items) {
+      if (item.productId !== productId) {
+        nextItems.push(item);
+      } else if (item.quantity > 1) {
+        nextItems.push({ ...item, quantity: item.quantity - 1 });
+      }
+    }
+    onChange(nextItems);
   }
 
   function changeItemQuantity(productId: string, value: string) {

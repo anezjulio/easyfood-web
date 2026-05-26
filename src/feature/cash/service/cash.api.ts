@@ -31,7 +31,7 @@ export async function fetchWorkdaysApi(): Promise<Workday[]> {
 export async function fetchCurrentWorkdayApi(operator: string): Promise<Workday | null> {
   const response = await fetch(`/workdays/current?operator=${encodeURIComponent(operator)}`);
   if (response.status === 404) return null;
-  return await readJsonOrThrow<Workday>(response);
+  return await readJsonOrThrow<Workday | null>(response);
 }
 
 export async function fetchCashOpeningAssignmentsApi(): Promise<CashOpeningAssignment[]> {

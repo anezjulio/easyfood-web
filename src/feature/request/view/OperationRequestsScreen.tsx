@@ -147,13 +147,17 @@ export default function OperationRequestsScreen() {
   }
 
   function decreaseRequestItem(productId: string) {
-    setRequestItems((current) =>
-      current.flatMap((item) => {
-        if (item.productId !== productId) return [item];
-        if (item.quantity <= 1) return [];
-        return [{ ...item, quantity: item.quantity - 1 }];
-      }),
-    );
+    setRequestItems((current) => {
+      const nextItems: OperationRequestItem[] = [];
+      for (const item of current) {
+        if (item.productId !== productId) {
+          nextItems.push(item);
+        } else if (item.quantity > 1) {
+          nextItems.push({ ...item, quantity: item.quantity - 1 });
+        }
+      }
+      return nextItems;
+    });
     clearFeedback();
   }
 

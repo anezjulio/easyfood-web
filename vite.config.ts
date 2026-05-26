@@ -21,6 +21,8 @@ const DEFAULT_DATA_STORE_ID = "default";
 const DEV_SERVER_PORT = parsePort(process.env.PORT, 5173);
 const PREVIEW_PORT = parsePort(process.env.PORT, 4173);
 const ALLOWED_HOSTS = resolveAllowedHosts();
+const JS_COMPAT_TARGET = "es2018";
+const CSS_COMPAT_TARGET = "chrome80";
 
 type Product = {
   id: string;
@@ -1920,7 +1922,7 @@ function mockDbPlugin(): Plugin {
             const current =
               db.workdays.find((item) => item.operator === operator && !item.endedAt && item.status !== "closed") || null;
             if (!current) {
-              return sendJson(res, 404, { message: "Workday not found" });
+              return sendJson(res, 200, null);
             }
             return sendJson(res, 200, current);
           }
@@ -5064,11 +5066,11 @@ function formatReceiptDateTime(value: string): string {
 
 function escapeHtml(value: string): string {
   return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll("\"", "&quot;")
-    .replaceAll("'", "&#39;");
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function sendJson(res: { statusCode: number; setHeader: (name: string, value: string) => void; end: (chunk?: string) => void }, status: number, payload: unknown) {
@@ -6027,6 +6029,18 @@ function contentTypeFromExt(fileExt: string): string {
 
 // https://vite.dev/config/
 export default defineConfig({
+  esbuild: {
+    target: JS_COMPAT_TARGET,
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: JS_COMPAT_TARGET,
+    },
+  },
+  build: {
+    target: JS_COMPAT_TARGET,
+    cssTarget: CSS_COMPAT_TARGET,
+  },
   server: {
     host: true,
     port: DEV_SERVER_PORT,
