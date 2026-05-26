@@ -3,7 +3,13 @@ import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { useAuth } from "../../../app/provider/useAuth";
 import { formatDateTimeAR } from "../../../shared/format/locale";
-import { createDataStoreApi, fetchDataStoresApi, resetDatabaseApi, switchDataStoreApi } from "../service/data.api";
+import {
+  createDataStoreApi,
+  downloadDataStoreBackupApi,
+  fetchDataStoresApi,
+  resetDatabaseApi,
+  switchDataStoreApi,
+} from "../service/data.api";
 import styles from "./DataScreen.module.css";
 
 export default function DataScreen() {
@@ -23,7 +29,7 @@ export default function DataScreen() {
     }>
   >([]);
   const [loadingStores, setLoadingStores] = useState(false);
-  const [busyAction, setBusyAction] = useState<"" | "create" | "reset" | `switch:${string}`>("");
+  const [busyAction, setBusyAction] = useState<"" | "create" | "reset" | `switch:${string}` | `download:${string}`>("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -116,6 +122,27 @@ export default function DataScreen() {
       await loadStores();
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo cambiar la base activa.");
+    } finally {
+      setBusyAction("");
+    }
+  }
+
+  async function handleDownloadStoreBackup(storeId: string, storeName: string) {
+    if (!isAdmin || busyAction) return;
+    resetFeedback();
+    if (!validateAdminPassword()) return;
+
+    setBusyAction(`download:${storeId}`);
+    try {
+      const result = await downloadDataStoreBackupApi({
+        requestedBy: auth.user?.username || "",
+        adminPassword,
+        storeId,
+      });
+      downloadBlob(result.blob, result.filename);
+      setMessage(`Backup descargado: ${storeName}.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo descargar el backup de la base.");
     } finally {
       setBusyAction("");
     }
@@ -217,14 +244,24 @@ export default function DataScreen() {
                       <p className={styles.storeMeta}>imagenes: {store.imagesDir}</p>
                       <p className={styles.storeMeta}>recibos: {store.receiptsDir}</p>
                       <p className={styles.storeMeta}>creada: {formatDateTimeAR(store.createdAt)}</p>
-                      <button
-                        type="button"
-                        className={styles.secondaryButton}
-                        disabled={busyAction !== "" || isActive}
-                        onClick={() => void handleSwitchStore(store.id, store.name)}
-                      >
-                        {isActive ? "Base activa" : switching ? "Cambiando..." : "Usar esta base"}
-                      </button>
+                      <div className={styles.storeActions}>
+                        <button
+                          type="button"
+                          className={styles.secondaryButton}
+                          disabled={busyAction !== "" || isActive}
+                          onClick={() => void handleSwitchStore(store.id, store.name)}
+                        >
+                          {isActive ? "Base activa" : switching ? "Cambiando..." : "Usar esta base"}
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.secondaryButton}
+                          disabled={busyAction !== ""}
+                          onClick={() => void handleDownloadStoreBackup(store.id, store.name)}
+                        >
+                          {busyAction === `download:${store.id}` ? "Descargando..." : "Descargar backup .js"}
+                        </button>
+                      </div>
                     </article>
                   );
                 })}
@@ -254,4 +291,15 @@ export default function DataScreen() {
       </div>
     </div>
   );
+}
+
+function downloadBlob(blob: Blob, filename: string) {
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
 }

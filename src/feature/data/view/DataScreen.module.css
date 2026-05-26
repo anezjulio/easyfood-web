@@ -166,6 +166,12 @@
   word-break: break-word;
 }
 
+.storeActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .success {
   margin: 14px 0 0;
   padding: 10px 14px;
@@ -189,4 +195,3 @@
     grid-template-columns: 1fr;
   }
 }
-

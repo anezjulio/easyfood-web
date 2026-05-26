@@ -1037,6 +1037,27 @@ function mockDbPlugin(): Plugin {
             });
           }
 
+          if (pathname === "/admin/data/stores/backup" && method === "POST") {
+            const activeDb = await readDb();
+            const draft = sanitizeAdminDataStoreSwitchDraft(await readJsonBody(req));
+            const credential = validateAdminCredentials(activeDb, draft.requestedBy, draft.adminPasswordHash);
+            if (!credential.ok) {
+              return sendJson(res, credential.status, { message: credential.message });
+            }
+            const targetStoreId = normalizeDataStoreId(draft.storeId);
+            if (!targetStoreId) {
+              return sendJson(res, 400, { message: "Base destino invalida." });
+            }
+            const state = await readDataStoresState();
+            const targetStore = state.stores.find((item) => item.id === targetStoreId);
+            if (!targetStore) {
+              return sendJson(res, 404, { message: "Base no encontrada." });
+            }
+            await ensureDataStoreDbFile(targetStore);
+            const content = await readFile(targetStore.dbPath, "utf8");
+            return sendTextDownload(res, buildDataStoreBackupFileName(targetStore), content);
+          }
+
           if (pathname === "/admin/data/reset" && method === "POST") {
             const db = await readDb();
             const draft = sanitizeAdminDataResetDraft(await readJsonBody(req));
@@ -5073,10 +5094,28 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
+function buildDataStoreBackupFileName(store: DataStoreRecord): string {
+  const timestamp = new Date().toISOString().replace(/\D/g, "").slice(0, 14);
+  const safeStoreId = normalizeDataStoreId(store.id || store.name) || "base";
+  return `easycommerce-${safeStoreId}-${timestamp}.js`;
+}
+
 function sendJson(res: { statusCode: number; setHeader: (name: string, value: string) => void; end: (chunk?: string) => void }, status: number, payload: unknown) {
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.end(JSON.stringify(payload));
+}
+
+function sendTextDownload(
+  res: { statusCode: number; setHeader: (name: string, value: string) => void; end: (chunk?: string) => void },
+  filename: string,
+  content: string,
+) {
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+  res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+  res.setHeader("X-Backup-Filename", filename);
+  res.end(content);
 }
 
 function sanitizeDraft(input: unknown) {

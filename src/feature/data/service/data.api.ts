@@ -54,6 +54,12 @@ type SwitchDataStoreResult = {
   store: DataStoreSummary;
 };
 
+type DownloadDataStoreBackupDraft = {
+  requestedBy: string;
+  adminPassword: string;
+  storeId: string;
+};
+
 function toAdminPayload(requestedBy: string, adminPassword: string) {
   return {
     requestedBy: String(requestedBy || "").trim(),
@@ -89,6 +95,28 @@ export async function switchDataStoreApi(draft: SwitchDataStoreDraft): Promise<S
     }),
   });
   return await readJsonOrThrow<SwitchDataStoreResult>(response);
+}
+
+export async function downloadDataStoreBackupApi(
+  draft: DownloadDataStoreBackupDraft,
+): Promise<{ blob: Blob; filename: string }> {
+  const response = await fetch("/admin/data/stores/backup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...toAdminPayload(draft.requestedBy, draft.adminPassword),
+      storeId: String(draft.storeId || "").trim(),
+    }),
+  });
+
+  if (!response.ok) {
+    await readJsonOrThrow<never>(response);
+  }
+
+  return {
+    blob: await response.blob(),
+    filename: response.headers.get("X-Backup-Filename") || `easycommerce-${draft.storeId || "base"}-backup.js`,
+  };
 }
 
 export async function resetDatabaseApi(draft: ResetDatabaseDraft): Promise<ResetDatabaseResult> {
