@@ -18,6 +18,7 @@ export type Product = {
   createdAt: string; // ISO string
   imageUrl?: string;
   barcode?: string;
+  brand?: string;
   category?: ProductCategory;
   supplyOrderId?: string;
   existencia?: number;

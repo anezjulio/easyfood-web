@@ -35,6 +35,7 @@ export type ProductDraft = {
   marginPercent?: number;
   imageUrl?: string;
   barcode?: string;
+  brand?: string;
   category?: Product["category"];
   supplyOrderId?: string;
 };
@@ -173,6 +174,7 @@ function normalizeProducts(products: Product[]): Product[] {
   const normalized = products.map((p, index) => {
     const fixedName = normalizeMojibake(p.name);
     const barcode = (p.barcode || "").trim() || buildDefaultBarcode(p.id, index);
+    const brand = String((p as { brand?: unknown }).brand || "").trim() || undefined;
     const rawCategory = String((p as { category?: unknown }).category || "").trim().toLowerCase();
     const category = rawCategory === "no perecedero" ? "vivere" : p.category || "vivere";
     const fallbackCostPrice = Math.max(1, Math.trunc(Number(p.price) || 0));
@@ -182,12 +184,13 @@ function normalizeProducts(products: Product[]): Product[] {
     if (
       fixedName !== p.name ||
       barcode !== p.barcode ||
+      brand !== p.brand ||
       category !== p.category ||
       costPrice !== p.costPrice ||
       supplyOrderId !== p.supplyOrderId
     ) {
       changed = true;
-      return { ...p, name: fixedName, barcode, category, costPrice, supplyOrderId };
+      return { ...p, name: fixedName, barcode, brand, category, costPrice, supplyOrderId };
     }
     return p;
   });
@@ -262,6 +265,7 @@ export function createProduct(draft: ProductDraft): Product {
     createdAt: now,
     imageUrl: draft.imageUrl?.trim() || undefined,
     barcode: draft.barcode?.trim() || undefined,
+    brand: draft.brand?.trim() || undefined,
     category,
     supplyOrderId: draft.supplyOrderId?.trim() || undefined,
   };
@@ -315,6 +319,7 @@ export function updateProduct(id: string, draft: ProductDraft): Product | null {
       costPrice: Math.max(1, Math.trunc(nextCostPrice)),
       imageUrl: draft.imageUrl?.trim() || undefined,
       barcode: draft.barcode?.trim() || undefined,
+      brand: draft.brand?.trim() || undefined,
       category: nextCategory,
       supplyOrderId: typeof draft.supplyOrderId === "string" ? draft.supplyOrderId.trim() || undefined : item.supplyOrderId,
     };

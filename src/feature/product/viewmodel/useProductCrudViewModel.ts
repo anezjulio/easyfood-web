@@ -49,6 +49,7 @@ export function useProductCrudViewModel() {
   const [imageUrl, setImageUrl] = useState("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [barcode, setBarcode] = useState("");
+  const [brand, setBrand] = useState("");
   const [autoGenerateBarcodeOnSubmit, setAutoGenerateBarcodeOnSubmit] = useState(false);
   const [category, setCategory] = useState<ProductCategory>("vivere");
   const [error, setError] = useState("");
@@ -63,6 +64,7 @@ export function useProductCrudViewModel() {
     setCostPrice("");
     setImageUrl("");
     setBarcode("");
+    setBrand("");
     setAutoGenerateBarcodeOnSubmit(false);
     setCategory("vivere");
     setNewProductUseMarginOverride(false);
@@ -205,6 +207,7 @@ export function useProductCrudViewModel() {
     setCostPrice(String(Math.max(1, normalizedCost)));
     setImageUrl(selectedProduct.imageUrl || "");
     setBarcode(selectedProduct.barcode || "");
+    setBrand(selectedProduct.brand || "");
     setCategory(selectedProduct.category || "vivere");
   }, [effectiveMarginPercent, marginSettings, selectedProduct]);
 
@@ -385,6 +388,7 @@ export function useProductCrudViewModel() {
           costPrice: parsedCost,
           imageUrl,
           barcode: nextBarcode,
+          brand,
           category,
         });
 
@@ -405,6 +409,7 @@ export function useProductCrudViewModel() {
         marginPercent: effectiveMarginPercent,
         imageUrl,
         barcode: nextBarcode,
+        brand,
         category,
       });
 
@@ -476,6 +481,8 @@ export function useProductCrudViewModel() {
     isUploadingImage,
     barcode,
     setBarcode,
+    brand,
+    setBrand,
     autoGenerateBarcodeOnSubmit,
     setAutoGenerateBarcodeOnSubmit: toggleAutoGenerateBarcodeOnSubmit,
     category,

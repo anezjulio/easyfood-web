@@ -61,6 +61,7 @@ export default function StockEntryScreen() {
   const [hasUserSorted, setHasUserSorted] = useState(false);
 
   const [newName, setNewName] = useState("");
+  const [newBrand, setNewBrand] = useState("");
   const [newBarcode, setNewBarcode] = useState("");
   const [autoGenerateBarcodeOnConfirm, setAutoGenerateBarcodeOnConfirm] = useState(false);
   const [newCategory, setNewCategory] = useState<ProductCategory>("vivere");
@@ -245,6 +246,7 @@ export default function StockEntryScreen() {
 
   function clearNewProductFields() {
     setNewName("");
+    setNewBrand("");
     setNewBarcode("");
     setAutoGenerateBarcodeOnConfirm(false);
     setNewCategory("vivere");
@@ -414,6 +416,7 @@ export default function StockEntryScreen() {
 
         const created = await createProductApi({
           name: trimmedName,
+          brand: newBrand,
           barcode: barcodeToPersist,
           category: newCategory,
           costPrice: costPriceValue,
@@ -574,6 +577,15 @@ export default function StockEntryScreen() {
                         />
                       </label>
                       <label className={`${styles.field} ${styles.fieldCompact}`}>
+                        <span>Marca</span>
+                        <input
+                          className={styles.input}
+                          value={newBrand}
+                          onChange={(event) => setNewBrand(event.target.value)}
+                          placeholder="Ej: Coca-Cola"
+                        />
+                      </label>
+                      <label className={`${styles.field} ${styles.fieldCompact}`}>
                         <span>Codigo de barra</span>
                         <div className={styles.inputStack}>
                           <input
@@ -633,6 +645,9 @@ export default function StockEntryScreen() {
                     <div className={styles.productSummary}>
                       <p>
                         <strong>Nombre:</strong> {selectedProduct?.name || "-"}
+                      </p>
+                      <p>
+                        <strong>Marca:</strong> {selectedProduct?.brand || "-"}
                       </p>
                       <p>
                         <strong>Categoria:</strong> {selectedProduct?.category || "-"}

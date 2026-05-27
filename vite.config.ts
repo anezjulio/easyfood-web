@@ -32,6 +32,7 @@ type Product = {
   createdAt: string;
   imageUrl?: string;
   barcode?: string;
+  brand?: string;
   category?: "bebida" | "vivere" | "helado" | "chocolate" | "tabaqueria" | "golosina" | "perecedero";
   supplyOrderId?: string;
 };
@@ -1111,6 +1112,7 @@ function mockDbPlugin(): Plugin {
               createdAt: now,
               imageUrl: draft.imageUrl,
               barcode: draft.barcode,
+              brand: draft.brand,
               category,
               supplyOrderId: draft.supplyOrderId,
             };
@@ -1346,6 +1348,7 @@ function mockDbPlugin(): Plugin {
               costPrice: nextCostPrice,
               imageUrl: draft.imageUrl,
               barcode: draft.barcode,
+              brand: draft.brand,
               category,
               supplyOrderId: typeof draft.supplyOrderId === "string" ? draft.supplyOrderId : current.supplyOrderId,
             };
@@ -3731,6 +3734,7 @@ function normalizeProductRecord(input: unknown): Product | null {
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     imageUrl: String(draft.imageUrl || "").trim() || undefined,
     barcode: String(draft.barcode || "").trim() || undefined,
+    brand: String(draft.brand || "").trim() || undefined,
     category,
     supplyOrderId: String(draft.supplyOrderId || "").trim() || undefined,
   };
@@ -5126,6 +5130,7 @@ function sanitizeDraft(input: unknown) {
     marginPercent?: unknown;
     imageUrl?: unknown;
     barcode?: unknown;
+    brand?: unknown;
     category?: unknown;
     supplyOrderId?: unknown;
   };
@@ -5135,9 +5140,10 @@ function sanitizeDraft(input: unknown) {
   const marginPercent = Number(obj.marginPercent);
   const imageUrl = String(obj.imageUrl || "").trim() || undefined;
   const barcode = String(obj.barcode || "").trim() || undefined;
+  const brand = String(obj.brand || "").trim() || undefined;
   const category = normalizeCategory(obj.category);
   const supplyOrderId = String(obj.supplyOrderId || "").trim() || undefined;
-  return { name, price, costPrice, marginPercent, imageUrl, barcode, category, supplyOrderId };
+  return { name, price, costPrice, marginPercent, imageUrl, barcode, brand, category, supplyOrderId };
 }
 
 function sanitizeStockEntryDraft(input: unknown) {

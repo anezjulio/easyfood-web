@@ -98,6 +98,16 @@ export default function ProductCrudScreen() {
                   </label>
 
                   <label className={styles.field}>
+                    <span>Marca</span>
+                    <input
+                      value={vm.brand}
+                      onChange={(e) => vm.setBrand(e.target.value)}
+                      className={styles.input}
+                      placeholder="Ej: Coca-Cola"
+                    />
+                  </label>
+
+                  <label className={styles.field}>
                     <span>Codigo de barra</span>
                     <div className={styles.inputStack}>
                       <input

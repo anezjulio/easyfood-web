@@ -59,6 +59,7 @@ export default function SupplyOrdersScreen() {
   const [selectedCatalogProductId, setSelectedCatalogProductId] = useState<string | null>(null);
 
   const [newProductName, setNewProductName] = useState("");
+  const [newProductBrand, setNewProductBrand] = useState("");
   const [newProductCategory, setNewProductCategory] = useState<ProductCategory>("vivere");
   const [newProductBarcode, setNewProductBarcode] = useState("");
   const [newProductCostPrice, setNewProductCostPrice] = useState("");
@@ -143,7 +144,7 @@ export default function SupplyOrdersScreen() {
     return products.filter((item) =>
       !query
         ? true
-        : normalizeForSearch(`${item.name} ${item.barcode || ""} ${item.category || ""}`).includes(query),
+        : normalizeForSearch(`${item.name} ${item.brand || ""} ${item.barcode || ""} ${item.category || ""}`).includes(query),
     );
   }, [productSearch, products]);
 
@@ -170,6 +171,7 @@ export default function SupplyOrdersScreen() {
 
   function clearMiniProductForm() {
     setNewProductName("");
+    setNewProductBrand("");
     setNewProductCategory("vivere");
     setNewProductBarcode("");
     setNewProductCostPrice("");
@@ -335,6 +337,7 @@ export default function SupplyOrdersScreen() {
     try {
       const created = await createProductApi({
         name: trimmedName,
+        brand: newProductBrand,
         category: newProductCategory,
         costPrice: newProductCostValue,
         price: newProductSalePreview,
@@ -495,6 +498,16 @@ export default function SupplyOrdersScreen() {
                           value={newProductName}
                           onChange={(event) => setNewProductName(event.target.value)}
                           placeholder="Ej: Galleta premium"
+                        />
+                      </label>
+
+                      <label className={styles.fieldCompact}>
+                        <span>Marca</span>
+                        <input
+                          className={styles.input}
+                          value={newProductBrand}
+                          onChange={(event) => setNewProductBrand(event.target.value)}
+                          placeholder="Ej: Coca-Cola"
                         />
                       </label>
 
