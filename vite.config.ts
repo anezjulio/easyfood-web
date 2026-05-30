@@ -73,6 +73,7 @@ type OperationRequestItem = {
   productName: string;
   quantity: number;
   barcode?: string;
+  brand?: string;
   category?: Product["category"];
 };
 
@@ -236,6 +237,7 @@ type SupplyOrderItem = {
   productName: string;
   quantity: number;
   barcode?: string;
+  brand?: string;
   category?: Product["category"];
   receivedQuantity?: number;
   missingQuantity?: number;
@@ -910,6 +912,7 @@ function normalizeOperationRequestItems(items: unknown, products: Product[]): Op
       productName?: unknown;
       quantity?: unknown;
       barcode?: unknown;
+      brand?: unknown;
       category?: unknown;
     };
     const productId = String(draft.productId || "").trim();
@@ -926,6 +929,7 @@ function normalizeOperationRequestItems(items: unknown, products: Product[]): Op
       productName: product?.name || String(draft.productName || "").trim() || existing?.productName || productId,
       quantity: quantity + (existing?.quantity || 0),
       barcode: product?.barcode || String(draft.barcode || "").trim() || existing?.barcode || undefined,
+      brand: product?.brand || String(draft.brand || "").trim() || existing?.brand || undefined,
       category,
     });
   }
@@ -3127,6 +3131,7 @@ function buildSupplyOrderItemsFromDraft(
       productName: product.name,
       quantity: nextQuantity,
       barcode: product.barcode,
+      brand: product.brand,
       category: product.category,
       receivedQuantity: existing?.receivedQuantity,
       missingQuantity: existing?.missingQuantity,
@@ -3312,6 +3317,7 @@ function normalizeSupplyOrderItemRecord(input: unknown): SupplyOrderItem | null 
     productName,
     quantity,
     barcode: String(draft.barcode || "").trim() || undefined,
+    brand: String(draft.brand || "").trim() || undefined,
     category: normalizeCategory(draft.category),
     receivedQuantity,
     missingQuantity,
@@ -4990,8 +4996,8 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
       const subtotal = Math.max(0, Math.trunc(item.unitPrice * quantity));
       return [
         "<article class=\"item\">",
-        `  <p class=\"item-name\">${index + 1}. ${escapeHtml(item.productName)}</p>`,
-        `  <p class=\"item-meta\">${quantity} x ${escapeHtml(formatReceiptMoney(item.unitPrice))}<span class=\"dots\"></span>${escapeHtml(formatReceiptMoney(subtotal))}</p>`,
+        `  <p class="item-name">${index + 1}. ${escapeHtml(item.productName)}</p>`,
+        `  <p class="item-meta">${quantity} x ${escapeHtml(formatReceiptMoney(item.unitPrice))}<span class="dots"></span>${escapeHtml(formatReceiptMoney(subtotal))}</p>`,
         "</article>",
       ].join("\n");
     })
@@ -5044,14 +5050,14 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     "      <header class=\"center\">",
     "        <p class=\"shop-name\">EasyCommerce</p>",
     "        <p class=\"ticket-title\">Comprobante de venta</p>",
-    `        <p class=\"small\">${escapeHtml(formatReceiptDateTime(receipt.createdAt))}</p>`,
-    `        <p class=\"small\">Ref: ${escapeHtml(receipt.id)}</p>`,
+    `        <p class="small">${escapeHtml(formatReceiptDateTime(receipt.createdAt))}</p>`,
+    `        <p class="small">Ref: ${escapeHtml(receipt.id)}</p>`,
     "      </header>",
     "      <hr class=\"sep\" />",
     "      <section class=\"meta\">",
-    `        <p class=\"line\"><span class=\"label\">Codigo factura:</span><span class=\"value\">${escapeHtml(receipt.invoiceId || "-")}</span></p>`,
-    `        <p class=\"line\"><span class=\"label\">Operador:</span><span class=\"value\">${escapeHtml(receipt.operator)}</span></p>`,
-    `        <p class=\"line\"><span class=\"label\">Pago:</span><span class=\"value\">${escapeHtml(formatReceiptPaymentMethod(receipt.paymentMethod))}</span></p>`,
+    `        <p class="line"><span class="label">Codigo factura:</span><span class="value">${escapeHtml(receipt.invoiceId || "-")}</span></p>`,
+    `        <p class="line"><span class="label">Operador:</span><span class="value">${escapeHtml(receipt.operator)}</span></p>`,
+    `        <p class="line"><span class="label">Pago:</span><span class="value">${escapeHtml(formatReceiptPaymentMethod(receipt.paymentMethod))}</span></p>`,
     "      </section>",
     "      <hr class=\"sep\" />",
     "      <section class=\"items\">",
@@ -5059,8 +5065,8 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     "      </section>",
     "      <hr class=\"sep\" />",
     "      <section class=\"totals\">",
-    `        <p class=\"line\"><span class=\"label\">Subtotal</span><span class=\"value\">${escapeHtml(subtotalLabel)}</span></p>`,
-    `        <p class=\"line total\"><span class=\"label\">Total</span><span class=\"value\">${escapeHtml(totalLabel)}</span></p>`,
+    `        <p class="line"><span class="label">Subtotal</span><span class="value">${escapeHtml(subtotalLabel)}</span></p>`,
+    `        <p class="line total"><span class="label">Total</span><span class="value">${escapeHtml(totalLabel)}</span></p>`,
     "      </section>",
     "      <p class=\"thanks\">Gracias por su compra</p>",
     "    </main>",

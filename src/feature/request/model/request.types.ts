@@ -9,6 +9,7 @@ export type OperationRequestItem = {
   productName: string;
   quantity: number;
   barcode?: string;
+  brand?: string;
   category?: ProductCategory;
 };
 

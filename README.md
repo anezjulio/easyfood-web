@@ -16,6 +16,7 @@ EasyCommerce Web es el frontend React + TypeScript de una operacion comercial co
 - Login y control de sesion
 - Menu operativo con alertas
 - Ventas, resumen e impresion de recibos
+- Autoventa para terminales
 - Caja, cierre y auditoria administrativa
 - Jornadas, balance y transacciones
 - Productos, precios, finanzas y carga de stock
@@ -37,7 +38,8 @@ La app levanta por defecto en `http://localhost:5173`.
 
 - La pantalla de login arranca en desarrollo con `admin / 1234` precargado.
 - La autenticacion es de demo: consulta `GET /users` y compara el password hasheado con MD5 desde el frontend.
-- Los roles actuales son `admin` y `operator`.
+- Los roles actuales son `admin`, `operator` y `terminal`.
+- El rol `terminal` entra al flujo de autoventa y tiene ocultos los modulos operativos y administrativos generales.
 
 ## Variables de entorno relevantes
 

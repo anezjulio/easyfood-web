@@ -25,7 +25,7 @@ export type Product = {
   ultimoIngreso?: string;
 };
 
-export type ProductSortKey = "name" | "price" | "existencia" | "category" | "createdAt";
+export type ProductSortKey = "name" | "brand" | "price" | "existencia" | "category" | "createdAt";
 
 export type PriceMarginByProduct = {
   productId: string;

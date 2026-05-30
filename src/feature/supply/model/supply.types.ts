@@ -7,6 +7,7 @@ export type SupplyOrderItem = {
   productName: string;
   quantity: number;
   barcode?: string;
+  brand?: string;
   category?: ProductCategory;
   receivedQuantity?: number;
   missingQuantity?: number;

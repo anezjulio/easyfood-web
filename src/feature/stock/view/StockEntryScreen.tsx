@@ -25,6 +25,7 @@ import {
   fetchProducts,
   removeProductPriceMarginApi,
   updateCategoryPriceMarginApi,
+  updateProductApi,
   upsertProductPriceMarginApi,
 } from "../../product/service/product.api";
 import type { SupplyOrder } from "../../supply/model/supply.types";
@@ -43,6 +44,7 @@ export default function StockEntryScreen() {
   const [searchParams] = useSearchParams();
   const initialProductId = searchParams.get("productId");
   const cameFromProducts = (location.state as { from?: string } | null)?.from === "products";
+  const merchandiseFormId = "stock-entry-form";
 
   const [mode, setMode] = useState<EntryMode>("existing");
   const [products, setProducts] = useState<Product[]>([]);
@@ -67,6 +69,11 @@ export default function StockEntryScreen() {
   const [newCategory, setNewCategory] = useState<ProductCategory>("vivere");
   const [newImageUrl, setNewImageUrl] = useState("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [existingName, setExistingName] = useState("");
+  const [existingBrand, setExistingBrand] = useState("");
+  const [existingBarcode, setExistingBarcode] = useState("");
+  const [existingCategory, setExistingCategory] = useState<ProductCategory>("vivere");
+  const [existingImageUrl, setExistingImageUrl] = useState("");
 
   const [supplyOrderId, setSupplyOrderId] = useState("");
   const [costPrice, setCostPrice] = useState("");
@@ -127,7 +134,7 @@ export default function StockEntryScreen() {
     setMode("existing");
   }, [initialProductId, mode, selectedProductId]);
 
-  const activeCategory = mode === "existing" ? selectedProduct?.category || "vivere" : newCategory;
+  const activeCategory = mode === "existing" ? existingCategory : newCategory;
   const selectedProductHasMarginOverride = useMemo(() => {
     if (!selectedProduct) return false;
     return (marginSettings?.productMargins || []).some((item) => item.productId === selectedProduct.id);
@@ -183,6 +190,23 @@ export default function StockEntryScreen() {
     setCostPrice(formatIntegerTextMask(String(productCost)));
   }, [activeMarginPercent, mode, selectedProduct]);
 
+  useEffect(() => {
+    if (mode !== "existing") return;
+    if (!selectedProduct) {
+      setExistingName("");
+      setExistingBrand("");
+      setExistingBarcode("");
+      setExistingCategory("vivere");
+      setExistingImageUrl("");
+      return;
+    }
+    setExistingName(selectedProduct.name || "");
+    setExistingBrand(selectedProduct.brand || "");
+    setExistingBarcode(selectedProduct.barcode || "");
+    setExistingCategory(selectedProduct.category || "vivere");
+    setExistingImageUrl(selectedProduct.imageUrl || "");
+  }, [mode, selectedProduct?.id]);
+
   const costPriceValue = parsePositiveIntFromTextMask(costPrice);
   const salePricePreview = calculateSalePrice(costPriceValue, activeMarginPercent);
 
@@ -217,6 +241,7 @@ export default function StockEntryScreen() {
 
     return [...list].sort((a, b) => {
       if (sortKey === "name") return a.name.localeCompare(b.name) * dir;
+      if (sortKey === "brand") return (a.brand || "").localeCompare(b.brand || "") * dir;
       if (sortKey === "category") return (a.category || "").localeCompare(b.category || "") * dir;
       if (sortKey === "price") return (a.price - b.price) * dir;
       if (sortKey === "existencia") return (Number(a.existencia || 0) - Number(b.existencia || 0)) * dir;
@@ -268,16 +293,6 @@ export default function StockEntryScreen() {
     }
   }
 
-  function clearAll() {
-    setError("");
-    setMessage("");
-    clearStockFields();
-    setCostPrice("");
-    if (mode === "new") {
-      clearNewProductFields();
-    }
-  }
-
   async function handleNewProductImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     event.target.value = "";
@@ -299,6 +314,65 @@ export default function StockEntryScreen() {
     } finally {
       setIsUploadingImage(false);
     }
+  }
+
+  async function handleExistingProductImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("El archivo debe ser una imagen.");
+      return;
+    }
+
+    setError("");
+    setMessage("");
+    setIsUploadingImage(true);
+    try {
+      const uploadedPath = await uploadImageFromFile(file);
+      setExistingImageUrl(uploadedPath);
+      setMessage("Imagen del producto cargada correctamente. Confirma el ingreso para guardar el cambio.");
+    } catch {
+      setError("No se pudo cargar la imagen del producto.");
+    } finally {
+      setIsUploadingImage(false);
+    }
+  }
+
+  async function saveSelectedProductChanges() {
+    if (!selectedProduct) return null;
+
+    const trimmedName = existingName.trim();
+    if (!trimmedName) {
+      setError("El nombre del producto es obligatorio.");
+      return null;
+    }
+
+    const typedBarcode = existingBarcode.trim();
+    const barcodeConflict = findBarcodeConflict(products, typedBarcode, selectedProduct.id);
+    if (normalizeBarcodeInput(typedBarcode) && barcodeConflict) {
+      setError(`El codigo de barra ya existe en ${barcodeConflict.name}.`);
+      return null;
+    }
+
+    const updated = await updateProductApi(selectedProduct.id, {
+      name: trimmedName,
+      brand: existingBrand,
+      barcode: typedBarcode || undefined,
+      category: existingCategory,
+      costPrice: costPriceValue,
+      price: salePricePreview,
+      marginPercent: activeMarginPercent,
+      imageUrl: existingImageUrl || undefined,
+      supplyOrderId: supplyOrderId || undefined,
+    });
+
+    if (!updated) {
+      setError("No se pudo actualizar el producto seleccionado.");
+      return null;
+    }
+
+    return updated;
   }
 
   async function saveCategoryMargin() {
@@ -442,6 +516,10 @@ export default function StockEntryScreen() {
           return;
         }
 
+        const updatedProduct = await saveSelectedProductChanges();
+        if (!updatedProduct) return;
+        targetProductName = updatedProduct.name;
+
         await createProductPriceApi({
           productId: selectedProductId,
           costPrice: costPriceValue,
@@ -523,25 +601,26 @@ export default function StockEntryScreen() {
         </header>
 
         <div className={styles.layout}>
-          <section className={styles.formCard}>
+          <div className={styles.formColumn}>
             <div className={styles.modeSwitch}>
               <button
                 type="button"
                 className={`${styles.modeBtn} ${mode === "existing" ? styles.modeBtnActive : ""}`}
                 onClick={() => setMode("existing")}
               >
-                Producto existente
+                Añadir existencia
               </button>
               <button
                 type="button"
                 className={`${styles.modeBtn} ${mode === "new" ? styles.modeBtnActive : ""}`}
                 onClick={() => setMode("new")}
               >
-                Crear producto
+                Nuevo producto
               </button>
             </div>
 
-            <form onSubmit={submitMerchandise} className={`${styles.form} ${mode === "new" ? styles.formCompact : ""}`}>
+            <section className={styles.formCard}>
+            <form id={merchandiseFormId} onSubmit={submitMerchandise} className={`${styles.form} ${mode === "new" ? styles.formCompact : ""}`}>
               {mode === "new" ? (
                 <section className={styles.section}>
                   <h2 className={styles.sectionTitle}>Datos para crear producto</h2>
@@ -630,38 +709,86 @@ export default function StockEntryScreen() {
                   <h2 className={styles.sectionTitle}>Producto seleccionado</h2>
                   <div className={styles.sectionSplit}>
                     <div className={styles.imagePanel}>
-                      {selectedProduct?.imageUrl ? (
+                      {existingImageUrl ? (
                         <img
                           className={styles.productImage}
-                          src={resolveImageUrl(selectedProduct.imageUrl)}
-                          alt={selectedProduct.name || "Producto seleccionado"}
+                          src={resolveImageUrl(existingImageUrl)}
+                          alt={existingName || "Producto seleccionado"}
                         />
                       ) : (
                         <div className={styles.imageFallback}>
-                          {(selectedProduct?.name || "P").slice(0, 1).toUpperCase()}
+                          {(existingName || "P").slice(0, 1).toUpperCase()}
                         </div>
                       )}
+                      <label className={styles.uploadBtn} aria-disabled={isUploadingImage || !selectedProduct}>
+                        {isUploadingImage ? "Subiendo..." : "Cambiar imagen"}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className={styles.hiddenFileInput}
+                          onChange={handleExistingProductImageChange}
+                          disabled={isUploadingImage || !selectedProduct}
+                        />
+                      </label>
                     </div>
-                    <div className={styles.productSummary}>
-                      <p>
-                        <strong>Nombre:</strong> {selectedProduct?.name || "-"}
-                      </p>
-                      <p>
-                        <strong>Marca:</strong> {selectedProduct?.brand || "-"}
-                      </p>
-                      <p>
-                        <strong>Categoria:</strong> {selectedProduct?.category || "-"}
-                      </p>
-                      <p>
-                        <strong>Codigo de barra:</strong> {selectedProduct?.barcode || "-"}
-                      </p>
-                      <p>
-                        <strong>Stock actual:</strong> {Math.max(0, Math.trunc(Number(selectedProduct?.existencia || 0)))}
-                      </p>
+                    <div className={`${styles.fieldsColumn} ${styles.fieldMatrix}`}>
+                      <label className={`${styles.field} ${styles.fieldCompact}`}>
+                        <span>Nombre</span>
+                        <input
+                          className={styles.input}
+                          value={existingName}
+                          onChange={(event) => setExistingName(event.target.value)}
+                          placeholder="Ej: Gaseosa lima 500ml"
+                          disabled={!selectedProduct}
+                        />
+                      </label>
+                      <label className={`${styles.field} ${styles.fieldCompact}`}>
+                        <span>Marca</span>
+                        <input
+                          className={styles.input}
+                          value={existingBrand}
+                          onChange={(event) => setExistingBrand(event.target.value)}
+                          placeholder="Ej: Coca-Cola"
+                          disabled={!selectedProduct}
+                        />
+                      </label>
+                      <label className={`${styles.field} ${styles.fieldCompact}`}>
+                        <span>Codigo de barra</span>
+                        <input
+                          className={styles.input}
+                          value={existingBarcode}
+                          onChange={(event) => setExistingBarcode(event.target.value)}
+                          onKeyDown={preventEnterFromSubmittingBarcode}
+                          autoComplete="off"
+                          spellCheck={false}
+                          placeholder="Ej: 7791234567890"
+                          disabled={!selectedProduct}
+                        />
+                      </label>
+                      <label className={`${styles.field} ${styles.fieldCompact}`}>
+                        <span>Categoria</span>
+                        <select
+                          className={`${styles.input} ${styles.selectInput}`}
+                          value={existingCategory}
+                          onChange={(event) => setExistingCategory(event.target.value as ProductCategory)}
+                          disabled={!selectedProduct}
+                        >
+                          {PRODUCT_CATEGORIES.map((option) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                      <div className={`${styles.field} ${styles.fieldCompact}`}>
+                        <span>Stock actual</span>
+                        <div className={styles.valueBox}>{Math.max(0, Math.trunc(Number(selectedProduct?.existencia || 0)))}</div>
+                      </div>
                       {isAdmin ? (
-                        <p>
-                          <strong>Precio de venta:</strong> {selectedProduct ? formatMoneyARS(selectedProduct.price) : "-"}
-                        </p>
+                        <div className={`${styles.field} ${styles.fieldCompact}`}>
+                          <span>Precio de venta actual</span>
+                          <div className={styles.valueBox}>{selectedProduct ? formatMoneyARS(selectedProduct.price) : "-"}</div>
+                        </div>
                       ) : null}
                     </div>
                   </div>
@@ -822,15 +949,13 @@ export default function StockEntryScreen() {
               {message ? <div className={styles.successBox}>{message}</div> : null}
 
               <div className={styles.formActions}>
-                <button type="button" className={styles.secondaryBtn} onClick={clearAll}>
-                  Limpiar
-                </button>
                 <button type="submit" className={styles.primaryBtn}>
                   Confirmar ingreso
                 </button>
               </div>
             </form>
-          </section>
+            </section>
+          </div>
 
           <section className={styles.listCard}>
             <ProductTable

@@ -9,6 +9,7 @@ export default function ProductRow({
   onDoubleClick,
   rowIndex,
   showExistence = false,
+  showBrand = true,
   showCategory = false,
   showDateColumn = true,
   existenceAlign = "left",
@@ -22,12 +23,13 @@ export default function ProductRow({
   onDoubleClick?: () => void;
   rowIndex: number;
   showExistence?: boolean;
+  showBrand?: boolean;
   showCategory?: boolean;
   showDateColumn?: boolean;
   existenceAlign?: "left" | "center" | "right";
   dateValue?: string;
 }) {
-  const columnCount = 3 + (showExistence ? 1 : 0) + (showCategory ? 1 : 0) + (showDateColumn ? 1 : 0);
+  const columnCount = 3 + (showBrand ? 1 : 0) + (showExistence ? 1 : 0) + (showCategory ? 1 : 0) + (showDateColumn ? 1 : 0);
   const minTableWidth = Math.max(620, columnCount * 150);
   const isEven = rowIndex % 2 === 0;
   const baseBg = isEven ? "#f8fafc" : "white";
@@ -59,6 +61,12 @@ export default function ProductRow({
       <div style={{ fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {product.name}
       </div>
+
+      {showBrand ? (
+        <div style={{ textAlign: "left", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {product.brand || "-"}
+        </div>
+      ) : null}
 
       {showCategory ? (
         <div style={{ textAlign: "left", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>

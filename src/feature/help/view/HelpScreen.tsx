@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
@@ -33,24 +33,29 @@ type HelpTutorial = {
 export default function HelpScreen() {
   const auth = useAuth();
   const isAdmin = auth.user?.role === "admin";
-  const visibleSections = getVisibleSections(isAdmin);
-  const groupedSections = GROUP_ORDER.map((group) => ({
-    group,
-    sections: visibleSections.filter((section) => section.menuGroup === group),
-  })).filter((group) => group.sections.length > 0);
-  const tutorials: HelpTutorial[] = visibleSections.flatMap((section) =>
-    section.actions.map((action) => ({ section, action })),
+  const visibleSections = useMemo(() => getVisibleSections(isAdmin), [isAdmin]);
+  const groupedSections = useMemo(
+    () =>
+      GROUP_ORDER.map((group) => ({
+        group,
+        sections: visibleSections.filter((section) => section.menuGroup === group),
+      })).filter((group) => group.sections.length > 0),
+    [visibleSections],
   );
-  const [selectedActionId, setSelectedActionId] = useState<string | null>(null);
+  const tutorials: HelpTutorial[] = useMemo(
+    () =>
+      visibleSections.reduce<HelpTutorial[]>((items, section) => {
+        for (const action of section.actions) {
+          items.push({ section, action });
+        }
+        return items;
+      }, []),
+    [visibleSections],
+  );
+  const [selectedActionId, setSelectedActionId] = useState<string | null>(() => resolveSelectedActionId(visibleSections, tutorials, null));
+  const resolvedSelectedActionId = resolveSelectedActionId(visibleSections, tutorials, selectedActionId);
 
-  useEffect(() => {
-    const nextSelectedActionId = resolveSelectedActionId(visibleSections, tutorials, selectedActionId);
-    if (nextSelectedActionId !== selectedActionId) {
-      setSelectedActionId(nextSelectedActionId);
-    }
-  }, [selectedActionId, tutorials, visibleSections]);
-
-  const selectedTutorial = tutorials.find((tutorial) => tutorial.action.id === selectedActionId) ?? tutorials[0] ?? null;
+  const selectedTutorial = tutorials.find((tutorial) => tutorial.action.id === resolvedSelectedActionId) ?? tutorials[0] ?? null;
 
   function handleSelectTutorial(actionId: string) {
     setSelectedActionId(actionId);
@@ -302,18 +307,20 @@ export default function HelpScreen() {
 }
 
 function getVisibleSections(isAdmin: boolean): HelpSection[] {
-  return helpSections.flatMap((section) => {
+  const sections: HelpSection[] = [];
+  for (const section of helpSections) {
     if (!isAdmin && section.access === "admin") {
-      return [];
+      continue;
     }
 
     const actions = section.actions.filter((action) => isAdmin || action.audience !== "admin");
     if (actions.length === 0) {
-      return [];
+      continue;
     }
 
-    return [{ ...section, actions }];
-  });
+    sections.push({ ...section, actions });
+  }
+  return sections;
 }
 
 function getAudienceBadgeClass(audience: HelpAudience) {

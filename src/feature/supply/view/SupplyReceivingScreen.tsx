@@ -131,9 +131,9 @@ export default function SupplyReceivingScreen() {
 
   const receiveCommentTrimmed = receiveComment.trim();
   const remainingAmount = selectedOrder ? selectedOrder.expectedTotal - paymentTotal : 0;
-  const orderItems = selectedOrder?.items || [];
 
   const itemValidationError = useMemo(() => {
+    const orderItems = selectedOrder?.items || [];
     if (!selectedOrder || orderItems.length === 0) return "";
 
     for (const item of orderItems) {
@@ -149,7 +149,7 @@ export default function SupplyReceivingScreen() {
     }
 
     return "";
-  }, [orderItems, receiptItems, selectedOrder]);
+  }, [receiptItems, selectedOrder]);
 
   const canConfirm =
     !!selectedOrder &&
@@ -210,7 +210,7 @@ export default function SupplyReceivingScreen() {
     const rows = selectedOrder.items
       .map(
         (item) =>
-          `<tr><td>${escapeHtml(item.productName)}</td><td>${item.barcode || "-"}</td><td style="text-align:right;">${item.quantity}</td></tr>`,
+          `<tr><td>${escapeHtml(item.productName)}</td><td>${escapeHtml(item.brand || "-")}</td><td>${item.barcode || "-"}</td><td style="text-align:right;">${item.quantity}</td></tr>`,
       )
       .join("");
 
@@ -237,6 +237,7 @@ export default function SupplyReceivingScreen() {
       <thead>
         <tr>
           <th>Producto</th>
+          <th>Marca</th>
           <th>Codigo</th>
           <th>Cantidad esperada</th>
         </tr>
@@ -404,6 +405,7 @@ export default function SupplyReceivingScreen() {
                     <div className={styles.itemTable}>
                       <div className={styles.itemTableHead}>
                         <div>Producto</div>
+                        <div>Marca</div>
                         <div className={styles.cellRight}>Esperado</div>
                         <div className={styles.cellRight}>No llego</div>
                         <div className={styles.cellRight}>Se recibe</div>
@@ -422,6 +424,7 @@ export default function SupplyReceivingScreen() {
                               <strong>{item.productName}</strong>
                               <p className={styles.itemMeta}>{item.barcode || "-"}</p>
                             </div>
+                            <div>{item.brand || "-"}</div>
                             <div className={styles.cellRight}>{item.quantity}</div>
                             <div>
                               <input
@@ -621,9 +624,9 @@ export default function SupplyReceivingScreen() {
 
 function escapeHtml(value: string) {
   return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }

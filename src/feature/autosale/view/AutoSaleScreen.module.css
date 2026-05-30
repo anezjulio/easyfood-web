@@ -642,11 +642,23 @@
   display: grid;
   gap: 4px;
   justify-items: start;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  color: #10212b;
+}
+
+.methodBtn small {
+  color: #475569;
 }
 
 .methodBtnActive {
   background: #10212b;
   color: #ffffff;
+  border-color: #10212b;
+  box-shadow: 0 14px 30px rgba(16, 33, 43, 0.22);
+}
+
+.methodBtnActive small {
+  color: #dbeafe;
 }
 
 .paymentTotals {

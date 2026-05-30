@@ -9,8 +9,9 @@ import styles from "./ProductCrudScreen.module.css";
 export default function ProductCrudScreen() {
   const vm = useProductCrudViewModel();
   const imageUrl = resolveImageUrl(vm.imageUrl?.trim() || "");
-  const leftActionLabel = vm.isEditing ? "Nuevo" : "Limpiar";
+  const leftActionLabel = "Nuevo";
   const submitLabel = vm.isEditing ? "Modificar" : "Confirmar";
+  const productFormId = "product-crud-form";
   const categoryOptions = [
     "bebida",
     "vivere",
@@ -57,10 +58,23 @@ export default function ProductCrudScreen() {
         </header>
 
         <div className={styles.layout}>
-          <section className={styles.formCard}>
+          <div className={styles.formColumn}>
+            <div className={styles.topActions}>
+              <button type="button" className={`${styles.topActionBtn} ${styles.topActionBtnDanger}`.trim()} onClick={vm.deleteOrRequest}>
+                Eliminar
+              </button>
+              <button type="submit" form={productFormId} className={`${styles.topActionBtn} ${styles.topActionBtnActive}`.trim()}>
+                {submitLabel}
+              </button>
+              <button type="button" className={styles.topActionBtn} onClick={vm.clearForm}>
+                {leftActionLabel}
+              </button>
+            </div>
+
+            <section className={styles.formCard}>
             <h2 className={styles.formTitle}>{vm.isEditing ? "Editar producto" : "Crear producto"}</h2>
 
-            <form onSubmit={vm.submitForm} className={styles.form}>
+            <form id={productFormId} onSubmit={vm.submitForm} className={styles.form}>
               <div className={styles.editorGrid}>
                 <aside className={styles.photoPanel}>
                   <div className={styles.photoControl}>
@@ -242,25 +256,14 @@ export default function ProductCrudScreen() {
               {vm.error ? <div className={styles.errorBox}>{vm.error}</div> : null}
               {vm.message ? <div className={styles.successBox}>{vm.message}</div> : null}
 
-              <div className={styles.formActions}>
-                <button type="button" className={styles.secondaryBtn} onClick={vm.clearForm}>
-                  {leftActionLabel}
-                </button>
-                <button type="button" className={styles.warnBtn} onClick={vm.deleteOrRequest}>
-                  Eliminar
-                </button>
-                <button type="submit" className={styles.primaryBtn}>
-                  {submitLabel}
-                </button>
-              </div>
-
               <p className={styles.roleHint}>
                 {vm.isAdmin
                   ? "Perfil administrador: puedes crear, editar y eliminar productos."
                   : "Perfil operador: puedes crear/editar; la eliminacion se envia como solicitud al administrador."}
               </p>
             </form>
-          </section>
+            </section>
+          </div>
 
           <section className={styles.listCard}>
             <ProductTable

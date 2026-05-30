@@ -203,8 +203,9 @@ export default function SalesScreen() {
         if (!alive) return;
         setIsCashOpen(false);
       } finally {
-        if (!alive) return;
-        setIsCashStateResolved(true);
+        if (alive) {
+          setIsCashStateResolved(true);
+        }
       }
     }
 
@@ -351,6 +352,7 @@ export default function SalesScreen() {
     const dir = sortDir === "asc" ? 1 : -1;
     return [...list].sort((a, b) => {
       if (sortKey === "name") return a.name.localeCompare(b.name) * dir;
+      if (sortKey === "brand") return (a.brand || "").localeCompare(b.brand || "") * dir;
       if (sortKey === "category") return (a.category || "").localeCompare(b.category || "") * dir;
       if (sortKey === "price") return (a.price - b.price) * dir;
       if (sortKey === "existencia") return (Number(a.existencia || 0) - Number(b.existencia || 0)) * dir;

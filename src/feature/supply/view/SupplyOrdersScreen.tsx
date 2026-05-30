@@ -31,6 +31,7 @@ type SelectedSupplyItem = {
   productName: string;
   quantity: number;
   barcode?: string;
+  brand?: string;
   category?: ProductCategory;
 };
 
@@ -206,6 +207,7 @@ export default function SupplyOrdersScreen() {
         productName: product.name,
         quantity: Math.max(1, Math.trunc(item.quantity)),
         barcode: product.barcode,
+        brand: product.brand,
         category: product.category,
       });
     }
@@ -242,6 +244,7 @@ export default function SupplyOrdersScreen() {
           productName: product.name,
           quantity,
           barcode: product.barcode,
+          brand: product.brand,
           category: product.category,
         },
       ];
@@ -297,6 +300,7 @@ export default function SupplyOrdersScreen() {
           productName: product.name,
           quantity: parsed,
           barcode: product.barcode,
+          brand: product.brand,
           category: product.category,
         },
       ];
@@ -353,6 +357,7 @@ export default function SupplyOrdersScreen() {
           productName: created.name,
           quantity: newProductQuantityValue,
           barcode: created.barcode,
+          brand: created.brand,
           category: created.category,
         },
       ]);
@@ -651,6 +656,7 @@ export default function SupplyOrdersScreen() {
                       <div className={`${styles.tableHead} ${styles.catalogTableHead}`}>
                         <div>Codigo</div>
                         <div>Nombre</div>
+                        <div>Marca</div>
                         <div>Categoria</div>
                         <div className={styles.cellCenter}>Stock</div>
                       </div>
@@ -672,6 +678,7 @@ export default function SupplyOrdersScreen() {
                             >
                               <div className={styles.codeCell}>{product.barcode || "-"}</div>
                               <div className={styles.nameCell}>{product.name}</div>
+                              <div className={styles.nameCell}>{product.brand || "-"}</div>
                               <div className={styles.categoryCell}>{product.category || "vivere"}</div>
                               <div className={styles.stockCell}>{Math.max(0, Math.trunc(Number(product.existencia || 0)))}</div>
                             </button>
@@ -692,6 +699,7 @@ export default function SupplyOrdersScreen() {
                     <div className={styles.tableCard}>
                       <div className={`${styles.tableHead} ${styles.selectedTableHead}`}>
                         <div>Nombre</div>
+                        <div>Marca</div>
                         <div>Categoria</div>
                         <div>Codigo</div>
                         <div className={styles.cellCenter}>Cantidad</div>
@@ -707,6 +715,7 @@ export default function SupplyOrdersScreen() {
                               className={`${styles.selectedTableRow} ${index % 2 === 0 ? styles.tableRowOdd : ""}`.trim()}
                             >
                               <div className={styles.nameCell}>{item.productName}</div>
+                              <div className={styles.nameCell}>{item.brand || "-"}</div>
                               <div className={styles.categoryCell}>{item.category || "vivere"}</div>
                               <div className={styles.codeCell}>{item.barcode || "-"}</div>
                               <div className={styles.quantityCell}>
@@ -819,6 +828,7 @@ export default function SupplyOrdersScreen() {
                             }`.trim()}
                           >
                             <div>Producto / Cant. esperada</div>
+                            <div>Marca</div>
                             {order.status === "received" ? (
                               <>
                                 <div className={styles.cellRight}>No llego</div>
@@ -839,6 +849,7 @@ export default function SupplyOrdersScreen() {
                                 <span className={styles.orderItemName}>{item.productName}</span>
                                 <span className={styles.orderItemQtyBadge}>x{item.quantity}</span>
                               </div>
+                              <div>{item.brand || "-"}</div>
                               {order.status === "received" ? (
                                 <>
                                   <div className={styles.cellRight}>{item.missingQuantity || 0}</div>

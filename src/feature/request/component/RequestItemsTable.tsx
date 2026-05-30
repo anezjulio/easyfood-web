@@ -41,6 +41,7 @@ export default function RequestItemsTable({
       <div className={styles.tableCard}>
         <div className={`${styles.tableHead} ${editable ? styles.tableHeadEditable : ""}`.trim()}>
           <div>Nombre</div>
+          <div>Marca</div>
           <div>Categoria</div>
           <div>Codigo</div>
           <div className={styles.cellCenter}>Cantidad</div>
@@ -57,6 +58,7 @@ export default function RequestItemsTable({
                 className={`${styles.row} ${editable ? styles.rowEditable : ""} ${index % 2 === 0 ? styles.rowOdd : ""}`.trim()}
               >
                 <div className={styles.nameCell}>{item.productName}</div>
+                <div className={styles.nameCell}>{item.brand || "-"}</div>
                 <div className={styles.categoryCell}>{item.category || "vivere"}</div>
                 <div className={styles.codeCell}>{item.barcode || "-"}</div>
                 <div className={styles.quantityCell}>

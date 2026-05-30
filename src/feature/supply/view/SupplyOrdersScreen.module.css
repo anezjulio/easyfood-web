@@ -271,12 +271,12 @@
 
 .catalogTableHead,
 .catalogTableRow {
-  grid-template-columns: minmax(140px, 1fr) minmax(0, 1.6fr) minmax(110px, 0.9fr) 92px;
+  grid-template-columns: minmax(140px, 1fr) minmax(0, 1.5fr) minmax(0, 0.9fr) minmax(110px, 0.85fr) 92px;
 }
 
 .selectedTableHead,
 .selectedTableRow {
-  grid-template-columns: minmax(0, 1.45fr) minmax(110px, 0.8fr) minmax(140px, 1fr) minmax(210px, 1.1fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr) minmax(110px, 0.75fr) minmax(140px, 0.9fr) minmax(210px, 1.1fr);
 }
 
 .tableBody {
@@ -477,7 +477,7 @@
 .orderItemsHead,
 .orderItemRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.75fr);
   gap: 12px;
   align-items: center;
   min-width: 0;
@@ -493,7 +493,7 @@
 
 .orderItemsHeadReceived,
 .orderItemRowReceived {
-  grid-template-columns: minmax(0, 1.5fr) 110px 110px minmax(140px, 0.9fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.75fr) 110px 110px minmax(140px, 0.9fr);
 }
 
 .orderItemRow {

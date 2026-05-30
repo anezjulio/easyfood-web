@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import type { Product, ProductSortKey } from "../model/product.types";
 import ProductRow from "./ProductRow";
 
@@ -21,8 +20,6 @@ function formatPriceMask(input: string): string {
   }).format(amount);
   return `$${formatted}`;
 }
-
-const CLICK_PAIR_WINDOW_MS = 360;
 
 export default function ProductTable({
   products,
@@ -47,6 +44,7 @@ export default function ProductTable({
   showDateColumn = true,
   existenceAlign = "left",
   showCategory = false,
+  showBrand = true,
 }: {
   products: Product[];
   loading: boolean;
@@ -70,17 +68,9 @@ export default function ProductTable({
   showDateColumn?: boolean;
   existenceAlign?: "left" | "center" | "right";
   showCategory?: boolean;
+  showBrand?: boolean;
 }) {
-  const clickPairRef = useRef<{
-    productId: string;
-    lastClickAt: number;
-    clickCount: number;
-  }>({
-    productId: "",
-    lastClickAt: 0,
-    clickCount: 0,
-  });
-  const columnCount = 3 + (showExistence ? 1 : 0) + (showCategory ? 1 : 0) + (showDateColumn ? 1 : 0);
+  const columnCount = 3 + (showBrand ? 1 : 0) + (showExistence ? 1 : 0) + (showCategory ? 1 : 0) + (showDateColumn ? 1 : 0);
   const minTableWidth = Math.max(620, columnCount * 150);
   const categoryOptions = Array.from(
     new Set(
@@ -163,33 +153,6 @@ export default function ProductTable({
 
   function handleRowClick(product: Product) {
     onSelectProduct(product.id);
-
-    if (!onProductDoubleClick) return;
-
-    const now = Date.now();
-    const current = clickPairRef.current;
-    const isSameRow = current.productId === product.id;
-    const isWithinPairWindow = now - current.lastClickAt <= CLICK_PAIR_WINDOW_MS;
-
-    if (!isSameRow || !isWithinPairWindow) {
-      clickPairRef.current = {
-        productId: product.id,
-        lastClickAt: now,
-        clickCount: 1,
-      };
-      return;
-    }
-
-    const nextCount = current.clickCount + 1;
-    clickPairRef.current = {
-      productId: product.id,
-      lastClickAt: now,
-      clickCount: nextCount,
-    };
-
-    if (nextCount % 2 === 0) {
-      onProductDoubleClick(product);
-    }
   }
 
   return (
@@ -242,6 +205,8 @@ export default function ProductTable({
             </div>
           ) : null}
         </div>
+
+        {showBrand ? <div style={headerCellStyle}>{renderHeaderCell("Marca", "brand")}</div> : null}
 
         {showCategory ? (
           <div style={headerCellStyle}>
@@ -369,8 +334,10 @@ export default function ProductTable({
             formatDate={formatDate}
             selected={p.id === selectedProductId}
             onClick={() => handleRowClick(p)}
+            onDoubleClick={onProductDoubleClick ? () => onProductDoubleClick(p) : undefined}
             rowIndex={index}
             showExistence={showExistence}
+            showBrand={showBrand}
             showCategory={showCategory}
             showDateColumn={showDateColumn}
             existenceAlign={existenceAlign}

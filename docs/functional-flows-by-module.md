@@ -8,8 +8,9 @@ Este documento resume lo que hoy cubre la aplicacion desde el punto de vista fun
 
 - `admin`
 - `operator`
+- `terminal`
 
-La mayoria de los modulos operativos pueden ser usados por ambos perfiles, pero varias pantallas administrativas filtran o amplian capacidades cuando el usuario es `admin`.
+La mayoria de los modulos operativos pueden ser usados por `admin` y `operator`, pero varias pantallas administrativas filtran o amplian capacidades cuando el usuario es `admin`. El rol `terminal` queda acotado al flujo de autoventa y a la salida controlada de la terminal.
 
 ## Mapa general de modulos
 
@@ -21,6 +22,7 @@ La mayoria de los modulos operativos pueden ser usados por ambos perfiles, pero 
 - Usuarios
 - Stock
 - Ventas y resumen
+- Autoventa
 - Caja
 - Jornadas
 - Balance y reportes
@@ -186,6 +188,28 @@ Casos de uso:
 - operador cobra en efectivo, debito, credito o Mercado Pago
 - el sistema rechaza venta si no hay caja abierta
 - un pago pendiente vence automaticamente si no se resuelve a tiempo
+
+## Autoventa
+
+Ruta: `/autoventa`
+
+Flujos cubiertos:
+
+- navegacion de productos por categorias disponibles
+- armado de carrito desde una terminal dedicada
+- revision de cantidades y stock disponible
+- creacion de orden pendiente sin exigir jornada de caja abierta
+- seleccion de metodo de pago con descuentos o recargos configurados
+- aprobacion o rechazo del pago dentro de la ventana temporal
+- facturacion, descuento de stock y generacion de resumen imprimible
+- cierre de terminal protegido por contrasena de un usuario `admin` u `operator`
+
+Casos de uso:
+
+- usuario `terminal` opera solo la pantalla de autoventa
+- admin puede entrar a autoventa para validar o probar el flujo
+- una compra pendiente se rechaza automaticamente al cerrar la terminal
+- una orden pendiente expira si no se aprueba o rechaza a tiempo
 
 ## Resumen de venta y recibo
 

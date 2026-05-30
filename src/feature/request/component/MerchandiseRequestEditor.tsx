@@ -31,6 +31,7 @@ function addProductToItems(current: OperationRequestItem[], product: Product) {
       productName: product.name,
       quantity: 1,
       barcode: product.barcode,
+      brand: product.brand,
       category: product.category,
     },
   ];
@@ -112,6 +113,7 @@ export default function MerchandiseRequestEditor({
       })
       .sort((a, b) => {
         if (sortKey === "name") return a.name.localeCompare(b.name) * dir;
+        if (sortKey === "brand") return (a.brand || "").localeCompare(b.brand || "") * dir;
         if (sortKey === "category") return (a.category || "").localeCompare(b.category || "") * dir;
         if (sortKey === "price") return (a.price - b.price) * dir;
         if (sortKey === "existencia") return (Number(a.existencia || 0) - Number(b.existencia || 0)) * dir;

@@ -7,6 +7,7 @@
       "costPrice": 2000,
       "createdAt": "2026-03-17T03:39:00.634Z",
       "barcode": "7798740631109",
+      "brand": "cocacola",
       "category": "vivere",
       "supplyOrderId": "so170320260117139380"
     },
@@ -78,10 +79,11 @@
     {
       "id": "pseed1773718891471006",
       "name": "Caramelos Mix 25g Serie 01",
-      "price": 1155,
+      "price": 1073,
       "costPrice": 825,
       "createdAt": "2026-03-17T03:41:31.470Z",
       "barcode": "7795000000006",
+      "brand": "serie 01",
       "category": "golosina"
     },
     {
@@ -2077,6 +2079,22 @@
   ],
   "orders": [
     {
+      "id": "or300520261444384742",
+      "items": [
+        {
+          "productId": "pseed1773718891471001",
+          "productName": "Gaseosa Cola 354ml Serie 01",
+          "unitPrice": 945,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-05-30T17:44:38.279Z",
+      "status": "cancelada",
+      "total": 945,
+      "operator": "admin",
+      "cancelledAt": "2026-05-30T17:44:55.804Z"
+    },
+    {
       "id": "or040520260148484121",
       "items": [
         {
@@ -2588,7 +2606,7 @@
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
       "currentBalance": -47100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-05-04T04:49:37.219Z"
+      "updatedAt": "2026-05-30T17:44:55.805Z"
     },
     {
       "id": "account-gains",
@@ -2598,7 +2616,7 @@
       "description": "Ventas pagadas registradas por la plataforma.",
       "currentBalance": 31600,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-05-04T04:49:37.219Z"
+      "updatedAt": "2026-05-30T17:44:55.805Z"
     },
     {
       "id": "account-expenses",
@@ -2608,7 +2626,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": -106100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-05-04T04:49:37.219Z"
+      "updatedAt": "2026-05-30T17:44:55.805Z"
     },
     {
       "id": "account-tobacco",
@@ -2618,7 +2636,7 @@
       "description": "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-05-04T04:49:37.219Z"
+      "updatedAt": "2026-05-30T17:44:55.805Z"
     }
   ],
   "financialTransactions": [

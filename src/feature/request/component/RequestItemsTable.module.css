@@ -39,7 +39,7 @@
 .tableHead,
 .row {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.75fr) minmax(0, 0.9fr) minmax(120px, 0.95fr);
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 0.9fr) minmax(120px, 0.9fr);
   gap: 10px;
   align-items: center;
   padding: 12px;
@@ -48,7 +48,7 @@
 
 .tableHeadEditable,
 .rowEditable {
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.75fr) minmax(0, 0.9fr) minmax(120px, 0.95fr) 92px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 0.9fr) minmax(120px, 0.9fr) 92px;
 }
 
 .tableHead {

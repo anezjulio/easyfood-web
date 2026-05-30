@@ -173,7 +173,11 @@ export default function ExpensesScreen() {
     }
     setFormError("");
     setFormMessage("");
-    kind === "invoice" ? setIsUploadingInvoice(true) : setIsUploadingUnexpected(true);
+    if (kind === "invoice") {
+      setIsUploadingInvoice(true);
+    } else {
+      setIsUploadingUnexpected(true);
+    }
     try {
       const uploadedPath = await uploadImageFromFile(file);
       if (kind === "invoice") setInvoiceImageUrl(uploadedPath);
@@ -182,7 +186,11 @@ export default function ExpensesScreen() {
     } catch {
       setFormError(kind === "invoice" ? "No se pudo cargar la foto de factura." : "No se pudo cargar la foto del imprevisto.");
     } finally {
-      kind === "invoice" ? setIsUploadingInvoice(false) : setIsUploadingUnexpected(false);
+      if (kind === "invoice") {
+        setIsUploadingInvoice(false);
+      } else {
+        setIsUploadingUnexpected(false);
+      }
     }
   }
 
