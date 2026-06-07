@@ -1,6 +1,6 @@
 type ReplaceAllFn = (searchValue: string | RegExp, replaceValue: string) => string;
 
-const stringPrototype = String.prototype as String & { replaceAll?: ReplaceAllFn };
+const stringPrototype = String.prototype as typeof String.prototype & { replaceAll?: ReplaceAllFn };
 
 if (typeof stringPrototype.replaceAll !== "function") {
   Object.defineProperty(String.prototype, "replaceAll", {

@@ -205,7 +205,7 @@ export default function StockEntryScreen() {
     setExistingBarcode(selectedProduct.barcode || "");
     setExistingCategory(selectedProduct.category || "vivere");
     setExistingImageUrl(selectedProduct.imageUrl || "");
-  }, [mode, selectedProduct?.id]);
+  }, [mode, selectedProduct]);
 
   const costPriceValue = parsePositiveIntFromTextMask(costPrice);
   const salePricePreview = calculateSalePrice(costPriceValue, activeMarginPercent);
