@@ -2,6 +2,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginScreen from "../../feature/auth/view/LoginScreen";
 import OperationScreen from "../../feature/operation/view/OperationScreen";
 import ProductCrudScreen from "../../feature/product/view/ProductCrudScreen";
+import IngredientsScreen from "../../feature/ingredient/view/IngredientsScreen";
+import MenuProductsScreen from "../../feature/menu/view/MenuProductsScreen";
 import PriceScreen from "../../feature/product/view/PriceScreen";
 import FinanceScreen from "../../feature/finance/view/FinanceScreen";
 import UsersScreen from "../../feature/user/view/UsersScreen";
@@ -36,6 +38,8 @@ export default function AppRoutes() {
         <Route element={<RequireRole allowedRoles={["admin", "operator"]} />}>
           <Route path="/products" element={<Navigate to="/products/new" replace />} />
           <Route path="/products/new" element={<ProductCrudScreen />} />
+          <Route path="/ingredients/manage" element={<IngredientsScreen />} />
+          <Route path="/menu-products/manage" element={<MenuProductsScreen />} />
           <Route path="/stock" element={<StockEntryScreen />} />
           <Route path="/cash" element={<CashScreen />} />
           <Route path="/sales" element={<SalesScreen />} />

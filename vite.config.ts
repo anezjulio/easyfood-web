@@ -46,6 +46,37 @@ type ProductPrice = {
   createdAt: string;
 };
 
+type IngredientStockMode = "weight" | "package" | "unit";
+
+type Ingredient = {
+  id: string;
+  name: string;
+  expiresInDays: number;
+  stockMode: IngredientStockMode;
+  stockQuantity: number;
+  createdAt: string;
+  updatedAt?: string;
+  lastEntryAt?: string;
+  nextExpirationDate?: string;
+};
+
+type MenuRecipeItem = {
+  ingredientId: string;
+  ingredientName: string;
+  quantity: number;
+  stockMode: IngredientStockMode;
+};
+
+type MenuProduct = {
+  id: string;
+  name: string;
+  price: number;
+  description?: string;
+  recipeItems: MenuRecipeItem[];
+  createdAt: string;
+  updatedAt?: string;
+};
+
 type RequestType = "product-delete" | "operation-order";
 
 type RequestStatus = "pending" | "approved" | "rejected";
@@ -483,6 +514,8 @@ type PriceMarginSettings = {
 type MockDb = {
   products: Product[];
   productPrices: ProductPrice[];
+  ingredients: Ingredient[];
+  menuProducts: MenuProduct[];
   users: AppUserRecord[];
   deleteRequests: DeleteRequest[];
   requests: OperationRequest[];
@@ -519,9 +552,150 @@ type DataStoresState = {
   stores: DataStoreRecord[];
 };
 
+const defaultIngredientSeed: Ingredient[] = [
+  {
+    id: "ing-pan-hamburguesa",
+    name: "Pan de hamburguesa",
+    expiresInDays: 5,
+    stockMode: "unit",
+    stockQuantity: 48,
+    createdAt: "2026-02-01T10:00:00.000Z",
+  },
+  {
+    id: "ing-carne-medallon",
+    name: "Medallon de carne",
+    expiresInDays: 3,
+    stockMode: "unit",
+    stockQuantity: 80,
+    createdAt: "2026-02-01T10:05:00.000Z",
+  },
+  {
+    id: "ing-queso-feta",
+    name: "Queso en feta",
+    expiresInDays: 7,
+    stockMode: "unit",
+    stockQuantity: 120,
+    createdAt: "2026-02-01T10:10:00.000Z",
+  },
+  {
+    id: "ing-cebolla",
+    name: "Cebolla",
+    expiresInDays: 10,
+    stockMode: "weight",
+    stockQuantity: 3500,
+    createdAt: "2026-02-01T10:15:00.000Z",
+  },
+  {
+    id: "ing-lechuga",
+    name: "Lechuga",
+    expiresInDays: 4,
+    stockMode: "weight",
+    stockQuantity: 1800,
+    createdAt: "2026-02-01T10:20:00.000Z",
+  },
+  {
+    id: "ing-tomate",
+    name: "Tomate",
+    expiresInDays: 5,
+    stockMode: "weight",
+    stockQuantity: 4200,
+    createdAt: "2026-02-01T10:25:00.000Z",
+  },
+  {
+    id: "ing-pan-pancho",
+    name: "Pan de pancho",
+    expiresInDays: 5,
+    stockMode: "unit",
+    stockQuantity: 60,
+    createdAt: "2026-02-01T10:30:00.000Z",
+  },
+  {
+    id: "ing-salchicha",
+    name: "Salchicha",
+    expiresInDays: 6,
+    stockMode: "unit",
+    stockQuantity: 60,
+    createdAt: "2026-02-01T10:35:00.000Z",
+  },
+  {
+    id: "ing-milanesa",
+    name: "Milanesa cocida",
+    expiresInDays: 2,
+    stockMode: "unit",
+    stockQuantity: 30,
+    createdAt: "2026-02-01T10:40:00.000Z",
+  },
+  {
+    id: "ing-papa",
+    name: "Papa",
+    expiresInDays: 12,
+    stockMode: "weight",
+    stockQuantity: 9000,
+    createdAt: "2026-02-01T10:45:00.000Z",
+  },
+];
+
+const defaultMenuProductSeed: MenuProduct[] = [
+  {
+    id: "menu-hamburguesa-simple",
+    name: "Hamburguesa simple",
+    price: 4500,
+    description: "Pan, carne, queso, lechuga y tomate.",
+    recipeItems: [
+      { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
+      { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 1, stockMode: "unit" },
+      { ingredientId: "ing-queso-feta", ingredientName: "Queso en feta", quantity: 1, stockMode: "unit" },
+      { ingredientId: "ing-lechuga", ingredientName: "Lechuga", quantity: 20, stockMode: "weight" },
+      { ingredientId: "ing-tomate", ingredientName: "Tomate", quantity: 35, stockMode: "weight" },
+    ],
+    createdAt: "2026-02-01T11:00:00.000Z",
+  },
+  {
+    id: "menu-hamburguesa-doble",
+    name: "Hamburguesa doble",
+    price: 6200,
+    description: "Pan, doble carne, doble queso, cebolla, lechuga y tomate.",
+    recipeItems: [
+      { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
+      { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 2, stockMode: "unit" },
+      { ingredientId: "ing-queso-feta", ingredientName: "Queso en feta", quantity: 2, stockMode: "unit" },
+      { ingredientId: "ing-cebolla", ingredientName: "Cebolla", quantity: 20, stockMode: "weight" },
+      { ingredientId: "ing-lechuga", ingredientName: "Lechuga", quantity: 20, stockMode: "weight" },
+      { ingredientId: "ing-tomate", ingredientName: "Tomate", quantity: 35, stockMode: "weight" },
+    ],
+    createdAt: "2026-02-01T11:05:00.000Z",
+  },
+  {
+    id: "menu-pancho",
+    name: "Pancho",
+    price: 2800,
+    description: "Pan y salchicha.",
+    recipeItems: [
+      { ingredientId: "ing-pan-pancho", ingredientName: "Pan de pancho", quantity: 1, stockMode: "unit" },
+      { ingredientId: "ing-salchicha", ingredientName: "Salchicha", quantity: 1, stockMode: "unit" },
+    ],
+    createdAt: "2026-02-01T11:10:00.000Z",
+  },
+  {
+    id: "menu-sandwich-milanesa",
+    name: "Sandwich de milanesa",
+    price: 5800,
+    description: "Pan, milanesa, lechuga y tomate.",
+    recipeItems: [
+      { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
+      { ingredientId: "ing-milanesa", ingredientName: "Milanesa cocida", quantity: 1, stockMode: "unit" },
+      { ingredientId: "ing-lechuga", ingredientName: "Lechuga", quantity: 25, stockMode: "weight" },
+      { ingredientId: "ing-tomate", ingredientName: "Tomate", quantity: 40, stockMode: "weight" },
+    ],
+    createdAt: "2026-02-01T11:15:00.000Z",
+  },
+];
+
 const defaultDb: MockDb = {
   products: [],
   productPrices: [],
+  ingredients: defaultIngredientSeed,
+  menuProducts: defaultMenuProductSeed,
   users: [],
   deleteRequests: [],
   requests: [],
@@ -1372,6 +1546,145 @@ function mockDbPlugin(): Plugin {
               markNotificationAsReceived(db, "product", productId);
               await writeDb(db);
             }
+            return sendJson(res, 200, { ok: removed });
+          }
+
+          if (pathname === "/ingredients" && method === "GET") {
+            const db = await readDb();
+            return sendJson(res, 200, db.ingredients);
+          }
+
+          if (pathname === "/ingredients" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeIngredientDraft(await readJsonBody(req));
+            if (!draft.name) {
+              return sendJson(res, 400, { message: "Invalid ingredient draft" });
+            }
+            const now = new Date();
+            const ingredient: Ingredient = {
+              id: buildEntityId("ing"),
+              name: draft.name,
+              expiresInDays: draft.expiresInDays,
+              stockMode: draft.stockMode,
+              stockQuantity: draft.stockQuantity + draft.entryQuantity,
+              createdAt: now.toISOString(),
+              lastEntryAt: draft.entryQuantity > 0 ? now.toISOString() : undefined,
+              nextExpirationDate: draft.entryQuantity > 0 ? buildIngredientExpirationDate(draft.expiresInDays, now) : undefined,
+            };
+            db.ingredients.unshift(ingredient);
+            await writeDb(db);
+            return sendJson(res, 201, ingredient);
+          }
+
+          const ingredientId = extractIngredientId(pathname);
+          if (ingredientId && method === "PUT") {
+            const db = await readDb();
+            const draft = sanitizeIngredientDraft(await readJsonBody(req));
+            if (!draft.name) {
+              return sendJson(res, 400, { message: "Invalid ingredient draft" });
+            }
+            const index = db.ingredients.findIndex((item) => item.id === ingredientId);
+            if (index < 0) {
+              return sendJson(res, 404, { message: "Ingredient not found" });
+            }
+            const now = new Date();
+            db.ingredients[index] = {
+              ...db.ingredients[index],
+              name: draft.name,
+              expiresInDays: draft.expiresInDays,
+              stockMode: draft.stockMode,
+              stockQuantity: draft.stockQuantity + draft.entryQuantity,
+              updatedAt: now.toISOString(),
+              lastEntryAt: draft.entryQuantity > 0 ? now.toISOString() : db.ingredients[index].lastEntryAt,
+              nextExpirationDate:
+                draft.entryQuantity > 0
+                  ? buildIngredientExpirationDate(draft.expiresInDays, now)
+                  : db.ingredients[index].nextExpirationDate,
+            };
+            db.menuProducts = db.menuProducts.map((menuProduct) => ({
+              ...menuProduct,
+              recipeItems: menuProduct.recipeItems.map((item) =>
+                item.ingredientId === ingredientId
+                  ? {
+                      ...item,
+                      ingredientName: db.ingredients[index].name,
+                      stockMode: db.ingredients[index].stockMode,
+                    }
+                  : item,
+              ),
+            }));
+            await writeDb(db);
+            return sendJson(res, 200, db.ingredients[index]);
+          }
+
+          if (ingredientId && method === "DELETE") {
+            const db = await readDb();
+            const before = db.ingredients.length;
+            db.ingredients = db.ingredients.filter((item) => item.id !== ingredientId);
+            const removed = db.ingredients.length !== before;
+            if (removed) {
+              db.menuProducts = db.menuProducts.map((menuProduct) => ({
+                ...menuProduct,
+                recipeItems: menuProduct.recipeItems.filter((item) => item.ingredientId !== ingredientId),
+              }));
+              await writeDb(db);
+            }
+            return sendJson(res, 200, { ok: removed });
+          }
+
+          if (pathname === "/menu-products" && method === "GET") {
+            const db = await readDb();
+            return sendJson(res, 200, db.menuProducts);
+          }
+
+          if (pathname === "/menu-products" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeMenuProductDraft(await readJsonBody(req), db.ingredients);
+            if (!draft.name || draft.price <= 0 || draft.recipeItems.length === 0) {
+              return sendJson(res, 400, { message: "Invalid menu product draft" });
+            }
+            const menuProduct: MenuProduct = {
+              id: buildEntityId("menu"),
+              name: draft.name,
+              price: draft.price,
+              description: draft.description,
+              recipeItems: draft.recipeItems,
+              createdAt: new Date().toISOString(),
+            };
+            db.menuProducts.unshift(menuProduct);
+            await writeDb(db);
+            return sendJson(res, 201, menuProduct);
+          }
+
+          const menuProductId = extractMenuProductId(pathname);
+          if (menuProductId && method === "PUT") {
+            const db = await readDb();
+            const draft = sanitizeMenuProductDraft(await readJsonBody(req), db.ingredients);
+            if (!draft.name || draft.price <= 0 || draft.recipeItems.length === 0) {
+              return sendJson(res, 400, { message: "Invalid menu product draft" });
+            }
+            const index = db.menuProducts.findIndex((item) => item.id === menuProductId);
+            if (index < 0) {
+              return sendJson(res, 404, { message: "Menu product not found" });
+            }
+            db.menuProducts[index] = {
+              ...db.menuProducts[index],
+              name: draft.name,
+              price: draft.price,
+              description: draft.description,
+              recipeItems: draft.recipeItems,
+              updatedAt: new Date().toISOString(),
+            };
+            await writeDb(db);
+            return sendJson(res, 200, db.menuProducts[index]);
+          }
+
+          if (menuProductId && method === "DELETE") {
+            const db = await readDb();
+            const before = db.menuProducts.length;
+            db.menuProducts = db.menuProducts.filter((item) => item.id !== menuProductId);
+            const removed = db.menuProducts.length !== before;
+            if (removed) await writeDb(db);
             return sendJson(res, 200, { ok: removed });
           }
 
@@ -2890,6 +3203,16 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
   await ensureDbFile(targetStore);
   const raw = await readFile(targetStore.dbPath, "utf8");
   const parsed = JSON.parse(raw) as Partial<MockDb>;
+  const normalizedIngredients = Array.isArray((parsed as { ingredients?: unknown[] }).ingredients)
+    ? ((parsed as { ingredients: unknown[] }).ingredients)
+        .map((item) => normalizeIngredientRecord(item))
+        .filter((item): item is Ingredient => !!item)
+    : defaultIngredientSeed;
+  const normalizedMenuProducts = Array.isArray((parsed as { menuProducts?: unknown[] }).menuProducts)
+    ? ((parsed as { menuProducts: unknown[] }).menuProducts)
+        .map((item) => normalizeMenuProductRecord(item, normalizedIngredients))
+        .filter((item): item is MenuProduct => !!item)
+    : defaultMenuProductSeed;
   const db: MockDb = {
     products: Array.isArray(parsed.products)
       ? parsed.products
@@ -2899,6 +3222,8 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
     productPrices: Array.isArray((parsed as { productPrices?: unknown[] }).productPrices)
       ? ((parsed as { productPrices: ProductPrice[] }).productPrices)
       : [],
+    ingredients: normalizedIngredients,
+    menuProducts: normalizedMenuProducts,
     users: Array.isArray((parsed as { users?: unknown[] }).users)
       ? ((parsed as { users: AppUserRecord[] }).users)
       : [],
@@ -3078,6 +3403,8 @@ function buildClearedOperationalDb(db: MockDb): MockDb {
     ...db,
     products: [],
     productPrices: [],
+    ingredients: [],
+    menuProducts: [],
     deleteRequests: [],
     requests: [],
     stocks: [],
@@ -3744,6 +4071,75 @@ function normalizeProductRecord(input: unknown): Product | null {
     category,
     supplyOrderId: String(draft.supplyOrderId || "").trim() || undefined,
   };
+}
+
+function normalizeIngredientStockMode(value: unknown): IngredientStockMode {
+  const raw = String(value || "").trim().toLowerCase();
+  if (raw === "weight" || raw === "package" || raw === "unit") return raw;
+  return "unit";
+}
+
+function normalizeIngredientRecord(input: unknown): Ingredient | null {
+  const draft = (input || {}) as Partial<Ingredient>;
+  const id = String(draft.id || "").trim();
+  const name = String(draft.name || "").trim();
+  if (!id || !name) return null;
+
+  return {
+    id,
+    name,
+    expiresInDays: Math.max(0, Math.trunc(Number(draft.expiresInDays) || 0)),
+    stockMode: normalizeIngredientStockMode(draft.stockMode),
+    stockQuantity: Math.max(0, Number(draft.stockQuantity) || 0),
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    updatedAt: String(draft.updatedAt || "").trim() || undefined,
+    lastEntryAt: String(draft.lastEntryAt || "").trim() || undefined,
+    nextExpirationDate: String(draft.nextExpirationDate || "").trim() || undefined,
+  };
+}
+
+function normalizeMenuRecipeItems(input: unknown, ingredients: Ingredient[]): MenuRecipeItem[] {
+  if (!Array.isArray(input)) return [];
+  return input
+    .map((item) => {
+      const draft = (item || {}) as Partial<MenuRecipeItem>;
+      const ingredientId = String(draft.ingredientId || "").trim();
+      const ingredient = ingredients.find((node) => node.id === ingredientId);
+      const quantity = Number(draft.quantity);
+      if (!ingredient || !Number.isFinite(quantity) || quantity <= 0) return null;
+      return {
+        ingredientId: ingredient.id,
+        ingredientName: ingredient.name,
+        quantity,
+        stockMode: ingredient.stockMode,
+      };
+    })
+    .filter((item): item is MenuRecipeItem => !!item);
+}
+
+function normalizeMenuProductRecord(input: unknown, ingredients: Ingredient[]): MenuProduct | null {
+  const draft = (input || {}) as Partial<MenuProduct>;
+  const id = String(draft.id || "").trim();
+  const name = String(draft.name || "").trim();
+  const price = Math.max(0, Math.trunc(Number(draft.price) || 0));
+  const recipeItems = normalizeMenuRecipeItems(draft.recipeItems, ingredients);
+  if (!id || !name || recipeItems.length === 0) return null;
+
+  return {
+    id,
+    name,
+    price,
+    description: String(draft.description || "").trim() || undefined,
+    recipeItems,
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    updatedAt: String(draft.updatedAt || "").trim() || undefined,
+  };
+}
+
+function buildIngredientExpirationDate(expiresInDays: number, inputDate = new Date()): string {
+  const date = new Date(inputDate);
+  date.setDate(date.getDate() + Math.max(0, Math.trunc(expiresInDays)));
+  return date.toISOString().slice(0, 10);
 }
 
 function computeDurationDays(issueDate?: string, expirationDate?: string): number | undefined {
@@ -4811,12 +5207,12 @@ function generateNotificationTestCases(db: MockDb): number {
 
   const lowStockProduct = upsertProduct({
     id: "ptc-low-stock",
-    name: "Yerba Playadito 500g",
-    price: 3200,
-    costPrice: 2450,
+    name: "Hamburguesa simple",
+    price: 4500,
+    costPrice: 2800,
     createdAt: iso(-5),
     barcode: "7790001000001",
-    category: "vivere",
+    category: "perecedero",
   });
 
   const expiringProduct = upsertProduct({
@@ -5152,6 +5548,38 @@ function sanitizeDraft(input: unknown) {
   return { name, price, costPrice, marginPercent, imageUrl, barcode, brand, category, supplyOrderId };
 }
 
+function sanitizeIngredientDraft(input: unknown) {
+  const obj = (input || {}) as {
+    name?: unknown;
+    expiresInDays?: unknown;
+    stockMode?: unknown;
+    stockQuantity?: unknown;
+    entryQuantity?: unknown;
+  };
+  return {
+    name: String(obj.name || "").trim(),
+    expiresInDays: Math.max(0, Math.trunc(Number(obj.expiresInDays) || 0)),
+    stockMode: normalizeIngredientStockMode(obj.stockMode),
+    stockQuantity: Math.max(0, Number(obj.stockQuantity) || 0),
+    entryQuantity: Math.max(0, Number(obj.entryQuantity) || 0),
+  };
+}
+
+function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[]) {
+  const obj = (input || {}) as {
+    name?: unknown;
+    price?: unknown;
+    description?: unknown;
+    recipeItems?: unknown;
+  };
+  return {
+    name: String(obj.name || "").trim(),
+    price: Math.max(0, Math.trunc(Number(obj.price) || 0)),
+    description: String(obj.description || "").trim() || undefined,
+    recipeItems: normalizeMenuRecipeItems(obj.recipeItems, ingredients),
+  };
+}
+
 function sanitizeStockEntryDraft(input: unknown) {
   const obj = (input || {}) as {
     productId?: unknown;
@@ -5456,6 +5884,18 @@ function expirePendingOrders(db: MockDb) {
 function extractProductId(pathname: string): string | null {
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 2 && parts[0] === "products") return parts[1];
+  return null;
+}
+
+function extractIngredientId(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 2 && parts[0] === "ingredients") return parts[1];
+  return null;
+}
+
+function extractMenuProductId(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 2 && parts[0] === "menu-products") return parts[1];
   return null;
 }
 
