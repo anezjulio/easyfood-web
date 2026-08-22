@@ -1747,7 +1747,7 @@
     {
       "id": "u140220260500000001",
       "name": "Administrador",
-      "email": "admin@easycommerce.local",
+      "email": "admin@easyfood.local",
       "username": "admin",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:00:00.000Z",
@@ -1758,7 +1758,7 @@
     {
       "id": "u140220260505000002",
       "name": "Operador Base",
-      "email": "user@easycommerce.local",
+      "email": "user@easyfood.local",
       "username": "user",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:05:00.000Z",
@@ -1769,7 +1769,7 @@
     {
       "id": "u040520260300000010",
       "name": "Terminal Principal",
-      "email": "terminal@easycommerce.local",
+      "email": "terminal@easyfood.local",
       "username": "terminal",
       "role": "terminal",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
@@ -1781,7 +1781,7 @@
     {
       "id": "u140220260510000001",
       "name": "Operador Uno",
-      "email": "operador1@easycommerce.local",
+      "email": "operador1@easyfood.local",
       "username": "operador1",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:10:00.000Z",
@@ -1792,7 +1792,7 @@
     {
       "id": "u140220260515000002",
       "name": "Operador Dos",
-      "email": "operador2@easycommerce.local",
+      "email": "operador2@easyfood.local",
       "username": "operador2",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:15:00.000Z",
@@ -1803,7 +1803,7 @@
     {
       "id": "u140220260520000003",
       "name": "Operador Tres",
-      "email": "operador3@easycommerce.local",
+      "email": "operador3@easyfood.local",
       "username": "operador3",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:20:00.000Z",
@@ -1866,6 +1866,7 @@
           "productName": "Caramelos Mix 25g Serie 01",
           "quantity": 2,
           "barcode": "7795000000006",
+          "brand": "serie 01",
           "category": "golosina"
         },
         {
@@ -1921,6 +1922,20 @@
     }
   ],
   "stocks": [
+    {
+      "id": "se200620261315116894",
+      "productId": "pseed1773718891471001",
+      "quantity": -3,
+      "description": "Venta orden or200620261314388493",
+      "createdAt": "2026-06-20T16:15:11.383Z"
+    },
+    {
+      "id": "se200620261312282979",
+      "productId": "pseed1773718891471005",
+      "quantity": -1,
+      "description": "Venta orden or200620261311417880",
+      "createdAt": "2026-06-20T16:12:28.586Z"
+    },
     {
       "id": "se040520260612000001",
       "productId": "pseed1773718891471001",
@@ -2079,6 +2094,54 @@
   ],
   "orders": [
     {
+      "id": "or200620261315245954",
+      "items": [
+        {
+          "productId": "pseed1773718891471001",
+          "productName": "Gaseosa Cola 354ml Serie 01",
+          "unitPrice": 945,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-06-20T16:15:24.703Z",
+      "status": "cancelada",
+      "total": 945,
+      "operator": "admin",
+      "cancelledAt": "2026-06-20T16:17:30.950Z"
+    },
+    {
+      "id": "or200620261314388493",
+      "items": [
+        {
+          "productId": "pseed1773718891471001",
+          "productName": "Gaseosa Cola 354ml Serie 01",
+          "unitPrice": 945,
+          "quantity": 3
+        }
+      ],
+      "createdAt": "2026-06-20T16:14:38.086Z",
+      "status": "pagada",
+      "total": 2835,
+      "operator": "admin",
+      "paymentMethod": "tarjeta debito"
+    },
+    {
+      "id": "or200620261311417880",
+      "items": [
+        {
+          "productId": "pseed1773718891471005",
+          "productName": "Tabaco Vanilla 30g Serie 01",
+          "unitPrice": 2133,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-06-20T16:11:41.747Z",
+      "status": "pagada",
+      "total": 2133,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
       "id": "or300520261444384742",
       "items": [
         {
@@ -2151,6 +2214,22 @@
   ],
   "invoices": [
     {
+      "id": "fc200620261315117903",
+      "orderId": "or200620261314388493",
+      "createdAt": "2026-06-20T16:15:11.404Z",
+      "total": 2835,
+      "paymentMethod": "tarjeta debito",
+      "operator": "admin"
+    },
+    {
+      "id": "fc200620261312282201",
+      "orderId": "or200620261311417880",
+      "createdAt": "2026-06-20T16:12:28.609Z",
+      "total": 2133,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
       "id": "fc040520260149378944",
       "orderId": "or040520260148484121",
       "createdAt": "2026-05-04T04:49:37.218Z",
@@ -2176,6 +2255,15 @@
     }
   ],
   "workdays": [
+    {
+      "id": "wd200620261318328918",
+      "operator": "admin",
+      "startedAt": "2026-06-20T16:18:32.585Z",
+      "orderIds": [],
+      "status": "open",
+      "openingDeclaredAmount": 5000,
+      "openingDifferenceAmount": 0
+    },
     {
       "id": "wd240320261457131148",
       "operator": "admin",
@@ -2604,9 +2692,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": -47100,
+      "currentBalance": -39967,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-05-30T17:44:55.805Z"
+      "updatedAt": "2026-06-20T16:18:32.592Z"
     },
     {
       "id": "account-gains",
@@ -2614,9 +2702,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 31600,
+      "currentBalance": 36568,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-05-30T17:44:55.805Z"
+      "updatedAt": "2026-06-20T16:18:32.592Z"
     },
     {
       "id": "account-expenses",
@@ -2626,7 +2714,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": -106100,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-05-30T17:44:55.805Z"
+      "updatedAt": "2026-06-20T16:18:32.592Z"
     },
     {
       "id": "account-tobacco",
@@ -2634,12 +2722,106 @@
       "name": "Tabaqueria",
       "kind": "category",
       "description": "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
-      "currentBalance": 0,
+      "currentBalance": 2133,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-05-30T17:44:55.805Z"
+      "updatedAt": "2026-06-20T16:18:32.592Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-cash-opening-wd200620261318328918",
+      "createdAt": "2026-06-20T16:18:32.585Z",
+      "type": "cash-opening",
+      "title": "Apertura de caja wd200620261318328918",
+      "description": "Apertura declarada por admin.",
+      "amount": 5000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd200620261318328918",
+      "workdayId": "wd200620261318328918",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or200620261314388493",
+      "createdAt": "2026-06-20T16:14:38.086Z",
+      "type": "sale-income",
+      "title": "Venta pagada or200620261314388493",
+      "description": "Venta registrada por admin por 2835.",
+      "amount": 2835,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or200620261314388493",
+      "orderId": "or200620261314388493",
+      "paymentMethod": "tarjeta debito",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-sale-cash-or200620261311417880",
+      "createdAt": "2026-06-20T16:11:41.747Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or200620261311417880",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 2133,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or200620261311417880",
+      "orderId": "or200620261311417880",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or200620261311417880",
+      "createdAt": "2026-06-20T16:11:41.747Z",
+      "type": "sale-income",
+      "title": "Venta pagada or200620261311417880",
+      "description": "Venta registrada por admin por 2133.",
+      "amount": 2133,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or200620261311417880",
+      "orderId": "or200620261311417880",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-sale-tobacco-or200620261311417880",
+      "createdAt": "2026-06-20T16:11:41.747Z",
+      "type": "sale-tobacco",
+      "title": "Venta tabaqueria or200620261311417880",
+      "description": "Subtotal de productos de tabaqueria dentro de la venta or200620261311417880.",
+      "amount": 2133,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-tobacco",
+      "referenceModule": "sale",
+      "referenceId": "or200620261311417880",
+      "orderId": "or200620261311417880",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "tobacco",
+      "accountName": "Tabaqueria"
+    },
     {
       "id": "txn-sale-income-or040520260148484121",
       "createdAt": "2026-05-04T04:48:48.318Z",
@@ -3048,6 +3230,87 @@
   ],
   "licenses": [],
   "notifications": [
+    {
+      "id": "nt200620261318322006",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 5000.",
+      "createdAt": "2026-06-20T16:18:32.585Z",
+      "dueAt": "2026-06-21T16:18:32.585Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd200620261318328918",
+      "status": "active"
+    },
+    {
+      "id": "nt200620261315116295",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Gaseosa Cola 354ml Serie 01",
+      "description": "Se registro un ingreso de -3 unidades para Gaseosa Cola 354ml Serie 01.",
+      "createdAt": "2026-06-20T16:15:11.383Z",
+      "dueAt": "2026-06-27T16:15:11.383Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "bebida",
+      "entityType": "stock",
+      "entityId": "se200620261315116894",
+      "status": "active"
+    },
+    {
+      "id": "nt200620261315115514",
+      "type": "sale-created",
+      "title": "Venta registrada: or200620261314388493",
+      "description": "Venta por 2835 (admin).",
+      "createdAt": "2026-06-20T16:15:11.369Z",
+      "dueAt": "2026-06-21T16:15:11.369Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or200620261314388493",
+      "status": "active"
+    },
+    {
+      "id": "nt200620261312283411",
+      "type": "product-low-stock",
+      "title": "Stock bajo: Tabaco Vanilla 30g Serie 01",
+      "description": "Stock actual 8. Minimo configurado 10. Reponer producto.",
+      "createdAt": "2026-06-20T16:12:28.587Z",
+      "isFixed": true,
+      "requiresAction": true,
+      "actionLabel": "Reponer stock",
+      "category": "tabaqueria",
+      "entityType": "product",
+      "entityId": "pseed1773718891471005",
+      "status": "active"
+    },
+    {
+      "id": "nt200620261312280061",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Tabaco Vanilla 30g Serie 01",
+      "description": "Se registro un ingreso de -1 unidades para Tabaco Vanilla 30g Serie 01.",
+      "createdAt": "2026-06-20T16:12:28.586Z",
+      "dueAt": "2026-06-27T16:12:28.586Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "tabaqueria",
+      "entityType": "stock",
+      "entityId": "se200620261312282979",
+      "status": "active"
+    },
+    {
+      "id": "nt200620261312287369",
+      "type": "sale-created",
+      "title": "Venta registrada: or200620261311417880",
+      "description": "Venta por 2133 (admin).",
+      "createdAt": "2026-06-20T16:12:28.564Z",
+      "dueAt": "2026-06-21T16:12:28.564Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or200620261311417880",
+      "status": "active"
+    },
     {
       "id": "nt040520260149373522",
       "type": "stock-created",

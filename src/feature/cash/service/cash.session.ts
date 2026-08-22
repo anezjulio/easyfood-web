@@ -1,4 +1,4 @@
-const CASH_SESSION_PREFIX = "easycommerce:cash-session:";
+const CASH_SESSION_PREFIX = "easyfood:cash-session:";
 
 function buildOperatorKey(operator: string): string | null {
   const normalized = String(operator || "").trim().toLowerCase();

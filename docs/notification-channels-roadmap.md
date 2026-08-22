@@ -2,7 +2,7 @@
 
 ## Punto de partida real del proyecto
 
-EasyCommerce ya tiene un canal in-app funcionando. No se parte de cero.
+EasyFood ya tiene un canal in-app funcionando. No se parte de cero.
 
 Hoy existen:
 

@@ -5048,7 +5048,7 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     "  <div class=\"wrap\">",
     "    <main class=\"ticket\">",
     "      <header class=\"center\">",
-    "        <p class=\"shop-name\">EasyCommerce</p>",
+    "        <p class=\"shop-name\">EasyFood</p>",
     "        <p class=\"ticket-title\">Comprobante de venta</p>",
     `        <p class="small">${escapeHtml(formatReceiptDateTime(receipt.createdAt))}</p>`,
     `        <p class="small">Ref: ${escapeHtml(receipt.id)}</p>`,
@@ -5107,7 +5107,7 @@ function escapeHtml(value: string): string {
 function buildDataStoreBackupFileName(store: DataStoreRecord): string {
   const timestamp = new Date().toISOString().replace(/\D/g, "").slice(0, 14);
   const safeStoreId = normalizeDataStoreId(store.id || store.name) || "base";
-  return `easycommerce-${safeStoreId}-${timestamp}.js`;
+  return `easyfood-${safeStoreId}-${timestamp}.js`;
 }
 
 function sendJson(res: { statusCode: number; setHeader: (name: string, value: string) => void; end: (chunk?: string) => void }, status: number, payload: unknown) {

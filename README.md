@@ -1,6 +1,6 @@
-# EasyCommerce Web
+# EasyFood Web
 
-EasyCommerce Web es el frontend React + TypeScript de una operacion comercial con ventas, caja, productos, stock, mercaderia, gastos, notificaciones y administracion. El repo incluye la UI y tambien un mock backend montado dentro de `vite.config.ts`, con persistencia en archivos, subida de imagenes, generacion de recibos HTML, libro financiero derivado y soporte de multiples bases.
+EasyFood Web es el frontend React + TypeScript de una operacion comercial con ventas, caja, productos, stock, mercaderia, gastos, notificaciones y administracion. El repo incluye la UI y tambien un mock backend montado dentro de `vite.config.ts`, con persistencia en archivos, subida de imagenes, generacion de recibos HTML, libro financiero derivado y soporte de multiples bases.
 
 ## Stack
 

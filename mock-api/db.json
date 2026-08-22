@@ -1004,7 +1004,7 @@
     {
       "id": "u140220260500000001",
       "name": "Administrador",
-      "email": "admin@easycommerce.local",
+      "email": "admin@easyfood.local",
       "username": "admin",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:00:00.000Z",
@@ -1015,7 +1015,7 @@
     {
       "id": "u140220260505000002",
       "name": "Operador Base",
-      "email": "user@easycommerce.local",
+      "email": "user@easyfood.local",
       "username": "user",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:05:00.000Z",
@@ -1026,7 +1026,7 @@
     {
       "id": "u040520260300000010",
       "name": "Terminal Principal",
-      "email": "terminal@easycommerce.local",
+      "email": "terminal@easyfood.local",
       "username": "terminal",
       "role": "terminal",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
@@ -1038,7 +1038,7 @@
     {
       "id": "u140220260510000001",
       "name": "Operador Uno",
-      "email": "operador1@easycommerce.local",
+      "email": "operador1@easyfood.local",
       "username": "operador1",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:10:00.000Z",
@@ -1049,7 +1049,7 @@
     {
       "id": "u140220260515000002",
       "name": "Operador Dos",
-      "email": "operador2@easycommerce.local",
+      "email": "operador2@easyfood.local",
       "username": "operador2",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:15:00.000Z",
@@ -1060,7 +1060,7 @@
     {
       "id": "u140220260520000003",
       "name": "Operador Tres",
-      "email": "operador3@easycommerce.local",
+      "email": "operador3@easyfood.local",
       "username": "operador3",
       "password": "81dc9bdb52d04dc20036dbd8313ed055",
       "createdAt": "2026-02-14T08:20:00.000Z",

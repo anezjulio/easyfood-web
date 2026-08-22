@@ -50,7 +50,7 @@ export default function LoginScreen() {
           {vm.loading ? "Ingresando..." : "Entrar"}
         </button>
       </form>
-      <p className={styles.poweredBy}>powerade by easycommerce</p>
+      <p className={styles.poweredBy}>powered by easyfood</p>
     </div>
   );
 }

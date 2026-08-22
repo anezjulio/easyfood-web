@@ -115,7 +115,7 @@ export async function downloadDataStoreBackupApi(
 
   return {
     blob: await response.blob(),
-    filename: response.headers.get("X-Backup-Filename") || `easycommerce-${draft.storeId || "base"}-backup.js`,
+    filename: response.headers.get("X-Backup-Filename") || `easyfood-${draft.storeId || "base"}-backup.js`,
   };
 }
 

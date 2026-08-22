@@ -9,10 +9,10 @@ import {
   type Product,
 } from "../model/product.types";
 
-const KEY = "easycommerce_product_v1";
-const PRODUCT_PRICE_KEY = "easycommerce_product_price_v1";
-const DELETE_REQUEST_KEY = "easycommerce_product_delete_requests_v1";
-const PRICE_MARGIN_SETTINGS_KEY = "easycommerce_price_margin_settings_v1";
+const KEY = "easyfood_product_v1";
+const PRODUCT_PRICE_KEY = "easyfood_product_price_v1";
+const DELETE_REQUEST_KEY = "easyfood_product_delete_requests_v1";
+const PRICE_MARGIN_SETTINGS_KEY = "easyfood_price_margin_settings_v1";
 const MAX_MARGIN_HISTORY = 300;
 
 function padIdPart(value: number): string {
