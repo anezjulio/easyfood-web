@@ -7,6 +7,8 @@ import { useAuth } from "../../../app/provider/useAuth";
 import ProductTable from "../../product/component/ProductTable";
 import type { Product, ProductSortKey } from "../../product/model/product.types";
 import { fetchProducts } from "../../product/service/product.api";
+import type { MenuProduct } from "../../menu/model/menu.types";
+import { fetchMenuProductsApi } from "../../menu/service/menu.api";
 import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
 import { keepOnlyDigits } from "../../../shared/format/numeric";
 import { matchesPriceFilter } from "../../../shared/product/product-filter";
@@ -43,6 +45,34 @@ type CartItem = {
   unitPrice: number;
   quantity: number;
 };
+
+type SellableProduct = Product & {
+  saleSource?: "product" | "menu";
+  menuProductId?: string;
+};
+
+function buildMenuSaleProductId(menuProductId: string): string {
+  return `menu:${menuProductId}`;
+}
+
+function isMenuSaleProductId(productId: string): boolean {
+  return productId.startsWith("menu:");
+}
+
+function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProduct {
+  return {
+    id: buildMenuSaleProductId(menuProduct.id),
+    name: menuProduct.name,
+    price: menuProduct.price,
+    costPrice: 0,
+    createdAt: menuProduct.createdAt,
+    category: "perecedero",
+    brand: "Menu",
+    existencia: 9999,
+    saleSource: "menu",
+    menuProductId: menuProduct.id,
+  };
+}
 
 function generateOrderCode() {
   const now = new Date();
@@ -88,7 +118,7 @@ export default function SalesScreen() {
   const cartCardRef = useRef<HTMLElement | null>(null);
   const listCardRef = useRef<HTMLElement | null>(null);
   const barcodeScanInputRef = useRef<HTMLInputElement | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<SellableProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [quantityToAdd, setQuantityToAdd] = useState("1");
@@ -130,9 +160,15 @@ export default function SalesScreen() {
 
   async function reloadProducts() {
     setLoading(true);
-    const list = await fetchProducts();
-    setProducts(list);
-    setLoading(false);
+    try {
+      const [productList, menuProductList] = await Promise.all([fetchProducts(), fetchMenuProductsApi()]);
+      const menuSellables = menuProductList.map((item) => mapMenuProductToSellableProduct(item));
+      const menuNames = new Set(menuSellables.map((item) => normalizeForSearch(item.name)));
+      const nonDuplicatedProducts = productList.filter((item) => !menuNames.has(normalizeForSearch(item.name)));
+      setProducts([...menuSellables, ...nonDuplicatedProducts]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -227,7 +263,8 @@ export default function SalesScreen() {
   );
   const selectedImageUrl = resolveImageUrl(selectedProduct?.imageUrl?.trim() || "");
 
-  const selectedProductStock = Math.max(0, Math.trunc(Number(selectedProduct?.existencia || 0)));
+  const selectedProductIsMenu = selectedProduct?.saleSource === "menu" || isMenuSaleProductId(selectedProduct?.id || "");
+  const selectedProductStock = selectedProductIsMenu ? Number.POSITIVE_INFINITY : Math.max(0, Math.trunc(Number(selectedProduct?.existencia || 0)));
   const hasPendingPayment = pendingOrder?.status === "por pagar";
 
   useEffect(() => {
@@ -441,7 +478,17 @@ export default function SalesScreen() {
     if (key === "createdAt") setCreatedAtFilter(value);
   }
 
-  function addProductToCart(product: Product, rawQuantity: number) {
+  function resolveProductStock(product: SellableProduct | null | undefined): number {
+    if (!product) return 0;
+    if (product.saleSource === "menu" || isMenuSaleProductId(product.id)) return Number.POSITIVE_INFINITY;
+    return Math.max(0, Math.trunc(Number(product.existencia || 0)));
+  }
+
+  function formatStockLimit(value: number): string {
+    return Number.isFinite(value) ? String(value) : "disponible";
+  }
+
+  function addProductToCart(product: SellableProduct, rawQuantity: number) {
     setError("");
     setWarning("");
     setMessage("");
@@ -457,9 +504,9 @@ export default function SalesScreen() {
       return;
     }
 
-    const productStock = Math.max(0, Math.trunc(Number(product.existencia || 0)));
+    const productStock = resolveProductStock(product);
     if (nextQuantity > productStock) {
-      setError(`No puedes agregar mas de ${productStock} unidades.`);
+      setError(`No puedes agregar mas de ${formatStockLimit(productStock)} unidades.`);
       return;
     }
 
@@ -480,7 +527,7 @@ export default function SalesScreen() {
 
       const combinedQuantity = existing.quantity + nextQuantity;
       if (combinedQuantity > productStock) {
-        setError(`No puedes superar la existencia (${productStock}) para ${product.name}.`);
+        setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${product.name}.`);
         return current;
       }
 
@@ -526,7 +573,7 @@ export default function SalesScreen() {
       return raw === scannedCode || keepOnlyDigits(raw) === scannedCode;
     });
     const matchedProduct =
-      matches.find((item) => Math.max(0, Math.trunc(Number(item.existencia || 0))) > 0) || matches[0] || null;
+      matches.find((item) => resolveProductStock(item) > 0) || matches[0] || null;
 
     if (!matchedProduct) {
       setError(`No se encontro un producto con el codigo ${scannedCode}.`);
@@ -550,17 +597,14 @@ export default function SalesScreen() {
     const parsed = Math.trunc(Number(nextValue));
     if (!Number.isFinite(parsed) || parsed < 1) return;
 
-    const productStock = Math.max(
-      0,
-      Math.trunc(Number(products.find((item) => item.id === productId)?.existencia || 0)),
-    );
+    const productStock = resolveProductStock(products.find((item) => item.id === productId));
 
     const maxAllowed = Math.max(1, productStock);
     const clamped = Math.min(parsed, maxAllowed);
 
     if (parsed > productStock) {
       const productName = products.find((item) => item.id === productId)?.name || "el producto";
-      setError(`No puedes superar la existencia (${productStock}) para ${productName}.`);
+      setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${productName}.`);
     } else {
       setError("");
     }
@@ -583,10 +627,10 @@ export default function SalesScreen() {
     const currentItem = cart.find((item) => item.productId === productId);
     if (!product || !currentItem) return;
 
-    const productStock = Math.max(0, Math.trunc(Number(product.existencia || 0)));
+    const productStock = resolveProductStock(product);
     const nextQuantity = currentItem.quantity + 1;
     if (nextQuantity > productStock) {
-      setError(`No puedes superar la existencia (${productStock}) para ${product.name}.`);
+      setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${product.name}.`);
       return;
     }
 
@@ -723,6 +767,7 @@ export default function SalesScreen() {
       });
 
       for (const item of pendingOrder.items) {
+        if (isMenuSaleProductId(item.productId)) continue;
         await createStockEntryApi({
           productId: item.productId,
           quantity: -Math.trunc(item.quantity),
@@ -818,7 +863,9 @@ export default function SalesScreen() {
                   <div>
                     <div className={styles.selectedLabel}>Producto seleccionado</div>
                     <p className={styles.selectedName}>{selectedProduct?.name || "Sin seleccionar"}</p>
-                    <p className={styles.selectedStock}>Existencia: {selectedProductStock}</p>
+                    <p className={styles.selectedStock}>
+                      {selectedProductIsMenu ? "Tipo: producto de menu" : `Existencia: ${selectedProductStock}`}
+                    </p>
                   </div>
 
                   <div className={styles.quantityActionRow}>
@@ -827,7 +874,7 @@ export default function SalesScreen() {
                       <input
                         type="number"
                         min={1}
-                        max={selectedProductStock}
+                        max={Number.isFinite(selectedProductStock) ? selectedProductStock : undefined}
                         value={quantityToAdd}
                         onChange={(event) => setQuantityToAdd(event.target.value)}
                         className={`${styles.input} ${styles.quantityInput}`}
@@ -909,7 +956,7 @@ export default function SalesScreen() {
                           <input
                             type="number"
                             min={1}
-                            max={Math.max(0, Math.trunc(Number(products.find((p) => p.id === item.productId)?.existencia || 0)))}
+                            max={Number.isFinite(resolveProductStock(products.find((p) => p.id === item.productId))) ? resolveProductStock(products.find((p) => p.id === item.productId)) : undefined}
                             value={item.quantity}
                             onChange={(e) => updateCartItemQuantity(item.productId, e.target.value)}
                             className={styles.cartQtyInput}

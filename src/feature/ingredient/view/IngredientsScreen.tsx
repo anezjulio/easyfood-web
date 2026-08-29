@@ -5,28 +5,12 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { formatDateAR } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
 import {
-  formatIngredientQuantity,
-  getIngredientQuantityUnitLabel,
   getIngredientStockModeLabel,
   type Ingredient,
   type IngredientStockMode,
 } from "../model/ingredient.types";
 import { createIngredientApi, deleteIngredientApi, fetchIngredientsApi, updateIngredientApi } from "../service/ingredient.api";
 import styles from "./IngredientsScreen.module.css";
-
-type WeightEntryUnit = "g" | "kg";
-
-function toNumber(value: string): number {
-  const parsed = Number(value.replace(",", "."));
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function toEntryQuantity(value: string, mode: IngredientStockMode, weightUnit: WeightEntryUnit): number {
-  const parsed = toNumber(value);
-  if (!Number.isFinite(parsed) || parsed <= 0) return 0;
-  if (mode === "weight" && weightUnit === "kg") return parsed * 1000;
-  return parsed;
-}
 
 function buildExpirationPreview(days: string): string {
   const parsed = Math.max(0, Math.trunc(Number(days) || 0));
@@ -45,9 +29,6 @@ export default function IngredientsScreen() {
   const [name, setName] = useState("");
   const [expiresInDays, setExpiresInDays] = useState("5");
   const [stockMode, setStockMode] = useState<IngredientStockMode>("unit");
-  const [stockQuantity, setStockQuantity] = useState("0");
-  const [entryQuantity, setEntryQuantity] = useState("");
-  const [weightEntryUnit, setWeightEntryUnit] = useState<WeightEntryUnit>("kg");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -82,9 +63,6 @@ export default function IngredientsScreen() {
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [ingredients, search, stockModeFilter]);
 
-  const currentQuantity = Math.max(0, toNumber(stockQuantity));
-  const entryQuantityValue = toEntryQuantity(entryQuantity, stockMode, weightEntryUnit);
-  const projectedQuantity = currentQuantity + entryQuantityValue;
   const isEditing = !!selectedIngredient;
   const expirationPreview = buildExpirationPreview(expiresInDays);
 
@@ -93,9 +71,6 @@ export default function IngredientsScreen() {
     setName("");
     setExpiresInDays("5");
     setStockMode("unit");
-    setStockQuantity("0");
-    setEntryQuantity("");
-    setWeightEntryUnit("kg");
     setMessage("");
     setError("");
   }
@@ -105,9 +80,6 @@ export default function IngredientsScreen() {
     setName(item.name);
     setExpiresInDays(String(item.expiresInDays));
     setStockMode(item.stockMode);
-    setStockQuantity(String(item.stockQuantity));
-    setEntryQuantity("");
-    setWeightEntryUnit(item.stockMode === "weight" ? "kg" : "g");
     setMessage("");
     setError("");
   }
@@ -133,15 +105,14 @@ export default function IngredientsScreen() {
         name: trimmedName,
         expiresInDays: parsedDays,
         stockMode,
-        stockQuantity: currentQuantity,
-        entryQuantity: entryQuantityValue,
+        stockQuantity: selectedIngredient?.stockQuantity || 0,
+        entryQuantity: 0,
       };
       const saved = isEditing ? await updateIngredientApi(selectedIngredient.id, draft) : await createIngredientApi(draft);
       if (!saved) {
         setError("No se pudo guardar el ingrediente seleccionado.");
         return;
       }
-      setEntryQuantity("");
       await reload(saved.id);
       selectIngredient(saved);
       setMessage(isEditing ? "Ingrediente actualizado." : "Ingrediente creado.");
@@ -182,7 +153,7 @@ export default function IngredientsScreen() {
         <section className={styles.summary}>
           <p><strong>Ingredientes:</strong> {ingredients.length}</p>
           <p><strong>Por peso:</strong> {ingredients.filter((item) => item.stockMode === "weight").length}</p>
-          <p><strong>Bajo stock:</strong> {ingredients.filter((item) => item.stockQuantity <= 0).length}</p>
+          <p><strong>Por unidad:</strong> {ingredients.filter((item) => item.stockMode === "unit").length}</p>
         </section>
 
         <div className={styles.layout}>
@@ -224,44 +195,8 @@ export default function IngredientsScreen() {
                 </select>
               </label>
 
-              <label className={styles.field}>
-                <span>Stock actual</span>
-                <input
-                  className={styles.input}
-                  type="number"
-                  min={0}
-                  step={stockMode === "weight" ? 1 : 0.01}
-                  value={stockQuantity}
-                  onChange={(event) => setStockQuantity(event.target.value)}
-                  placeholder="0"
-                />
-              </label>
-
-              <div className={styles.field}>
-                <span>Ingreso</span>
-                <div className={styles.inlineFields}>
-                  <input
-                    className={styles.input}
-                    type="number"
-                    min={0}
-                    step="0.01"
-                    value={entryQuantity}
-                    onChange={(event) => setEntryQuantity(event.target.value)}
-                    placeholder={stockMode === "weight" ? "Ej: 2.5" : "0"}
-                  />
-                  {stockMode === "weight" ? (
-                    <select className={styles.smallSelect} value={weightEntryUnit} onChange={(event) => setWeightEntryUnit(event.target.value as WeightEntryUnit)}>
-                      <option value="kg">kg</option>
-                      <option value="g">g</option>
-                    </select>
-                  ) : (
-                    <div className={styles.unitPill}>{getIngredientQuantityUnitLabel(stockMode)}</div>
-                  )}
-                </div>
-              </div>
-
               <div className={styles.previewGrid}>
-                <div><span>Stock resultante</span><strong>{formatIngredientQuantity(projectedQuantity, stockMode)}</strong></div>
+                <div><span>Modo</span><strong>{getIngredientStockModeLabel(stockMode)}</strong></div>
                 <div><span>Proximo vencimiento</span><strong>{formatDateAR(expirationPreview)}</strong></div>
               </div>
 
@@ -299,7 +234,6 @@ export default function IngredientsScreen() {
                     <tr>
                       <th>Ingrediente</th>
                       <th>Modo</th>
-                      <th>Stock</th>
                       <th>Caduca</th>
                       <th>Vencimiento</th>
                     </tr>
@@ -309,7 +243,6 @@ export default function IngredientsScreen() {
                       <tr key={item.id} className={selectedId === item.id ? styles.selectedRow : ""} onClick={() => selectIngredient(item)}>
                         <td><strong>{item.name}</strong></td>
                         <td>{getIngredientStockModeLabel(item.stockMode)}</td>
-                        <td>{formatIngredientQuantity(item.stockQuantity, item.stockMode)}</td>
                         <td>{item.expiresInDays} dias</td>
                         <td>{item.nextExpirationDate ? formatDateAR(item.nextExpirationDate) : "-"}</td>
                       </tr>
