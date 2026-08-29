@@ -66,6 +66,45 @@ const seed: MenuProduct[] = [
     ],
     createdAt: "2026-02-01T11:15:00.000Z",
   },
+  {
+    id: "menu-papas",
+    name: "Papas",
+    price: 3800,
+    description: "Papas baston doradas para compartir.",
+    imageUrl: "food-fries-cheddar.png",
+    category: "papas",
+    recipeItems: [
+      { ingredientId: "ing-papa-baston", ingredientName: "Papa baston", quantity: 300, stockMode: "weight" },
+    ],
+    createdAt: "2026-02-01T11:20:00.000Z",
+  },
+  {
+    id: "menu-papas-cheddar",
+    name: "Papas con cheddar",
+    price: 4700,
+    description: "Papas baston con cheddar fundido.",
+    imageUrl: "food-fries-cheddar.png",
+    category: "papas",
+    recipeItems: [
+      { ingredientId: "ing-papa-baston", ingredientName: "Papa baston", quantity: 300, stockMode: "weight" },
+      { ingredientId: "ing-cheddar-feta", ingredientName: "Cheddar feta", quantity: 2, stockMode: "unit" },
+    ],
+    createdAt: "2026-02-01T11:25:00.000Z",
+  },
+  {
+    id: "menu-papas-cheddar-bacon",
+    name: "Papas con cheddar y bacon",
+    price: 5400,
+    description: "Papas baston con cheddar fundido y tocino crocante.",
+    imageUrl: "food-fries-cheddar.png",
+    category: "papas",
+    recipeItems: [
+      { ingredientId: "ing-papa-baston", ingredientName: "Papa baston", quantity: 300, stockMode: "weight" },
+      { ingredientId: "ing-cheddar-feta", ingredientName: "Cheddar feta", quantity: 2, stockMode: "unit" },
+      { ingredientId: "ing-tocino", ingredientName: "Tocino", quantity: 40, stockMode: "weight" },
+    ],
+    createdAt: "2026-02-01T11:30:00.000Z",
+  },
 ];
 
 function padIdPart(value: number): string {

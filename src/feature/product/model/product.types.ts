@@ -3,6 +3,7 @@ export const PRODUCT_CATEGORIES = [
   "hamburguesa",
   "pancho",
   "combos",
+  "papas",
   "pollo",
   "vegano",
 ] as const;

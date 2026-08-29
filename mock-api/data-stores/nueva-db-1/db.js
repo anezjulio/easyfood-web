@@ -3,32 +3,32 @@
     {
       "id": "food-bebida-cola",
       "name": "Bebida cola 500 ml",
-      "category": "bebida",
       "price": 1800,
       "costPrice": 950,
+      "createdAt": "2026-08-29T12:00:00.000Z",
       "imageUrl": "food-drinks.png",
       "barcode": "779000100001",
-      "createdAt": "2026-08-29T12:00:00.000Z"
+      "category": "bebida"
     },
     {
       "id": "food-agua-500",
       "name": "Agua mineral 500 ml",
-      "category": "bebida",
       "price": 1400,
       "costPrice": 760,
+      "createdAt": "2026-08-29T12:05:00.000Z",
       "imageUrl": "food-drinks.png",
       "barcode": "779000100002",
-      "createdAt": "2026-08-29T12:05:00.000Z"
+      "category": "bebida"
     },
     {
       "id": "food-papas-cheddar",
-      "name": "Papas cheddar bacon",
-      "category": "combos",
+      "name": "Papas con cheddar y bacon",
       "price": 5400,
       "costPrice": 3100,
+      "createdAt": "2026-08-29T12:10:00.000Z",
       "imageUrl": "food-fries-cheddar.png",
       "barcode": "779000100003",
-      "createdAt": "2026-08-29T12:10:00.000Z"
+      "category": "papas"
     }
   ],
   "productPrices": [
@@ -279,10 +279,10 @@
     {
       "id": "menu-hamburguesa-completa",
       "name": "Hamburguesa completa",
-      "category": "hamburguesa",
       "price": 6800,
       "description": "Pan, medallon, cheddar, lechuga, tomate, cebolla, pepinillos, mayonesa y ketchup.",
       "imageUrl": "food-hamburger.png",
+      "category": "hamburguesa",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-hamburguesa",
@@ -344,10 +344,10 @@
     {
       "id": "menu-hamburguesa-bacon",
       "name": "Hamburguesa bacon cheddar",
-      "category": "hamburguesa",
       "price": 7600,
       "description": "Pan, medallon, cheddar, tocino, cebolla y aderezos.",
       "imageUrl": "food-hamburger.png",
+      "category": "hamburguesa",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-hamburguesa",
@@ -397,10 +397,10 @@
     {
       "id": "menu-pancho-completo",
       "name": "Pancho completo",
-      "category": "pancho",
       "price": 3900,
       "description": "Pan, salchicha, papas pay, mayonesa y ketchup.",
       "imageUrl": "food-hotdog.png",
+      "category": "pancho",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-pancho",
@@ -438,10 +438,10 @@
     {
       "id": "menu-bebida-limonada",
       "name": "Limonada casera",
-      "category": "bebida",
       "price": 2500,
       "description": "Limonada fresca con limon, agua, azucar y hielo.",
       "imageUrl": "food-drinks.png",
+      "category": "bebida",
       "recipeItems": [
         {
           "ingredientId": "ing-limon",
@@ -473,10 +473,10 @@
     {
       "id": "menu-bebida-cola",
       "name": "Bebida cola 500 ml",
-      "category": "bebida",
       "price": 1800,
       "description": "Bebida fria individual.",
       "imageUrl": "food-drinks.png",
+      "category": "bebida",
       "recipeItems": [
         {
           "ingredientId": "ing-bebida-cola",
@@ -490,10 +490,10 @@
     {
       "id": "menu-combo-hamburguesa",
       "name": "Combo hamburguesa completa",
-      "category": "combos",
       "price": 9800,
       "description": "Hamburguesa completa con papas y bebida.",
       "imageUrl": "food-hamburger.png",
+      "category": "combos",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-hamburguesa",
@@ -555,10 +555,10 @@
     {
       "id": "menu-combo-pancho",
       "name": "Combo pancho completo",
-      "category": "combos",
       "price": 6900,
       "description": "Pancho completo con papas y bebida.",
       "imageUrl": "food-hotdog.png",
+      "category": "combos",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-pancho",
@@ -608,10 +608,10 @@
     {
       "id": "menu-pollo-crispy",
       "name": "Sandwich pollo crispy",
-      "category": "pollo",
       "price": 7200,
       "description": "Pan, pollo crispy, lechuga, tomate y mayonesa.",
       "imageUrl": "food-hamburger.png",
+      "category": "pollo",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-hamburguesa",
@@ -649,10 +649,10 @@
     {
       "id": "menu-nuggets-papas",
       "name": "Nuggets con papas",
-      "category": "pollo",
       "price": 6200,
       "description": "Nuggets de pollo con papas baston y aderezos.",
       "imageUrl": "food-fries-cheddar.png",
+      "category": "pollo",
       "recipeItems": [
         {
           "ingredientId": "ing-nuggets-pollo",
@@ -684,10 +684,10 @@
     {
       "id": "menu-burger-vegana",
       "name": "Hamburguesa vegana",
-      "category": "vegano",
       "price": 6900,
       "description": "Pan, medallon vegano, lechuga, tomate, cebolla, pepinillos y palta.",
       "imageUrl": "food-hamburger.png",
+      "category": "vegano",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-hamburguesa",
@@ -737,10 +737,10 @@
     {
       "id": "menu-wrap-vegano",
       "name": "Wrap vegano fresco",
-      "category": "vegano",
       "price": 5600,
       "description": "Tortilla con lechuga, tomate, zanahoria, cebolla, pepinillos y palta.",
       "imageUrl": "food-hamburger.png",
+      "category": "vegano",
       "recipeItems": [
         {
           "ingredientId": "ing-tortilla-wrap",
@@ -786,6 +786,75 @@
         }
       ],
       "createdAt": "2026-08-29T13:50:00.000Z"
+    },
+    {
+      "id": "menu-papas",
+      "name": "Papas",
+      "price": 3800,
+      "description": "Papas baston doradas para compartir.",
+      "imageUrl": "food-fries-cheddar.png",
+      "category": "papas",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 300,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:52:00.000Z"
+    },
+    {
+      "id": "menu-papas-cheddar",
+      "name": "Papas con cheddar",
+      "price": 4700,
+      "description": "Papas baston con cheddar fundido.",
+      "imageUrl": "food-fries-cheddar.png",
+      "category": "papas",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 300,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cheddar-feta",
+          "ingredientName": "Cheddar feta",
+          "quantity": 2,
+          "stockMode": "unit"
+        }
+      ],
+      "createdAt": "2026-08-29T13:54:00.000Z"
+    },
+    {
+      "id": "menu-papas-cheddar-bacon",
+      "name": "Papas con cheddar y bacon",
+      "price": 5400,
+      "description": "Papas baston con cheddar fundido y tocino crocante.",
+      "imageUrl": "food-fries-cheddar.png",
+      "category": "papas",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 300,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cheddar-feta",
+          "ingredientName": "Cheddar feta",
+          "quantity": 2,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-tocino",
+          "ingredientName": "Tocino",
+          "quantity": 40,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:56:00.000Z"
     }
   ],
   "users": [
@@ -1076,6 +1145,7 @@
       "hamburguesa": 10,
       "pancho": 10,
       "combos": 10,
+      "papas": 10,
       "pollo": 10,
       "vegano": 10
     },
@@ -1087,6 +1157,7 @@
       "hamburguesa": 30,
       "pancho": 30,
       "combos": 30,
+      "papas": 30,
       "pollo": 30,
       "vegano": 30
     },

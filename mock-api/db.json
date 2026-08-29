@@ -22,8 +22,8 @@
     },
     {
       "id": "food-papas-cheddar",
-      "name": "Papas cheddar bacon",
-      "category": "combos",
+      "name": "Papas con cheddar y bacon",
+      "category": "papas",
       "price": 5400,
       "costPrice": 3100,
       "imageUrl": "food-fries-cheddar.png",
@@ -301,6 +301,7 @@
       "hamburguesa": 10,
       "pancho": 10,
       "combos": 10,
+      "papas": 10,
       "pollo": 10,
       "vegano": 10
     },
@@ -312,6 +313,7 @@
       "hamburguesa": 30,
       "pancho": 30,
       "combos": 30,
+      "papas": 30,
       "pollo": 30,
       "vegano": 30
     },
@@ -1076,6 +1078,75 @@
         }
       ],
       "createdAt": "2026-08-29T13:50:00.000Z"
+    },
+    {
+      "id": "menu-papas",
+      "name": "Papas",
+      "category": "papas",
+      "price": 3800,
+      "description": "Papas baston doradas para compartir.",
+      "imageUrl": "food-fries-cheddar.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 300,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:52:00.000Z"
+    },
+    {
+      "id": "menu-papas-cheddar",
+      "name": "Papas con cheddar",
+      "category": "papas",
+      "price": 4700,
+      "description": "Papas baston con cheddar fundido.",
+      "imageUrl": "food-fries-cheddar.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 300,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cheddar-feta",
+          "ingredientName": "Cheddar feta",
+          "quantity": 2,
+          "stockMode": "unit"
+        }
+      ],
+      "createdAt": "2026-08-29T13:54:00.000Z"
+    },
+    {
+      "id": "menu-papas-cheddar-bacon",
+      "name": "Papas con cheddar y bacon",
+      "category": "papas",
+      "price": 5400,
+      "description": "Papas baston con cheddar fundido y tocino crocante.",
+      "imageUrl": "food-fries-cheddar.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 300,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cheddar-feta",
+          "ingredientName": "Cheddar feta",
+          "quantity": 2,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-tocino",
+          "ingredientName": "Tocino",
+          "quantity": 40,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:56:00.000Z"
     }
   ],
   "feedbackEntries": [],

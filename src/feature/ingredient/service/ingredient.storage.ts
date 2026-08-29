@@ -83,6 +83,30 @@ const seed: Ingredient[] = [
     stockQuantity: 9000,
     createdAt: "2026-02-01T10:45:00.000Z",
   },
+  {
+    id: "ing-papa-baston",
+    name: "Papa baston",
+    expiresInDays: 12,
+    stockMode: "weight",
+    stockQuantity: 18000,
+    createdAt: "2026-02-01T10:50:00.000Z",
+  },
+  {
+    id: "ing-cheddar-feta",
+    name: "Cheddar feta",
+    expiresInDays: 7,
+    stockMode: "unit",
+    stockQuantity: 180,
+    createdAt: "2026-02-01T10:55:00.000Z",
+  },
+  {
+    id: "ing-tocino",
+    name: "Tocino",
+    expiresInDays: 6,
+    stockMode: "weight",
+    stockQuantity: 2500,
+    createdAt: "2026-02-01T11:00:00.000Z",
+  },
 ];
 
 function padIdPart(value: number): string {

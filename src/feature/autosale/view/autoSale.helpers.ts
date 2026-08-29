@@ -31,6 +31,7 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
   hamburguesa: "Hamburguesas",
   pancho: "Panchos",
   combos: "Combos",
+  papas: "Papas",
   pollo: "Pollo",
   vegano: "Vegano",
 };

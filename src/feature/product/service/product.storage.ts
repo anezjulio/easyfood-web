@@ -116,7 +116,7 @@ const seedBase: Product[] = [
     name: "Papas fritas",
     price: 3200,
     costPrice: 1800,
-    category: "combos",
+    category: "papas",
     imageUrl: "food-fries-cheddar.png",
     createdAt: "2026-02-01T11:20:00.000Z",
   },

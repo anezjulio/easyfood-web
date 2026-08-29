@@ -33,7 +33,7 @@ type Product = {
   imageUrl?: string;
   barcode?: string;
   brand?: string;
-  category?: "bebida" | "hamburguesa" | "pancho" | "combos" | "pollo" | "vegano";
+  category?: "bebida" | "hamburguesa" | "pancho" | "combos" | "papas" | "pollo" | "vegano";
   supplyOrderId?: string;
 };
 
@@ -635,6 +635,30 @@ const defaultIngredientSeed: Ingredient[] = [
     stockQuantity: 9000,
     createdAt: "2026-02-01T10:45:00.000Z",
   },
+  {
+    id: "ing-papa-baston",
+    name: "Papa baston",
+    expiresInDays: 12,
+    stockMode: "weight",
+    stockQuantity: 18000,
+    createdAt: "2026-02-01T10:50:00.000Z",
+  },
+  {
+    id: "ing-cheddar-feta",
+    name: "Cheddar feta",
+    expiresInDays: 7,
+    stockMode: "unit",
+    stockQuantity: 180,
+    createdAt: "2026-02-01T10:55:00.000Z",
+  },
+  {
+    id: "ing-tocino",
+    name: "Tocino",
+    expiresInDays: 6,
+    stockMode: "weight",
+    stockQuantity: 2500,
+    createdAt: "2026-02-01T11:00:00.000Z",
+  },
 ];
 
 const defaultMenuProductSeed: MenuProduct[] = [
@@ -695,6 +719,45 @@ const defaultMenuProductSeed: MenuProduct[] = [
     ],
     createdAt: "2026-02-01T11:15:00.000Z",
   },
+  {
+    id: "menu-papas",
+    name: "Papas",
+    price: 3800,
+    description: "Papas baston doradas para compartir.",
+    imageUrl: "food-fries-cheddar.png",
+    category: "papas",
+    recipeItems: [
+      { ingredientId: "ing-papa-baston", ingredientName: "Papa baston", quantity: 300, stockMode: "weight" },
+    ],
+    createdAt: "2026-02-01T11:20:00.000Z",
+  },
+  {
+    id: "menu-papas-cheddar",
+    name: "Papas con cheddar",
+    price: 4700,
+    description: "Papas baston con cheddar fundido.",
+    imageUrl: "food-fries-cheddar.png",
+    category: "papas",
+    recipeItems: [
+      { ingredientId: "ing-papa-baston", ingredientName: "Papa baston", quantity: 300, stockMode: "weight" },
+      { ingredientId: "ing-cheddar-feta", ingredientName: "Cheddar feta", quantity: 2, stockMode: "unit" },
+    ],
+    createdAt: "2026-02-01T11:25:00.000Z",
+  },
+  {
+    id: "menu-papas-cheddar-bacon",
+    name: "Papas con cheddar y bacon",
+    price: 5400,
+    description: "Papas baston con cheddar fundido y tocino crocante.",
+    imageUrl: "food-fries-cheddar.png",
+    category: "papas",
+    recipeItems: [
+      { ingredientId: "ing-papa-baston", ingredientName: "Papa baston", quantity: 300, stockMode: "weight" },
+      { ingredientId: "ing-cheddar-feta", ingredientName: "Cheddar feta", quantity: 2, stockMode: "unit" },
+      { ingredientId: "ing-tocino", ingredientName: "Tocino", quantity: 40, stockMode: "weight" },
+    ],
+    createdAt: "2026-02-01T11:30:00.000Z",
+  },
 ];
 
 const defaultDb: MockDb = {
@@ -724,6 +787,7 @@ const defaultDb: MockDb = {
       hamburguesa: 10,
       pancho: 10,
       combos: 10,
+      papas: 10,
       pollo: 10,
       vegano: 10,
     },
@@ -735,6 +799,7 @@ const defaultDb: MockDb = {
       hamburguesa: 30,
       pancho: 30,
       combos: 30,
+      papas: 30,
       pollo: 30,
       vegano: 30,
     },
@@ -1073,6 +1138,7 @@ function isProductCategoryValue(value: string): value is NonNullable<Product["ca
     value === "hamburguesa" ||
     value === "pancho" ||
     value === "combos" ||
+    value === "papas" ||
     value === "pollo" ||
     value === "vegano"
   );
@@ -4027,6 +4093,7 @@ function normalizeCategory(value: unknown): Product["category"] | undefined {
     raw === "hamburguesa" ||
     raw === "pancho" ||
     raw === "combos" ||
+    raw === "papas" ||
     raw === "pollo" ||
     raw === "vegano"
   ) {

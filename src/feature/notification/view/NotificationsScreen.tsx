@@ -4,7 +4,7 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { useAuth } from "../../../app/provider/useAuth";
 import { formatDateTimeAR as formatDateTime, formatTimeRemaining } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
-import type { Product, ProductCategory } from "../../product/model/product.types";
+import { PRODUCT_CATEGORIES, type Product, type ProductCategory } from "../../product/model/product.types";
 import { fetchProducts } from "../../product/service/product.api";
 import type { AppNotification, CreateNotificationDraft, NotificationSetting, NotificationStatus, StockThresholdSettings, NotificationType } from "../model/notification.types";
 import { allNotificationTypes, notificationTypeLabel } from "../model/notification.metadata";
@@ -24,14 +24,7 @@ import styles from "./NotificationsScreen.module.css";
 
 type NotificationTab = "viewer" | "list" | "action" | "due-fixed" | "settings" | "stock-levels" | "create";
 
-const categoryOptions: ProductCategory[] = [
-  "bebida",
-  "hamburguesa",
-  "pancho",
-  "combos",
-  "pollo",
-  "vegano",
-];
+const categoryOptions: ProductCategory[] = [...PRODUCT_CATEGORIES];
 
 const allTypes = allNotificationTypes;
 const notificationStatusLabel: Record<NotificationStatus, string> = {
