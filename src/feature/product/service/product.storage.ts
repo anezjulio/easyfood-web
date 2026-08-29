@@ -74,71 +74,58 @@ function findProductByBarcode(products: Product[], barcode: string, excludeId?: 
   return products.find((item) => normalizeBarcode(item.barcode) === normalized && (!excludeId || item.id !== excludeId));
 }
 
-const seed: Product[] = [
-  { id: "p1", name: "Coca-Cola 500ml", price: 1500, createdAt: "2026-01-20T12:00:00.000Z" },
-  { id: "p2", name: "Alfajor", price: 900, createdAt: "2026-01-22T09:30:00.000Z" },
-  { id: "p3", name: "Agua 1.5L", price: 1200, createdAt: "2026-01-23T18:10:00.000Z" },
-  { id: "p4", name: "Pan lactal", price: 2200, createdAt: "2026-01-05T10:15:00.000Z" },
-  { id: "p5", name: "Leche entera 1L", price: 1800, createdAt: "2026-01-06T08:00:00.000Z" },
-  { id: "p6", name: "Yogur natural 200g", price: 1200, createdAt: "2026-01-06T11:20:00.000Z" },
-  { id: "p7", name: "Queso cremoso 300g", price: 4500, createdAt: "2026-01-07T14:40:00.000Z" },
-  { id: "p8", name: "Jamon cocido 200g", price: 3800, createdAt: "2026-01-07T16:10:00.000Z" },
-  { id: "p9", name: "Harina 1kg", price: 1400, createdAt: "2026-01-08T09:05:00.000Z" },
-  { id: "p10", name: "Arroz 1kg", price: 1600, createdAt: "2026-01-08T12:30:00.000Z" },
-  { id: "p11", name: "Fideos 500g", price: 1300, createdAt: "2026-01-09T10:25:00.000Z" },
-  { id: "p12", name: "Aceite girasol 900ml", price: 3200, createdAt: "2026-01-09T13:50:00.000Z" },
-  { id: "p13", name: "Sal fina 500g", price: 900, createdAt: "2026-01-10T08:45:00.000Z" },
-  { id: "p14", name: "Azucar 1kg", price: 1700, createdAt: "2026-01-10T12:10:00.000Z" },
-  { id: "p15", name: "Cafe molido 250g", price: 4200, createdAt: "2026-01-11T09:15:00.000Z" },
-  { id: "p16", name: "Te en saquitos", price: 1500, createdAt: "2026-01-11T15:35:00.000Z" },
-  { id: "p17", name: "Manteca 200g", price: 2100, createdAt: "2026-01-12T10:05:00.000Z" },
-  { id: "p18", name: "Crema de leche 200ml", price: 1900, createdAt: "2026-01-12T18:00:00.000Z" },
-  { id: "p19", name: "Galletitas dulces", price: 1600, createdAt: "2026-01-13T08:20:00.000Z" },
-  { id: "p20", name: "Galletitas saladas", price: 1500, createdAt: "2026-01-13T16:30:00.000Z" },
-  { id: "p21", name: "Dulce de leche 400g", price: 2800, createdAt: "2026-01-14T09:40:00.000Z" },
-  { id: "p22", name: "Mermelada frutilla 450g", price: 2600, createdAt: "2026-01-14T12:55:00.000Z" },
-  { id: "p23", name: "Atun en lata", price: 2400, createdAt: "2026-01-15T11:10:00.000Z" },
-  { id: "p24", name: "Tomate triturado 520g", price: 1700, createdAt: "2026-01-15T14:00:00.000Z" },
-  { id: "p25", name: "Mayonesa 500g", price: 2300, createdAt: "2026-01-16T09:25:00.000Z" },
-  { id: "p26", name: "Ketchup 500g", price: 2100, createdAt: "2026-01-16T12:45:00.000Z" },
-  { id: "p27", name: "Mostaza 250g", price: 1600, createdAt: "2026-01-17T10:00:00.000Z" },
-  { id: "p28", name: "Cereal 300g", price: 2700, createdAt: "2026-01-17T17:20:00.000Z" },
-  { id: "p29", name: "Chocolate barra 100g", price: 1900, createdAt: "2026-01-18T09:35:00.000Z" },
-  { id: "p30", name: "Caramelos surtidos", price: 1100, createdAt: "2026-01-18T15:10:00.000Z" },
-  { id: "p31", name: "Yerba mate 1kg", price: 5200, createdAt: "2026-01-19T08:55:00.000Z" },
-  { id: "p32", name: "Agua con gas 500ml", price: 1200, createdAt: "2026-01-21T13:05:00.000Z" },
-  { id: "p33", name: "Jugo en polvo", price: 800, createdAt: "2026-01-24T09:00:00.000Z" },
-  { id: "p34", name: "Papel higienico x4", price: 2600, createdAt: "2026-01-24T12:10:00.000Z" },
-  { id: "p35", name: "Servilletas x100", price: 1500, createdAt: "2026-01-24T14:30:00.000Z" },
-  { id: "p36", name: "Jabon liquido 500ml", price: 2400, createdAt: "2026-01-25T09:05:00.000Z" },
-  { id: "p37", name: "Detergente 750ml", price: 2300, createdAt: "2026-01-25T11:20:00.000Z" },
-  { id: "p38", name: "Lavandina 1L", price: 1800, createdAt: "2026-01-25T13:45:00.000Z" },
-  { id: "p39", name: "Esponja doble", price: 700, createdAt: "2026-01-25T16:10:00.000Z" },
-  { id: "p40", name: "Cepillo dientes", price: 1200, createdAt: "2026-01-26T08:20:00.000Z" },
-  { id: "p41", name: "Pasta dental 90g", price: 1900, createdAt: "2026-01-26T09:40:00.000Z" },
-  { id: "p42", name: "Shampoo 400ml", price: 3200, createdAt: "2026-01-26T10:55:00.000Z" },
-  { id: "p43", name: "Acondicionador 400ml", price: 3300, createdAt: "2026-01-26T12:05:00.000Z" },
-  { id: "p44", name: "Desodorante aerosol", price: 2800, createdAt: "2026-01-26T13:25:00.000Z" },
-  { id: "p45", name: "Crema corporal 250ml", price: 3500, createdAt: "2026-01-26T15:15:00.000Z" },
-  { id: "p46", name: "Avena 500g", price: 1700, createdAt: "2026-01-27T08:10:00.000Z" },
-  { id: "p47", name: "Granola 400g", price: 2900, createdAt: "2026-01-27T09:30:00.000Z" },
-  { id: "p48", name: "Miel 500g", price: 3600, createdAt: "2026-01-27T10:50:00.000Z" },
-  { id: "p49", name: "Barra cereal", price: 900, createdAt: "2026-01-27T12:05:00.000Z" },
-  { id: "p50", name: "Gaseosa cola 2L", price: 2500, createdAt: "2026-01-27T14:20:00.000Z" },
-  { id: "p51", name: "Bebida isotónica 500ml", price: 2100, createdAt: "2026-01-27T16:00:00.000Z" },
-  { id: "p52", name: "Agua mineral 2L", price: 1600, createdAt: "2026-01-27T17:25:00.000Z" },
-  { id: "p53", name: "Tapa de empanadas", price: 1400, createdAt: "2026-01-28T08:15:00.000Z" },
-  { id: "p54", name: "Pan rallado 500g", price: 1500, createdAt: "2026-01-28T09:35:00.000Z" },
-  { id: "p55", name: "Pure de tomate 340g", price: 1200, createdAt: "2026-01-28T10:50:00.000Z" },
-  { id: "p56", name: "Lentejas 400g", price: 1800, createdAt: "2026-01-28T12:10:00.000Z" },
-  { id: "p57", name: "Porotos 400g", price: 1900, createdAt: "2026-01-28T13:40:00.000Z" },
-  { id: "p58", name: "Maiz en lata", price: 1300, createdAt: "2026-01-28T15:00:00.000Z" },
-  { id: "p59", name: "Arvejas en lata", price: 1400, createdAt: "2026-01-28T16:20:00.000Z" },
-  { id: "p60", name: "Salsa soja 250ml", price: 2600, createdAt: "2026-01-28T17:30:00.000Z" },
-  { id: "p61", name: "Vinagre 500ml", price: 1500, createdAt: "2026-01-28T18:45:00.000Z" },
-  { id: "p62", name: "Condimento pizza", price: 900, createdAt: "2026-01-28T19:10:00.000Z" },
-  { id: "p63", name: "Pimienta molida 50g", price: 1200, createdAt: "2026-01-28T20:00:00.000Z" },
-].map((item, index) => ({ ...item, barcode: buildDefaultBarcode(item.id, index) }));
+const seedBase: Product[] = [
+  {
+    id: "food-hamburguesa-simple",
+    name: "Hamburguesa simple",
+    price: 4500,
+    costPrice: 2800,
+    category: "perecedero",
+    createdAt: "2026-02-01T11:00:00.000Z",
+  },
+  {
+    id: "food-hamburguesa-doble",
+    name: "Hamburguesa doble",
+    price: 6200,
+    costPrice: 3900,
+    category: "perecedero",
+    createdAt: "2026-02-01T11:05:00.000Z",
+  },
+  {
+    id: "food-pancho",
+    name: "Pancho",
+    price: 2800,
+    costPrice: 1500,
+    category: "perecedero",
+    createdAt: "2026-02-01T11:10:00.000Z",
+  },
+  {
+    id: "food-sandwich-milanesa",
+    name: "Sandwich de milanesa",
+    price: 5800,
+    costPrice: 3600,
+    category: "perecedero",
+    createdAt: "2026-02-01T11:15:00.000Z",
+  },
+  {
+    id: "food-papas-fritas",
+    name: "Papas fritas",
+    price: 3200,
+    costPrice: 1800,
+    category: "perecedero",
+    createdAt: "2026-02-01T11:20:00.000Z",
+  },
+  {
+    id: "food-agua-500",
+    name: "Agua mineral 500ml",
+    price: 1200,
+    costPrice: 700,
+    category: "bebida",
+    createdAt: "2026-02-01T11:25:00.000Z",
+  },
+];
+
+const seed: Product[] = seedBase.map((item, index) => ({ ...item, barcode: buildDefaultBarcode(item.id, index) }));
 
 function safeParse(raw: string | null): Product[] {
   if (!raw) return [];
@@ -152,21 +139,21 @@ function safeParse(raw: string | null): Product[] {
 
 function normalizeMojibake(text: string): string {
   return text
-    .replaceAll("Ã¡", "á")
-    .replaceAll("Ã©", "é")
-    .replaceAll("Ã­", "í")
-    .replaceAll("Ã³", "ó")
-    .replaceAll("Ãº", "ú")
-    .replaceAll("Ã±", "ñ")
-    .replaceAll("Ã", "Á")
-    .replaceAll("Ã‰", "É")
-    .replaceAll("Ã", "Í")
-    .replaceAll("Ã“", "Ó")
-    .replaceAll("Ãš", "Ú")
-    .replaceAll("Ã‘", "Ñ")
-    .replaceAll("â€¦", "…")
-    .replaceAll("â†‘", "↑")
-    .replaceAll("â†“", "↓");
+    .replaceAll("ÃƒÂ¡", "Ã¡")
+    .replaceAll("ÃƒÂ©", "Ã©")
+    .replaceAll("ÃƒÂ­", "Ã­")
+    .replaceAll("ÃƒÂ³", "Ã³")
+    .replaceAll("ÃƒÂº", "Ãº")
+    .replaceAll("ÃƒÂ±", "Ã±")
+    .replaceAll("ÃƒÂ", "Ã")
+    .replaceAll("Ãƒâ€°", "Ã‰")
+    .replaceAll("ÃƒÂ", "Ã")
+    .replaceAll("Ãƒâ€œ", "Ã“")
+    .replaceAll("ÃƒÅ¡", "Ãš")
+    .replaceAll("Ãƒâ€˜", "Ã‘")
+    .replaceAll("Ã¢â‚¬Â¦", "â€¦")
+    .replaceAll("Ã¢â€ â€˜", "â†‘")
+    .replaceAll("Ã¢â€ â€œ", "â†“");
 }
 
 function normalizeProducts(products: Product[]): Product[] {
@@ -211,7 +198,7 @@ export function loadProducts(): Product[] {
     return seed;
   }
 
-  // si el seed creció, completar faltantes por id
+  // si el seed creciÃ³, completar faltantes por id
   const existingIds = new Set(list.map((p) => p.id));
   const merged = [...list, ...seed.filter((p) => !existingIds.has(p.id))];
   if (merged.length !== list.length) {
