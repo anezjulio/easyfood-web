@@ -1104,9 +1104,7 @@ export default function SalesScreen() {
           >
             <div className={styles.modalHeader}>
               <div className={styles.modalTitleWrap}>
-                <h3 className={styles.modalTitle}>
-                  Pago de compra <span className={styles.modalOrderCode}>Orden: {pendingOrder?.id || "-"}</span>
-                </h3>
+                <h3 className={styles.modalTitle}>Orden: {pendingOrder?.id || "-"}</h3>
                 {hasPendingPayment ? (
                   <p className={`${styles.paymentTimer} ${isPaymentCountdownWarning ? styles.paymentTimerWarning : ""}`}>
                     Tiempo restante: <strong>{paymentCountdownLabel}</strong>
@@ -1166,7 +1164,7 @@ export default function SalesScreen() {
                 </p>
               ) : null}
               <p className={styles.modalTotalValue}>
-                Total final: <span className={styles.modalTotalAmount}>{formatMoneyARS(finalTotalForPayment)}</span>
+                Total: <span className={styles.modalTotalAmount}>{formatMoneyARS(finalTotalForPayment)}</span>
               </p>
             </div>
 

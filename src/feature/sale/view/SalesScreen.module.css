@@ -514,18 +514,9 @@
 
 .modalTitle {
   margin: 0;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 900;
   color: #0f172a;
-}
-
-.modalOrderCode {
-  display: inline-block;
-  margin-left: 10px;
-  color: #15803d;
-  font-size: 34px;
-  line-height: 1;
-  white-space: nowrap;
 }
 
 .paymentTimer {
@@ -600,7 +591,7 @@
 .modalTotalValue {
   margin: 2px 0 0;
   color: #0f172a;
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 900;
 }
 
