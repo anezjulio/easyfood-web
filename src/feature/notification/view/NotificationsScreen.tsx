@@ -26,12 +26,11 @@ type NotificationTab = "viewer" | "list" | "action" | "due-fixed" | "settings" |
 
 const categoryOptions: ProductCategory[] = [
   "bebida",
-  "vivere",
-  "helado",
-  "chocolate",
-  "tabaqueria",
-  "golosina",
-  "perecedero",
+  "hamburguesa",
+  "pancho",
+  "combos",
+  "pollo",
+  "vegano",
 ];
 
 const allTypes = allNotificationTypes;
@@ -264,7 +263,7 @@ export default function NotificationsScreen() {
         productId: item.productId,
         minUnits: item.minUnits,
         productName: product.name,
-        category: product.category || "vivere",
+        category: product.category || "bebida",
         currentStock: Math.max(0, Math.trunc(Number(product.existencia || 0))),
       });
     }
@@ -642,7 +641,7 @@ export default function NotificationsScreen() {
                       <option value="">Selecciona producto</option>
                       {sortedProducts.map((item) => (
                         <option key={item.id} value={item.id}>
-                          {item.name} ({item.category || "vivere"}) - stock {Math.max(0, Math.trunc(Number(item.existencia || 0)))}
+                          {item.name} ({item.category || "bebida"}) - stock {Math.max(0, Math.trunc(Number(item.existencia || 0)))}
                         </option>
                       ))}
                     </select>

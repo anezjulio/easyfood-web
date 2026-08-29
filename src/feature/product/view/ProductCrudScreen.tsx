@@ -4,6 +4,7 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import ProductTable from "../component/ProductTable";
 import { useProductCrudViewModel } from "../viewmodel/useProductCrudViewModel";
 import { resolveImageUrl } from "../../../shared/image/image.service";
+import { PRODUCT_CATEGORIES } from "../model/product.types";
 import styles from "./ProductCrudScreen.module.css";
 
 export default function ProductCrudScreen() {
@@ -12,16 +13,7 @@ export default function ProductCrudScreen() {
   const leftActionLabel = "Nuevo";
   const submitLabel = vm.isEditing ? "Modificar" : "Confirmar";
   const productFormId = "product-crud-form";
-  const categoryOptions = [
-    "bebida",
-    "vivere",
-    "helado",
-    "chocolate",
-    "tabaqueria",
-    "golosina",
-    "perecedero",
-  ] as const;
-  const toLabel = (value: (typeof categoryOptions)[number]) => value.charAt(0).toUpperCase() + value.slice(1);
+  const toLabel = (value: (typeof PRODUCT_CATEGORIES)[number]) => value.charAt(0).toUpperCase() + value.slice(1);
   function preventEnterFromSubmittingBarcode(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -151,10 +143,10 @@ export default function ProductCrudScreen() {
                     <span>Tipo de producto</span>
                     <select
                       value={vm.category}
-                      onChange={(e) => vm.setCategory(e.target.value as (typeof categoryOptions)[number])}
+                      onChange={(e) => vm.setCategory(e.target.value as (typeof PRODUCT_CATEGORIES)[number])}
                       className={`${styles.input} ${styles.selectInput}`}
                     >
-                      {categoryOptions.map((option) => (
+                      {PRODUCT_CATEGORIES.map((option) => (
                         <option key={option} value={option}>
                           {toLabel(option)}
                         </option>

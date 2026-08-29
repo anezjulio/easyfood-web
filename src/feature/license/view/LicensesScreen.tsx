@@ -4,20 +4,12 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { useAuth } from "../../../app/provider/useAuth";
 import { formatDateTimeAR as formatDateTime } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
-import type { ProductCategory } from "../../product/model/product.types";
+import { PRODUCT_CATEGORIES, type ProductCategory } from "../../product/model/product.types";
 import type { LicenseRecord, LicenseStatus } from "../model/license.types";
 import { addLicenseIssuanceApi, createLicenseApi, fetchLicensesApi, updateLicenseApi } from "../service/license.api";
 import styles from "./LicensesScreen.module.css";
 
-const categoryOptions: ProductCategory[] = [
-  "bebida",
-  "vivere",
-  "helado",
-  "chocolate",
-  "tabaqueria",
-  "golosina",
-  "perecedero",
-];
+const categoryOptions: ProductCategory[] = [...PRODUCT_CATEGORIES];
 
 function formatDateOnly(iso?: string) {
   if (!iso) return "-";

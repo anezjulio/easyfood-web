@@ -28,12 +28,11 @@ export type CheckoutSummaryState = {
 
 const CATEGORY_LABELS: Record<ProductCategory, string> = {
   bebida: "Bebidas",
-  vivere: "Viveres",
-  helado: "Helados",
-  chocolate: "Chocolates",
-  tabaqueria: "Tabaqueria",
-  golosina: "Golosinas",
-  perecedero: "Perecederos",
+  hamburguesa: "Hamburguesas",
+  pancho: "Panchos",
+  combos: "Combos",
+  pollo: "Pollo",
+  vegano: "Vegano",
 };
 
 const PENDING_PAYMENT_TIMEOUT_MINUTES = getPendingTimeoutMinutes();
@@ -80,7 +79,7 @@ export function mapProductToCartItem(product: Product, quantity: number): CartIt
     unitPrice: product.price,
     quantity,
     imageUrl: product.imageUrl,
-    category: product.category || "vivere",
+    category: product.category || "bebida",
   };
 }
 
@@ -92,7 +91,7 @@ export function mapOrderItemToCartItem(item: OrderItem, productMap: Map<string, 
     unitPrice: item.unitPrice,
     quantity: item.quantity,
     imageUrl: relatedProduct?.imageUrl,
-    category: relatedProduct?.category || "vivere",
+    category: relatedProduct?.category || "bebida",
   };
 }
 

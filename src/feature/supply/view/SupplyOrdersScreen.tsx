@@ -61,7 +61,7 @@ export default function SupplyOrdersScreen() {
 
   const [newProductName, setNewProductName] = useState("");
   const [newProductBrand, setNewProductBrand] = useState("");
-  const [newProductCategory, setNewProductCategory] = useState<ProductCategory>("vivere");
+  const [newProductCategory, setNewProductCategory] = useState<ProductCategory>("bebida");
   const [newProductBarcode, setNewProductBarcode] = useState("");
   const [newProductCostPrice, setNewProductCostPrice] = useState("");
   const [newProductQuantity, setNewProductQuantity] = useState("");
@@ -173,7 +173,7 @@ export default function SupplyOrdersScreen() {
   function clearMiniProductForm() {
     setNewProductName("");
     setNewProductBrand("");
-    setNewProductCategory("vivere");
+    setNewProductCategory("bebida");
     setNewProductBarcode("");
     setNewProductCostPrice("");
     setNewProductQuantity("");
@@ -679,7 +679,7 @@ export default function SupplyOrdersScreen() {
                               <div className={styles.codeCell}>{product.barcode || "-"}</div>
                               <div className={styles.nameCell}>{product.name}</div>
                               <div className={styles.nameCell}>{product.brand || "-"}</div>
-                              <div className={styles.categoryCell}>{product.category || "vivere"}</div>
+                              <div className={styles.categoryCell}>{product.category || "bebida"}</div>
                               <div className={styles.stockCell}>{Math.max(0, Math.trunc(Number(product.existencia || 0)))}</div>
                             </button>
                           ))
@@ -716,7 +716,7 @@ export default function SupplyOrdersScreen() {
                             >
                               <div className={styles.nameCell}>{item.productName}</div>
                               <div className={styles.nameCell}>{item.brand || "-"}</div>
-                              <div className={styles.categoryCell}>{item.category || "vivere"}</div>
+                              <div className={styles.categoryCell}>{item.category || "bebida"}</div>
                               <div className={styles.codeCell}>{item.barcode || "-"}</div>
                               <div className={styles.quantityCell}>
                                 <div className={styles.quantityStepper}>

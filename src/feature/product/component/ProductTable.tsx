@@ -21,6 +21,10 @@ function formatPriceMask(input: string): string {
   return `$${formatted}`;
 }
 
+function formatCategory(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 export default function ProductTable({
   products,
   loading,
@@ -240,7 +244,7 @@ export default function ProductTable({
                   <option value="">Todas</option>
                   {categoryOptions.map((category) => (
                     <option key={category} value={category}>
-                      {category}
+                      {formatCategory(category)}
                     </option>
                   ))}
                 </select>

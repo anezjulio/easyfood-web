@@ -121,7 +121,7 @@ export default function FinanceScreen() {
     if (!selectedProductForMargin) return 30;
     return resolveEffectiveMarginPercent(
       marginSettings,
-      selectedProductForMargin.category || "vivere",
+      selectedProductForMargin.category || "bebida",
       selectedProductForMargin.id,
     );
   }, [marginSettings, selectedProductForMargin]);
@@ -162,7 +162,7 @@ export default function FinanceScreen() {
   const productMarginRows = useMemo(
     () =>
       sortedProducts.map((item) => {
-        const category = item.category || "vivere";
+        const category = item.category || "bebida";
         const overrideMarginPercent = productOverridesMap.get(item.id);
         const marginPercent = resolveEffectiveMarginPercent(marginSettings, category, item.id);
         return {
@@ -405,7 +405,7 @@ export default function FinanceScreen() {
                         <>
                           <h3 className={styles.detailTitle}>{selectedProductForMargin.name}</h3>
                           <p className={styles.detailMeta}>
-                            Categoria: {selectedProductForMargin.category || "vivere"} | Margen vigente:{" "}
+                            Categoria: {selectedProductForMargin.category || "bebida"} | Margen vigente:{" "}
                             {selectedProductMarginForEditor}% ({selectedProductOverrideMargin === null ? "categoria" : "override"})
                           </p>
 

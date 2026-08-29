@@ -1,106 +1,44 @@
 {
   "products": [
     {
-      "id": "food-combo-burger",
-      "name": "Combo hamburguesa completa",
-      "price": 8900,
-      "costPrice": 5200,
-      "createdAt": "2026-08-29T12:00:00.000Z",
-      "imageUrl": "food-hamburger.png",
-      "barcode": "779000100001",
-      "category": "perecedero"
-    },
-    {
-      "id": "food-papas-cheddar",
-      "name": "Papas con cheddar y bacon",
-      "price": 5400,
-      "costPrice": 3100,
-      "createdAt": "2026-08-29T12:05:00.000Z",
-      "imageUrl": "food-fries-cheddar.png",
-      "barcode": "779000100002",
-      "category": "perecedero"
-    },
-    {
-      "id": "food-pancho-especial",
-      "name": "Pancho especial",
-      "price": 3900,
-      "costPrice": 2100,
-      "createdAt": "2026-08-29T12:10:00.000Z",
-      "imageUrl": "food-hotdog.png",
-      "barcode": "779000100003",
-      "category": "perecedero"
-    },
-    {
-      "id": "food-tostado-jamon-queso",
-      "name": "Tostado jamon y queso",
-      "price": 4200,
-      "costPrice": 2400,
-      "createdAt": "2026-08-29T12:15:00.000Z",
-      "imageUrl": "food-hamburger.png",
-      "barcode": "779000100004",
-      "category": "perecedero"
-    },
-    {
-      "id": "food-gaseosa-500",
-      "name": "Gaseosa 500 ml",
+      "id": "food-bebida-cola",
+      "name": "Bebida cola 500 ml",
+      "category": "bebida",
       "price": 1800,
       "costPrice": 950,
-      "createdAt": "2026-08-29T12:20:00.000Z",
       "imageUrl": "food-drinks.png",
-      "barcode": "779000100005",
-      "category": "bebida"
+      "barcode": "779000100001",
+      "createdAt": "2026-08-29T12:00:00.000Z"
     },
     {
       "id": "food-agua-500",
       "name": "Agua mineral 500 ml",
+      "category": "bebida",
       "price": 1400,
       "costPrice": 760,
-      "createdAt": "2026-08-29T12:25:00.000Z",
       "imageUrl": "food-drinks.png",
-      "barcode": "779000100006",
-      "category": "bebida"
+      "barcode": "779000100002",
+      "createdAt": "2026-08-29T12:05:00.000Z"
+    },
+    {
+      "id": "food-papas-cheddar",
+      "name": "Papas cheddar bacon",
+      "category": "combos",
+      "price": 5400,
+      "costPrice": 3100,
+      "imageUrl": "food-fries-cheddar.png",
+      "barcode": "779000100003",
+      "createdAt": "2026-08-29T12:10:00.000Z"
     }
   ],
   "productPrices": [
     {
-      "id": "pp-food-combo-burger",
-      "productId": "food-combo-burger",
-      "newPrice": 8900,
-      "costPrice": 5200,
-      "marginPercent": 71,
-      "createdAt": "2026-08-29T12:00:00.000Z"
-    },
-    {
-      "id": "pp-food-papas-cheddar",
-      "productId": "food-papas-cheddar",
-      "newPrice": 5400,
-      "costPrice": 3100,
-      "marginPercent": 74,
-      "createdAt": "2026-08-29T12:05:00.000Z"
-    },
-    {
-      "id": "pp-food-pancho-especial",
-      "productId": "food-pancho-especial",
-      "newPrice": 3900,
-      "costPrice": 2100,
-      "marginPercent": 86,
-      "createdAt": "2026-08-29T12:10:00.000Z"
-    },
-    {
-      "id": "pp-food-tostado-jamon-queso",
-      "productId": "food-tostado-jamon-queso",
-      "newPrice": 4200,
-      "costPrice": 2400,
-      "marginPercent": 75,
-      "createdAt": "2026-08-29T12:15:00.000Z"
-    },
-    {
-      "id": "pp-food-gaseosa-500",
-      "productId": "food-gaseosa-500",
+      "id": "pp-food-bebida-cola",
+      "productId": "food-bebida-cola",
       "newPrice": 1800,
       "costPrice": 950,
       "marginPercent": 89,
-      "createdAt": "2026-08-29T12:20:00.000Z"
+      "createdAt": "2026-08-29T12:00:00.000Z"
     },
     {
       "id": "pp-food-agua-500",
@@ -108,7 +46,15 @@
       "newPrice": 1400,
       "costPrice": 760,
       "marginPercent": 84,
-      "createdAt": "2026-08-29T12:25:00.000Z"
+      "createdAt": "2026-08-29T12:05:00.000Z"
+    },
+    {
+      "id": "pp-food-papas-cheddar",
+      "productId": "food-papas-cheddar",
+      "newPrice": 5400,
+      "costPrice": 3100,
+      "marginPercent": 74,
+      "createdAt": "2026-08-29T12:10:00.000Z"
     }
   ],
   "ingredients": [
@@ -126,7 +72,7 @@
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 90,
-      "createdAt": "2026-08-29T10:05:00.000Z"
+      "createdAt": "2026-08-29T10:01:00.000Z"
     },
     {
       "id": "ing-medallon-carne",
@@ -134,7 +80,7 @@
       "expiresInDays": 3,
       "stockMode": "unit",
       "stockQuantity": 100,
-      "createdAt": "2026-08-29T10:10:00.000Z"
+      "createdAt": "2026-08-29T10:02:00.000Z"
     },
     {
       "id": "ing-salchicha",
@@ -142,7 +88,7 @@
       "expiresInDays": 6,
       "stockMode": "unit",
       "stockQuantity": 120,
-      "createdAt": "2026-08-29T10:15:00.000Z"
+      "createdAt": "2026-08-29T10:03:00.000Z"
     },
     {
       "id": "ing-queso-feta",
@@ -150,7 +96,7 @@
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 160,
-      "createdAt": "2026-08-29T10:20:00.000Z"
+      "createdAt": "2026-08-29T10:04:00.000Z"
     },
     {
       "id": "ing-jamon-feta",
@@ -158,7 +104,7 @@
       "expiresInDays": 6,
       "stockMode": "unit",
       "stockQuantity": 140,
-      "createdAt": "2026-08-29T10:25:00.000Z"
+      "createdAt": "2026-08-29T10:05:00.000Z"
     },
     {
       "id": "ing-cheddar-feta",
@@ -166,7 +112,7 @@
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 180,
-      "createdAt": "2026-08-29T10:30:00.000Z"
+      "createdAt": "2026-08-29T10:06:00.000Z"
     },
     {
       "id": "ing-tocino",
@@ -174,7 +120,7 @@
       "expiresInDays": 5,
       "stockMode": "weight",
       "stockQuantity": 2500,
-      "createdAt": "2026-08-29T10:35:00.000Z"
+      "createdAt": "2026-08-29T10:07:00.000Z"
     },
     {
       "id": "ing-papas-pay",
@@ -182,7 +128,7 @@
       "expiresInDays": 20,
       "stockMode": "weight",
       "stockQuantity": 6000,
-      "createdAt": "2026-08-29T10:40:00.000Z"
+      "createdAt": "2026-08-29T10:08:00.000Z"
     },
     {
       "id": "ing-papa-baston",
@@ -190,7 +136,7 @@
       "expiresInDays": 12,
       "stockMode": "weight",
       "stockQuantity": 18000,
-      "createdAt": "2026-08-29T10:45:00.000Z"
+      "createdAt": "2026-08-29T10:09:00.000Z"
     },
     {
       "id": "ing-mayonesa",
@@ -198,7 +144,7 @@
       "expiresInDays": 30,
       "stockMode": "weight",
       "stockQuantity": 5000,
-      "createdAt": "2026-08-29T10:50:00.000Z"
+      "createdAt": "2026-08-29T10:10:00.000Z"
     },
     {
       "id": "ing-ketchup",
@@ -206,7 +152,7 @@
       "expiresInDays": 30,
       "stockMode": "weight",
       "stockQuantity": 5000,
-      "createdAt": "2026-08-29T10:55:00.000Z"
+      "createdAt": "2026-08-29T10:11:00.000Z"
     },
     {
       "id": "ing-lechuga",
@@ -214,7 +160,7 @@
       "expiresInDays": 4,
       "stockMode": "weight",
       "stockQuantity": 3200,
-      "createdAt": "2026-08-29T11:00:00.000Z"
+      "createdAt": "2026-08-29T10:12:00.000Z"
     },
     {
       "id": "ing-cebolla",
@@ -222,7 +168,7 @@
       "expiresInDays": 10,
       "stockMode": "weight",
       "stockQuantity": 4500,
-      "createdAt": "2026-08-29T11:05:00.000Z"
+      "createdAt": "2026-08-29T10:13:00.000Z"
     },
     {
       "id": "ing-pepinillos",
@@ -230,7 +176,7 @@
       "expiresInDays": 18,
       "stockMode": "weight",
       "stockQuantity": 2800,
-      "createdAt": "2026-08-29T11:10:00.000Z"
+      "createdAt": "2026-08-29T10:14:00.000Z"
     },
     {
       "id": "ing-tomate",
@@ -238,15 +184,105 @@
       "expiresInDays": 5,
       "stockMode": "weight",
       "stockQuantity": 4200,
-      "createdAt": "2026-08-29T11:15:00.000Z"
+      "createdAt": "2026-08-29T10:15:00.000Z"
+    },
+    {
+      "id": "ing-pollo-crispy",
+      "name": "Pollo crispy",
+      "expiresInDays": 3,
+      "stockMode": "unit",
+      "stockQuantity": 70,
+      "createdAt": "2026-08-29T10:16:00.000Z"
+    },
+    {
+      "id": "ing-nuggets-pollo",
+      "name": "Nuggets de pollo",
+      "expiresInDays": 3,
+      "stockMode": "unit",
+      "stockQuantity": 160,
+      "createdAt": "2026-08-29T10:17:00.000Z"
+    },
+    {
+      "id": "ing-medallon-vegano",
+      "name": "Medallon vegano",
+      "expiresInDays": 4,
+      "stockMode": "unit",
+      "stockQuantity": 70,
+      "createdAt": "2026-08-29T10:18:00.000Z"
+    },
+    {
+      "id": "ing-tortilla-wrap",
+      "name": "Tortilla wrap",
+      "expiresInDays": 7,
+      "stockMode": "unit",
+      "stockQuantity": 60,
+      "createdAt": "2026-08-29T10:19:00.000Z"
+    },
+    {
+      "id": "ing-zanahoria",
+      "name": "Zanahoria",
+      "expiresInDays": 10,
+      "stockMode": "weight",
+      "stockQuantity": 3000,
+      "createdAt": "2026-08-29T10:20:00.000Z"
+    },
+    {
+      "id": "ing-palta",
+      "name": "Palta",
+      "expiresInDays": 4,
+      "stockMode": "weight",
+      "stockQuantity": 2500,
+      "createdAt": "2026-08-29T10:21:00.000Z"
+    },
+    {
+      "id": "ing-limon",
+      "name": "Limon",
+      "expiresInDays": 12,
+      "stockMode": "unit",
+      "stockQuantity": 80,
+      "createdAt": "2026-08-29T10:22:00.000Z"
+    },
+    {
+      "id": "ing-azucar",
+      "name": "Azucar",
+      "expiresInDays": 60,
+      "stockMode": "weight",
+      "stockQuantity": 6000,
+      "createdAt": "2026-08-29T10:23:00.000Z"
+    },
+    {
+      "id": "ing-agua-filtrada",
+      "name": "Agua filtrada",
+      "expiresInDays": 3,
+      "stockMode": "weight",
+      "stockQuantity": 30000,
+      "createdAt": "2026-08-29T10:24:00.000Z"
+    },
+    {
+      "id": "ing-hielo",
+      "name": "Hielo",
+      "expiresInDays": 2,
+      "stockMode": "weight",
+      "stockQuantity": 20000,
+      "createdAt": "2026-08-29T10:25:00.000Z"
+    },
+    {
+      "id": "ing-bebida-cola",
+      "name": "Bebida cola 500 ml",
+      "expiresInDays": 90,
+      "stockMode": "unit",
+      "stockQuantity": 72,
+      "createdAt": "2026-08-29T10:26:00.000Z"
     }
   ],
   "menuProducts": [
     {
       "id": "menu-hamburguesa-completa",
       "name": "Hamburguesa completa",
+      "category": "hamburguesa",
       "price": 6800,
       "description": "Pan, medallon, cheddar, lechuga, tomate, cebolla, pepinillos, mayonesa y ketchup.",
+      "imageUrl": "food-hamburger.png",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-hamburguesa",
@@ -303,14 +339,15 @@
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-08-29T13:00:00.000Z",
-      "imageUrl": "food-hamburger.png"
+      "createdAt": "2026-08-29T13:00:00.000Z"
     },
     {
       "id": "menu-hamburguesa-bacon",
       "name": "Hamburguesa bacon cheddar",
+      "category": "hamburguesa",
       "price": 7600,
       "description": "Pan, medallon, cheddar, tocino, cebolla y aderezos.",
+      "imageUrl": "food-hamburger.png",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-hamburguesa",
@@ -355,14 +392,15 @@
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-08-29T13:05:00.000Z",
-      "imageUrl": "food-hamburger.png"
+      "createdAt": "2026-08-29T13:05:00.000Z"
     },
     {
       "id": "menu-pancho-completo",
       "name": "Pancho completo",
+      "category": "pancho",
       "price": 3900,
       "description": "Pan, salchicha, papas pay, mayonesa y ketchup.",
+      "imageUrl": "food-hotdog.png",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-pancho",
@@ -395,14 +433,67 @@
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-08-29T13:10:00.000Z",
-      "imageUrl": "food-hotdog.png"
+      "createdAt": "2026-08-29T13:10:00.000Z"
     },
     {
-      "id": "menu-tostado-jamon-queso",
-      "name": "Tostado jamon y queso",
-      "price": 4200,
-      "description": "Pan de hamburguesa, jamon y queso en fetas.",
+      "id": "menu-bebida-limonada",
+      "name": "Limonada casera",
+      "category": "bebida",
+      "price": 2500,
+      "description": "Limonada fresca con limon, agua, azucar y hielo.",
+      "imageUrl": "food-drinks.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-limon",
+          "ingredientName": "Limon",
+          "quantity": 2,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-agua-filtrada",
+          "ingredientName": "Agua filtrada",
+          "quantity": 450,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-azucar",
+          "ingredientName": "Azucar",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-hielo",
+          "ingredientName": "Hielo",
+          "quantity": 120,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:15:00.000Z"
+    },
+    {
+      "id": "menu-bebida-cola",
+      "name": "Bebida cola 500 ml",
+      "category": "bebida",
+      "price": 1800,
+      "description": "Bebida fria individual.",
+      "imageUrl": "food-drinks.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-bebida-cola",
+          "ingredientName": "Bebida cola 500 ml",
+          "quantity": 1,
+          "stockMode": "unit"
+        }
+      ],
+      "createdAt": "2026-08-29T13:20:00.000Z"
+    },
+    {
+      "id": "menu-combo-hamburguesa",
+      "name": "Combo hamburguesa completa",
+      "category": "combos",
+      "price": 9800,
+      "description": "Hamburguesa completa con papas y bebida.",
+      "imageUrl": "food-hamburger.png",
       "recipeItems": [
         {
           "ingredientId": "ing-pan-hamburguesa",
@@ -411,48 +502,290 @@
           "stockMode": "unit"
         },
         {
-          "ingredientId": "ing-jamon-feta",
-          "ingredientName": "Jamon feta",
-          "quantity": 2,
+          "ingredientId": "ing-medallon-carne",
+          "ingredientName": "Medallon de carne",
+          "quantity": 1,
           "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-queso-feta",
-          "ingredientName": "Queso feta",
-          "quantity": 2,
-          "stockMode": "unit"
-        }
-      ],
-      "createdAt": "2026-08-29T13:15:00.000Z",
-      "imageUrl": "food-hamburger.png"
-    },
-    {
-      "id": "menu-papas-cheddar-bacon",
-      "name": "Papas cheddar bacon",
-      "price": 5400,
-      "description": "Papas baston, cheddar y tocino.",
-      "recipeItems": [
-        {
-          "ingredientId": "ing-papa-baston",
-          "ingredientName": "Papa baston",
-          "quantity": 300,
-          "stockMode": "weight"
         },
         {
           "ingredientId": "ing-cheddar-feta",
           "ingredientName": "Cheddar feta",
-          "quantity": 2,
+          "quantity": 1,
           "stockMode": "unit"
         },
         {
-          "ingredientId": "ing-tocino",
-          "ingredientName": "Tocino",
-          "quantity": 40,
+          "ingredientId": "ing-lechuga",
+          "ingredientName": "Lechuga",
+          "quantity": 25,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-tomate",
+          "ingredientName": "Tomate",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cebolla",
+          "ingredientName": "Cebolla",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-pepinillos",
+          "ingredientName": "Pepinillos",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 250,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-bebida-cola",
+          "ingredientName": "Bebida cola 500 ml",
+          "quantity": 1,
+          "stockMode": "unit"
+        }
+      ],
+      "createdAt": "2026-08-29T13:25:00.000Z"
+    },
+    {
+      "id": "menu-combo-pancho",
+      "name": "Combo pancho completo",
+      "category": "combos",
+      "price": 6900,
+      "description": "Pancho completo con papas y bebida.",
+      "imageUrl": "food-hotdog.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-pan-pancho",
+          "ingredientName": "Pan panchos",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-salchicha",
+          "ingredientName": "Salchicha",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-papas-pay",
+          "ingredientName": "Papas pay",
+          "quantity": 25,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-mayonesa",
+          "ingredientName": "Mayonesa",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-ketchup",
+          "ingredientName": "Ketchup",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 220,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-bebida-cola",
+          "ingredientName": "Bebida cola 500 ml",
+          "quantity": 1,
+          "stockMode": "unit"
+        }
+      ],
+      "createdAt": "2026-08-29T13:30:00.000Z"
+    },
+    {
+      "id": "menu-pollo-crispy",
+      "name": "Sandwich pollo crispy",
+      "category": "pollo",
+      "price": 7200,
+      "description": "Pan, pollo crispy, lechuga, tomate y mayonesa.",
+      "imageUrl": "food-hamburger.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-pan-hamburguesa",
+          "ingredientName": "Pan hamburguesas",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-pollo-crispy",
+          "ingredientName": "Pollo crispy",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-lechuga",
+          "ingredientName": "Lechuga",
+          "quantity": 25,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-tomate",
+          "ingredientName": "Tomate",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-mayonesa",
+          "ingredientName": "Mayonesa",
+          "quantity": 20,
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-08-29T13:20:00.000Z",
-      "imageUrl": "food-fries-cheddar.png"
+      "createdAt": "2026-08-29T13:35:00.000Z"
+    },
+    {
+      "id": "menu-nuggets-papas",
+      "name": "Nuggets con papas",
+      "category": "pollo",
+      "price": 6200,
+      "description": "Nuggets de pollo con papas baston y aderezos.",
+      "imageUrl": "food-fries-cheddar.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-nuggets-pollo",
+          "ingredientName": "Nuggets de pollo",
+          "quantity": 8,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 250,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-ketchup",
+          "ingredientName": "Ketchup",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-mayonesa",
+          "ingredientName": "Mayonesa",
+          "quantity": 20,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:40:00.000Z"
+    },
+    {
+      "id": "menu-burger-vegana",
+      "name": "Hamburguesa vegana",
+      "category": "vegano",
+      "price": 6900,
+      "description": "Pan, medallon vegano, lechuga, tomate, cebolla, pepinillos y palta.",
+      "imageUrl": "food-hamburger.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-pan-hamburguesa",
+          "ingredientName": "Pan hamburguesas",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-medallon-vegano",
+          "ingredientName": "Medallon vegano",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-lechuga",
+          "ingredientName": "Lechuga",
+          "quantity": 25,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-tomate",
+          "ingredientName": "Tomate",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cebolla",
+          "ingredientName": "Cebolla",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-pepinillos",
+          "ingredientName": "Pepinillos",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-palta",
+          "ingredientName": "Palta",
+          "quantity": 45,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:45:00.000Z"
+    },
+    {
+      "id": "menu-wrap-vegano",
+      "name": "Wrap vegano fresco",
+      "category": "vegano",
+      "price": 5600,
+      "description": "Tortilla con lechuga, tomate, zanahoria, cebolla, pepinillos y palta.",
+      "imageUrl": "food-hamburger.png",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-tortilla-wrap",
+          "ingredientName": "Tortilla wrap",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-lechuga",
+          "ingredientName": "Lechuga",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-tomate",
+          "ingredientName": "Tomate",
+          "quantity": 45,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-zanahoria",
+          "ingredientName": "Zanahoria",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cebolla",
+          "ingredientName": "Cebolla",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-pepinillos",
+          "ingredientName": "Pepinillos",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-palta",
+          "ingredientName": "Palta",
+          "quantity": 45,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:50:00.000Z"
     }
   ],
   "users": [
@@ -528,54 +861,14 @@
   "requests": [],
   "stocks": [
     {
-      "id": "st-food-combo-burger",
-      "productId": "food-combo-burger",
-      "expirationDate": "2026-09-05",
-      "quantity": 20,
-      "description": "Stock inicial de apertura",
-      "costPrice": 5200,
-      "salePrice": 8900,
-      "createdAt": "2026-08-29T14:00:00.000Z"
-    },
-    {
-      "id": "st-food-papas-cheddar",
-      "productId": "food-papas-cheddar",
-      "expirationDate": "2026-09-05",
-      "quantity": 20,
-      "description": "Stock inicial de apertura",
-      "costPrice": 3100,
-      "salePrice": 5400,
-      "createdAt": "2026-08-29T14:05:00.000Z"
-    },
-    {
-      "id": "st-food-pancho-especial",
-      "productId": "food-pancho-especial",
-      "expirationDate": "2026-09-05",
-      "quantity": 20,
-      "description": "Stock inicial de apertura",
-      "costPrice": 2100,
-      "salePrice": 3900,
-      "createdAt": "2026-08-29T14:10:00.000Z"
-    },
-    {
-      "id": "st-food-tostado-jamon-queso",
-      "productId": "food-tostado-jamon-queso",
-      "expirationDate": "2026-09-05",
-      "quantity": 20,
-      "description": "Stock inicial de apertura",
-      "costPrice": 2400,
-      "salePrice": 4200,
-      "createdAt": "2026-08-29T14:15:00.000Z"
-    },
-    {
-      "id": "st-food-gaseosa-500",
-      "productId": "food-gaseosa-500",
+      "id": "st-food-bebida-cola",
+      "productId": "food-bebida-cola",
       "expirationDate": "2027-02-28",
       "quantity": 48,
       "description": "Stock inicial de apertura",
       "costPrice": 950,
       "salePrice": 1800,
-      "createdAt": "2026-08-29T14:20:00.000Z"
+      "createdAt": "2026-08-29T14:00:00.000Z"
     },
     {
       "id": "st-food-agua-500",
@@ -585,50 +878,22 @@
       "description": "Stock inicial de apertura",
       "costPrice": 760,
       "salePrice": 1400,
-      "createdAt": "2026-08-29T14:25:00.000Z"
-    }
-  ],
-  "orders": [
+      "createdAt": "2026-08-29T14:05:00.000Z"
+    },
     {
-      "id": "or290820261841488175",
-      "items": [
-        {
-          "productId": "food-gaseosa-500",
-          "productName": "Gaseosa 500 ml",
-          "unitPrice": 1800,
-          "quantity": 1
-        },
-        {
-          "productId": "food-agua-500",
-          "productName": "Agua mineral 500 ml",
-          "unitPrice": 1400,
-          "quantity": 1
-        },
-        {
-          "productId": "food-pancho-especial",
-          "productName": "Pancho especial",
-          "unitPrice": 3900,
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-08-29T21:41:48.205Z",
-      "status": "por pagar",
-      "total": 7100,
-      "operator": "admin"
+      "id": "st-food-papas-cheddar",
+      "productId": "food-papas-cheddar",
+      "expirationDate": "2026-09-05",
+      "quantity": 20,
+      "description": "Stock inicial de apertura",
+      "costPrice": 3100,
+      "salePrice": 5400,
+      "createdAt": "2026-08-29T14:10:00.000Z"
     }
   ],
+  "orders": [],
   "invoices": [],
-  "workdays": [
-    {
-      "id": "wd290820261806339100",
-      "operator": "admin",
-      "startedAt": "2026-08-29T21:06:33.468Z",
-      "orderIds": [],
-      "status": "open",
-      "openingDeclaredAmount": 5000,
-      "openingDifferenceAmount": 0
-    }
-  ],
+  "workdays": [],
   "cashOpeningAssignments": [],
   "supplyOrders": [],
   "expenses": [],
@@ -665,52 +930,19 @@
       "updatedAt": "2026-08-29T21:41:48.206Z"
     },
     {
-      "id": "account-tobacco",
-      "code": "tobacco",
-      "name": "Tabaqueria",
+      "id": "account-food-categories",
+      "code": "food-categories",
+      "name": "Categorias de comida",
       "kind": "category",
-      "description": "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
+      "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
       "updatedAt": "2026-08-29T21:41:48.206Z"
     }
   ],
-  "financialTransactions": [
-    {
-      "id": "txn-cash-opening-wd290820261806339100",
-      "createdAt": "2026-08-29T21:06:33.468Z",
-      "type": "cash-opening",
-      "title": "Apertura de caja wd290820261806339100",
-      "description": "Apertura declarada por admin.",
-      "amount": 5000,
-      "direction": "in",
-      "entryKind": "credit",
-      "accountId": "account-cash-local",
-      "referenceModule": "cash",
-      "referenceId": "wd290820261806339100",
-      "workdayId": "wd290820261806339100",
-      "actor": "admin",
-      "countsInBalance": true,
-      "accountCode": "cash-local",
-      "accountName": "Caja fisica local"
-    }
-  ],
+  "financialTransactions": [],
   "licenses": [],
-  "notifications": [
-    {
-      "id": "nt290820261806335690",
-      "type": "cash-opened",
-      "title": "Caja abierta: admin",
-      "description": "Se abrio caja para admin con 5000.",
-      "createdAt": "2026-08-29T21:06:33.468Z",
-      "dueAt": "2026-08-30T21:06:33.468Z",
-      "isFixed": false,
-      "requiresAction": false,
-      "entityType": "workday",
-      "entityId": "wd290820261806339100",
-      "status": "active"
-    }
-  ],
+  "notifications": [],
   "notificationSettings": [
     {
       "type": "license-required",
@@ -840,25 +1072,23 @@
   ],
   "stockThresholdSettings": {
     "categoryThresholds": {
-      "bebida": 12,
-      "vivere": 10,
-      "helado": 10,
-      "chocolate": 10,
-      "tabaqueria": 10,
-      "golosina": 10,
-      "perecedero": 10
+      "bebida": 10,
+      "hamburguesa": 10,
+      "pancho": 10,
+      "combos": 10,
+      "pollo": 10,
+      "vegano": 10
     },
     "productThresholds": []
   },
   "priceMarginSettings": {
     "categoryMargins": {
-      "bebida": 45,
-      "vivere": 40,
-      "helado": 30,
-      "chocolate": 60,
-      "tabaqueria": 30,
-      "golosina": 30,
-      "perecedero": 30
+      "bebida": 30,
+      "hamburguesa": 30,
+      "pancho": 30,
+      "combos": 30,
+      "pollo": 30,
+      "vegano": 30
     },
     "productMargins": [],
     "categoryMarginHistory": [],

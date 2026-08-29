@@ -59,6 +59,10 @@ function isMenuSaleProductId(productId: string): boolean {
   return productId.startsWith("menu:");
 }
 
+function formatCategoryLabel(category: string) {
+  return category.charAt(0).toUpperCase() + category.slice(1);
+}
+
 function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProduct {
   return {
     id: buildMenuSaleProductId(menuProduct.id),
@@ -67,7 +71,7 @@ function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProd
     costPrice: 0,
     createdAt: menuProduct.createdAt,
     imageUrl: menuProduct.imageUrl,
-    category: "perecedero",
+    category: menuProduct.category || "hamburguesa",
     brand: "Menu",
     existencia: 9999,
     saleSource: "menu",
@@ -1038,7 +1042,7 @@ export default function SalesScreen() {
                   }`.trim()}
                   onClick={() => setCategoryFilter(category)}
                 >
-                  {category}
+                  {formatCategoryLabel(category)}
                 </button>
               ))}
             </div>

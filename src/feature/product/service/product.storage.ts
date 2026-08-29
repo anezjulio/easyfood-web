@@ -80,7 +80,7 @@ const seedBase: Product[] = [
     name: "Hamburguesa simple",
     price: 4500,
     costPrice: 2800,
-    category: "perecedero",
+    category: "hamburguesa",
     imageUrl: "food-hamburger.png",
     createdAt: "2026-02-01T11:00:00.000Z",
   },
@@ -89,7 +89,7 @@ const seedBase: Product[] = [
     name: "Hamburguesa doble",
     price: 6200,
     costPrice: 3900,
-    category: "perecedero",
+    category: "hamburguesa",
     imageUrl: "food-hamburger.png",
     createdAt: "2026-02-01T11:05:00.000Z",
   },
@@ -98,7 +98,7 @@ const seedBase: Product[] = [
     name: "Pancho",
     price: 2800,
     costPrice: 1500,
-    category: "perecedero",
+    category: "pancho",
     imageUrl: "food-hotdog.png",
     createdAt: "2026-02-01T11:10:00.000Z",
   },
@@ -107,7 +107,7 @@ const seedBase: Product[] = [
     name: "Sandwich de milanesa",
     price: 5800,
     costPrice: 3600,
-    category: "perecedero",
+    category: "pollo",
     imageUrl: "food-hamburger.png",
     createdAt: "2026-02-01T11:15:00.000Z",
   },
@@ -116,7 +116,7 @@ const seedBase: Product[] = [
     name: "Papas fritas",
     price: 3200,
     costPrice: 1800,
-    category: "perecedero",
+    category: "combos",
     imageUrl: "food-fries-cheddar.png",
     createdAt: "2026-02-01T11:20:00.000Z",
   },
@@ -169,7 +169,7 @@ function normalizeProducts(products: Product[]): Product[] {
     const barcode = (p.barcode || "").trim() || buildDefaultBarcode(p.id, index);
     const brand = String((p as { brand?: unknown }).brand || "").trim() || undefined;
     const rawCategory = String((p as { category?: unknown }).category || "").trim().toLowerCase();
-    const category = rawCategory === "no perecedero" ? "vivere" : p.category || "vivere";
+    const category = rawCategory === "no perecedero" ? "bebida" : p.category || "bebida";
     const fallbackCostPrice = Math.max(1, Math.trunc(Number(p.price) || 0));
     const parsedCostPrice = Math.trunc(Number((p as { costPrice?: unknown }).costPrice));
     const costPrice = Number.isFinite(parsedCostPrice) && parsedCostPrice > 0 ? parsedCostPrice : fallbackCostPrice;
@@ -232,7 +232,7 @@ export function createProduct(draft: ProductDraft): Product {
       throw new Error(`Barcode already exists: ${duplicate.name}`);
     }
   }
-  const category = draft.category || "vivere";
+  const category = draft.category || "bebida";
   const marginSettings = getPriceMarginSettings();
   const effectiveMargin = Number.isFinite(Number(draft.marginPercent))
     ? normalizeMarginPercent(Number(draft.marginPercent))
@@ -287,7 +287,7 @@ export function updateProduct(id: string, draft: ProductDraft): Product | null {
   let updated: Product | null = null;
   const next = list.map((item) => {
     if (item.id !== id) return item;
-    const nextCategory = draft.category || item.category || "vivere";
+    const nextCategory = draft.category || item.category || "bebida";
     const marginPercent = Number.isFinite(Number(draft.marginPercent))
       ? normalizeMarginPercent(Number(draft.marginPercent))
       : resolveEffectiveMarginPercent(marginSettings, nextCategory, item.id);

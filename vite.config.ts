@@ -33,7 +33,7 @@ type Product = {
   imageUrl?: string;
   barcode?: string;
   brand?: string;
-  category?: "bebida" | "vivere" | "helado" | "chocolate" | "tabaqueria" | "golosina" | "perecedero";
+  category?: "bebida" | "hamburguesa" | "pancho" | "combos" | "pollo" | "vegano";
   supplyOrderId?: string;
 };
 
@@ -73,6 +73,7 @@ type MenuProduct = {
   price: number;
   description?: string;
   imageUrl?: string;
+  category?: Product["category"];
   recipeItems: MenuRecipeItem[];
   createdAt: string;
   updatedAt?: string;
@@ -642,6 +643,7 @@ const defaultMenuProductSeed: MenuProduct[] = [
     name: "Hamburguesa simple",
     price: 4500,
     description: "Pan, carne, queso, lechuga y tomate.",
+    category: "hamburguesa",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 1, stockMode: "unit" },
@@ -656,6 +658,7 @@ const defaultMenuProductSeed: MenuProduct[] = [
     name: "Hamburguesa doble",
     price: 6200,
     description: "Pan, doble carne, doble queso, cebolla, lechuga y tomate.",
+    category: "hamburguesa",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 2, stockMode: "unit" },
@@ -671,6 +674,7 @@ const defaultMenuProductSeed: MenuProduct[] = [
     name: "Pancho",
     price: 2800,
     description: "Pan y salchicha.",
+    category: "pancho",
     recipeItems: [
       { ingredientId: "ing-pan-pancho", ingredientName: "Pan de pancho", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-salchicha", ingredientName: "Salchicha", quantity: 1, stockMode: "unit" },
@@ -682,6 +686,7 @@ const defaultMenuProductSeed: MenuProduct[] = [
     name: "Sandwich de milanesa",
     price: 5800,
     description: "Pan, milanesa, lechuga y tomate.",
+    category: "pollo",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-milanesa", ingredientName: "Milanesa cocida", quantity: 1, stockMode: "unit" },
@@ -716,24 +721,22 @@ const defaultDb: MockDb = {
   stockThresholdSettings: {
     categoryThresholds: {
       bebida: 10,
-      vivere: 10,
-      helado: 10,
-      chocolate: 10,
-      tabaqueria: 10,
-      golosina: 10,
-      perecedero: 10,
+      hamburguesa: 10,
+      pancho: 10,
+      combos: 10,
+      pollo: 10,
+      vegano: 10,
     },
     productThresholds: [],
   },
   priceMarginSettings: {
     categoryMargins: {
       bebida: 30,
-      vivere: 30,
-      helado: 30,
-      chocolate: 30,
-      tabaqueria: 30,
-      golosina: 30,
-      perecedero: 30,
+      hamburguesa: 30,
+      pancho: 30,
+      combos: 30,
+      pollo: 30,
+      vegano: 30,
     },
     productMargins: [],
     categoryMarginHistory: [],
@@ -782,11 +785,11 @@ const FINANCIAL_ACCOUNT_DEFINITIONS: Array<{
     description: "Egresos confirmados por gastos y pagos de mercaderia.",
   },
   {
-    id: "account-tobacco",
-    code: "tobacco",
-    name: "Tabaqueria",
+    id: "account-food-categories",
+    code: "food-categories",
+    name: "Categorias de comida",
     kind: "category",
-    description: "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
+    description: "Movimientos asociados a ventas agrupadas por categorias de comida.",
   },
 ];
 
@@ -1067,12 +1070,11 @@ function findUserByUsername(db: MockDb, username: string): AppUserRecord | undef
 function isProductCategoryValue(value: string): value is NonNullable<Product["category"]> {
   return (
     value === "bebida" ||
-    value === "vivere" ||
-    value === "helado" ||
-    value === "chocolate" ||
-    value === "tabaqueria" ||
-    value === "golosina" ||
-    value === "perecedero"
+    value === "hamburguesa" ||
+    value === "pancho" ||
+    value === "combos" ||
+    value === "pollo" ||
+    value === "vegano"
   );
 }
 
@@ -1281,7 +1283,7 @@ function mockDbPlugin(): Plugin {
                 return sendJson(res, 409, { message: `Barcode already exists: ${duplicate.name}` });
               }
             }
-            const category = draft.category || "vivere";
+            const category = draft.category || "bebida";
             const effectiveMarginPercent =
               Number.isFinite(draft.marginPercent) && draft.marginPercent >= 0
                 ? normalizeMarginPercent(draft.marginPercent)
@@ -1508,7 +1510,7 @@ function mockDbPlugin(): Plugin {
                 return sendJson(res, 409, { message: `Barcode already exists: ${duplicate.name}` });
               }
             }
-            const category = draft.category || current.category || "vivere";
+            const category = draft.category || current.category || "bebida";
             const hasPrice = Number.isFinite(draft.price) && draft.price > 0;
             const hasCostPrice = Number.isFinite(draft.costPrice) && draft.costPrice > 0;
             const marginPercent =
@@ -1658,6 +1660,7 @@ function mockDbPlugin(): Plugin {
               price: draft.price,
               description: draft.description,
               imageUrl: draft.imageUrl,
+              category: draft.category,
               recipeItems: draft.recipeItems,
               createdAt: new Date().toISOString(),
             };
@@ -1683,6 +1686,7 @@ function mockDbPlugin(): Plugin {
               price: draft.price,
               description: draft.description,
               imageUrl: draft.imageUrl,
+              category: draft.category,
               recipeItems: draft.recipeItems,
               updatedAt: new Date().toISOString(),
             };
@@ -3756,7 +3760,6 @@ function buildFinancialTransactionRecord(
 }
 
 function buildFinancialTransactions(db: MockDb): FinancialTransaction[] {
-  const productsById = new Map(db.products.map((item) => [item.id, item]));
   const orderToWorkday = new Map<string, string>();
   const transactions: FinancialTransaction[] = [];
 
@@ -3770,13 +3773,6 @@ function buildFinancialTransactions(db: MockDb): FinancialTransaction[] {
     if (order.status !== "pagada") continue;
     const workdayId = orderToWorkday.get(order.id);
     const saleTotal = sanitizeMoneyAmount(order.total);
-    const tobaccoSubtotal = sanitizeMoneyAmount(
-      order.items.reduce((acc, item) => {
-        const product = productsById.get(item.productId);
-        if (product?.category !== "tabaqueria") return acc;
-        return acc + sanitizeMoneyAmount(item.unitPrice * item.quantity);
-      }, 0),
-    );
 
     transactions.push(
       buildFinancialTransactionRecord({
@@ -3822,28 +3818,6 @@ function buildFinancialTransactions(db: MockDb): FinancialTransaction[] {
       );
     }
 
-    if (tobaccoSubtotal > 0) {
-      transactions.push(
-        buildFinancialTransactionRecord({
-          id: `txn-sale-tobacco-${order.id}`,
-          createdAt: order.createdAt,
-          type: "sale-tobacco",
-          title: `Venta tabaqueria ${order.id}`,
-          description: `Subtotal de productos de tabaqueria dentro de la venta ${order.id}.`,
-          amount: tobaccoSubtotal,
-          direction: "in",
-          entryKind: "credit",
-          accountId: "account-tobacco",
-          referenceModule: "sale",
-          referenceId: order.id,
-          orderId: order.id,
-          workdayId,
-          paymentMethod: order.paymentMethod,
-          actor: order.operator,
-          countsInBalance: true,
-        }),
-      );
-    }
   }
 
   for (const expense of db.expenses) {
@@ -4046,15 +4020,15 @@ function syncFinancialData(db: MockDb) {
 
 function normalizeCategory(value: unknown): Product["category"] | undefined {
   const raw = String(value || "").trim().toLowerCase();
-  if (raw === "no perecedero") return "vivere";
+  if (raw === "no perecedero" || raw === "vivere") return "bebida";
+  if (raw === "combo") return "combos";
   if (
     raw === "bebida" ||
-    raw === "vivere" ||
-    raw === "helado" ||
-    raw === "chocolate" ||
-    raw === "tabaqueria" ||
-    raw === "golosina" ||
-    raw === "perecedero"
+    raw === "hamburguesa" ||
+    raw === "pancho" ||
+    raw === "combos" ||
+    raw === "pollo" ||
+    raw === "vegano"
   ) {
     return raw;
   }
@@ -4067,7 +4041,7 @@ function normalizeProductRecord(input: unknown): Product | null {
   const name = String(draft.name || "").trim();
   const price = Math.trunc(Number(draft.price));
   if (!id || !name || !Number.isFinite(price) || price <= 0) return null;
-  const category = normalizeCategory(draft.category) || "vivere";
+  const category = normalizeCategory(draft.category) || "bebida";
   const rawCostPrice = Math.trunc(Number(draft.costPrice));
   const costPrice = Number.isFinite(rawCostPrice) && rawCostPrice > 0 ? rawCostPrice : price;
   return {
@@ -4142,6 +4116,7 @@ function normalizeMenuProductRecord(input: unknown, ingredients: Ingredient[]): 
     price,
     description: String(draft.description || "").trim() || undefined,
     imageUrl: String(draft.imageUrl || "").trim() || undefined,
+    category: normalizeCategory(draft.category) || "hamburguesa",
     recipeItems,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
@@ -4998,7 +4973,7 @@ function computeMarginPercentFromPrices(costPrice: number | undefined, salePrice
 }
 
 function getCategoryPriceMarginPercent(db: MockDb, category: Product["category"] | undefined): number {
-  const safeCategory = category || "vivere";
+  const safeCategory = category || "bebida";
   const configured = db.priceMarginSettings.categoryMargins[safeCategory];
   if (!Number.isFinite(configured)) return 30;
   return normalizeMarginPercent(configured);
@@ -5108,7 +5083,7 @@ function getCurrentStockByProductId(db: MockDb, productId: string): number {
 }
 
 function getCategoryThreshold(db: MockDb, category: Product["category"] | undefined): number {
-  const safeCategory = category || "vivere";
+  const safeCategory = category || "bebida";
   return db.stockThresholdSettings.categoryThresholds[safeCategory] ?? 10;
 }
 
@@ -5224,7 +5199,7 @@ function generateNotificationTestCases(db: MockDb): number {
     costPrice: 2800,
     createdAt: iso(-5),
     barcode: "7790001000001",
-    category: "perecedero",
+    category: "hamburguesa",
   });
 
   const expiringProduct = upsertProduct({
@@ -5234,7 +5209,7 @@ function generateNotificationTestCases(db: MockDb): number {
     costPrice: 3400,
     createdAt: iso(-3),
     barcode: "7790001000002",
-    category: "perecedero",
+    category: "pollo",
   });
 
   const thresholdIndex = db.stockThresholdSettings.productThresholds.findIndex((item) => item.productId === lowStockProduct.id);
@@ -5583,6 +5558,7 @@ function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[]) {
     price?: unknown;
     description?: unknown;
     imageUrl?: unknown;
+    category?: unknown;
     recipeItems?: unknown;
   };
   return {
@@ -5590,6 +5566,7 @@ function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[]) {
     price: Math.max(0, Math.trunc(Number(obj.price) || 0)),
     description: String(obj.description || "").trim() || undefined,
     imageUrl: String(obj.imageUrl || "").trim() || undefined,
+    category: normalizeCategory(obj.category) || "hamburguesa",
     recipeItems: normalizeMenuRecipeItems(obj.recipeItems, ingredients),
   };
 }

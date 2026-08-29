@@ -1,6 +1,11 @@
 import type { Product } from "../model/product.types";
 import { resolveImageUrl } from "../../../shared/image/image.service";
 
+function formatCategory(value?: string) {
+  if (!value) return "-";
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 export default function ProductRow({
   product,
   formatMoney,
@@ -95,7 +100,7 @@ export default function ProductRow({
 
       {showCategory ? (
         <div style={{ textAlign: "left", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {product.category || "-"}
+          {formatCategory(product.category)}
         </div>
       ) : null}
 

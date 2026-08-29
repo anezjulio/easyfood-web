@@ -59,7 +59,7 @@ export default function RequestItemsTable({
               >
                 <div className={styles.nameCell}>{item.productName}</div>
                 <div className={styles.nameCell}>{item.brand || "-"}</div>
-                <div className={styles.categoryCell}>{item.category || "vivere"}</div>
+                <div className={styles.categoryCell}>{item.category || "bebida"}</div>
                 <div className={styles.codeCell}>{item.barcode || "-"}</div>
                 <div className={styles.quantityCell}>
                   {editable ? (

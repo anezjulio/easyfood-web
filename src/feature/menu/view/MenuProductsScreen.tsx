@@ -5,6 +5,7 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { formatMoneyARS } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
 import { formatIngredientQuantity, getIngredientQuantityUnitLabel, type Ingredient } from "../../ingredient/model/ingredient.types";
+import { PRODUCT_CATEGORIES, type ProductCategory } from "../../product/model/product.types";
 import { fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
 import type { MenuProduct, MenuRecipeItem } from "../model/menu.types";
 import { createMenuProductApi, deleteMenuProductApi, fetchMenuProductsApi, updateMenuProductApi } from "../service/menu.api";
@@ -33,6 +34,10 @@ function getRecipeLineLabel(item: MenuRecipeItem) {
   return `${formatIngredientQuantity(item.quantity, item.stockMode)} de ${item.ingredientName}`;
 }
 
+function formatCategoryLabel(category: ProductCategory) {
+  return category.charAt(0).toUpperCase() + category.slice(1);
+}
+
 export default function MenuProductsScreen() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [menuProducts, setMenuProducts] = useState<MenuProduct[]>([]);
@@ -42,6 +47,7 @@ export default function MenuProductsScreen() {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState<ProductCategory>("hamburguesa");
   const [description, setDescription] = useState("");
   const [recipeItems, setRecipeItems] = useState<MenuRecipeItem[]>([]);
   const [ingredientId, setIngredientId] = useState("");
@@ -84,7 +90,7 @@ export default function MenuProductsScreen() {
     return menuProducts
       .filter((item) => {
         if (!query) return true;
-        return normalizeForSearch(`${item.name} ${item.description || ""} ${item.recipeItems.map((recipe) => recipe.ingredientName).join(" ")}`).includes(query);
+        return normalizeForSearch(`${item.name} ${item.category || ""} ${item.description || ""} ${item.recipeItems.map((recipe) => recipe.ingredientName).join(" ")}`).includes(query);
       })
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [menuProducts, search]);
@@ -98,19 +104,21 @@ export default function MenuProductsScreen() {
           id: selectedId || "draft",
           name,
           price: parsedPrice,
+          category,
           description,
           recipeItems,
           createdAt: new Date().toISOString(),
         },
         ingredients,
       ),
-    [description, ingredients, name, parsedPrice, recipeItems, selectedId],
+    [category, description, ingredients, name, parsedPrice, recipeItems, selectedId],
   );
 
   function clearForm() {
     setSelectedId("");
     setName("");
     setPrice("");
+    setCategory("hamburguesa");
     setDescription("");
     setRecipeItems([]);
     setIngredientQuantity("");
@@ -122,6 +130,7 @@ export default function MenuProductsScreen() {
     setSelectedId(item.id);
     setName(item.name);
     setPrice(String(item.price || ""));
+    setCategory(item.category || "hamburguesa");
     setDescription(item.description || "");
     setRecipeItems(item.recipeItems);
     setIngredientQuantity("");
@@ -185,6 +194,7 @@ export default function MenuProductsScreen() {
       const draft = {
         name: trimmedName,
         price: parsedPrice,
+        category,
         description: description.trim() || undefined,
         recipeItems,
       };
@@ -257,6 +267,17 @@ export default function MenuProductsScreen() {
               <label className={styles.field}>
                 <span>Precio de venta</span>
                 <input className={styles.input} type="number" min={1} value={price} onChange={(event) => setPrice(event.target.value)} placeholder="0" />
+              </label>
+
+              <label className={styles.field}>
+                <span>Categoria</span>
+                <select className={styles.input} value={category} onChange={(event) => setCategory(event.target.value as ProductCategory)}>
+                  {PRODUCT_CATEGORIES.map((option) => (
+                    <option key={option} value={option}>
+                      {formatCategoryLabel(option)}
+                    </option>
+                  ))}
+                </select>
               </label>
 
               <label className={styles.field}>
@@ -344,6 +365,7 @@ export default function MenuProductsScreen() {
                         <strong>{item.name}</strong>
                         <span>{formatMoneyARS(item.price)}</span>
                       </div>
+                      <p className={styles.meta}>Categoria: {formatCategoryLabel(item.category || "hamburguesa")}</p>
                       {item.description ? <p className={styles.description}>{item.description}</p> : null}
                       <p className={styles.meta}>{item.recipeItems.length} ingredientes - {servings === null ? "-" : servings} porciones posibles</p>
                       <div className={styles.recipeChips}>

@@ -1,4 +1,5 @@
 import { loadIngredients } from "../../ingredient/service/ingredient.storage";
+import { PRODUCT_CATEGORIES, type ProductCategory } from "../../product/model/product.types";
 import type { MenuProduct, MenuProductDraft, MenuRecipeItem } from "../model/menu.types";
 
 const KEY = "easyfood_menu_product_v1";
@@ -10,6 +11,7 @@ const seed: MenuProduct[] = [
     price: 4500,
     description: "Pan, carne, queso, lechuga y tomate.",
     imageUrl: "food-hamburger.png",
+    category: "hamburguesa",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 1, stockMode: "unit" },
@@ -25,6 +27,7 @@ const seed: MenuProduct[] = [
     price: 6200,
     description: "Pan, doble carne, doble queso, cebolla, lechuga y tomate.",
     imageUrl: "food-hamburger.png",
+    category: "hamburguesa",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 2, stockMode: "unit" },
@@ -41,6 +44,7 @@ const seed: MenuProduct[] = [
     price: 2800,
     description: "Pan y salchicha.",
     imageUrl: "food-hotdog.png",
+    category: "pancho",
     recipeItems: [
       { ingredientId: "ing-pan-pancho", ingredientName: "Pan de pancho", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-salchicha", ingredientName: "Salchicha", quantity: 1, stockMode: "unit" },
@@ -53,6 +57,7 @@ const seed: MenuProduct[] = [
     price: 5800,
     description: "Pan, milanesa, lechuga y tomate.",
     imageUrl: "food-hamburger.png",
+    category: "pollo",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-milanesa", ingredientName: "Milanesa cocida", quantity: 1, stockMode: "unit" },
@@ -96,6 +101,11 @@ function normalizeRecipeItems(input: unknown): MenuRecipeItem[] {
     .filter((item): item is MenuRecipeItem => !!item);
 }
 
+function normalizeMenuCategory(value: unknown): ProductCategory | undefined {
+  const raw = String(value || "").trim().toLowerCase();
+  return PRODUCT_CATEGORIES.includes(raw as ProductCategory) ? (raw as ProductCategory) : undefined;
+}
+
 function normalizeMenuProductRecord(input: unknown): MenuProduct | null {
   const draft = (input || {}) as Partial<MenuProduct>;
   const id = String(draft.id || "").trim();
@@ -109,6 +119,7 @@ function normalizeMenuProductRecord(input: unknown): MenuProduct | null {
     price,
     description: String(draft.description || "").trim() || undefined,
     imageUrl: String(draft.imageUrl || "").trim() || undefined,
+    category: normalizeMenuCategory(draft.category),
     recipeItems,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
@@ -132,8 +143,9 @@ function normalizeDraft(draft: MenuProductDraft) {
   const price = Math.max(0, Math.trunc(Number(draft.price) || 0));
   const description = draft.description?.trim() || undefined;
   const imageUrl = draft.imageUrl?.trim() || undefined;
+  const category = normalizeMenuCategory(draft.category) || "hamburguesa";
   const recipeItems = normalizeRecipeItems(draft.recipeItems);
-  return { name, price, description, imageUrl, recipeItems };
+  return { name, price, description, imageUrl, category, recipeItems };
 }
 
 export function loadMenuProducts(): MenuProduct[] {
@@ -168,6 +180,7 @@ export function createMenuProduct(draft: MenuProductDraft): MenuProduct {
     price: normalized.price,
     description: normalized.description,
     imageUrl: normalized.imageUrl,
+    category: normalized.category,
     recipeItems: normalized.recipeItems,
     createdAt: new Date().toISOString(),
   };
@@ -189,6 +202,7 @@ export function updateMenuProduct(id: string, draft: MenuProductDraft): MenuProd
       price: normalized.price,
       description: normalized.description,
       imageUrl: normalized.imageUrl,
+      category: normalized.category,
       recipeItems: normalized.recipeItems,
       updatedAt: new Date().toISOString(),
     };

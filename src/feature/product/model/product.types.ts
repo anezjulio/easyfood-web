@@ -1,11 +1,10 @@
 export const PRODUCT_CATEGORIES = [
   "bebida",
-  "vivere",
-  "helado",
-  "chocolate",
-  "tabaqueria",
-  "golosina",
-  "perecedero",
+  "hamburguesa",
+  "pancho",
+  "combos",
+  "pollo",
+  "vegano",
 ] as const;
 
 export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
@@ -100,7 +99,7 @@ export function resolveEffectiveMarginPercent(
   }
 
   if (settings) {
-    const safeCategory = category || "vivere";
+    const safeCategory = category || "bebida";
     return normalizeMarginPercent(settings.categoryMargins[safeCategory] ?? DEFAULT_MARGIN_PERCENT);
   }
 

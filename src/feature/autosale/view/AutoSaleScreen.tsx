@@ -123,7 +123,7 @@ export default function AutoSaleScreen() {
     () =>
       PRODUCT_CATEGORIES.map((category) => ({
         category,
-        count: products.filter((product) => (product.category || "vivere") === category).length,
+        count: products.filter((product) => (product.category || "bebida") === category).length,
       })),
     [products],
   );
@@ -147,7 +147,7 @@ export default function AutoSaleScreen() {
   const visibleProducts = useMemo(() => {
     const safeCategory = selectedCategory || availableCategories[0] || null;
     const filtered = safeCategory
-      ? products.filter((product) => (product.category || "vivere") === safeCategory)
+      ? products.filter((product) => (product.category || "bebida") === safeCategory)
       : products;
 
     return [...filtered].sort((a, b) => {

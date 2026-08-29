@@ -66,13 +66,13 @@ export default function StockEntryScreen() {
   const [newBrand, setNewBrand] = useState("");
   const [newBarcode, setNewBarcode] = useState("");
   const [autoGenerateBarcodeOnConfirm, setAutoGenerateBarcodeOnConfirm] = useState(false);
-  const [newCategory, setNewCategory] = useState<ProductCategory>("vivere");
+  const [newCategory, setNewCategory] = useState<ProductCategory>("bebida");
   const [newImageUrl, setNewImageUrl] = useState("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [existingName, setExistingName] = useState("");
   const [existingBrand, setExistingBrand] = useState("");
   const [existingBarcode, setExistingBarcode] = useState("");
-  const [existingCategory, setExistingCategory] = useState<ProductCategory>("vivere");
+  const [existingCategory, setExistingCategory] = useState<ProductCategory>("bebida");
   const [existingImageUrl, setExistingImageUrl] = useState("");
 
   const [supplyOrderId, setSupplyOrderId] = useState("");
@@ -196,14 +196,14 @@ export default function StockEntryScreen() {
       setExistingName("");
       setExistingBrand("");
       setExistingBarcode("");
-      setExistingCategory("vivere");
+      setExistingCategory("bebida");
       setExistingImageUrl("");
       return;
     }
     setExistingName(selectedProduct.name || "");
     setExistingBrand(selectedProduct.brand || "");
     setExistingBarcode(selectedProduct.barcode || "");
-    setExistingCategory(selectedProduct.category || "vivere");
+    setExistingCategory(selectedProduct.category || "bebida");
     setExistingImageUrl(selectedProduct.imageUrl || "");
   }, [mode, selectedProduct]);
 
@@ -274,10 +274,10 @@ export default function StockEntryScreen() {
     setNewBrand("");
     setNewBarcode("");
     setAutoGenerateBarcodeOnConfirm(false);
-    setNewCategory("vivere");
+    setNewCategory("bebida");
     setNewImageUrl("");
     setNewProductUseMarginOverride(false);
-    setNewProductMarginDraft(String(marginSettings?.categoryMargins?.vivere ?? 30));
+    setNewProductMarginDraft(String(marginSettings?.categoryMargins?.bebida ?? 30));
   }
 
   function preventEnterFromSubmittingBarcode(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -427,7 +427,7 @@ export default function StockEntryScreen() {
     try {
       const updated = await removeProductPriceMarginApi(selectedProduct.id);
       setMarginSettings(updated);
-      const fallback = updated.categoryMargins[selectedProduct.category || "vivere"] ?? 30;
+      const fallback = updated.categoryMargins[selectedProduct.category || "bebida"] ?? 30;
       setProductMarginDraft(String(fallback));
       setMessage("Porcentaje especifico del producto eliminado.");
     } catch {
@@ -994,4 +994,5 @@ export default function StockEntryScreen() {
     </div>
   );
 }
+
 

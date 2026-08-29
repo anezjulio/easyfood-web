@@ -51,7 +51,7 @@ export function useProductCrudViewModel() {
   const [barcode, setBarcode] = useState("");
   const [brand, setBrand] = useState("");
   const [autoGenerateBarcodeOnSubmit, setAutoGenerateBarcodeOnSubmit] = useState(false);
-  const [category, setCategory] = useState<ProductCategory>("vivere");
+  const [category, setCategory] = useState<ProductCategory>("bebida");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [categoryMarginDraft, setCategoryMarginDraft] = useState("30");
@@ -66,10 +66,10 @@ export function useProductCrudViewModel() {
     setBarcode("");
     setBrand("");
     setAutoGenerateBarcodeOnSubmit(false);
-    setCategory("vivere");
+    setCategory("bebida");
     setNewProductUseMarginOverride(false);
-    setNewProductMarginDraft(String(marginSettings?.categoryMargins?.vivere ?? 30));
-  }, [marginSettings?.categoryMargins?.vivere]);
+    setNewProductMarginDraft(String(marginSettings?.categoryMargins?.bebida ?? 30));
+  }, [marginSettings?.categoryMargins?.bebida]);
 
   const reloadProducts = useCallback(async (nextSelectedId?: string | null) => {
     setLoading(true);
@@ -209,7 +209,7 @@ export function useProductCrudViewModel() {
     setImageUrl(selectedProduct.imageUrl || "");
     setBarcode(selectedProduct.barcode || "");
     setBrand(selectedProduct.brand || "");
-    setCategory(selectedProduct.category || "vivere");
+    setCategory(selectedProduct.category || "bebida");
   }, [effectiveMarginPercent, marginSettings, selectedProduct]);
 
   function handleSortChange(nextKey: ProductSortKey) {
@@ -333,7 +333,7 @@ export function useProductCrudViewModel() {
     try {
       const updated = await removeProductPriceMarginApi(selectedProduct.id);
       setMarginSettings(updated);
-      const fallback = updated.categoryMargins[selectedProduct.category || "vivere"] ?? 30;
+      const fallback = updated.categoryMargins[selectedProduct.category || "bebida"] ?? 30;
       setProductMarginDraft(String(fallback));
       setMessage("Porcentaje especifico de producto eliminado.");
     } catch {

@@ -1,4 +1,5 @@
 import type { IngredientStockMode } from "../../ingredient/model/ingredient.types";
+import type { ProductCategory } from "../../product/model/product.types";
 
 export type MenuRecipeItem = {
   ingredientId: string;
@@ -13,6 +14,7 @@ export type MenuProduct = {
   price: number;
   description?: string;
   imageUrl?: string;
+  category?: ProductCategory;
   recipeItems: MenuRecipeItem[];
   createdAt: string;
   updatedAt?: string;
@@ -23,6 +25,7 @@ export type MenuProductDraft = {
   price: number;
   description?: string;
   imageUrl?: string;
+  category?: ProductCategory;
   recipeItems: MenuRecipeItem[];
 };
 
