@@ -9,6 +9,7 @@ const seed: MenuProduct[] = [
     name: "Hamburguesa simple",
     price: 4500,
     description: "Pan, carne, queso, lechuga y tomate.",
+    imageUrl: "images/nueva-db-1/food-hamburger.png",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 1, stockMode: "unit" },
@@ -23,6 +24,7 @@ const seed: MenuProduct[] = [
     name: "Hamburguesa doble",
     price: 6200,
     description: "Pan, doble carne, doble queso, cebolla, lechuga y tomate.",
+    imageUrl: "images/nueva-db-1/food-hamburger.png",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 2, stockMode: "unit" },
@@ -38,6 +40,7 @@ const seed: MenuProduct[] = [
     name: "Pancho",
     price: 2800,
     description: "Pan y salchicha.",
+    imageUrl: "images/nueva-db-1/food-hotdog.png",
     recipeItems: [
       { ingredientId: "ing-pan-pancho", ingredientName: "Pan de pancho", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-salchicha", ingredientName: "Salchicha", quantity: 1, stockMode: "unit" },
@@ -49,6 +52,7 @@ const seed: MenuProduct[] = [
     name: "Sandwich de milanesa",
     price: 5800,
     description: "Pan, milanesa, lechuga y tomate.",
+    imageUrl: "images/nueva-db-1/food-hamburger.png",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-milanesa", ingredientName: "Milanesa cocida", quantity: 1, stockMode: "unit" },
@@ -104,6 +108,7 @@ function normalizeMenuProductRecord(input: unknown): MenuProduct | null {
     name,
     price,
     description: String(draft.description || "").trim() || undefined,
+    imageUrl: String(draft.imageUrl || "").trim() || undefined,
     recipeItems,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
@@ -126,8 +131,9 @@ function normalizeDraft(draft: MenuProductDraft) {
   const name = draft.name.trim();
   const price = Math.max(0, Math.trunc(Number(draft.price) || 0));
   const description = draft.description?.trim() || undefined;
+  const imageUrl = draft.imageUrl?.trim() || undefined;
   const recipeItems = normalizeRecipeItems(draft.recipeItems);
-  return { name, price, description, recipeItems };
+  return { name, price, description, imageUrl, recipeItems };
 }
 
 export function loadMenuProducts(): MenuProduct[] {
@@ -161,6 +167,7 @@ export function createMenuProduct(draft: MenuProductDraft): MenuProduct {
     name: normalized.name,
     price: normalized.price,
     description: normalized.description,
+    imageUrl: normalized.imageUrl,
     recipeItems: normalized.recipeItems,
     createdAt: new Date().toISOString(),
   };
@@ -181,6 +188,7 @@ export function updateMenuProduct(id: string, draft: MenuProductDraft): MenuProd
       name: normalized.name,
       price: normalized.price,
       description: normalized.description,
+      imageUrl: normalized.imageUrl,
       recipeItems: normalized.recipeItems,
       updatedAt: new Date().toISOString(),
     };

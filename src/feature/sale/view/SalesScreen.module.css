@@ -431,6 +431,34 @@
   min-width: 0;
 }
 
+.categoryFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.categoryFilterBtn {
+  min-height: 32px;
+  border: 1px solid #cbd5e1;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.categoryFilterBtnActive {
+  background: #f0fdf4;
+  border-color: #16a34a;
+}
+
 .modalOverlay {
   position: fixed;
   inset: 0;

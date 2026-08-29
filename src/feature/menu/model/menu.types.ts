@@ -12,6 +12,7 @@ export type MenuProduct = {
   name: string;
   price: number;
   description?: string;
+  imageUrl?: string;
   recipeItems: MenuRecipeItem[];
   createdAt: string;
   updatedAt?: string;
@@ -21,6 +22,7 @@ export type MenuProductDraft = {
   name: string;
   price: number;
   description?: string;
+  imageUrl?: string;
   recipeItems: MenuRecipeItem[];
 };
 

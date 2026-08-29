@@ -45,6 +45,9 @@ export default function ProductTable({
   existenceAlign = "left",
   showCategory = false,
   showBrand = true,
+  showBarcode = true,
+  showImageThumbnail = false,
+  showHeaderFilters = true,
 }: {
   products: Product[];
   loading: boolean;
@@ -69,9 +72,20 @@ export default function ProductTable({
   existenceAlign?: "left" | "center" | "right";
   showCategory?: boolean;
   showBrand?: boolean;
+  showBarcode?: boolean;
+  showImageThumbnail?: boolean;
+  showHeaderFilters?: boolean;
 }) {
-  const columnCount = 3 + (showBrand ? 1 : 0) + (showExistence ? 1 : 0) + (showCategory ? 1 : 0) + (showDateColumn ? 1 : 0);
-  const minTableWidth = Math.max(620, columnCount * 150);
+  const columnCount =
+    2 +
+    (showImageThumbnail ? 1 : 0) +
+    (showBarcode ? 1 : 0) +
+    (showBrand ? 1 : 0) +
+    (showExistence ? 1 : 0) +
+    (showCategory ? 1 : 0) +
+    (showDateColumn ? 1 : 0);
+  const minTableWidth = Math.max(showImageThumbnail ? 520 : 620, columnCount * 140);
+  const shouldShowFilters = !!filters && !!onFilterChange && showHeaderFilters;
   const categoryOptions = Array.from(
     new Set(
       products
@@ -158,9 +172,12 @@ export default function ProductTable({
   return (
     <section style={cardStyle}>
       <div style={{ ...headerStyle, gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`, minWidth: `${minTableWidth}px` }}>
-        <div style={headerCellStyle}>
-          <div style={{ textAlign: "left", justifySelf: "start", width: "max-content" }}>Codigo de barra</div>
-          {filters && onFilterChange ? (
+        {showImageThumbnail ? <div style={headerCellStyle} aria-label="Foto" /> : null}
+
+        {showBarcode ? (
+          <div style={headerCellStyle}>
+            <div style={{ textAlign: "left", justifySelf: "start", width: "max-content" }}>Codigo de barra</div>
+            {shouldShowFilters ? (
             <div style={filterInputWrapStyle}>
               <input
                 value={filters.barcode}
@@ -179,12 +196,13 @@ export default function ProductTable({
                   </button>
               ) : null}
             </div>
-          ) : null}
-        </div>
+            ) : null}
+          </div>
+        ) : null}
 
         <div style={headerCellStyle}>
           {renderHeaderCell("Nombre", "name")}
-          {filters && onFilterChange ? (
+          {shouldShowFilters ? (
             <div style={filterInputWrapStyle}>
               <input
                 value={filters.name}
@@ -211,7 +229,7 @@ export default function ProductTable({
         {showCategory ? (
           <div style={headerCellStyle}>
             {renderHeaderCell("Categoria", "category")}
-            {filters && onFilterChange ? (
+            {shouldShowFilters ? (
               <div style={filterInputWrapStyle}>
                 <select
                   value={filters.category || ""}
@@ -244,7 +262,7 @@ export default function ProductTable({
         {showExistence ? (
           <div style={headerCellStyle}>
             {renderHeaderCell(existenceLabel, "existencia", existenceAlign)}
-            {filters && onFilterChange ? (
+            {shouldShowFilters ? (
               <div style={filterInputWrapStyle}>
                 <input
                   value={filters.existencia || ""}
@@ -270,7 +288,7 @@ export default function ProductTable({
 
         <div style={headerCellStyle}>
           {renderHeaderCell("Precio", "price")}
-          {filters && onFilterChange ? (
+          {shouldShowFilters ? (
             <div style={filterInputWrapStyle}>
               <input
                 value={filters.price}
@@ -296,7 +314,7 @@ export default function ProductTable({
         {showDateColumn ? (
           <div style={headerCellStyle}>
             {renderHeaderCell(dateLabel, "createdAt")}
-            {filters && onFilterChange ? (
+            {shouldShowFilters ? (
               <div style={dateFilterWrapStyle}>
                 <input
                   type="date"
@@ -338,6 +356,8 @@ export default function ProductTable({
             rowIndex={index}
             showExistence={showExistence}
             showBrand={showBrand}
+            showBarcode={showBarcode}
+            showImageThumbnail={showImageThumbnail}
             showCategory={showCategory}
             showDateColumn={showDateColumn}
             existenceAlign={existenceAlign}

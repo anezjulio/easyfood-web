@@ -66,6 +66,7 @@ function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProd
     price: menuProduct.price,
     costPrice: 0,
     createdAt: menuProduct.createdAt,
+    imageUrl: menuProduct.imageUrl,
     category: "perecedero",
     brand: "Menu",
     existencia: 9999,
@@ -396,6 +397,14 @@ export default function SalesScreen() {
       return (new Date(a.ultimoIngreso || a.createdAt).getTime() - new Date(b.ultimoIngreso || b.createdAt).getTime()) * dir;
     });
   }, [products, nameFilter, barcodeFilter, categoryFilter, priceFilter, createdAtFilter, sortKey, sortDir]);
+
+  const categoryOptions = useMemo(
+    () =>
+      [...new Set(products.map((item) => (item.category || "").trim()).filter(Boolean))].sort((a, b) =>
+        a.localeCompare(b),
+      ),
+    [products],
+  );
 
   const cartBaseTotal = useMemo(
     () => cart.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0),
@@ -1012,6 +1021,27 @@ export default function SalesScreen() {
           </section>
 
           <section ref={listCardRef} className={styles.listCard}>
+            <div className={styles.categoryFilters} aria-label="Categorias de productos">
+              <button
+                type="button"
+                className={`${styles.categoryFilterBtn} ${categoryFilter ? "" : styles.categoryFilterBtnActive}`.trim()}
+                onClick={() => setCategoryFilter("")}
+              >
+                Todas
+              </button>
+              {categoryOptions.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  className={`${styles.categoryFilterBtn} ${
+                    categoryFilter === category ? styles.categoryFilterBtnActive : ""
+                  }`.trim()}
+                  onClick={() => setCategoryFilter(category)}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
             <ProductTable
               products={filteredProducts}
               loading={loading}
@@ -1034,6 +1064,10 @@ export default function SalesScreen() {
               }}
               onFilterChange={handleFilterChange}
               showCategory
+              showBrand={false}
+              showBarcode={false}
+              showImageThumbnail
+              showHeaderFilters={false}
               showDateColumn={false}
               topMargin={0}
             />

@@ -7,7 +7,8 @@
       "costPrice": 5200,
       "createdAt": "2026-08-29T12:00:00.000Z",
       "category": "perecedero",
-      "barcode": "779000100001"
+      "barcode": "779000100001",
+      "imageUrl": "images/nueva-db-1/food-hamburger.png"
     },
     {
       "id": "food-papas-cheddar",
@@ -16,7 +17,8 @@
       "costPrice": 3100,
       "createdAt": "2026-08-29T12:05:00.000Z",
       "category": "perecedero",
-      "barcode": "779000100002"
+      "barcode": "779000100002",
+      "imageUrl": "images/nueva-db-1/food-fries-cheddar.png"
     },
     {
       "id": "food-pancho-especial",
@@ -25,7 +27,8 @@
       "costPrice": 2100,
       "createdAt": "2026-08-29T12:10:00.000Z",
       "category": "perecedero",
-      "barcode": "779000100003"
+      "barcode": "779000100003",
+      "imageUrl": "images/nueva-db-1/food-hotdog.png"
     },
     {
       "id": "food-tostado-jamon-queso",
@@ -34,7 +37,8 @@
       "costPrice": 2400,
       "createdAt": "2026-08-29T12:15:00.000Z",
       "category": "perecedero",
-      "barcode": "779000100004"
+      "barcode": "779000100004",
+      "imageUrl": "images/nueva-db-1/food-hamburger.png"
     },
     {
       "id": "food-gaseosa-500",
@@ -43,7 +47,8 @@
       "costPrice": 950,
       "createdAt": "2026-08-29T12:20:00.000Z",
       "category": "bebida",
-      "barcode": "779000100005"
+      "barcode": "779000100005",
+      "imageUrl": "images/nueva-db-1/food-drinks.png"
     },
     {
       "id": "food-agua-500",
@@ -52,7 +57,8 @@
       "costPrice": 760,
       "createdAt": "2026-08-29T12:25:00.000Z",
       "category": "bebida",
-      "barcode": "779000100006"
+      "barcode": "779000100006",
+      "imageUrl": "images/nueva-db-1/food-drinks.png"
     }
   ],
   "productPrices": [
@@ -619,7 +625,8 @@
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-08-29T13:00:00.000Z"
+      "createdAt": "2026-08-29T13:00:00.000Z",
+      "imageUrl": "images/nueva-db-1/food-hamburger.png"
     },
     {
       "id": "menu-hamburguesa-bacon",
@@ -670,7 +677,8 @@
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-08-29T13:05:00.000Z"
+      "createdAt": "2026-08-29T13:05:00.000Z",
+      "imageUrl": "images/nueva-db-1/food-hamburger.png"
     },
     {
       "id": "menu-pancho-completo",
@@ -709,7 +717,8 @@
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-08-29T13:10:00.000Z"
+      "createdAt": "2026-08-29T13:10:00.000Z",
+      "imageUrl": "images/nueva-db-1/food-hotdog.png"
     },
     {
       "id": "menu-tostado-jamon-queso",
@@ -736,7 +745,8 @@
           "stockMode": "unit"
         }
       ],
-      "createdAt": "2026-08-29T13:15:00.000Z"
+      "createdAt": "2026-08-29T13:15:00.000Z",
+      "imageUrl": "images/nueva-db-1/food-hamburger.png"
     },
     {
       "id": "menu-papas-cheddar-bacon",
@@ -763,7 +773,8 @@
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-08-29T13:20:00.000Z"
+      "createdAt": "2026-08-29T13:20:00.000Z",
+      "imageUrl": "images/nueva-db-1/food-fries-cheddar.png"
     }
   ],
   "feedbackEntries": [],

@@ -1,4 +1,5 @@
 import type { Product } from "../model/product.types";
+import { resolveImageUrl } from "../../../shared/image/image.service";
 
 export default function ProductRow({
   product,
@@ -10,6 +11,8 @@ export default function ProductRow({
   rowIndex,
   showExistence = false,
   showBrand = true,
+  showBarcode = true,
+  showImageThumbnail = false,
   showCategory = false,
   showDateColumn = true,
   existenceAlign = "left",
@@ -24,16 +27,26 @@ export default function ProductRow({
   rowIndex: number;
   showExistence?: boolean;
   showBrand?: boolean;
+  showBarcode?: boolean;
+  showImageThumbnail?: boolean;
   showCategory?: boolean;
   showDateColumn?: boolean;
   existenceAlign?: "left" | "center" | "right";
   dateValue?: string;
 }) {
-  const columnCount = 3 + (showBrand ? 1 : 0) + (showExistence ? 1 : 0) + (showCategory ? 1 : 0) + (showDateColumn ? 1 : 0);
-  const minTableWidth = Math.max(620, columnCount * 150);
+  const columnCount =
+    2 +
+    (showImageThumbnail ? 1 : 0) +
+    (showBarcode ? 1 : 0) +
+    (showBrand ? 1 : 0) +
+    (showExistence ? 1 : 0) +
+    (showCategory ? 1 : 0) +
+    (showDateColumn ? 1 : 0);
+  const minTableWidth = Math.max(showImageThumbnail ? 520 : 620, columnCount * 140);
   const isEven = rowIndex % 2 === 0;
   const baseBg = isEven ? "#f8fafc" : "white";
   const isOutOfStock = Number(product.existencia || 0) <= 0;
+  const imageUrl = resolveImageUrl(product.imageUrl);
 
   return (
     <div
@@ -54,9 +67,21 @@ export default function ProductRow({
         opacity: isOutOfStock ? 0.5 : 1,
       }}
     >
-      <div style={{ textAlign: "left", color: "#334155", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        {product.barcode || "-"}
-      </div>
+      {showImageThumbnail ? (
+        <div style={imageCellStyle}>
+          {imageUrl ? (
+            <img src={imageUrl} alt="" style={imageStyle} loading="lazy" />
+          ) : (
+            <div style={imageFallbackStyle}>{product.name.slice(0, 1).toUpperCase()}</div>
+          )}
+        </div>
+      ) : null}
+
+      {showBarcode ? (
+        <div style={{ textAlign: "left", color: "#334155", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {product.barcode || "-"}
+        </div>
+      ) : null}
 
       <div style={{ fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {product.name}
@@ -96,10 +121,32 @@ export default function ProductRow({
 const rowStyle: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-  padding: 14,
+  padding: 12,
   borderTop: "1px solid #e2e8f0",
   alignItems: "center",
   cursor: "pointer",
   userSelect: "none",
   WebkitUserSelect: "none",
+};
+
+const imageCellStyle: React.CSSProperties = {
+  width: 58,
+  height: 58,
+};
+
+const imageStyle: React.CSSProperties = {
+  width: 58,
+  height: 58,
+  objectFit: "cover",
+  border: "1px solid #e2e8f0",
+  background: "#ffffff",
+  display: "block",
+};
+
+const imageFallbackStyle: React.CSSProperties = {
+  ...imageStyle,
+  display: "grid",
+  placeItems: "center",
+  color: "#0f172a",
+  fontWeight: 900,
 };
