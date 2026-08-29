@@ -1104,7 +1104,9 @@ export default function SalesScreen() {
           >
             <div className={styles.modalHeader}>
               <div className={styles.modalTitleWrap}>
-                <h3 className={styles.modalTitle}>Pago de compra</h3>
+                <h3 className={styles.modalTitle}>
+                  Pago de compra <span className={styles.modalOrderCode}>Orden: {pendingOrder?.id || "-"}</span>
+                </h3>
                 {hasPendingPayment ? (
                   <p className={`${styles.paymentTimer} ${isPaymentCountdownWarning ? styles.paymentTimerWarning : ""}`}>
                     Tiempo restante: <strong>{paymentCountdownLabel}</strong>
@@ -1145,13 +1147,8 @@ export default function SalesScreen() {
                 );
               })}
             </div>
-            <p className={styles.modalHint}>Orden: {pendingOrder?.id || "-"}</p>
 
             <div className={styles.modalTotals}>
-              <p className={styles.modalHint}>
-                IVA ({ivaPercent}% - {taxSettings.mode === "add_to_total" ? "se suma al total" : "solo informativo"}):{" "}
-                <strong>{formatMoneyARS(ivaAmount)}</strong>
-              </p>
               {showSubtotalLine ? (
                 <p className={styles.modalHint}>
                   Subtotal: <strong>{formatMoneyARS(pendingBaseTotal)}</strong>
