@@ -188,8 +188,8 @@ export default function OperationScreen() {
           <div className={styles.grid}>
             {!isTerminal ? (
               <>
-                <BigBtn title="Caja" subtitle="Apertura y cierre de turno" onClick={() => nav("/cash")} />
                 <BigBtn title="Ventas" subtitle="Cobros y tickets" onClick={() => nav("/sales")} variant="sales" />
+                <BigBtn title="Caja" subtitle="Apertura y cierre de turno" onClick={() => nav("/cash")} />
                 <BigBtn
                   title="Confirmar Gastos"
                   subtitle="Validar gastos asignados"
@@ -217,10 +217,10 @@ export default function OperationScreen() {
             <div className={styles.grid}>
               <BigBtn title="Creacion de Menu" subtitle="Recetas para vender" onClick={() => nav("/menu-products")} variant="menu" />
               <BigBtn title="Ingredientes" subtitle="Definicion y caducidad" onClick={() => nav("/ingredients")} />
-              <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} />
               {isAdmin ? (
                 <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
               ) : null}
+              <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} disabled />
               <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} disabled />
               {isAdmin ? (
                 <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} disabled />

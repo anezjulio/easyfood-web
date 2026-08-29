@@ -1,152 +1,230 @@
 {
   "products": [
     {
-      "id": "food-hamburguesa-simple",
-      "name": "Hamburguesa simple",
-      "price": 4500,
-      "costPrice": 2800,
-      "createdAt": "2026-02-01T11:00:00.000Z",
-      "category": "perecedero"
+      "id": "food-combo-burger",
+      "name": "Combo hamburguesa completa",
+      "price": 8900,
+      "costPrice": 5200,
+      "createdAt": "2026-08-29T12:00:00.000Z",
+      "category": "perecedero",
+      "barcode": "779000100001"
     },
     {
-      "id": "food-hamburguesa-doble",
-      "name": "Hamburguesa doble",
-      "price": 6200,
-      "costPrice": 3900,
-      "createdAt": "2026-02-01T11:05:00.000Z",
-      "category": "perecedero"
+      "id": "food-papas-cheddar",
+      "name": "Papas con cheddar y bacon",
+      "price": 5400,
+      "costPrice": 3100,
+      "createdAt": "2026-08-29T12:05:00.000Z",
+      "category": "perecedero",
+      "barcode": "779000100002"
     },
     {
-      "id": "food-pancho",
-      "name": "Pancho",
-      "price": 2800,
-      "costPrice": 1500,
-      "createdAt": "2026-02-01T11:10:00.000Z",
-      "category": "perecedero"
+      "id": "food-pancho-especial",
+      "name": "Pancho especial",
+      "price": 3900,
+      "costPrice": 2100,
+      "createdAt": "2026-08-29T12:10:00.000Z",
+      "category": "perecedero",
+      "barcode": "779000100003"
     },
     {
-      "id": "food-sandwich-milanesa",
-      "name": "Sandwich de milanesa",
-      "price": 5800,
-      "costPrice": 3600,
-      "createdAt": "2026-02-01T11:15:00.000Z",
-      "category": "perecedero"
+      "id": "food-tostado-jamon-queso",
+      "name": "Tostado jamon y queso",
+      "price": 4200,
+      "costPrice": 2400,
+      "createdAt": "2026-08-29T12:15:00.000Z",
+      "category": "perecedero",
+      "barcode": "779000100004"
     },
     {
-      "id": "food-papas-fritas",
-      "name": "Papas fritas",
-      "price": 3200,
-      "costPrice": 1800,
-      "createdAt": "2026-02-01T11:20:00.000Z",
-      "category": "perecedero"
+      "id": "food-gaseosa-500",
+      "name": "Gaseosa 500 ml",
+      "price": 1800,
+      "costPrice": 950,
+      "createdAt": "2026-08-29T12:20:00.000Z",
+      "category": "bebida",
+      "barcode": "779000100005"
     },
     {
       "id": "food-agua-500",
-      "name": "Agua mineral 500ml",
-      "price": 1200,
-      "costPrice": 700,
-      "createdAt": "2026-02-01T11:25:00.000Z",
-      "category": "bebida"
+      "name": "Agua mineral 500 ml",
+      "price": 1400,
+      "costPrice": 760,
+      "createdAt": "2026-08-29T12:25:00.000Z",
+      "category": "bebida",
+      "barcode": "779000100006"
     }
   ],
   "productPrices": [
     {
-      "id": "pp-food-hamburguesa-simple",
-      "productId": "food-hamburguesa-simple",
-      "newPrice": 4500,
-      "costPrice": 2800,
-      "marginPercent": 60,
-      "createdAt": "2026-02-01T11:00:00.000Z"
+      "id": "pp-food-combo-burger",
+      "productId": "food-combo-burger",
+      "newPrice": 8900,
+      "costPrice": 5200,
+      "marginPercent": 71,
+      "createdAt": "2026-08-29T12:00:00.000Z"
     },
     {
-      "id": "pp-food-hamburguesa-doble",
-      "productId": "food-hamburguesa-doble",
-      "newPrice": 6200,
-      "costPrice": 3900,
-      "marginPercent": 58,
-      "createdAt": "2026-02-01T11:05:00.000Z"
+      "id": "pp-food-papas-cheddar",
+      "productId": "food-papas-cheddar",
+      "newPrice": 5400,
+      "costPrice": 3100,
+      "marginPercent": 74,
+      "createdAt": "2026-08-29T12:05:00.000Z"
     },
     {
-      "id": "pp-food-pancho",
-      "productId": "food-pancho",
-      "newPrice": 2800,
-      "costPrice": 1500,
+      "id": "pp-food-pancho-especial",
+      "productId": "food-pancho-especial",
+      "newPrice": 3900,
+      "costPrice": 2100,
       "marginPercent": 86,
-      "createdAt": "2026-02-01T11:10:00.000Z"
+      "createdAt": "2026-08-29T12:10:00.000Z"
     },
     {
-      "id": "pp-food-sandwich-milanesa",
-      "productId": "food-sandwich-milanesa",
-      "newPrice": 5800,
-      "costPrice": 3600,
-      "marginPercent": 61,
-      "createdAt": "2026-02-01T11:15:00.000Z"
+      "id": "pp-food-tostado-jamon-queso",
+      "productId": "food-tostado-jamon-queso",
+      "newPrice": 4200,
+      "costPrice": 2400,
+      "marginPercent": 75,
+      "createdAt": "2026-08-29T12:15:00.000Z"
     },
     {
-      "id": "pp-food-papas-fritas",
-      "productId": "food-papas-fritas",
-      "newPrice": 3200,
-      "costPrice": 1800,
-      "marginPercent": 77,
-      "createdAt": "2026-02-01T11:20:00.000Z"
+      "id": "pp-food-gaseosa-500",
+      "productId": "food-gaseosa-500",
+      "newPrice": 1800,
+      "costPrice": 950,
+      "marginPercent": 89,
+      "createdAt": "2026-08-29T12:20:00.000Z"
     },
     {
       "id": "pp-food-agua-500",
       "productId": "food-agua-500",
-      "newPrice": 1200,
-      "costPrice": 700,
-      "marginPercent": 71,
-      "createdAt": "2026-02-01T11:25:00.000Z"
+      "newPrice": 1400,
+      "costPrice": 760,
+      "marginPercent": 84,
+      "createdAt": "2026-08-29T12:25:00.000Z"
     }
   ],
   "ingredients": [
     {
-      "id": "ing220820262053392066",
-      "name": "Chuleta",
-      "expiresInDays": 3,
-      "stockMode": "weight",
-      "stockQuantity": 0,
-      "createdAt": "2026-08-22T23:53:39.575Z"
-    },
-    {
       "id": "ing-pan-hamburguesa",
-      "name": "Pan de hamburguesa",
+      "name": "Pan hamburguesas",
       "expiresInDays": 5,
       "stockMode": "unit",
-      "stockQuantity": 48,
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "stockQuantity": 80,
+      "createdAt": "2026-08-29T10:00:00.000Z"
     },
     {
-      "id": "ing-carne-medallon",
+      "id": "ing-pan-pancho",
+      "name": "Pan panchos",
+      "expiresInDays": 5,
+      "stockMode": "unit",
+      "stockQuantity": 90,
+      "createdAt": "2026-08-29T10:05:00.000Z"
+    },
+    {
+      "id": "ing-medallon-carne",
       "name": "Medallon de carne",
       "expiresInDays": 3,
       "stockMode": "unit",
-      "stockQuantity": 80,
-      "createdAt": "2026-02-01T10:05:00.000Z"
+      "stockQuantity": 100,
+      "createdAt": "2026-08-29T10:10:00.000Z"
+    },
+    {
+      "id": "ing-salchicha",
+      "name": "Salchicha",
+      "expiresInDays": 6,
+      "stockMode": "unit",
+      "stockQuantity": 120,
+      "createdAt": "2026-08-29T10:15:00.000Z"
     },
     {
       "id": "ing-queso-feta",
-      "name": "Queso en feta",
+      "name": "Queso feta",
       "expiresInDays": 7,
       "stockMode": "unit",
-      "stockQuantity": 120,
-      "createdAt": "2026-02-01T10:10:00.000Z"
+      "stockQuantity": 160,
+      "createdAt": "2026-08-29T10:20:00.000Z"
     },
     {
-      "id": "ing-cebolla",
-      "name": "Cebolla",
-      "expiresInDays": 10,
+      "id": "ing-jamon-feta",
+      "name": "Jamon feta",
+      "expiresInDays": 6,
+      "stockMode": "unit",
+      "stockQuantity": 140,
+      "createdAt": "2026-08-29T10:25:00.000Z"
+    },
+    {
+      "id": "ing-cheddar-feta",
+      "name": "Cheddar feta",
+      "expiresInDays": 7,
+      "stockMode": "unit",
+      "stockQuantity": 180,
+      "createdAt": "2026-08-29T10:30:00.000Z"
+    },
+    {
+      "id": "ing-tocino",
+      "name": "Tocino",
+      "expiresInDays": 5,
       "stockMode": "weight",
-      "stockQuantity": 3500,
-      "createdAt": "2026-02-01T10:15:00.000Z"
+      "stockQuantity": 2500,
+      "createdAt": "2026-08-29T10:35:00.000Z"
+    },
+    {
+      "id": "ing-papas-pay",
+      "name": "Papas pay",
+      "expiresInDays": 20,
+      "stockMode": "weight",
+      "stockQuantity": 6000,
+      "createdAt": "2026-08-29T10:40:00.000Z"
+    },
+    {
+      "id": "ing-papa-baston",
+      "name": "Papa baston",
+      "expiresInDays": 12,
+      "stockMode": "weight",
+      "stockQuantity": 18000,
+      "createdAt": "2026-08-29T10:45:00.000Z"
+    },
+    {
+      "id": "ing-mayonesa",
+      "name": "Mayonesa",
+      "expiresInDays": 30,
+      "stockMode": "weight",
+      "stockQuantity": 5000,
+      "createdAt": "2026-08-29T10:50:00.000Z"
+    },
+    {
+      "id": "ing-ketchup",
+      "name": "Ketchup",
+      "expiresInDays": 30,
+      "stockMode": "weight",
+      "stockQuantity": 5000,
+      "createdAt": "2026-08-29T10:55:00.000Z"
     },
     {
       "id": "ing-lechuga",
       "name": "Lechuga",
       "expiresInDays": 4,
       "stockMode": "weight",
-      "stockQuantity": 1800,
-      "createdAt": "2026-02-01T10:20:00.000Z"
+      "stockQuantity": 3200,
+      "createdAt": "2026-08-29T11:00:00.000Z"
+    },
+    {
+      "id": "ing-cebolla",
+      "name": "Cebolla",
+      "expiresInDays": 10,
+      "stockMode": "weight",
+      "stockQuantity": 4500,
+      "createdAt": "2026-08-29T11:05:00.000Z"
+    },
+    {
+      "id": "ing-pepinillos",
+      "name": "Pepinillos",
+      "expiresInDays": 18,
+      "stockMode": "weight",
+      "stockQuantity": 2800,
+      "createdAt": "2026-08-29T11:10:00.000Z"
     },
     {
       "id": "ing-tomate",
@@ -154,244 +232,31 @@
       "expiresInDays": 5,
       "stockMode": "weight",
       "stockQuantity": 4200,
-      "createdAt": "2026-02-01T10:25:00.000Z"
-    },
-    {
-      "id": "ing-pan-pancho",
-      "name": "Pan de pancho",
-      "expiresInDays": 5,
-      "stockMode": "unit",
-      "stockQuantity": 60,
-      "createdAt": "2026-02-01T10:30:00.000Z"
-    },
-    {
-      "id": "ing-salchicha",
-      "name": "Salchicha",
-      "expiresInDays": 6,
-      "stockMode": "unit",
-      "stockQuantity": 60,
-      "createdAt": "2026-02-01T10:35:00.000Z"
-    },
-    {
-      "id": "ing-milanesa",
-      "name": "Milanesa cocida",
-      "expiresInDays": 2,
-      "stockMode": "unit",
-      "stockQuantity": 30,
-      "createdAt": "2026-02-01T10:40:00.000Z"
-    },
-    {
-      "id": "ing-papa",
-      "name": "Papa",
-      "expiresInDays": 12,
-      "stockMode": "weight",
-      "stockQuantity": 9000,
-      "createdAt": "2026-02-01T10:45:00.000Z"
+      "createdAt": "2026-08-29T11:15:00.000Z"
     }
   ],
   "menuProducts": [
     {
-      "id": "menu220820262109221860",
-      "name": "Chuleton",
-      "price": 14000,
+      "id": "menu-hamburguesa-completa",
+      "name": "Hamburguesa completa",
+      "price": 6800,
+      "description": "Pan, medallon, cheddar, lechuga, tomate, cebolla, pepinillos, mayonesa y ketchup.",
       "recipeItems": [
         {
-          "ingredientId": "ing-papa",
-          "ingredientName": "Papa",
-          "quantity": 20,
-          "stockMode": "weight"
-        },
-        {
           "ingredientId": "ing-pan-hamburguesa",
-          "ingredientName": "Pan de hamburguesa",
+          "ingredientName": "Pan hamburguesas",
           "quantity": 1,
           "stockMode": "unit"
         },
         {
-          "ingredientId": "ing-lechuga",
-          "ingredientName": "Lechuga",
-          "quantity": 20,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-tomate",
-          "ingredientName": "Tomate",
-          "quantity": 20,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-cebolla",
-          "ingredientName": "Cebolla",
-          "quantity": 15,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-queso-feta",
-          "ingredientName": "Queso en feta",
-          "quantity": 2,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing220820262053392066",
-          "ingredientName": "Chuleta",
-          "quantity": 180,
-          "stockMode": "weight"
-        }
-      ],
-      "createdAt": "2026-08-23T00:09:22.509Z"
-    },
-    {
-      "id": "menu220820262020482203",
-      "name": "hamburguesa simple carne",
-      "price": 5000,
-      "recipeItems": [
-        {
-          "ingredientId": "ing-pan-hamburguesa",
-          "ingredientName": "Pan de hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-carne-medallon",
+          "ingredientId": "ing-medallon-carne",
           "ingredientName": "Medallon de carne",
           "quantity": 1,
           "stockMode": "unit"
         },
         {
-          "ingredientId": "ing-cebolla",
-          "ingredientName": "Cebolla",
-          "quantity": 15,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-queso-feta",
-          "ingredientName": "Queso en feta",
-          "quantity": 1,
-          "stockMode": "unit"
-        }
-      ],
-      "createdAt": "2026-08-22T23:20:48.367Z"
-    },
-    {
-      "id": "menu-hamburguesa-simple",
-      "name": "Hamburguesa simple",
-      "price": 4500,
-      "description": "Pan, carne, queso, lechuga y tomate.",
-      "recipeItems": [
-        {
-          "ingredientId": "ing-pan-hamburguesa",
-          "ingredientName": "Pan de hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-carne-medallon",
-          "ingredientName": "Medallon de carne",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-queso-feta",
-          "ingredientName": "Queso en feta",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-lechuga",
-          "ingredientName": "Lechuga",
-          "quantity": 20,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-tomate",
-          "ingredientName": "Tomate",
-          "quantity": 35,
-          "stockMode": "weight"
-        }
-      ],
-      "createdAt": "2026-02-01T11:00:00.000Z"
-    },
-    {
-      "id": "menu-hamburguesa-doble",
-      "name": "Hamburguesa doble",
-      "price": 6200,
-      "description": "Pan, doble carne, doble queso, cebolla, lechuga y tomate.",
-      "recipeItems": [
-        {
-          "ingredientId": "ing-pan-hamburguesa",
-          "ingredientName": "Pan de hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-carne-medallon",
-          "ingredientName": "Medallon de carne",
-          "quantity": 2,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-queso-feta",
-          "ingredientName": "Queso en feta",
-          "quantity": 2,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-cebolla",
-          "ingredientName": "Cebolla",
-          "quantity": 20,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-lechuga",
-          "ingredientName": "Lechuga",
-          "quantity": 20,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-tomate",
-          "ingredientName": "Tomate",
-          "quantity": 35,
-          "stockMode": "weight"
-        }
-      ],
-      "createdAt": "2026-02-01T11:05:00.000Z"
-    },
-    {
-      "id": "menu-pancho",
-      "name": "Pancho",
-      "price": 2800,
-      "description": "Pan y salchicha.",
-      "recipeItems": [
-        {
-          "ingredientId": "ing-pan-pancho",
-          "ingredientName": "Pan de pancho",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-salchicha",
-          "ingredientName": "Salchicha",
-          "quantity": 1,
-          "stockMode": "unit"
-        }
-      ],
-      "createdAt": "2026-02-01T11:10:00.000Z"
-    },
-    {
-      "id": "menu-sandwich-milanesa",
-      "name": "Sandwich de milanesa",
-      "price": 5800,
-      "description": "Pan, milanesa, lechuga y tomate.",
-      "recipeItems": [
-        {
-          "ingredientId": "ing-pan-hamburguesa",
-          "ingredientName": "Pan de hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-milanesa",
-          "ingredientName": "Milanesa cocida",
+          "ingredientId": "ing-cheddar-feta",
+          "ingredientName": "Cheddar feta",
           "quantity": 1,
           "stockMode": "unit"
         },
@@ -404,11 +269,179 @@
         {
           "ingredientId": "ing-tomate",
           "ingredientName": "Tomate",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cebolla",
+          "ingredientName": "Cebolla",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-pepinillos",
+          "ingredientName": "Pepinillos",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-mayonesa",
+          "ingredientName": "Mayonesa",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-ketchup",
+          "ingredientName": "Ketchup",
+          "quantity": 15,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:00:00.000Z"
+    },
+    {
+      "id": "menu-hamburguesa-bacon",
+      "name": "Hamburguesa bacon cheddar",
+      "price": 7600,
+      "description": "Pan, medallon, cheddar, tocino, cebolla y aderezos.",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-pan-hamburguesa",
+          "ingredientName": "Pan hamburguesas",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-medallon-carne",
+          "ingredientName": "Medallon de carne",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-cheddar-feta",
+          "ingredientName": "Cheddar feta",
+          "quantity": 2,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-tocino",
+          "ingredientName": "Tocino",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cebolla",
+          "ingredientName": "Cebolla",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-mayonesa",
+          "ingredientName": "Mayonesa",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-ketchup",
+          "ingredientName": "Ketchup",
+          "quantity": 15,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:05:00.000Z"
+    },
+    {
+      "id": "menu-pancho-completo",
+      "name": "Pancho completo",
+      "price": 3900,
+      "description": "Pan, salchicha, papas pay, mayonesa y ketchup.",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-pan-pancho",
+          "ingredientName": "Pan panchos",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-salchicha",
+          "ingredientName": "Salchicha",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-papas-pay",
+          "ingredientName": "Papas pay",
+          "quantity": 25,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-mayonesa",
+          "ingredientName": "Mayonesa",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-ketchup",
+          "ingredientName": "Ketchup",
+          "quantity": 15,
+          "stockMode": "weight"
+        }
+      ],
+      "createdAt": "2026-08-29T13:10:00.000Z"
+    },
+    {
+      "id": "menu-tostado-jamon-queso",
+      "name": "Tostado jamon y queso",
+      "price": 4200,
+      "description": "Pan de hamburguesa, jamon y queso en fetas.",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-pan-hamburguesa",
+          "ingredientName": "Pan hamburguesas",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-jamon-feta",
+          "ingredientName": "Jamon feta",
+          "quantity": 2,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-queso-feta",
+          "ingredientName": "Queso feta",
+          "quantity": 2,
+          "stockMode": "unit"
+        }
+      ],
+      "createdAt": "2026-08-29T13:15:00.000Z"
+    },
+    {
+      "id": "menu-papas-cheddar-bacon",
+      "name": "Papas cheddar bacon",
+      "price": 5400,
+      "description": "Papas baston, cheddar y tocino.",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-papa-baston",
+          "ingredientName": "Papa baston",
+          "quantity": 300,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cheddar-feta",
+          "ingredientName": "Cheddar feta",
+          "quantity": 2,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-tocino",
+          "ingredientName": "Tocino",
           "quantity": 40,
           "stockMode": "weight"
         }
       ],
-      "createdAt": "2026-02-01T11:15:00.000Z"
+      "createdAt": "2026-08-29T13:20:00.000Z"
     }
   ],
   "users": [
@@ -484,212 +517,70 @@
   "requests": [],
   "stocks": [
     {
-      "id": "se220820262145155990",
-      "productId": "food-papas-fritas",
-      "quantity": -1,
-      "description": "Venta orden or220820262144049246",
-      "createdAt": "2026-08-23T00:45:15.002Z"
-    },
-    {
-      "id": "se220820262145143031",
-      "productId": "food-agua-500",
-      "quantity": -1,
-      "description": "Venta orden or220820262144049246",
-      "createdAt": "2026-08-23T00:45:14.982Z"
-    },
-    {
-      "id": "st-food-hamburguesa-simple",
-      "productId": "food-hamburguesa-simple",
-      "expirationDate": "2026-02-06",
-      "quantity": 24,
-      "description": "Stock inicial de menu",
-      "costPrice": 2800,
-      "salePrice": 4500,
-      "createdAt": "2026-02-01T12:00:00.000Z"
-    },
-    {
-      "id": "st-food-hamburguesa-doble",
-      "productId": "food-hamburguesa-doble",
-      "expirationDate": "2026-02-06",
-      "quantity": 18,
-      "description": "Stock inicial de menu",
-      "costPrice": 3900,
-      "salePrice": 6200,
-      "createdAt": "2026-02-01T12:05:00.000Z"
-    },
-    {
-      "id": "st-food-pancho",
-      "productId": "food-pancho",
-      "expirationDate": "2026-02-06",
-      "quantity": 30,
-      "description": "Stock inicial de menu",
-      "costPrice": 1500,
-      "salePrice": 2800,
-      "createdAt": "2026-02-01T12:10:00.000Z"
-    },
-    {
-      "id": "st-food-sandwich-milanesa",
-      "productId": "food-sandwich-milanesa",
-      "expirationDate": "2026-02-03",
-      "quantity": 12,
-      "description": "Stock inicial de menu",
-      "costPrice": 3600,
-      "salePrice": 5800,
-      "createdAt": "2026-02-01T12:15:00.000Z"
-    },
-    {
-      "id": "st-food-papas-fritas",
-      "productId": "food-papas-fritas",
-      "expirationDate": "2026-02-04",
+      "id": "st-food-combo-burger",
+      "productId": "food-combo-burger",
+      "expirationDate": "2026-09-05",
       "quantity": 20,
-      "description": "Stock inicial de menu",
-      "costPrice": 1800,
-      "salePrice": 3200,
-      "createdAt": "2026-02-01T12:20:00.000Z"
+      "description": "Stock inicial de apertura",
+      "costPrice": 5200,
+      "salePrice": 8900,
+      "createdAt": "2026-08-29T14:00:00.000Z"
+    },
+    {
+      "id": "st-food-papas-cheddar",
+      "productId": "food-papas-cheddar",
+      "expirationDate": "2026-09-05",
+      "quantity": 20,
+      "description": "Stock inicial de apertura",
+      "costPrice": 3100,
+      "salePrice": 5400,
+      "createdAt": "2026-08-29T14:05:00.000Z"
+    },
+    {
+      "id": "st-food-pancho-especial",
+      "productId": "food-pancho-especial",
+      "expirationDate": "2026-09-05",
+      "quantity": 20,
+      "description": "Stock inicial de apertura",
+      "costPrice": 2100,
+      "salePrice": 3900,
+      "createdAt": "2026-08-29T14:10:00.000Z"
+    },
+    {
+      "id": "st-food-tostado-jamon-queso",
+      "productId": "food-tostado-jamon-queso",
+      "expirationDate": "2026-09-05",
+      "quantity": 20,
+      "description": "Stock inicial de apertura",
+      "costPrice": 2400,
+      "salePrice": 4200,
+      "createdAt": "2026-08-29T14:15:00.000Z"
+    },
+    {
+      "id": "st-food-gaseosa-500",
+      "productId": "food-gaseosa-500",
+      "expirationDate": "2027-02-28",
+      "quantity": 48,
+      "description": "Stock inicial de apertura",
+      "costPrice": 950,
+      "salePrice": 1800,
+      "createdAt": "2026-08-29T14:20:00.000Z"
     },
     {
       "id": "st-food-agua-500",
       "productId": "food-agua-500",
-      "expirationDate": "2027-02-01",
-      "quantity": 60,
-      "description": "Stock inicial bebidas",
-      "costPrice": 700,
-      "salePrice": 1200,
-      "createdAt": "2026-02-01T12:25:00.000Z"
+      "expirationDate": "2027-02-28",
+      "quantity": 48,
+      "description": "Stock inicial de apertura",
+      "costPrice": 760,
+      "salePrice": 1400,
+      "createdAt": "2026-08-29T14:25:00.000Z"
     }
   ],
-  "orders": [
-    {
-      "id": "or220820262145325417",
-      "items": [
-        {
-          "productId": "menu:menu-hamburguesa-doble",
-          "productName": "Hamburguesa doble",
-          "unitPrice": 6200,
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-08-23T00:45:32.102Z",
-      "status": "pagada",
-      "total": 6200,
-      "operator": "admin",
-      "paymentMethod": "efectivo"
-    },
-    {
-      "id": "or220820262144049246",
-      "items": [
-        {
-          "productId": "menu:menu-pancho",
-          "productName": "Pancho",
-          "unitPrice": 2800,
-          "quantity": 1
-        },
-        {
-          "productId": "menu:menu-sandwich-milanesa",
-          "productName": "Sandwich de milanesa",
-          "unitPrice": 5800,
-          "quantity": 1
-        },
-        {
-          "productId": "food-agua-500",
-          "productName": "Agua mineral 500ml",
-          "unitPrice": 1200,
-          "quantity": 1
-        },
-        {
-          "productId": "food-papas-fritas",
-          "productName": "Papas fritas",
-          "unitPrice": 3200,
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-08-23T00:44:04.495Z",
-      "status": "pagada",
-      "total": 13000,
-      "operator": "admin",
-      "paymentMethod": "efectivo"
-    },
-    {
-      "id": "or220820262143048336",
-      "items": [
-        {
-          "productId": "menu:menu220820262109221860",
-          "productName": "Chuleton",
-          "unitPrice": 14000,
-          "quantity": 1
-        },
-        {
-          "productId": "menu:menu-pancho",
-          "productName": "Pancho",
-          "unitPrice": 2800,
-          "quantity": 1
-        },
-        {
-          "productId": "menu:menu-sandwich-milanesa",
-          "productName": "Sandwich de milanesa",
-          "unitPrice": 5800,
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-08-23T00:43:04.115Z",
-      "status": "pagada",
-      "total": 22600,
-      "operator": "admin",
-      "paymentMethod": "efectivo"
-    }
-  ],
-  "invoices": [
-    {
-      "id": "fc220820262147402014",
-      "orderId": "or220820262145325417",
-      "createdAt": "2026-08-23T00:47:40.361Z",
-      "total": 6200,
-      "paymentMethod": "efectivo",
-      "operator": "admin"
-    },
-    {
-      "id": "fc220820262145155451",
-      "orderId": "or220820262144049246",
-      "createdAt": "2026-08-23T00:45:15.019Z",
-      "total": 13000,
-      "paymentMethod": "efectivo",
-      "operator": "admin"
-    },
-    {
-      "id": "fc220820262143326847",
-      "orderId": "or220820262143048336",
-      "createdAt": "2026-08-23T00:43:32.160Z",
-      "total": 22600,
-      "paymentMethod": "efectivo",
-      "operator": "admin"
-    }
-  ],
-  "workdays": [
-    {
-      "id": "wd220820262012247353",
-      "operator": "admin",
-      "startedAt": "2026-08-22T23:12:24.857Z",
-      "orderIds": [
-        "or220820262143048336",
-        "or220820262144049246",
-        "or220820262145325417"
-      ],
-      "status": "open",
-      "openingDeclaredAmount": 20,
-      "openingDifferenceAmount": 0
-    }
-  ],
-  "cashOpeningAssignments": [
-    {
-      "operator": "user",
-      "amount": 5000,
-      "shift": "nocturno",
-      "startHour": "20:00",
-      "endHour": "07:59",
-      "updatedBy": "admin",
-      "updatedAt": "2026-03-22T01:47:43.922Z"
-    }
-  ],
+  "orders": [],
+  "invoices": [],
+  "workdays": [],
+  "cashOpeningAssignments": [],
   "supplyOrders": [],
   "expenses": [],
   "feedbackEntries": [],
@@ -735,229 +626,9 @@
       "updatedAt": "2026-08-23T00:47:40.381Z"
     }
   ],
-  "financialTransactions": [
-    {
-      "id": "txn-sale-cash-or220820262145325417",
-      "createdAt": "2026-08-23T00:45:32.102Z",
-      "type": "sale-cash",
-      "title": "Ingreso en caja por venta or220820262145325417",
-      "description": "Venta en efectivo cobrada por admin.",
-      "amount": 6200,
-      "direction": "in",
-      "entryKind": "credit",
-      "accountId": "account-cash-local",
-      "referenceModule": "sale",
-      "referenceId": "or220820262145325417",
-      "orderId": "or220820262145325417",
-      "workdayId": "wd220820262012247353",
-      "paymentMethod": "efectivo",
-      "actor": "admin",
-      "countsInBalance": true,
-      "accountCode": "cash-local",
-      "accountName": "Caja fisica local"
-    },
-    {
-      "id": "txn-sale-income-or220820262145325417",
-      "createdAt": "2026-08-23T00:45:32.102Z",
-      "type": "sale-income",
-      "title": "Venta pagada or220820262145325417",
-      "description": "Venta registrada por admin por 6200.",
-      "amount": 6200,
-      "direction": "in",
-      "entryKind": "credit",
-      "accountId": "account-gains",
-      "referenceModule": "sale",
-      "referenceId": "or220820262145325417",
-      "orderId": "or220820262145325417",
-      "workdayId": "wd220820262012247353",
-      "paymentMethod": "efectivo",
-      "actor": "admin",
-      "countsInBalance": true,
-      "accountCode": "gains",
-      "accountName": "Ganancias"
-    },
-    {
-      "id": "txn-sale-cash-or220820262144049246",
-      "createdAt": "2026-08-23T00:44:04.495Z",
-      "type": "sale-cash",
-      "title": "Ingreso en caja por venta or220820262144049246",
-      "description": "Venta en efectivo cobrada por admin.",
-      "amount": 13000,
-      "direction": "in",
-      "entryKind": "credit",
-      "accountId": "account-cash-local",
-      "referenceModule": "sale",
-      "referenceId": "or220820262144049246",
-      "orderId": "or220820262144049246",
-      "workdayId": "wd220820262012247353",
-      "paymentMethod": "efectivo",
-      "actor": "admin",
-      "countsInBalance": true,
-      "accountCode": "cash-local",
-      "accountName": "Caja fisica local"
-    },
-    {
-      "id": "txn-sale-income-or220820262144049246",
-      "createdAt": "2026-08-23T00:44:04.495Z",
-      "type": "sale-income",
-      "title": "Venta pagada or220820262144049246",
-      "description": "Venta registrada por admin por 13000.",
-      "amount": 13000,
-      "direction": "in",
-      "entryKind": "credit",
-      "accountId": "account-gains",
-      "referenceModule": "sale",
-      "referenceId": "or220820262144049246",
-      "orderId": "or220820262144049246",
-      "workdayId": "wd220820262012247353",
-      "paymentMethod": "efectivo",
-      "actor": "admin",
-      "countsInBalance": true,
-      "accountCode": "gains",
-      "accountName": "Ganancias"
-    },
-    {
-      "id": "txn-sale-cash-or220820262143048336",
-      "createdAt": "2026-08-23T00:43:04.115Z",
-      "type": "sale-cash",
-      "title": "Ingreso en caja por venta or220820262143048336",
-      "description": "Venta en efectivo cobrada por admin.",
-      "amount": 22600,
-      "direction": "in",
-      "entryKind": "credit",
-      "accountId": "account-cash-local",
-      "referenceModule": "sale",
-      "referenceId": "or220820262143048336",
-      "orderId": "or220820262143048336",
-      "workdayId": "wd220820262012247353",
-      "paymentMethod": "efectivo",
-      "actor": "admin",
-      "countsInBalance": true,
-      "accountCode": "cash-local",
-      "accountName": "Caja fisica local"
-    },
-    {
-      "id": "txn-sale-income-or220820262143048336",
-      "createdAt": "2026-08-23T00:43:04.115Z",
-      "type": "sale-income",
-      "title": "Venta pagada or220820262143048336",
-      "description": "Venta registrada por admin por 22600.",
-      "amount": 22600,
-      "direction": "in",
-      "entryKind": "credit",
-      "accountId": "account-gains",
-      "referenceModule": "sale",
-      "referenceId": "or220820262143048336",
-      "orderId": "or220820262143048336",
-      "workdayId": "wd220820262012247353",
-      "paymentMethod": "efectivo",
-      "actor": "admin",
-      "countsInBalance": true,
-      "accountCode": "gains",
-      "accountName": "Ganancias"
-    },
-    {
-      "id": "txn-cash-opening-wd220820262012247353",
-      "createdAt": "2026-08-22T23:12:24.857Z",
-      "type": "cash-opening",
-      "title": "Apertura de caja wd220820262012247353",
-      "description": "Apertura declarada por admin.",
-      "amount": 20,
-      "direction": "in",
-      "entryKind": "credit",
-      "accountId": "account-cash-local",
-      "referenceModule": "cash",
-      "referenceId": "wd220820262012247353",
-      "workdayId": "wd220820262012247353",
-      "actor": "admin",
-      "countsInBalance": true,
-      "accountCode": "cash-local",
-      "accountName": "Caja fisica local"
-    }
-  ],
+  "financialTransactions": [],
   "licenses": [],
-  "notifications": [
-    {
-      "id": "nt220820262147406752",
-      "type": "sale-created",
-      "title": "Venta registrada: or220820262145325417",
-      "description": "Venta por 6200 (admin).",
-      "createdAt": "2026-08-23T00:47:40.322Z",
-      "dueAt": "2026-08-24T00:47:40.322Z",
-      "isFixed": false,
-      "requiresAction": false,
-      "entityType": "order",
-      "entityId": "or220820262145325417",
-      "status": "active"
-    },
-    {
-      "id": "nt220820262145156600",
-      "type": "stock-created",
-      "title": "Ingreso de stock: Papas fritas",
-      "description": "Se registro un ingreso de -1 unidades para Papas fritas.",
-      "createdAt": "2026-08-23T00:45:15.002Z",
-      "dueAt": "2026-08-30T00:45:15.002Z",
-      "isFixed": false,
-      "requiresAction": false,
-      "category": "perecedero",
-      "entityType": "stock",
-      "entityId": "se220820262145155990",
-      "status": "active"
-    },
-    {
-      "id": "nt220820262145145444",
-      "type": "stock-created",
-      "title": "Ingreso de stock: Agua mineral 500ml",
-      "description": "Se registro un ingreso de -1 unidades para Agua mineral 500ml.",
-      "createdAt": "2026-08-23T00:45:14.982Z",
-      "dueAt": "2026-08-30T00:45:14.982Z",
-      "isFixed": false,
-      "requiresAction": false,
-      "category": "bebida",
-      "entityType": "stock",
-      "entityId": "se220820262145143031",
-      "status": "active"
-    },
-    {
-      "id": "nt220820262145149032",
-      "type": "sale-created",
-      "title": "Venta registrada: or220820262144049246",
-      "description": "Venta por 13000 (admin).",
-      "createdAt": "2026-08-23T00:45:14.962Z",
-      "dueAt": "2026-08-24T00:45:14.962Z",
-      "isFixed": false,
-      "requiresAction": false,
-      "entityType": "order",
-      "entityId": "or220820262144049246",
-      "status": "active"
-    },
-    {
-      "id": "nt220820262143324024",
-      "type": "sale-created",
-      "title": "Venta registrada: or220820262143048336",
-      "description": "Venta por 22600 (admin).",
-      "createdAt": "2026-08-23T00:43:32.131Z",
-      "dueAt": "2026-08-24T00:43:32.131Z",
-      "isFixed": false,
-      "requiresAction": false,
-      "entityType": "order",
-      "entityId": "or220820262143048336",
-      "status": "active"
-    },
-    {
-      "id": "nt220820262012243576",
-      "type": "cash-opened",
-      "title": "Caja abierta: admin",
-      "description": "Se abrio caja para admin con 20.",
-      "createdAt": "2026-08-22T23:12:24.857Z",
-      "dueAt": "2026-08-23T23:12:24.857Z",
-      "isFixed": false,
-      "requiresAction": false,
-      "entityType": "workday",
-      "entityId": "wd220820262012247353",
-      "status": "active"
-    }
-  ],
+  "notifications": [],
   "notificationSettings": [
     {
       "type": "license-required",
