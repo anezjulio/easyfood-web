@@ -1135,6 +1135,12 @@ function buildEntityId(prefix: string, inputDate = new Date()): string {
   return `${prefix}${formatIdDatePart(inputDate)}${suffix}`;
 }
 
+function isBrowserNavigation(req: IncomingMessage): boolean {
+  const mode = String(req.headers["sec-fetch-mode"] || "").trim().toLowerCase();
+  const accept = String(req.headers.accept || "").trim().toLowerCase();
+  return mode === "navigate" || accept.includes("text/html");
+}
+
 function mockDbPlugin(): Plugin {
   return {
     name: "mock-db-middleware",
@@ -1550,6 +1556,7 @@ function mockDbPlugin(): Plugin {
           }
 
           if (pathname === "/ingredients" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, db.ingredients);
           }
@@ -1633,6 +1640,7 @@ function mockDbPlugin(): Plugin {
           }
 
           if (pathname === "/menu-products" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, db.menuProducts);
           }

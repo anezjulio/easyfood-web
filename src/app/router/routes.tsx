@@ -38,8 +38,12 @@ export default function AppRoutes() {
         <Route element={<RequireRole allowedRoles={["admin", "operator"]} />}>
           <Route path="/products" element={<Navigate to="/products/new" replace />} />
           <Route path="/products/new" element={<ProductCrudScreen />} />
+          <Route path="/ingredients" element={<IngredientsScreen />} />
           <Route path="/ingredients/manage" element={<IngredientsScreen />} />
+          <Route path="/ingredientes" element={<IngredientsScreen />} />
+          <Route path="/menu-products" element={<MenuProductsScreen />} />
           <Route path="/menu-products/manage" element={<MenuProductsScreen />} />
+          <Route path="/crear-menu" element={<MenuProductsScreen />} />
           <Route path="/stock" element={<StockEntryScreen />} />
           <Route path="/cash" element={<CashScreen />} />
           <Route path="/sales" element={<SalesScreen />} />
