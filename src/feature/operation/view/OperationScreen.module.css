@@ -328,6 +328,28 @@
   background: #f0fdf4;
 }
 
+.bigBtnMenu {
+  background: #fff7ed;
+}
+
+.bigBtn:disabled {
+  background: #d1d5db;
+  border-color: #9ca3af;
+  color: #111827;
+  cursor: default;
+  opacity: 0.68;
+  box-shadow: none;
+  filter: grayscale(0.2);
+}
+
+.bigBtn:disabled .bigBtnTitle {
+  color: #111827;
+}
+
+.bigBtn:disabled .bigBtnSubtitle {
+  color: #374151;
+}
+
 .bigBtnTitle {
   font-size: 22px;
   font-weight: 900;

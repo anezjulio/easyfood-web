@@ -188,23 +188,25 @@ export default function OperationScreen() {
           <div className={styles.grid}>
             {!isTerminal ? (
               <>
-                <BigBtn title="Ventas" subtitle="Cobros y tickets" onClick={() => nav("/sales")} variant="sales" />
                 <BigBtn title="Caja" subtitle="Apertura y cierre de turno" onClick={() => nav("/cash")} />
+                <BigBtn title="Ventas" subtitle="Cobros y tickets" onClick={() => nav("/sales")} variant="sales" />
                 <BigBtn
-                  title="Confirmar Gasto"
+                  title="Confirmar Gastos"
                   subtitle="Validar gastos asignados"
                   onClick={() => nav("/expenses", { state: { tab: "confirm" } })}
+                  disabled
                 />
-                <BigBtn title="Solicitudes" subtitle="Gestion de solicitudes" onClick={() => nav("/requests")} />
+                <BigBtn title="Solicitudes" subtitle="Gestion de solicitudes" onClick={() => nav("/requests")} disabled />
                 <BigBtn
                   title="Sugerencias y reclamos"
                   subtitle="Libro de sugerencias y reclamos"
                   onClick={() => nav("/feedback")}
+                  disabled
                 />
               </>
             ) : null}
             {showAutoSale ? (
-              <BigBtn title="Autoventa" subtitle="Operacion exclusiva para terminales" onClick={() => nav("/autoventa")} />
+              <BigBtn title="Autoventa" subtitle="Operacion exclusiva para terminales" onClick={() => nav("/autoventa")} disabled />
             ) : null}
           </div>
         </section>
@@ -213,15 +215,15 @@ export default function OperationScreen() {
           <section className={styles.groupSection}>
             <h2 className={styles.groupTitle}>Productos</h2>
             <div className={styles.grid}>
-              <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} />
+              <BigBtn title="Creacion de Menu" subtitle="Recetas para vender" onClick={() => nav("/menu-products")} variant="menu" />
               <BigBtn title="Ingredientes" subtitle="Definicion y caducidad" onClick={() => nav("/ingredients")} />
-              <BigBtn title="Creacion de Menu" subtitle="Recetas para vender" onClick={() => nav("/menu-products")} />
-              <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} />
-              {isAdmin ? (
-                <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} />
-              ) : null}
+              <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} />
               {isAdmin ? (
                 <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
+              ) : null}
+              <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} disabled />
+              {isAdmin ? (
+                <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} disabled />
               ) : null}
             </div>
           </section>
@@ -239,16 +241,17 @@ export default function OperationScreen() {
               <BigBtn title="Transacciones" subtitle="Entradas y salidas" onClick={() => nav("/transactions")} />
               <BigBtn title="Notificaciones" subtitle="Avisos del sistema" onClick={() => nav("/notifications")} />
               <BigBtn
-                title="Aprobar Solicitudes"
-                subtitle="Flujo de aprobacion"
-                onClick={() => nav("/requests/approvals")}
-              />
-              <BigBtn
                 title="Permisos/Licencias"
                 subtitle="Control de accesos"
                 onClick={() => nav("/licenses")}
               />
               <BigBtn title="Data" subtitle="Limpieza de base de datos" onClick={() => nav("/data")} />
+              <BigBtn
+                title="Aprobar Solicitudes"
+                subtitle="Flujo de aprobacion"
+                onClick={() => nav("/requests/approvals")}
+                disabled
+              />
             </div>
           </section>
         ) : null}
@@ -349,16 +352,20 @@ function BigBtn({
   subtitle,
   onClick,
   variant = "default",
+  disabled = false,
 }: {
   title: string;
   subtitle?: string;
   onClick: () => void;
-  variant?: "default" | "sales";
+  variant?: "default" | "sales" | "menu";
+  disabled?: boolean;
 }) {
-  const className = `${styles.bigBtn} ${variant === "sales" ? styles.bigBtnSales : ""}`.trim();
+  const className = `${styles.bigBtn} ${variant === "sales" ? styles.bigBtnSales : ""} ${
+    variant === "menu" ? styles.bigBtnMenu : ""
+  }`.trim();
 
   return (
-    <button type="button" onClick={onClick} className={className}>
+    <button type="button" onClick={onClick} className={className} disabled={disabled} aria-disabled={disabled}>
       <div className={styles.bigBtnTitle}>{title}</div>
       {subtitle ? <div className={styles.bigBtnSubtitle}>{subtitle}</div> : null}
     </button>
