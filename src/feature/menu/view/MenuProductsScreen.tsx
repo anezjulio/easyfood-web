@@ -44,6 +44,7 @@ export default function MenuProductsScreen() {
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState("");
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<"all" | ProductCategory>("all");
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -89,11 +90,24 @@ export default function MenuProductsScreen() {
     const query = normalizeForSearch(search);
     return menuProducts
       .filter((item) => {
+        if (categoryFilter !== "all" && item.category !== categoryFilter) return false;
         if (!query) return true;
         return normalizeForSearch(`${item.name} ${item.category || ""} ${item.description || ""} ${item.recipeItems.map((recipe) => recipe.ingredientName).join(" ")}`).includes(query);
       })
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [menuProducts, search]);
+  }, [categoryFilter, menuProducts, search]);
+
+  const categoryCounts = useMemo(
+    () =>
+      PRODUCT_CATEGORIES.reduce(
+        (acc, item) => {
+          acc[item] = menuProducts.filter((product) => product.category === item).length;
+          return acc;
+        },
+        {} as Record<ProductCategory, number>,
+      ),
+    [menuProducts],
+  );
 
   const isEditing = !!selectedMenuProduct;
   const parsedPrice = Math.max(0, Math.trunc(toNumber(price)));
@@ -344,6 +358,26 @@ export default function MenuProductsScreen() {
             <div className={styles.listHead}>
               <h2 className={styles.cardTitle}>Menu actual</h2>
               <input className={styles.searchInput} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar producto o ingrediente" />
+            </div>
+
+            <div className={styles.categoryFilters} aria-label="Categorias del menu">
+              <button
+                type="button"
+                className={`${styles.categoryFilterBtn} ${categoryFilter === "all" ? styles.categoryFilterBtnActive : ""}`.trim()}
+                onClick={() => setCategoryFilter("all")}
+              >
+                Todas <span>{menuProducts.length}</span>
+              </button>
+              {PRODUCT_CATEGORIES.map((option) => (
+                <button
+                  type="button"
+                  key={option}
+                  className={`${styles.categoryFilterBtn} ${categoryFilter === option ? styles.categoryFilterBtnActive : ""}`.trim()}
+                  onClick={() => setCategoryFilter(option)}
+                >
+                  {formatCategoryLabel(option)} <span>{categoryCounts[option] || 0}</span>
+                </button>
+              ))}
             </div>
 
             {loading ? (

@@ -930,6 +930,13 @@
   "requests": [],
   "stocks": [
     {
+      "id": "se290820261945509296",
+      "productId": "food-agua-500",
+      "quantity": -1,
+      "description": "Venta orden or290820261945488199",
+      "createdAt": "2026-08-29T22:45:50.046Z"
+    },
+    {
       "id": "st-food-bebida-cola",
       "productId": "food-bebida-cola",
       "expirationDate": "2027-02-28",
@@ -960,9 +967,47 @@
       "createdAt": "2026-08-29T14:10:00.000Z"
     }
   ],
-  "orders": [],
-  "invoices": [],
-  "workdays": [],
+  "orders": [
+    {
+      "id": "or290820261945488199",
+      "items": [
+        {
+          "productId": "food-agua-500",
+          "productName": "Agua mineral 500 ml",
+          "unitPrice": 1400,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-08-29T22:45:48.607Z",
+      "status": "pagada",
+      "total": 1400,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    }
+  ],
+  "invoices": [
+    {
+      "id": "fc290820261945503461",
+      "orderId": "or290820261945488199",
+      "createdAt": "2026-08-29T22:45:50.060Z",
+      "total": 1400,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    }
+  ],
+  "workdays": [
+    {
+      "id": "wd290820261945438445",
+      "operator": "admin",
+      "startedAt": "2026-08-29T22:45:43.608Z",
+      "orderIds": [
+        "or290820261945488199"
+      ],
+      "status": "open",
+      "openingDeclaredAmount": 5000,
+      "openingDifferenceAmount": 0
+    }
+  ],
   "cashOpeningAssignments": [],
   "supplyOrders": [],
   "expenses": [],
@@ -974,9 +1019,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 5000,
+      "currentBalance": 6400,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T21:41:48.206Z"
+      "updatedAt": "2026-08-29T22:45:50.074Z"
     },
     {
       "id": "account-gains",
@@ -984,9 +1029,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 0,
+      "currentBalance": 1400,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T21:41:48.206Z"
+      "updatedAt": "2026-08-29T22:45:50.074Z"
     },
     {
       "id": "account-expenses",
@@ -996,7 +1041,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T21:41:48.206Z"
+      "updatedAt": "2026-08-29T22:45:50.074Z"
     },
     {
       "id": "account-food-categories",
@@ -1006,12 +1051,112 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T21:41:48.206Z"
+      "updatedAt": "2026-08-29T22:45:50.074Z"
     }
   ],
-  "financialTransactions": [],
+  "financialTransactions": [
+    {
+      "id": "txn-sale-cash-or290820261945488199",
+      "createdAt": "2026-08-29T22:45:48.607Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or290820261945488199",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 1400,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or290820261945488199",
+      "orderId": "or290820261945488199",
+      "workdayId": "wd290820261945438445",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or290820261945488199",
+      "createdAt": "2026-08-29T22:45:48.607Z",
+      "type": "sale-income",
+      "title": "Venta pagada or290820261945488199",
+      "description": "Venta registrada por admin por 1400.",
+      "amount": 1400,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or290820261945488199",
+      "orderId": "or290820261945488199",
+      "workdayId": "wd290820261945438445",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-cash-opening-wd290820261945438445",
+      "createdAt": "2026-08-29T22:45:43.608Z",
+      "type": "cash-opening",
+      "title": "Apertura de caja wd290820261945438445",
+      "description": "Apertura declarada por admin.",
+      "amount": 5000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd290820261945438445",
+      "workdayId": "wd290820261945438445",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    }
+  ],
   "licenses": [],
-  "notifications": [],
+  "notifications": [
+    {
+      "id": "nt290820261945501937",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Agua mineral 500 ml",
+      "description": "Se registro un ingreso de -1 unidades para Agua mineral 500 ml.",
+      "createdAt": "2026-08-29T22:45:50.046Z",
+      "dueAt": "2026-09-05T22:45:50.046Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "bebida",
+      "entityType": "stock",
+      "entityId": "se290820261945509296",
+      "status": "active"
+    },
+    {
+      "id": "nt290820261945502522",
+      "type": "sale-created",
+      "title": "Venta registrada: or290820261945488199",
+      "description": "Venta por 1400 (admin).",
+      "createdAt": "2026-08-29T22:45:50.030Z",
+      "dueAt": "2026-08-30T22:45:50.030Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or290820261945488199",
+      "status": "active"
+    },
+    {
+      "id": "nt290820261945430718",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 5000.",
+      "createdAt": "2026-08-29T22:45:43.608Z",
+      "dueAt": "2026-08-30T22:45:43.608Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd290820261945438445",
+      "status": "active"
+    }
+  ],
   "notificationSettings": [
     {
       "type": "license-required",

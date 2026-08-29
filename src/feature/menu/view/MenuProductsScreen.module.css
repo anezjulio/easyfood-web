@@ -112,6 +112,41 @@
   max-width: 320px;
 }
 
+.categoryFilters {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.categoryFilterBtn {
+  min-height: 34px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.categoryFilterBtn span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.categoryFilterBtnActive {
+  border-color: #ea580c;
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.categoryFilterBtnActive span {
+  color: #c2410c;
+}
+
 .recipeEditor {
   border: 1px solid #e2e8f0;
   background: #f8fafc;
