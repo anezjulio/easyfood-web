@@ -72,6 +72,7 @@ type MenuProduct = {
   name: string;
   price: number;
   description?: string;
+  imageUrl?: string;
   recipeItems: MenuRecipeItem[];
   createdAt: string;
   updatedAt?: string;
@@ -1656,6 +1657,7 @@ function mockDbPlugin(): Plugin {
               name: draft.name,
               price: draft.price,
               description: draft.description,
+              imageUrl: draft.imageUrl,
               recipeItems: draft.recipeItems,
               createdAt: new Date().toISOString(),
             };
@@ -1680,6 +1682,7 @@ function mockDbPlugin(): Plugin {
               name: draft.name,
               price: draft.price,
               description: draft.description,
+              imageUrl: draft.imageUrl,
               recipeItems: draft.recipeItems,
               updatedAt: new Date().toISOString(),
             };
@@ -4138,6 +4141,7 @@ function normalizeMenuProductRecord(input: unknown, ingredients: Ingredient[]): 
     name,
     price,
     description: String(draft.description || "").trim() || undefined,
+    imageUrl: String(draft.imageUrl || "").trim() || undefined,
     recipeItems,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
@@ -5578,12 +5582,14 @@ function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[]) {
     name?: unknown;
     price?: unknown;
     description?: unknown;
+    imageUrl?: unknown;
     recipeItems?: unknown;
   };
   return {
     name: String(obj.name || "").trim(),
     price: Math.max(0, Math.trunc(Number(obj.price) || 0)),
     description: String(obj.description || "").trim() || undefined,
+    imageUrl: String(obj.imageUrl || "").trim() || undefined,
     recipeItems: normalizeMenuRecipeItems(obj.recipeItems, ingredients),
   };
 }

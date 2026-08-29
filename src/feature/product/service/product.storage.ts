@@ -81,7 +81,7 @@ const seedBase: Product[] = [
     price: 4500,
     costPrice: 2800,
     category: "perecedero",
-    imageUrl: "images/nueva-db-1/food-hamburger.png",
+    imageUrl: "food-hamburger.png",
     createdAt: "2026-02-01T11:00:00.000Z",
   },
   {
@@ -90,7 +90,7 @@ const seedBase: Product[] = [
     price: 6200,
     costPrice: 3900,
     category: "perecedero",
-    imageUrl: "images/nueva-db-1/food-hamburger.png",
+    imageUrl: "food-hamburger.png",
     createdAt: "2026-02-01T11:05:00.000Z",
   },
   {
@@ -99,7 +99,7 @@ const seedBase: Product[] = [
     price: 2800,
     costPrice: 1500,
     category: "perecedero",
-    imageUrl: "images/nueva-db-1/food-hotdog.png",
+    imageUrl: "food-hotdog.png",
     createdAt: "2026-02-01T11:10:00.000Z",
   },
   {
@@ -108,7 +108,7 @@ const seedBase: Product[] = [
     price: 5800,
     costPrice: 3600,
     category: "perecedero",
-    imageUrl: "images/nueva-db-1/food-hamburger.png",
+    imageUrl: "food-hamburger.png",
     createdAt: "2026-02-01T11:15:00.000Z",
   },
   {
@@ -117,7 +117,7 @@ const seedBase: Product[] = [
     price: 3200,
     costPrice: 1800,
     category: "perecedero",
-    imageUrl: "images/nueva-db-1/food-fries-cheddar.png",
+    imageUrl: "food-fries-cheddar.png",
     createdAt: "2026-02-01T11:20:00.000Z",
   },
   {
@@ -126,7 +126,7 @@ const seedBase: Product[] = [
     price: 1200,
     costPrice: 700,
     category: "bebida",
-    imageUrl: "images/nueva-db-1/food-drinks.png",
+    imageUrl: "food-drinks.png",
     createdAt: "2026-02-01T11:25:00.000Z",
   },
 ];

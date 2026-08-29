@@ -6,9 +6,9 @@
       "price": 8900,
       "costPrice": 5200,
       "createdAt": "2026-08-29T12:00:00.000Z",
+      "imageUrl": "food-hamburger.png",
       "barcode": "779000100001",
-      "category": "perecedero",
-      "imageUrl": "images/nueva-db-1/food-hamburger.png"
+      "category": "perecedero"
     },
     {
       "id": "food-papas-cheddar",
@@ -16,9 +16,9 @@
       "price": 5400,
       "costPrice": 3100,
       "createdAt": "2026-08-29T12:05:00.000Z",
+      "imageUrl": "food-fries-cheddar.png",
       "barcode": "779000100002",
-      "category": "perecedero",
-      "imageUrl": "images/nueva-db-1/food-fries-cheddar.png"
+      "category": "perecedero"
     },
     {
       "id": "food-pancho-especial",
@@ -26,9 +26,9 @@
       "price": 3900,
       "costPrice": 2100,
       "createdAt": "2026-08-29T12:10:00.000Z",
+      "imageUrl": "food-hotdog.png",
       "barcode": "779000100003",
-      "category": "perecedero",
-      "imageUrl": "images/nueva-db-1/food-hotdog.png"
+      "category": "perecedero"
     },
     {
       "id": "food-tostado-jamon-queso",
@@ -36,9 +36,9 @@
       "price": 4200,
       "costPrice": 2400,
       "createdAt": "2026-08-29T12:15:00.000Z",
+      "imageUrl": "food-hamburger.png",
       "barcode": "779000100004",
-      "category": "perecedero",
-      "imageUrl": "images/nueva-db-1/food-hamburger.png"
+      "category": "perecedero"
     },
     {
       "id": "food-gaseosa-500",
@@ -46,9 +46,9 @@
       "price": 1800,
       "costPrice": 950,
       "createdAt": "2026-08-29T12:20:00.000Z",
+      "imageUrl": "food-drinks.png",
       "barcode": "779000100005",
-      "category": "bebida",
-      "imageUrl": "images/nueva-db-1/food-drinks.png"
+      "category": "bebida"
     },
     {
       "id": "food-agua-500",
@@ -56,9 +56,9 @@
       "price": 1400,
       "costPrice": 760,
       "createdAt": "2026-08-29T12:25:00.000Z",
+      "imageUrl": "food-drinks.png",
       "barcode": "779000100006",
-      "category": "bebida",
-      "imageUrl": "images/nueva-db-1/food-drinks.png"
+      "category": "bebida"
     }
   ],
   "productPrices": [
@@ -304,7 +304,7 @@
         }
       ],
       "createdAt": "2026-08-29T13:00:00.000Z",
-      "imageUrl": "images/nueva-db-1/food-hamburger.png"
+      "imageUrl": "food-hamburger.png"
     },
     {
       "id": "menu-hamburguesa-bacon",
@@ -356,7 +356,7 @@
         }
       ],
       "createdAt": "2026-08-29T13:05:00.000Z",
-      "imageUrl": "images/nueva-db-1/food-hamburger.png"
+      "imageUrl": "food-hamburger.png"
     },
     {
       "id": "menu-pancho-completo",
@@ -396,7 +396,7 @@
         }
       ],
       "createdAt": "2026-08-29T13:10:00.000Z",
-      "imageUrl": "images/nueva-db-1/food-hotdog.png"
+      "imageUrl": "food-hotdog.png"
     },
     {
       "id": "menu-tostado-jamon-queso",
@@ -424,7 +424,7 @@
         }
       ],
       "createdAt": "2026-08-29T13:15:00.000Z",
-      "imageUrl": "images/nueva-db-1/food-hamburger.png"
+      "imageUrl": "food-hamburger.png"
     },
     {
       "id": "menu-papas-cheddar-bacon",
@@ -452,7 +452,7 @@
         }
       ],
       "createdAt": "2026-08-29T13:20:00.000Z",
-      "imageUrl": "images/nueva-db-1/food-fries-cheddar.png"
+      "imageUrl": "food-fries-cheddar.png"
     }
   ],
   "users": [
@@ -588,7 +588,35 @@
       "createdAt": "2026-08-29T14:25:00.000Z"
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "id": "or290820261841488175",
+      "items": [
+        {
+          "productId": "food-gaseosa-500",
+          "productName": "Gaseosa 500 ml",
+          "unitPrice": 1800,
+          "quantity": 1
+        },
+        {
+          "productId": "food-agua-500",
+          "productName": "Agua mineral 500 ml",
+          "unitPrice": 1400,
+          "quantity": 1
+        },
+        {
+          "productId": "food-pancho-especial",
+          "productName": "Pancho especial",
+          "unitPrice": 3900,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-08-29T21:41:48.205Z",
+      "status": "por pagar",
+      "total": 7100,
+      "operator": "admin"
+    }
+  ],
   "invoices": [],
   "workdays": [
     {
@@ -614,7 +642,7 @@
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
       "currentBalance": 5000,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T21:06:33.469Z"
+      "updatedAt": "2026-08-29T21:41:48.206Z"
     },
     {
       "id": "account-gains",
@@ -624,7 +652,7 @@
       "description": "Ventas pagadas registradas por la plataforma.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T21:06:33.469Z"
+      "updatedAt": "2026-08-29T21:41:48.206Z"
     },
     {
       "id": "account-expenses",
@@ -634,7 +662,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T21:06:33.469Z"
+      "updatedAt": "2026-08-29T21:41:48.206Z"
     },
     {
       "id": "account-tobacco",
@@ -644,7 +672,7 @@
       "description": "Movimientos asociados a ventas de productos de la categoria tabaqueria.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T21:06:33.469Z"
+      "updatedAt": "2026-08-29T21:41:48.206Z"
     }
   ],
   "financialTransactions": [

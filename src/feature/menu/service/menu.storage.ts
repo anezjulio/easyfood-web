@@ -9,7 +9,7 @@ const seed: MenuProduct[] = [
     name: "Hamburguesa simple",
     price: 4500,
     description: "Pan, carne, queso, lechuga y tomate.",
-    imageUrl: "images/nueva-db-1/food-hamburger.png",
+    imageUrl: "food-hamburger.png",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 1, stockMode: "unit" },
@@ -24,7 +24,7 @@ const seed: MenuProduct[] = [
     name: "Hamburguesa doble",
     price: 6200,
     description: "Pan, doble carne, doble queso, cebolla, lechuga y tomate.",
-    imageUrl: "images/nueva-db-1/food-hamburger.png",
+    imageUrl: "food-hamburger.png",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-carne-medallon", ingredientName: "Medallon de carne", quantity: 2, stockMode: "unit" },
@@ -40,7 +40,7 @@ const seed: MenuProduct[] = [
     name: "Pancho",
     price: 2800,
     description: "Pan y salchicha.",
-    imageUrl: "images/nueva-db-1/food-hotdog.png",
+    imageUrl: "food-hotdog.png",
     recipeItems: [
       { ingredientId: "ing-pan-pancho", ingredientName: "Pan de pancho", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-salchicha", ingredientName: "Salchicha", quantity: 1, stockMode: "unit" },
@@ -52,7 +52,7 @@ const seed: MenuProduct[] = [
     name: "Sandwich de milanesa",
     price: 5800,
     description: "Pan, milanesa, lechuga y tomate.",
-    imageUrl: "images/nueva-db-1/food-hamburger.png",
+    imageUrl: "food-hamburger.png",
     recipeItems: [
       { ingredientId: "ing-pan-hamburguesa", ingredientName: "Pan de hamburguesa", quantity: 1, stockMode: "unit" },
       { ingredientId: "ing-milanesa", ingredientName: "Milanesa cocida", quantity: 1, stockMode: "unit" },
