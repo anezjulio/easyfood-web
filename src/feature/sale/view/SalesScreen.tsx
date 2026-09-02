@@ -10,7 +10,6 @@ import { fetchProducts } from "../../product/service/product.api";
 import type { MenuProduct } from "../../menu/model/menu.types";
 import { fetchMenuProductsApi } from "../../menu/service/menu.api";
 import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
-import { keepOnlyDigits } from "../../../shared/format/numeric";
 import { matchesPriceFilter } from "../../../shared/product/product-filter";
 import { normalizeForSearch } from "../../../shared/search/search";
 import type { Order, PaymentMethod, PaymentMethodSettings, TaxSettings } from "../model/sale.types";
@@ -40,15 +39,18 @@ import { openCashWithAmount, syncCashState as syncCashStateService } from "../..
 import styles from "./SalesScreen.module.css";
 
 type CartItem = {
+  id: string;
   productId: string;
   productName: string;
   unitPrice: number;
   quantity: number;
+  comboSelections?: Array<{ category: string; menuProductId: string; menuProductName: string }>;
 };
 
 type SellableProduct = Product & {
   saleSource?: "product" | "menu";
   menuProductId?: string;
+  menuProduct?: MenuProduct;
 };
 
 function buildMenuSaleProductId(menuProductId: string): string {
@@ -76,6 +78,7 @@ function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProd
     existencia: 9999,
     saleSource: "menu",
     menuProductId: menuProduct.id,
+    menuProduct,
   };
 }
 
@@ -122,11 +125,11 @@ export default function SalesScreen() {
   const auth = useAuth();
   const cartCardRef = useRef<HTMLElement | null>(null);
   const listCardRef = useRef<HTMLElement | null>(null);
-  const barcodeScanInputRef = useRef<HTMLInputElement | null>(null);
   const [products, setProducts] = useState<SellableProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [quantityToAdd, setQuantityToAdd] = useState("1");
+  const [comboSelections, setComboSelections] = useState<Record<string, string>>({});
   const [cart, setCart] = useState<CartItem[]>([]);
   const [draftOrderCode, setDraftOrderCode] = useState(() => generateOrderCode());
   const [message, setMessage] = useState("");
@@ -135,7 +138,6 @@ export default function SalesScreen() {
 
   const [nameFilter, setNameFilter] = useState("");
   const [barcodeFilter, setBarcodeFilter] = useState("");
-  const [barcodeScanInput, setBarcodeScanInput] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
   const [createdAtFilter, setCreatedAtFilter] = useState("");
@@ -330,7 +332,13 @@ export default function SalesScreen() {
 
   useEffect(() => {
     setQuantityToAdd("1");
-  }, [selectedProductId]);
+    const selections: Record<string, string> = {};
+    for (const item of selectedProduct?.menuProduct?.comboItems || []) {
+      if (item.type !== "category" || !item.category) continue;
+      selections[item.category] = products.find((product) => product.category === item.category && product.saleSource === "menu" && product.menuProduct?.kind !== "combo")?.id || "";
+    }
+    setComboSelections(selections);
+  }, [products, selectedProduct, selectedProductId]);
 
   useEffect(() => {
     if (!isModalOpen) return;
@@ -364,12 +372,6 @@ export default function SalesScreen() {
 
   useEffect(() => {
     if (isModalOpen) return;
-    const timerId = window.setTimeout(() => {
-      barcodeScanInputRef.current?.focus();
-    }, 0);
-    return () => {
-      window.clearTimeout(timerId);
-    };
   }, [isModalOpen]);
 
   const filteredProducts = useMemo(() => {
@@ -523,17 +525,31 @@ export default function SalesScreen() {
       return;
     }
 
+    const categoryItems = (product.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category);
+    const resolvedSelections = categoryItems.map((item) => {
+      const selected = products.find((candidate) => candidate.id === comboSelections[item.category!]);
+      return selected ? { category: item.category!, menuProductId: selected.menuProductId || selected.id.replace(/^menu:/, ""), menuProductName: selected.name } : null;
+    });
+    if (resolvedSelections.some((selection) => !selection)) {
+      setError("Selecciona una opcion para cada categoria del combo.");
+      return;
+    }
+    const selectionList = resolvedSelections.filter((selection): selection is NonNullable<typeof selection> => !!selection);
+    const cartItemId = `${product.id}:${selectionList.map((selection) => selection.menuProductId).join(",") || "fixed"}`;
+
     setSelectedProductId(product.id);
     setCart((current) => {
-      const existing = current.find((item) => item.productId === product.id);
+      const existing = current.find((item) => item.id === cartItemId);
       if (!existing) {
         return [
           ...current,
           {
+            id: cartItemId,
             productId: product.id,
             productName: product.name,
             unitPrice: product.price,
             quantity: nextQuantity,
+            comboSelections: selectionList.length ? selectionList : undefined,
           },
         ];
       }
@@ -545,7 +561,7 @@ export default function SalesScreen() {
       }
 
       return current.map((item) => {
-        if (item.productId !== product.id) return item;
+        if (item.id !== cartItemId) return item;
         return { ...item, quantity: combinedQuantity };
       });
     });
@@ -563,60 +579,26 @@ export default function SalesScreen() {
     addProductToCart(product, 1);
   }
 
-  function handleBarcodeScanChange(nextValue: string) {
-    const digits = keepOnlyDigits(nextValue);
-    setBarcodeScanInput(digits);
-    setBarcodeFilter(digits);
-  }
-
-  function handleBarcodeScanSubmit() {
-    const scannedCode = keepOnlyDigits(barcodeScanInput);
-    if (!scannedCode) return;
-
+  function removeFromCart(cartItemId: string) {
     if (hasPendingPayment) {
       setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
       return;
     }
-
-    setBarcodeFilter(scannedCode);
-
-    const matches = products.filter((item) => {
-      const raw = (item.barcode || "").trim();
-      if (!raw) return false;
-      return raw === scannedCode || keepOnlyDigits(raw) === scannedCode;
-    });
-    const matchedProduct =
-      matches.find((item) => resolveProductStock(item) > 0) || matches[0] || null;
-
-    if (!matchedProduct) {
-      setError(`No se encontro un producto con el codigo ${scannedCode}.`);
-      return;
-    }
-
-    addProductToCart(matchedProduct, 1);
-    setBarcodeScanInput("");
-    barcodeScanInputRef.current?.focus();
+    setCart((current) => current.filter((item) => item.id !== cartItemId));
   }
 
-  function removeFromCart(productId: string) {
-    if (hasPendingPayment) {
-      setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
-      return;
-    }
-    setCart((current) => current.filter((item) => item.productId !== productId));
-  }
-
-  function updateCartItemQuantity(productId: string, nextValue: string) {
+  function updateCartItemQuantity(cartItemId: string, nextValue: string) {
     const parsed = Math.trunc(Number(nextValue));
     if (!Number.isFinite(parsed) || parsed < 1) return;
 
-    const productStock = resolveProductStock(products.find((item) => item.id === productId));
+    const cartItem = cart.find((item) => item.id === cartItemId);
+    const productStock = resolveProductStock(products.find((item) => item.id === cartItem?.productId));
 
     const maxAllowed = Math.max(1, productStock);
     const clamped = Math.min(parsed, maxAllowed);
 
     if (parsed > productStock) {
-      const productName = products.find((item) => item.id === productId)?.name || "el producto";
+      const productName = products.find((item) => item.id === cartItem?.productId)?.name || "el producto";
       setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${productName}.`);
     } else {
       setError("");
@@ -624,20 +606,20 @@ export default function SalesScreen() {
 
     setCart((current) =>
       current.map((item) => {
-        if (item.productId !== productId) return item;
+        if (item.id !== cartItemId) return item;
         return { ...item, quantity: clamped };
       }),
     );
   }
 
-  function incrementCartItemQuantity(productId: string) {
+  function incrementCartItemQuantity(cartItemId: string) {
     if (hasPendingPayment) {
       setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
       return;
     }
 
-    const product = products.find((item) => item.id === productId);
-    const currentItem = cart.find((item) => item.productId === productId);
+    const currentItem = cart.find((item) => item.id === cartItemId);
+    const product = products.find((item) => item.id === currentItem?.productId);
     if (!product || !currentItem) return;
 
     const productStock = resolveProductStock(product);
@@ -649,27 +631,27 @@ export default function SalesScreen() {
 
     setError("");
     setCart((current) =>
-      current.map((item) => (item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item)),
+      current.map((item) => (item.id === cartItemId ? { ...item, quantity: item.quantity + 1 } : item)),
     );
   }
 
-  function decrementCartItemQuantity(productId: string) {
+  function decrementCartItemQuantity(cartItemId: string) {
     if (hasPendingPayment) {
       setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
       return;
     }
 
-    const currentItem = cart.find((item) => item.productId === productId);
+    const currentItem = cart.find((item) => item.id === cartItemId);
     if (!currentItem) return;
 
     setError("");
     if (currentItem.quantity <= 1) {
-      setCart((current) => current.filter((item) => item.productId !== productId));
+      setCart((current) => current.filter((item) => item.id !== cartItemId));
       return;
     }
 
     setCart((current) =>
-      current.map((item) => (item.productId === productId ? { ...item, quantity: item.quantity - 1 } : item)),
+      current.map((item) => (item.id === cartItemId ? { ...item, quantity: item.quantity - 1 } : item)),
     );
   }
 
@@ -713,6 +695,7 @@ export default function SalesScreen() {
           productName: item.productName,
           unitPrice: item.unitPrice,
           quantity: item.quantity,
+          comboSelections: item.comboSelections,
         })),
         operator: auth.user?.username || "operator",
       });
@@ -882,6 +865,15 @@ export default function SalesScreen() {
                   </div>
 
                   <div className={styles.quantityActionRow}>
+                    {(selectedProduct?.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category).map((item) => (
+                      <label key={item.category} className={styles.quantityRow}>
+                        <span>{item.categoryName || formatCategoryLabel(item.category!)} a eleccion</span>
+                        <select className={styles.input} value={comboSelections[item.category!] || ""} onChange={(event) => setComboSelections((current) => ({ ...current, [item.category!]: event.target.value }))} disabled={hasPendingPayment}>
+                          <option value="">Seleccionar</option>
+                          {products.filter((product) => product.saleSource === "menu" && product.menuProduct?.kind !== "combo" && product.category === item.category).map((product) => <option key={product.id} value={product.id}>{product.name}</option>)}
+                        </select>
+                      </label>
+                    ))}
                     <label className={styles.quantityRow}>
                       <span>Cantidad</span>
                       <input
@@ -908,32 +900,6 @@ export default function SalesScreen() {
               </div>
             </div>
 
-            <div className={styles.scanInlineRow}>
-              <p className={styles.scanHint}>Escanea el codigo y presiona Enter para agregar 1 unidad al carrito.</p>
-
-              <label className={styles.scanField}>
-                <span>Codigo de barras</span>
-                <input
-                  ref={barcodeScanInputRef}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="\d*"
-                  value={barcodeScanInput}
-                  onChange={(event) => handleBarcodeScanChange(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key !== "Enter") return;
-                    event.preventDefault();
-                    handleBarcodeScanSubmit();
-                  }}
-                  placeholder="Escanea y presiona Enter"
-                  className={styles.input}
-                  disabled={hasPendingPayment}
-                  autoComplete="off"
-                  aria-label="Escanear codigo de barras"
-                />
-              </label>
-            </div>
-
             <div className={styles.cartList}>
               <div className={styles.cartHead}>
                 <div>Producto</div>
@@ -952,7 +918,7 @@ export default function SalesScreen() {
                   return (
                     <div
                       className={`${styles.cartRow} ${isOddRow ? styles.cartRowOdd : ""} ${isSelectedRow ? styles.cartRowSelected : ""}`}
-                      key={item.productId}
+                      key={item.id}
                     >
                       <div className={styles.cellProduct}>{item.productName}</div>
                       <div className={styles.cellQty}>
@@ -960,7 +926,7 @@ export default function SalesScreen() {
                           <button
                             type="button"
                             className={styles.cartQtyStepBtn}
-                            onClick={() => decrementCartItemQuantity(item.productId)}
+                            onClick={() => decrementCartItemQuantity(item.id)}
                             disabled={hasPendingPayment}
                             aria-label={`Quitar una unidad de ${item.productName}`}
                           >
@@ -971,7 +937,7 @@ export default function SalesScreen() {
                             min={1}
                             max={Number.isFinite(resolveProductStock(products.find((p) => p.id === item.productId))) ? resolveProductStock(products.find((p) => p.id === item.productId)) : undefined}
                             value={item.quantity}
-                            onChange={(e) => updateCartItemQuantity(item.productId, e.target.value)}
+                            onChange={(e) => updateCartItemQuantity(item.id, e.target.value)}
                             className={styles.cartQtyInput}
                             disabled={hasPendingPayment}
                             aria-label={`Cantidad para ${item.productName}`}
@@ -979,7 +945,7 @@ export default function SalesScreen() {
                           <button
                             type="button"
                             className={styles.cartQtyStepBtn}
-                            onClick={() => incrementCartItemQuantity(item.productId)}
+                            onClick={() => incrementCartItemQuantity(item.id)}
                             disabled={hasPendingPayment}
                             aria-label={`Agregar una unidad de ${item.productName}`}
                           >
@@ -997,7 +963,7 @@ export default function SalesScreen() {
                       <button
                         type="button"
                         className={styles.cartRemoveBtn}
-                        onClick={() => removeFromCart(item.productId)}
+                        onClick={() => removeFromCart(item.id)}
                         disabled={hasPendingPayment}
                         aria-label={`Quitar ${item.productName}`}
                       >

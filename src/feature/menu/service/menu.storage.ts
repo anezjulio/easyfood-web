@@ -1,6 +1,6 @@
 import { loadIngredients } from "../../ingredient/service/ingredient.storage";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "../../product/model/product.types";
-import type { MenuProduct, MenuProductDraft, MenuRecipeItem } from "../model/menu.types";
+import type { MenuComboItem, MenuProduct, MenuProductDraft, MenuProductKind, MenuRecipeItem } from "../model/menu.types";
 
 const KEY = "easyfood_menu_product_v1";
 
@@ -140,6 +140,27 @@ function normalizeRecipeItems(input: unknown): MenuRecipeItem[] {
     .filter((item): item is MenuRecipeItem => !!item);
 }
 
+function normalizeComboItems(input: unknown): MenuComboItem[] {
+  if (!Array.isArray(input)) return [];
+  return input
+    .map((item) => {
+      const draft = (item || {}) as Partial<MenuComboItem>;
+      const menuProductId = String(draft.menuProductId || "").trim();
+      const menuProductName = String(draft.menuProductName || "").trim();
+      const category = normalizeMenuCategory(draft.category);
+      const categoryName = String(draft.categoryName || "").trim();
+      const quantity = Math.trunc(Number(draft.quantity));
+      if (!Number.isFinite(quantity) || quantity <= 0) return null;
+      if (draft.type === "category") {
+        if (!category || category === "combos") return null;
+        return { type: "category" as const, category, categoryName: categoryName || category, quantity };
+      }
+      if (!menuProductId || !menuProductName) return null;
+      return { type: "product" as const, menuProductId, menuProductName, quantity };
+    })
+    .filter(Boolean) as MenuComboItem[];
+}
+
 function normalizeMenuCategory(value: unknown): ProductCategory | undefined {
   const raw = String(value || "").trim().toLowerCase();
   return PRODUCT_CATEGORIES.includes(raw as ProductCategory) ? (raw as ProductCategory) : undefined;
@@ -151,7 +172,9 @@ function normalizeMenuProductRecord(input: unknown): MenuProduct | null {
   const name = String(draft.name || "").trim();
   const price = Math.max(0, Math.trunc(Number(draft.price) || 0));
   const recipeItems = normalizeRecipeItems(draft.recipeItems);
-  if (!id || !name || recipeItems.length === 0) return null;
+  const kind: MenuProductKind = draft.kind === "combo" ? "combo" : "menu";
+  const comboItems = normalizeComboItems(draft.comboItems);
+  if (!id || !name || (kind === "combo" ? comboItems.length === 0 : recipeItems.length === 0)) return null;
   return {
     id,
     name,
@@ -160,6 +183,8 @@ function normalizeMenuProductRecord(input: unknown): MenuProduct | null {
     imageUrl: String(draft.imageUrl || "").trim() || undefined,
     category: normalizeMenuCategory(draft.category),
     recipeItems,
+    kind,
+    comboItems: kind === "combo" ? comboItems : undefined,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
   };
@@ -184,7 +209,9 @@ function normalizeDraft(draft: MenuProductDraft) {
   const imageUrl = draft.imageUrl?.trim() || undefined;
   const category = normalizeMenuCategory(draft.category) || "hamburguesa";
   const recipeItems = normalizeRecipeItems(draft.recipeItems);
-  return { name, price, description, imageUrl, category, recipeItems };
+  const kind: MenuProductKind = draft.kind === "combo" ? "combo" : "menu";
+  const comboItems = normalizeComboItems(draft.comboItems);
+  return { name, price, description, imageUrl, category, recipeItems, kind, comboItems };
 }
 
 export function loadMenuProducts(): MenuProduct[] {
@@ -210,8 +237,8 @@ export function saveMenuProducts(menuProducts: MenuProduct[]) {
 
 export function createMenuProduct(draft: MenuProductDraft): MenuProduct {
   const normalized = normalizeDraft(draft);
-  if (!normalized.name || normalized.recipeItems.length === 0) {
-    throw new Error("Menu product must define name and recipe items");
+  if (!normalized.name || (normalized.kind === "combo" ? normalized.comboItems.length === 0 : normalized.recipeItems.length === 0)) {
+    throw new Error("Menu product must define its items");
   }
   const menuProduct: MenuProduct = {
     id: buildEntityId("menu"),
@@ -221,6 +248,8 @@ export function createMenuProduct(draft: MenuProductDraft): MenuProduct {
     imageUrl: normalized.imageUrl,
     category: normalized.category,
     recipeItems: normalized.recipeItems,
+    kind: normalized.kind,
+    comboItems: normalized.kind === "combo" ? normalized.comboItems : undefined,
     createdAt: new Date().toISOString(),
   };
   saveMenuProducts([menuProduct, ...loadMenuProducts()]);
@@ -229,8 +258,8 @@ export function createMenuProduct(draft: MenuProductDraft): MenuProduct {
 
 export function updateMenuProduct(id: string, draft: MenuProductDraft): MenuProduct | null {
   const normalized = normalizeDraft(draft);
-  if (!normalized.name || normalized.recipeItems.length === 0) {
-    throw new Error("Menu product must define name and recipe items");
+  if (!normalized.name || (normalized.kind === "combo" ? normalized.comboItems.length === 0 : normalized.recipeItems.length === 0)) {
+    throw new Error("Menu product must define its items");
   }
   let updated: MenuProduct | null = null;
   const next = loadMenuProducts().map((item) => {
@@ -243,17 +272,32 @@ export function updateMenuProduct(id: string, draft: MenuProductDraft): MenuProd
       imageUrl: normalized.imageUrl,
       category: normalized.category,
       recipeItems: normalized.recipeItems,
+      kind: normalized.kind,
+      comboItems: normalized.kind === "combo" ? normalized.comboItems : undefined,
       updatedAt: new Date().toISOString(),
     };
     return updated;
   });
   if (!updated) return null;
-  saveMenuProducts(next);
+  const synchronized = next.map((item) =>
+    item.kind === "combo"
+      ? {
+          ...item,
+          comboItems: item.comboItems?.map((comboItem) =>
+            comboItem.menuProductId === id ? { ...comboItem, menuProductName: updated!.name } : comboItem,
+          ),
+        }
+      : item,
+  );
+  saveMenuProducts(synchronized);
   return updated;
 }
 
 export function removeMenuProduct(id: string): boolean {
   const list = loadMenuProducts();
+  if (list.some((item) => item.kind === "combo" && item.comboItems?.some((comboItem) => comboItem.menuProductId === id))) {
+    return false;
+  }
   const next = list.filter((item) => item.id !== id);
   if (next.length === list.length) return false;
   saveMenuProducts(next);

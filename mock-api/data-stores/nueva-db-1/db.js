@@ -63,7 +63,7 @@
       "name": "Pan hamburguesas",
       "expiresInDays": 5,
       "stockMode": "unit",
-      "stockQuantity": 80,
+      "stockQuantity": 79,
       "createdAt": "2026-08-29T10:00:00.000Z"
     },
     {
@@ -79,7 +79,7 @@
       "name": "Medallon de carne",
       "expiresInDays": 3,
       "stockMode": "unit",
-      "stockQuantity": 100,
+      "stockQuantity": 99,
       "createdAt": "2026-08-29T10:02:00.000Z"
     },
     {
@@ -111,7 +111,7 @@
       "name": "Cheddar feta",
       "expiresInDays": 7,
       "stockMode": "unit",
-      "stockQuantity": 180,
+      "stockQuantity": 179,
       "createdAt": "2026-08-29T10:06:00.000Z"
     },
     {
@@ -135,7 +135,7 @@
       "name": "Papa baston",
       "expiresInDays": 12,
       "stockMode": "weight",
-      "stockQuantity": 18000,
+      "stockQuantity": 17700,
       "createdAt": "2026-08-29T10:09:00.000Z"
     },
     {
@@ -143,7 +143,7 @@
       "name": "Mayonesa",
       "expiresInDays": 30,
       "stockMode": "weight",
-      "stockQuantity": 5000,
+      "stockQuantity": 4980,
       "createdAt": "2026-08-29T10:10:00.000Z"
     },
     {
@@ -151,7 +151,7 @@
       "name": "Ketchup",
       "expiresInDays": 30,
       "stockMode": "weight",
-      "stockQuantity": 5000,
+      "stockQuantity": 4985,
       "createdAt": "2026-08-29T10:11:00.000Z"
     },
     {
@@ -159,7 +159,7 @@
       "name": "Lechuga",
       "expiresInDays": 4,
       "stockMode": "weight",
-      "stockQuantity": 3200,
+      "stockQuantity": 3175,
       "createdAt": "2026-08-29T10:12:00.000Z"
     },
     {
@@ -167,7 +167,7 @@
       "name": "Cebolla",
       "expiresInDays": 10,
       "stockMode": "weight",
-      "stockQuantity": 4500,
+      "stockQuantity": 4480,
       "createdAt": "2026-08-29T10:13:00.000Z"
     },
     {
@@ -175,7 +175,7 @@
       "name": "Pepinillos",
       "expiresInDays": 18,
       "stockMode": "weight",
-      "stockQuantity": 2800,
+      "stockQuantity": 2785,
       "createdAt": "2026-08-29T10:14:00.000Z"
     },
     {
@@ -183,7 +183,7 @@
       "name": "Tomate",
       "expiresInDays": 5,
       "stockMode": "weight",
-      "stockQuantity": 4200,
+      "stockQuantity": 4165,
       "createdAt": "2026-08-29T10:15:00.000Z"
     },
     {
@@ -271,11 +271,38 @@
       "name": "Bebida cola 500 ml",
       "expiresInDays": 90,
       "stockMode": "unit",
-      "stockQuantity": 72,
+      "stockQuantity": 71,
       "createdAt": "2026-08-29T10:26:00.000Z"
     }
   ],
   "menuProducts": [
+    {
+      "id": "menu020920261904290741",
+      "name": "Hamburguesas + papas + bebida",
+      "price": 14999,
+      "description": "Hamburguesas + papas + bebida",
+      "category": "combos",
+      "recipeItems": [],
+      "kind": "combo",
+      "comboItems": [
+        {
+          "menuProductId": "menu-hamburguesa-completa",
+          "menuProductName": "Hamburguesa completa",
+          "quantity": 1
+        },
+        {
+          "menuProductId": "menu-bebida-cola",
+          "menuProductName": "Bebida cola 500 ml",
+          "quantity": 1
+        },
+        {
+          "menuProductId": "menu-papas",
+          "menuProductName": "Papas",
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-02T22:04:29.602Z"
+    },
     {
       "id": "menu-hamburguesa-completa",
       "name": "Hamburguesa completa",
@@ -339,6 +366,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:00:00.000Z"
     },
     {
@@ -392,6 +420,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:05:00.000Z"
     },
     {
@@ -433,6 +462,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:10:00.000Z"
     },
     {
@@ -468,6 +498,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:15:00.000Z"
     },
     {
@@ -485,6 +516,7 @@
           "stockMode": "unit"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:20:00.000Z"
     },
     {
@@ -494,61 +526,12 @@
       "description": "Hamburguesa completa con papas y bebida.",
       "imageUrl": "food-hamburger.png",
       "category": "combos",
-      "recipeItems": [
-        {
-          "ingredientId": "ing-pan-hamburguesa",
-          "ingredientName": "Pan hamburguesas",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-medallon-carne",
-          "ingredientName": "Medallon de carne",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-cheddar-feta",
-          "ingredientName": "Cheddar feta",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-lechuga",
-          "ingredientName": "Lechuga",
-          "quantity": 25,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-tomate",
-          "ingredientName": "Tomate",
-          "quantity": 35,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-cebolla",
-          "ingredientName": "Cebolla",
-          "quantity": 20,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-pepinillos",
-          "ingredientName": "Pepinillos",
-          "quantity": 15,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-papa-baston",
-          "ingredientName": "Papa baston",
-          "quantity": 250,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-bebida-cola",
-          "ingredientName": "Bebida cola 500 ml",
-          "quantity": 1,
-          "stockMode": "unit"
-        }
+      "recipeItems": [],
+      "kind": "combo",
+      "comboItems": [
+        { "type": "product", "menuProductId": "menu-hamburguesa-completa", "menuProductName": "Hamburguesa completa", "quantity": 1 },
+        { "type": "product", "menuProductId": "menu-papas", "menuProductName": "Papas", "quantity": 1 },
+        { "type": "category", "category": "bebida", "categoryName": "Bebida", "quantity": 1 }
       ],
       "createdAt": "2026-08-29T13:25:00.000Z"
     },
@@ -559,49 +542,12 @@
       "description": "Pancho completo con papas y bebida.",
       "imageUrl": "food-hotdog.png",
       "category": "combos",
-      "recipeItems": [
-        {
-          "ingredientId": "ing-pan-pancho",
-          "ingredientName": "Pan panchos",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-salchicha",
-          "ingredientName": "Salchicha",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
-          "ingredientId": "ing-papas-pay",
-          "ingredientName": "Papas pay",
-          "quantity": 25,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-mayonesa",
-          "ingredientName": "Mayonesa",
-          "quantity": 15,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-ketchup",
-          "ingredientName": "Ketchup",
-          "quantity": 15,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-papa-baston",
-          "ingredientName": "Papa baston",
-          "quantity": 220,
-          "stockMode": "weight"
-        },
-        {
-          "ingredientId": "ing-bebida-cola",
-          "ingredientName": "Bebida cola 500 ml",
-          "quantity": 1,
-          "stockMode": "unit"
-        }
+      "recipeItems": [],
+      "kind": "combo",
+      "comboItems": [
+        { "type": "product", "menuProductId": "menu-pancho-completo", "menuProductName": "Pancho completo", "quantity": 1 },
+        { "type": "product", "menuProductId": "menu-papas", "menuProductName": "Papas", "quantity": 1 },
+        { "type": "category", "category": "bebida", "categoryName": "Bebida", "quantity": 1 }
       ],
       "createdAt": "2026-08-29T13:30:00.000Z"
     },
@@ -644,6 +590,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:35:00.000Z"
     },
     {
@@ -679,6 +626,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:40:00.000Z"
     },
     {
@@ -732,6 +680,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:45:00.000Z"
     },
     {
@@ -785,6 +734,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:50:00.000Z"
     },
     {
@@ -802,6 +752,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:52:00.000Z"
     },
     {
@@ -825,6 +776,7 @@
           "stockMode": "unit"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:54:00.000Z"
     },
     {
@@ -854,6 +806,7 @@
           "stockMode": "weight"
         }
       ],
+      "kind": "menu",
       "createdAt": "2026-08-29T13:56:00.000Z"
     }
   ],
@@ -969,6 +922,44 @@
   ],
   "orders": [
     {
+      "id": "or020920261911014877",
+      "items": [
+        {
+          "productId": "menu:menu020920261904290741",
+          "productName": "Hamburguesas + papas + bebida",
+          "unitPrice": 14999,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-02T22:11:01.303Z",
+      "status": "pagada",
+      "total": 14999,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or020920261801468826",
+      "items": [
+        {
+          "productId": "menu:menu-papas-cheddar-bacon",
+          "productName": "Papas con cheddar y bacon",
+          "unitPrice": 5400,
+          "quantity": 1
+        },
+        {
+          "productId": "menu:menu-papas-cheddar",
+          "productName": "Papas con cheddar",
+          "unitPrice": 4700,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-02T21:01:46.032Z",
+      "status": "pagada",
+      "total": 10100,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
       "id": "or290820261945488199",
       "items": [
         {
@@ -987,6 +978,22 @@
   ],
   "invoices": [
     {
+      "id": "fc020920261911028310",
+      "orderId": "or020920261911014877",
+      "createdAt": "2026-09-02T22:11:02.486Z",
+      "total": 14999,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc020920261801553818",
+      "orderId": "or020920261801468826",
+      "createdAt": "2026-09-02T21:01:55.749Z",
+      "total": 10100,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
       "id": "fc290820261945503461",
       "orderId": "or290820261945488199",
       "createdAt": "2026-08-29T22:45:50.060Z",
@@ -1001,7 +1008,9 @@
       "operator": "admin",
       "startedAt": "2026-08-29T22:45:43.608Z",
       "orderIds": [
-        "or290820261945488199"
+        "or290820261945488199",
+        "or020920261801468826",
+        "or020920261911014877"
       ],
       "status": "open",
       "openingDeclaredAmount": 5000,
@@ -1019,9 +1028,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 6400,
+      "currentBalance": 31499,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T22:45:50.074Z"
+      "updatedAt": "2026-09-02T22:11:02.498Z"
     },
     {
       "id": "account-gains",
@@ -1029,9 +1038,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 1400,
+      "currentBalance": 26499,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T22:45:50.074Z"
+      "updatedAt": "2026-09-02T22:11:02.498Z"
     },
     {
       "id": "account-expenses",
@@ -1041,7 +1050,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T22:45:50.074Z"
+      "updatedAt": "2026-09-02T22:11:02.498Z"
     },
     {
       "id": "account-food-categories",
@@ -1051,10 +1060,90 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-08-29T22:45:50.074Z"
+      "updatedAt": "2026-09-02T22:11:02.498Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-sale-cash-or020920261911014877",
+      "createdAt": "2026-09-02T22:11:01.303Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or020920261911014877",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 14999,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or020920261911014877",
+      "orderId": "or020920261911014877",
+      "workdayId": "wd290820261945438445",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or020920261911014877",
+      "createdAt": "2026-09-02T22:11:01.303Z",
+      "type": "sale-income",
+      "title": "Venta pagada or020920261911014877",
+      "description": "Venta registrada por admin por 14999.",
+      "amount": 14999,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or020920261911014877",
+      "orderId": "or020920261911014877",
+      "workdayId": "wd290820261945438445",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-sale-cash-or020920261801468826",
+      "createdAt": "2026-09-02T21:01:46.032Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or020920261801468826",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 10100,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or020920261801468826",
+      "orderId": "or020920261801468826",
+      "workdayId": "wd290820261945438445",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or020920261801468826",
+      "createdAt": "2026-09-02T21:01:46.032Z",
+      "type": "sale-income",
+      "title": "Venta pagada or020920261801468826",
+      "description": "Venta registrada por admin por 10100.",
+      "amount": 10100,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or020920261801468826",
+      "orderId": "or020920261801468826",
+      "workdayId": "wd290820261945438445",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
     {
       "id": "txn-sale-cash-or290820261945488199",
       "createdAt": "2026-08-29T22:45:48.607Z",
@@ -1116,6 +1205,32 @@
   ],
   "licenses": [],
   "notifications": [
+    {
+      "id": "nt020920261911021484",
+      "type": "sale-created",
+      "title": "Venta registrada: or020920261911014877",
+      "description": "Venta por 14999 (admin).",
+      "createdAt": "2026-09-02T22:11:02.473Z",
+      "dueAt": "2026-09-03T22:11:02.473Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or020920261911014877",
+      "status": "active"
+    },
+    {
+      "id": "nt020920261801557322",
+      "type": "sale-created",
+      "title": "Venta registrada: or020920261801468826",
+      "description": "Venta por 10100 (admin).",
+      "createdAt": "2026-09-02T21:01:55.735Z",
+      "dueAt": "2026-09-03T21:01:55.735Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or020920261801468826",
+      "status": "active"
+    },
     {
       "id": "nt290820261945501937",
       "type": "stock-created",

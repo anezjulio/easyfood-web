@@ -8,6 +8,17 @@ export type MenuRecipeItem = {
   stockMode: IngredientStockMode;
 };
 
+export type MenuComboItem = {
+  type: "product" | "category";
+  menuProductId?: string;
+  menuProductName?: string;
+  category?: ProductCategory;
+  categoryName?: string;
+  quantity: number;
+};
+
+export type MenuProductKind = "menu" | "combo";
+
 export type MenuProduct = {
   id: string;
   name: string;
@@ -16,6 +27,8 @@ export type MenuProduct = {
   imageUrl?: string;
   category?: ProductCategory;
   recipeItems: MenuRecipeItem[];
+  kind?: MenuProductKind;
+  comboItems?: MenuComboItem[];
   createdAt: string;
   updatedAt?: string;
 };
@@ -27,5 +40,7 @@ export type MenuProductDraft = {
   imageUrl?: string;
   category?: ProductCategory;
   recipeItems: MenuRecipeItem[];
+  kind?: MenuProductKind;
+  comboItems?: MenuComboItem[];
 };
 

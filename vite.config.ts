@@ -67,6 +67,17 @@ type MenuRecipeItem = {
   stockMode: IngredientStockMode;
 };
 
+type MenuComboItem = {
+  type: "product" | "category";
+  menuProductId?: string;
+  menuProductName?: string;
+  category?: Product["category"];
+  categoryName?: string;
+  quantity: number;
+};
+
+type MenuProductKind = "menu" | "combo";
+
 type MenuProduct = {
   id: string;
   name: string;
@@ -75,6 +86,8 @@ type MenuProduct = {
   imageUrl?: string;
   category?: Product["category"];
   recipeItems: MenuRecipeItem[];
+  kind?: MenuProductKind;
+  comboItems?: MenuComboItem[];
   createdAt: string;
   updatedAt?: string;
 };
@@ -164,6 +177,7 @@ type OrderItem = {
   productName: string;
   unitPrice: number;
   quantity: number;
+  comboSelections?: Array<{ category: NonNullable<Product["category"]>; menuProductId: string; menuProductName: string }>;
 };
 
 type Order = {
@@ -1716,8 +1730,8 @@ function mockDbPlugin(): Plugin {
 
           if (pathname === "/menu-products" && method === "POST") {
             const db = await readDb();
-            const draft = sanitizeMenuProductDraft(await readJsonBody(req), db.ingredients);
-            if (!draft.name || draft.price <= 0 || draft.recipeItems.length === 0) {
+            const draft = sanitizeMenuProductDraft(await readJsonBody(req), db.ingredients, db.menuProducts);
+            if (!draft.name || draft.price <= 0 || (draft.kind === "combo" ? draft.comboItems.length === 0 : draft.recipeItems.length === 0)) {
               return sendJson(res, 400, { message: "Invalid menu product draft" });
             }
             const menuProduct: MenuProduct = {
@@ -1728,6 +1742,8 @@ function mockDbPlugin(): Plugin {
               imageUrl: draft.imageUrl,
               category: draft.category,
               recipeItems: draft.recipeItems,
+              kind: draft.kind,
+              comboItems: draft.kind === "combo" ? draft.comboItems : undefined,
               createdAt: new Date().toISOString(),
             };
             db.menuProducts.unshift(menuProduct);
@@ -1738,8 +1754,8 @@ function mockDbPlugin(): Plugin {
           const menuProductId = extractMenuProductId(pathname);
           if (menuProductId && method === "PUT") {
             const db = await readDb();
-            const draft = sanitizeMenuProductDraft(await readJsonBody(req), db.ingredients);
-            if (!draft.name || draft.price <= 0 || draft.recipeItems.length === 0) {
+            const draft = sanitizeMenuProductDraft(await readJsonBody(req), db.ingredients, db.menuProducts);
+            if (!draft.name || draft.price <= 0 || (draft.kind === "combo" ? draft.comboItems.length === 0 : draft.recipeItems.length === 0)) {
               return sendJson(res, 400, { message: "Invalid menu product draft" });
             }
             const index = db.menuProducts.findIndex((item) => item.id === menuProductId);
@@ -1754,14 +1770,31 @@ function mockDbPlugin(): Plugin {
               imageUrl: draft.imageUrl,
               category: draft.category,
               recipeItems: draft.recipeItems,
+              kind: draft.kind,
+              comboItems: draft.kind === "combo" ? draft.comboItems : undefined,
               updatedAt: new Date().toISOString(),
             };
+            db.menuProducts = db.menuProducts.map((item) =>
+              item.kind === "combo"
+                ? {
+                    ...item,
+                    comboItems: item.comboItems?.map((comboItem) =>
+                      comboItem.menuProductId === menuProductId
+                        ? { ...comboItem, menuProductName: db.menuProducts[index].name }
+                        : comboItem,
+                    ),
+                  }
+                : item,
+            );
             await writeDb(db);
             return sendJson(res, 200, db.menuProducts[index]);
           }
 
           if (menuProductId && method === "DELETE") {
             const db = await readDb();
+            if (db.menuProducts.some((item) => item.kind === "combo" && item.comboItems?.some((comboItem) => comboItem.menuProductId === menuProductId))) {
+              return sendJson(res, 409, { message: "Menu product is used by a combo" });
+            }
             const before = db.menuProducts.length;
             db.menuProducts = db.menuProducts.filter((item) => item.id !== menuProductId);
             const removed = db.menuProducts.length !== before;
@@ -2181,6 +2214,25 @@ function mockDbPlugin(): Plugin {
             }
             if (body.status === "cancelada" && currentOrder.status !== "por pagar") {
               return sendJson(res, 409, { message: "Only pending orders can be canceled" });
+            }
+
+            if (body.status === "pagada") {
+              const consumption = resolveMenuIngredientConsumption(currentOrder.items, db.menuProducts);
+              if (consumption.error) {
+                return sendJson(res, 400, { message: consumption.error });
+              }
+              const insufficient = [...consumption.quantities.entries()].find(([ingredientId, quantity]) => {
+                const ingredient = db.ingredients.find((item) => item.id === ingredientId);
+                return !ingredient || ingredient.stockQuantity < quantity;
+              });
+              if (insufficient) {
+                const ingredient = db.ingredients.find((item) => item.id === insufficient[0]);
+                return sendJson(res, 409, { message: `Insufficient stock for ${ingredient?.name || insufficient[0]}` });
+              }
+              db.ingredients = db.ingredients.map((ingredient) => ({
+                ...ingredient,
+                stockQuantity: Math.max(0, ingredient.stockQuantity - (consumption.quantities.get(ingredient.id) || 0)),
+              }));
             }
 
             db.orders[index] = {
@@ -4169,13 +4221,36 @@ function normalizeMenuRecipeItems(input: unknown, ingredients: Ingredient[]): Me
     .filter((item): item is MenuRecipeItem => !!item);
 }
 
+function normalizeMenuComboItems(input: unknown, menuProducts?: MenuProduct[]): MenuComboItem[] {
+  if (!Array.isArray(input)) return [];
+  return input
+    .map((item) => {
+      const draft = (item || {}) as Partial<MenuComboItem>;
+      const menuProductId = String(draft.menuProductId || "").trim();
+      const menuProduct = menuProducts?.find((node) => node.id === menuProductId && node.kind !== "combo");
+      const category = normalizeCategory(draft.category);
+      const categoryName = String(draft.categoryName || "").trim();
+      const quantity = Math.trunc(Number(draft.quantity));
+      if (!Number.isFinite(quantity) || quantity <= 0) return null;
+      if (draft.type === "category") {
+        if (!category || category === "combos") return null;
+        return { type: "category" as const, category, categoryName: categoryName || category, quantity };
+      }
+      if (!menuProductId || (menuProducts && !menuProduct)) return null;
+      return { type: "product" as const, menuProductId: menuProduct?.id || menuProductId, menuProductName: menuProduct?.name || String(draft.menuProductName || "").trim(), quantity };
+    })
+    .filter(Boolean) as MenuComboItem[];
+}
+
 function normalizeMenuProductRecord(input: unknown, ingredients: Ingredient[]): MenuProduct | null {
   const draft = (input || {}) as Partial<MenuProduct>;
   const id = String(draft.id || "").trim();
   const name = String(draft.name || "").trim();
   const price = Math.max(0, Math.trunc(Number(draft.price) || 0));
   const recipeItems = normalizeMenuRecipeItems(draft.recipeItems, ingredients);
-  if (!id || !name || recipeItems.length === 0) return null;
+  const kind = draft.kind === "combo" ? "combo" : "menu";
+  const comboItems = normalizeMenuComboItems(draft.comboItems);
+  if (!id || !name || (kind === "combo" ? comboItems.length === 0 : recipeItems.length === 0)) return null;
 
   return {
     id,
@@ -4185,6 +4260,8 @@ function normalizeMenuProductRecord(input: unknown, ingredients: Ingredient[]): 
     imageUrl: String(draft.imageUrl || "").trim() || undefined,
     category: normalizeCategory(draft.category) || "hamburguesa",
     recipeItems,
+    kind,
+    comboItems: kind === "combo" ? comboItems : undefined,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
   };
@@ -5619,7 +5696,7 @@ function sanitizeIngredientDraft(input: unknown) {
   };
 }
 
-function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[]) {
+function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[], menuProducts: MenuProduct[]) {
   const obj = (input || {}) as {
     name?: unknown;
     price?: unknown;
@@ -5627,6 +5704,8 @@ function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[]) {
     imageUrl?: unknown;
     category?: unknown;
     recipeItems?: unknown;
+    kind?: unknown;
+    comboItems?: unknown;
   };
   return {
     name: String(obj.name || "").trim(),
@@ -5635,7 +5714,47 @@ function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[]) {
     imageUrl: String(obj.imageUrl || "").trim() || undefined,
     category: normalizeCategory(obj.category) || "hamburguesa",
     recipeItems: normalizeMenuRecipeItems(obj.recipeItems, ingredients),
+    kind: obj.kind === "combo" ? "combo" as const : "menu" as const,
+    comboItems: normalizeMenuComboItems(obj.comboItems, menuProducts),
   };
+}
+
+function resolveMenuIngredientConsumption(
+  orderItems: OrderItem[],
+  menuProducts: MenuProduct[],
+): { quantities: Map<string, number>; error?: string } {
+  const quantities = new Map<string, number>();
+
+  function addRecipe(product: MenuProduct, multiplier: number) {
+    for (const recipeItem of product.recipeItems) {
+      quantities.set(
+        recipeItem.ingredientId,
+        (quantities.get(recipeItem.ingredientId) || 0) + recipeItem.quantity * multiplier,
+      );
+    }
+  }
+
+  for (const orderItem of orderItems) {
+    if (!orderItem.productId.startsWith("menu:")) continue;
+    const menuProductId = orderItem.productId.slice("menu:".length);
+    const menuProduct = menuProducts.find((item) => item.id === menuProductId);
+    if (!menuProduct) return { quantities, error: `Menu product not found: ${orderItem.productName}` };
+
+    if (menuProduct.kind === "combo") {
+      for (const comboItem of menuProduct.comboItems || []) {
+        const selectedProductId = comboItem.type === "category"
+          ? orderItem.comboSelections?.find((selection) => selection.category === comboItem.category)?.menuProductId
+          : comboItem.menuProductId;
+        const component = menuProducts.find((item) => item.id === selectedProductId && item.kind !== "combo" && (comboItem.type !== "category" || item.category === comboItem.category));
+        if (!component) return { quantities, error: `Combo component not selected: ${comboItem.type === "category" ? comboItem.categoryName : comboItem.menuProductName}` };
+        addRecipe(component, comboItem.quantity * orderItem.quantity);
+      }
+    } else {
+      addRecipe(menuProduct, orderItem.quantity);
+    }
+  }
+
+  return { quantities };
 }
 
 function sanitizeStockEntryDraft(input: unknown) {
@@ -6110,6 +6229,7 @@ function sanitizeOrderItem(input: unknown): OrderItem | null {
     productName?: unknown;
     unitPrice?: unknown;
     quantity?: unknown;
+    comboSelections?: unknown;
   };
 
   const productId = String(obj.productId || "").trim();
@@ -6120,7 +6240,20 @@ function sanitizeOrderItem(input: unknown): OrderItem | null {
     return null;
   }
 
-  return { productId, productName, unitPrice, quantity };
+  const comboSelections = Array.isArray(obj.comboSelections)
+    ? obj.comboSelections
+        .map((selection) => {
+          const item = (selection || {}) as { category?: unknown; menuProductId?: unknown; menuProductName?: unknown };
+          const category = normalizeCategory(item.category);
+          const menuProductId = String(item.menuProductId || "").trim();
+          const menuProductName = String(item.menuProductName || "").trim();
+          if (!category || category === "combos" || !menuProductId || !menuProductName) return null;
+          return { category, menuProductId, menuProductName };
+        })
+        .filter(Boolean) as OrderItem["comboSelections"]
+    : undefined;
+
+  return { productId, productName, unitPrice, quantity, comboSelections };
 }
 
 function sanitizeOrderStatusDraft(input: unknown): { status?: OrderStatus; paymentMethod?: PaymentMethod; total?: number } {
