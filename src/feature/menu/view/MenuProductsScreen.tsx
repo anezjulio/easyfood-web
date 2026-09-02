@@ -52,6 +52,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState<ProductCategory>("hamburguesa");
   const [menuProductId, setMenuProductId] = useState(availableProducts[0]?.id || "");
   const [itemMode, setItemMode] = useState<"product" | "category">("product");
   const [itemCategory, setItemCategory] = useState<ProductCategory>("bebida");
@@ -71,6 +72,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
     setName("");
     setPrice("");
     setDescription("");
+    setCategory("hamburguesa");
     setComboItems([]);
     setQuantity("1");
     setMessage("");
@@ -82,6 +84,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
     setName(combo.name);
     setPrice(String(combo.price));
     setDescription(combo.description || "");
+    setCategory(combo.category === "combos" || !combo.category ? "hamburguesa" : combo.category);
     setComboItems(combo.comboItems || []);
     setMessage("");
     setError("");
@@ -115,7 +118,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
       return;
     }
     try {
-      const draft = { name: name.trim(), price: parsedPrice, description: description.trim() || undefined, category: "combos" as const, recipeItems: [], kind: "combo" as const, comboItems };
+      const draft = { name: name.trim(), price: parsedPrice, description: description.trim() || undefined, category, recipeItems: [], kind: "combo" as const, comboItems };
       const saved = selectedCombo ? await updateMenuProductApi(selectedCombo.id, draft) : await createMenuProductApi(draft);
       if (!saved) {
         setError("No se pudo guardar el combo seleccionado.");
@@ -155,6 +158,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
         <form className={styles.form} onSubmit={(event) => void submit(event)}>
           <label className={styles.field}><span>Nombre del combo</span><input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Hamburguesa doble + papas + bebida" /></label>
           <label className={styles.field}><span>Precio de venta</span><input className={styles.input} type="number" min={1} value={price} onChange={(event) => setPrice(event.target.value)} placeholder="0" /></label>
+          <label className={styles.field}><span>Categoria del combo</span><select className={styles.input} value={category} onChange={(event) => setCategory(event.target.value as ProductCategory)}>{PRODUCT_CATEGORIES.filter((item) => item !== "combos").map((item) => <option key={item} value={item}>{formatCategoryLabel(item)}</option>)}</select></label>
           <label className={styles.field}><span>Descripcion</span><textarea className={styles.textarea} rows={3} value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Detalle visible para caja" /></label>
           <section className={styles.recipeEditor}>
             <h3 className={styles.sectionTitle}>Productos incluidos</h3>

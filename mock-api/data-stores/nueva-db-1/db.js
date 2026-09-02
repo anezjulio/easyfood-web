@@ -281,27 +281,31 @@
       "name": "Hamburguesas + papas + bebida",
       "price": 14999,
       "description": "Hamburguesas + papas + bebida",
-      "category": "combos",
+      "category": "hamburguesa",
       "recipeItems": [],
       "kind": "combo",
       "comboItems": [
         {
+          "type": "product",
           "menuProductId": "menu-hamburguesa-completa",
           "menuProductName": "Hamburguesa completa",
           "quantity": 1
         },
         {
-          "menuProductId": "menu-bebida-cola",
-          "menuProductName": "Bebida cola 500 ml",
-          "quantity": 1
-        },
-        {
+          "type": "product",
           "menuProductId": "menu-papas",
           "menuProductName": "Papas",
           "quantity": 1
+        },
+        {
+          "type": "category",
+          "category": "bebida",
+          "categoryName": "Bebida",
+          "quantity": 1
         }
       ],
-      "createdAt": "2026-09-02T22:04:29.602Z"
+      "createdAt": "2026-09-02T22:04:29.602Z",
+      "updatedAt": "2026-09-02T22:18:04.622Z"
     },
     {
       "id": "menu-hamburguesa-completa",
@@ -525,13 +529,28 @@
       "price": 9800,
       "description": "Hamburguesa completa con papas y bebida.",
       "imageUrl": "food-hamburger.png",
-      "category": "combos",
+      "category": "hamburguesa",
       "recipeItems": [],
       "kind": "combo",
       "comboItems": [
-        { "type": "product", "menuProductId": "menu-hamburguesa-completa", "menuProductName": "Hamburguesa completa", "quantity": 1 },
-        { "type": "product", "menuProductId": "menu-papas", "menuProductName": "Papas", "quantity": 1 },
-        { "type": "category", "category": "bebida", "categoryName": "Bebida", "quantity": 1 }
+        {
+          "type": "product",
+          "menuProductId": "menu-hamburguesa-completa",
+          "menuProductName": "Hamburguesa completa",
+          "quantity": 1
+        },
+        {
+          "type": "product",
+          "menuProductId": "menu-papas",
+          "menuProductName": "Papas",
+          "quantity": 1
+        },
+        {
+          "type": "category",
+          "category": "bebida",
+          "categoryName": "Bebida",
+          "quantity": 1
+        }
       ],
       "createdAt": "2026-08-29T13:25:00.000Z"
     },
@@ -541,13 +560,28 @@
       "price": 6900,
       "description": "Pancho completo con papas y bebida.",
       "imageUrl": "food-hotdog.png",
-      "category": "combos",
+      "category": "pancho",
       "recipeItems": [],
       "kind": "combo",
       "comboItems": [
-        { "type": "product", "menuProductId": "menu-pancho-completo", "menuProductName": "Pancho completo", "quantity": 1 },
-        { "type": "product", "menuProductId": "menu-papas", "menuProductName": "Papas", "quantity": 1 },
-        { "type": "category", "category": "bebida", "categoryName": "Bebida", "quantity": 1 }
+        {
+          "type": "product",
+          "menuProductId": "menu-pancho-completo",
+          "menuProductName": "Pancho completo",
+          "quantity": 1
+        },
+        {
+          "type": "product",
+          "menuProductId": "menu-papas",
+          "menuProductName": "Papas",
+          "quantity": 1
+        },
+        {
+          "type": "category",
+          "category": "bebida",
+          "categoryName": "Bebida",
+          "quantity": 1
+        }
       ],
       "createdAt": "2026-08-29T13:30:00.000Z"
     },
@@ -1030,7 +1064,7 @@
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
       "currentBalance": 31499,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-02T22:11:02.498Z"
+      "updatedAt": "2026-09-02T22:18:04.623Z"
     },
     {
       "id": "account-gains",
@@ -1040,7 +1074,7 @@
       "description": "Ventas pagadas registradas por la plataforma.",
       "currentBalance": 26499,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-02T22:11:02.498Z"
+      "updatedAt": "2026-09-02T22:18:04.623Z"
     },
     {
       "id": "account-expenses",
@@ -1050,7 +1084,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-02T22:11:02.498Z"
+      "updatedAt": "2026-09-02T22:18:04.623Z"
     },
     {
       "id": "account-food-categories",
@@ -1060,7 +1094,7 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-02T22:11:02.498Z"
+      "updatedAt": "2026-09-02T22:18:04.623Z"
     }
   ],
   "financialTransactions": [
