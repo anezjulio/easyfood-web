@@ -73,6 +73,7 @@ type MenuComboItem = {
   menuProductName?: string;
   category?: Product["category"];
   categoryName?: string;
+  allowedMenuProductIds?: string[];
   quantity: number;
 };
 
@@ -4235,11 +4236,17 @@ function normalizeMenuComboItems(input: unknown, menuProducts?: MenuProduct[]): 
       const menuProduct = menuProducts?.find((node) => node.id === menuProductId && node.kind !== "combo");
       const category = normalizeCategory(draft.category);
       const categoryName = String(draft.categoryName || "").trim();
+      const allowedMenuProductIds = Array.isArray(draft.allowedMenuProductIds)
+        ? draft.allowedMenuProductIds.map((id) => String(id || "").trim()).filter(Boolean)
+        : [];
       const quantity = Math.trunc(Number(draft.quantity));
       if (!Number.isFinite(quantity) || quantity <= 0) return null;
       if (draft.type === "category") {
         if (!category || category === "combos") return null;
-        return { type: "category" as const, category, categoryName: categoryName || category, quantity };
+        const validAllowedIds = menuProducts
+          ? allowedMenuProductIds.filter((id) => menuProducts.some((node) => node.id === id && node.kind !== "combo" && node.category === category))
+          : allowedMenuProductIds;
+        return { type: "category" as const, category, categoryName: categoryName || category, allowedMenuProductIds: validAllowedIds, quantity };
       }
       if (!menuProductId || (menuProducts && !menuProduct)) return null;
       return { type: "product" as const, menuProductId: menuProduct?.id || menuProductId, menuProductName: menuProduct?.name || String(draft.menuProductName || "").trim(), quantity };
@@ -5755,6 +5762,9 @@ function resolveMenuIngredientConsumption(
         const selectedProductId = comboItem.type === "category"
           ? orderItem.comboSelections?.find((selection) => selection.category === comboItem.category)?.menuProductId
           : comboItem.menuProductId;
+        if (comboItem.type === "category" && comboItem.allowedMenuProductIds?.length && !comboItem.allowedMenuProductIds.includes(selectedProductId || "")) {
+          return { quantities, error: `Combo component not allowed: ${comboItem.categoryName || comboItem.category}` };
+        }
         const component = menuProducts.find((item) => item.id === selectedProductId && item.kind !== "combo" && (comboItem.type !== "category" || item.category === comboItem.category));
         if (!component) return { quantities, error: `Combo component not selected: ${comboItem.type === "category" ? comboItem.categoryName : comboItem.menuProductName}` };
         addRecipe(component, comboItem.quantity * orderItem.quantity);
@@ -5779,6 +5789,9 @@ function enrichReceiptComboItems(items: ReceiptItem[], menuProducts: MenuProduct
           comboItem.type === "category"
             ? item.comboSelections?.find((selection) => selection.category === comboItem.category)?.menuProductId
             : comboItem.menuProductId;
+        if (comboItem.type === "category" && comboItem.allowedMenuProductIds?.length && !comboItem.allowedMenuProductIds.includes(selectedProductId || "")) {
+          return null;
+        }
         const component = menuProducts.find(
           (node) => node.id === selectedProductId && node.kind !== "combo" && (comboItem.type !== "category" || node.category === comboItem.category),
         );

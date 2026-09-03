@@ -199,6 +199,40 @@
   font-weight: 800;
 }
 
+.allowedProducts {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.allowedHeader,
+.checkRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.checkRow {
+  justify-content: flex-start;
+  color: #334155;
+  font-weight: 800;
+}
+
+.miniBtn {
+  min-height: 30px;
+  border: 1px solid #0f172a;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
 .recipeList {
   display: grid;
   gap: 8px;

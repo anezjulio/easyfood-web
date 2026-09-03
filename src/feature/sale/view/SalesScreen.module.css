@@ -276,6 +276,28 @@
   font-weight: 700;
 }
 
+.comboSelectRow {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 220px);
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.comboSelectRow select {
+  min-width: 0;
+  height: 30px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 12px;
+  padding: 0 6px;
+}
+
 .comboItems span {
   overflow: hidden;
   text-overflow: ellipsis;

@@ -149,11 +149,14 @@ function normalizeComboItems(input: unknown): MenuComboItem[] {
       const menuProductName = String(draft.menuProductName || "").trim();
       const category = normalizeMenuCategory(draft.category);
       const categoryName = String(draft.categoryName || "").trim();
+      const allowedMenuProductIds = Array.isArray(draft.allowedMenuProductIds)
+        ? draft.allowedMenuProductIds.map((id) => String(id || "").trim()).filter(Boolean)
+        : [];
       const quantity = Math.trunc(Number(draft.quantity));
       if (!Number.isFinite(quantity) || quantity <= 0) return null;
       if (draft.type === "category") {
         if (!category || category === "combos") return null;
-        return { type: "category" as const, category, categoryName: categoryName || category, quantity };
+        return { type: "category" as const, category, categoryName: categoryName || category, allowedMenuProductIds, quantity };
       }
       if (!menuProductId || !menuProductName) return null;
       return { type: "product" as const, menuProductId, menuProductName, quantity };

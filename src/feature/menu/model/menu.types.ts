@@ -14,6 +14,7 @@ export type MenuComboItem = {
   menuProductName?: string;
   category?: ProductCategory;
   categoryName?: string;
+  allowedMenuProductIds?: string[];
   quantity: number;
 };
 
