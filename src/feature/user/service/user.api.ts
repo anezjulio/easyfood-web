@@ -1,5 +1,5 @@
 import type { AppUserRecord, AppUserRole } from "../model/user.types";
-import { readJsonOrThrow } from "../../../shared/http/http";
+import { md5 } from "../../../shared/crypto/md5";
 
 export type UserDraft = {
   name: string;
@@ -21,64 +21,109 @@ export type UserUpdateDraft = {
   endHour: string;
 };
 
-const API_URL = (import.meta.env.VITE_FAKE_API_URL ?? "").replace(/\/$/, "");
+const STORAGE_KEY = "easyfood_users";
 
-function apiUrl(path: string): string {
-  if (!API_URL) {
-    throw new Error(
-      "VITE_FAKE_API_URL no está configurada. El frontend no sabe dónde está la API."
-    );
+const DEFAULT_USERS: AppUserRecord[] = [
+  {
+    id: "1",
+    name: "Administrador",
+    email: "admin@easyfood.local",
+    username: "admin",
+    role: "admin",
+    password: md5("1234"),
+    startHour: "00:00",
+    endHour: "23:59",
+  } as AppUserRecord,
+];
+
+function readUsers(): AppUserRecord[] {
+  const stored = localStorage.getItem(STORAGE_KEY);
+
+  if (!stored) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_USERS));
+    return DEFAULT_USERS;
   }
 
-  return `${API_URL}${path}`;
+  try {
+    return JSON.parse(stored) as AppUserRecord[];
+  } catch {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_USERS));
+    return DEFAULT_USERS;
+  }
+}
+
+function saveUsers(users: AppUserRecord[]): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
 }
 
 export async function fetchUsersApi(): Promise<AppUserRecord[]> {
-  const response = await fetch(apiUrl("/users"));
-  return await readJsonOrThrow<AppUserRecord[]>(response);
+  return readUsers();
 }
 
 export async function createUserApi(
   draft: UserDraft,
 ): Promise<AppUserRecord> {
-  const response = await fetch(apiUrl("/users"), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(draft),
-  });
+  const users = readUsers();
 
-  return await readJsonOrThrow<AppUserRecord>(response);
+  const newUser = {
+    ...draft,
+    id: crypto.randomUUID(),
+    password: md5(draft.password),
+  } as AppUserRecord;
+
+  users.push(newUser);
+  saveUsers(users);
+
+  return newUser;
 }
 
 export async function updateUserApi(
   id: string,
   draft: UserUpdateDraft,
 ): Promise<AppUserRecord> {
-  const response = await fetch(
-    apiUrl(`/users/${encodeURIComponent(id)}`),
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(draft),
-    },
+  const users = readUsers();
+
+  const index = users.findIndex(
+    (user) => String(user.id) === String(id),
   );
 
-  return await readJsonOrThrow<AppUserRecord>(response);
+  if (index === -1) {
+    throw new Error("Usuario no encontrado");
+  }
+
+  const current = users[index];
+
+  const updated = {
+    ...current,
+    ...draft,
+    password: draft.password
+      ? md5(draft.password)
+      : current.password,
+  } as AppUserRecord;
+
+  users[index] = updated;
+  saveUsers(users);
+
+  return updated;
 }
 
 export async function deleteUserApi(
   id: string,
 ): Promise<{ ok: boolean; id: string }> {
-  const response = await fetch(
-    apiUrl(`/users/${encodeURIComponent(id)}`),
-    {
-      method: "DELETE",
-    },
+  const users = readUsers();
+
+  const filtered = users.filter(
+    (user) => String(user.id) !== String(id),
   );
 
-  return await readJsonOrThrow<{ ok: boolean; id: string }>(response);
+  if (filtered.length === users.length) {
+    throw new Error("Usuario no encontrado");
+  }
+
+  saveUsers(filtered);
+
+  return {
+    ok: true,
+    id,
+  };
 }
