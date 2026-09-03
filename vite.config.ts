@@ -941,6 +941,8 @@ function resolveAllowedHosts() {
     hosts.add(railwayDomain);
   }
 
+  hosts.add("easyfood-web-production.up.railway.app");
+
   return [...hosts];
 }
 
