@@ -91,6 +91,13 @@ function resolveComboItems(product: SellableProduct, selections: NonNullable<Car
         item.type === "category"
           ? products.find((candidate) => candidate.menuProductId === selection?.menuProductId)
           : products.find((candidate) => candidate.menuProductId === item.menuProductId);
+      if (item.type === "category" && selection && !selectedProduct) {
+        return {
+          menuProductId: selection.menuProductId,
+          menuProductName: selection.menuProductName,
+          quantity: Math.max(1, Math.trunc(Number(item.quantity || 1))),
+        };
+      }
       if (!selectedProduct?.menuProductId) return null;
       return {
         menuProductId: selectedProduct.menuProductId,

@@ -5773,7 +5773,7 @@ function enrichReceiptComboItems(items: ReceiptItem[], menuProducts: MenuProduct
     const menuProduct = menuProducts.find((node) => node.id === item.productId.slice("menu:".length));
     if (menuProduct?.kind !== "combo") return item;
     const itemQuantity = Math.max(1, Math.trunc(Number(item.quantity || 1)));
-    const comboItems = (menuProduct.comboItems || [])
+    const rebuiltItems = (menuProduct.comboItems || [])
       .map((comboItem) => {
         const selectedProductId =
           comboItem.type === "category"
@@ -5782,6 +5782,14 @@ function enrichReceiptComboItems(items: ReceiptItem[], menuProducts: MenuProduct
         const component = menuProducts.find(
           (node) => node.id === selectedProductId && node.kind !== "combo" && (comboItem.type !== "category" || node.category === comboItem.category),
         );
+        const existingComponent = item.comboItems?.find((node) => node.menuProductId === selectedProductId);
+        if (!component && existingComponent) {
+          return {
+            menuProductId: existingComponent.menuProductId,
+            menuProductName: existingComponent.menuProductName,
+            quantity: Math.max(1, Math.trunc(Number(existingComponent.quantity || 1))),
+          };
+        }
         if (!component) return null;
         return {
           menuProductId: component.id,
@@ -5790,6 +5798,11 @@ function enrichReceiptComboItems(items: ReceiptItem[], menuProducts: MenuProduct
         };
       })
       .filter((comboItem): comboItem is NonNullable<typeof comboItem> => !!comboItem);
+    const comboItems = [...rebuiltItems];
+    for (const existing of item.comboItems || []) {
+      if (comboItems.some((node) => node.menuProductId === existing.menuProductId)) continue;
+      comboItems.push(existing);
+    }
     return comboItems.length ? { ...item, comboItems } : item;
   });
 }
