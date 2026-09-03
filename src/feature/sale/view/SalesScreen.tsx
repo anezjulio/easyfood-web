@@ -926,7 +926,7 @@ export default function SalesScreen() {
               <div className={styles.cartHead}>
                 <div>Producto</div>
                 <div>Cant.</div>
-                <div>Precio / IVA</div>
+                <div>Precio</div>
                 <div>Subtotal</div>
                 <div />
               </div>
@@ -988,9 +988,6 @@ export default function SalesScreen() {
                       </div>
                       <div className={styles.cellPrice}>
                         <span>{formatMoneyARS(item.unitPrice)}</span>
-                        <small className={styles.ivaInline}>
-                          IVA {ivaPercent}%: {formatMoneyARS(Math.round(item.unitPrice * (ivaPercent / 100)))}
-                        </small>
                       </div>
                       <div className={styles.cellSubtotal}>{formatMoneyARS(item.unitPrice * item.quantity)}</div>
                       <button
