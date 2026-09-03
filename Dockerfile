@@ -1,26 +1,13 @@
-FROM node:22-alpine AS build
+FROM node:22-alpine
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+
 RUN npm ci
 
 COPY . .
 
-ARG VITE_USE_FAKE_API=true
-ARG VITE_ORDER_PENDING_TIMEOUT_MINUTES=15
+ENV NODE_ENV=production
 
-ENV VITE_USE_FAKE_API=$VITE_USE_FAKE_API \
-    VITE_ORDER_PENDING_TIMEOUT_MINUTES=$VITE_ORDER_PENDING_TIMEOUT_MINUTES
-
-RUN npm run build
-
-
-FROM nginx:1.27-alpine AS production
-
-COPY nginx.conf /etc/nginx/templates/default.conf.template
-
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY --from=build /app/images /usr/share/nginx/html/images
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["sh", "-c", "npm start -- --host 0.0.0.0 --port ${PORT}"]
