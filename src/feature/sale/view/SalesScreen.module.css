@@ -224,11 +224,11 @@
 .cartHead,
 .cartRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 152px 150px 132px 40px;
-  gap: 8px;
+  grid-template-columns: minmax(280px, 1fr) 104px 112px 116px 34px;
+  gap: 4px;
   align-items: center;
   padding: 10px;
-  min-width: 500px;
+  min-width: 720px;
 }
 
 .cartHead {
@@ -712,7 +712,7 @@
 @media (max-width: 620px) {
   .cartHead,
   .cartRow {
-    grid-template-columns: minmax(0, 1fr) 136px 110px 112px 36px;
+    grid-template-columns: minmax(240px, 1fr) 96px 104px 108px 32px;
     font-size: 14px;
   }
 
