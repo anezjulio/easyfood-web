@@ -59,11 +59,45 @@
   ],
   "ingredients": [
     {
+      "id": "ing030920260319001047",
+      "name": "Agua embotellada 50 ml",
+      "expiresInDays": 90,
+      "stockMode": "unit",
+      "stockQuantity": 0,
+      "createdAt": "2026-09-03T06:19:00.066Z"
+    },
+    {
+      "id": "ing030920260214388254",
+      "name": "Coca cola zero 500 ml",
+      "expiresInDays": 30,
+      "stockMode": "unit",
+      "stockQuantity": 0,
+      "createdAt": "2026-09-03T05:14:38.052Z"
+    },
+    {
+      "id": "ing030920260214057448",
+      "name": "Coca cola  500 ml",
+      "expiresInDays": 5,
+      "stockMode": "unit",
+      "stockQuantity": 0,
+      "createdAt": "2026-09-03T05:14:05.446Z",
+      "updatedAt": "2026-09-03T05:56:58.711Z"
+    },
+    {
+      "id": "ing030920260211375394",
+      "name": "pomelo paso de los toros 500ml",
+      "expiresInDays": 30,
+      "stockMode": "unit",
+      "stockQuantity": 0,
+      "createdAt": "2026-09-03T05:11:37.508Z",
+      "updatedAt": "2026-09-03T05:12:26.306Z"
+    },
+    {
       "id": "ing-pan-hamburguesa",
       "name": "Pan hamburguesas",
       "expiresInDays": 5,
       "stockMode": "unit",
-      "stockQuantity": 77,
+      "stockQuantity": 71,
       "createdAt": "2026-08-29T10:00:00.000Z"
     },
     {
@@ -79,7 +113,7 @@
       "name": "Medallon de carne",
       "expiresInDays": 3,
       "stockMode": "unit",
-      "stockQuantity": 97,
+      "stockQuantity": 91,
       "createdAt": "2026-08-29T10:02:00.000Z"
     },
     {
@@ -111,7 +145,7 @@
       "name": "Cheddar feta",
       "expiresInDays": 7,
       "stockMode": "unit",
-      "stockQuantity": 176,
+      "stockQuantity": 156,
       "createdAt": "2026-08-29T10:06:00.000Z"
     },
     {
@@ -119,7 +153,7 @@
       "name": "Tocino",
       "expiresInDays": 5,
       "stockMode": "weight",
-      "stockQuantity": 2465,
+      "stockQuantity": 2195,
       "createdAt": "2026-08-29T10:07:00.000Z"
     },
     {
@@ -135,7 +169,7 @@
       "name": "Papa baston",
       "expiresInDays": 12,
       "stockMode": "weight",
-      "stockQuantity": 17400,
+      "stockQuantity": 14400,
       "createdAt": "2026-08-29T10:09:00.000Z"
     },
     {
@@ -143,7 +177,7 @@
       "name": "Mayonesa",
       "expiresInDays": 30,
       "stockMode": "weight",
-      "stockQuantity": 4940,
+      "stockQuantity": 4820,
       "createdAt": "2026-08-29T10:10:00.000Z"
     },
     {
@@ -151,7 +185,7 @@
       "name": "Ketchup",
       "expiresInDays": 30,
       "stockMode": "weight",
-      "stockQuantity": 4955,
+      "stockQuantity": 4865,
       "createdAt": "2026-08-29T10:11:00.000Z"
     },
     {
@@ -159,7 +193,7 @@
       "name": "Lechuga",
       "expiresInDays": 4,
       "stockMode": "weight",
-      "stockQuantity": 3150,
+      "stockQuantity": 3015,
       "createdAt": "2026-08-29T10:12:00.000Z"
     },
     {
@@ -167,7 +201,7 @@
       "name": "Cebolla",
       "expiresInDays": 10,
       "stockMode": "weight",
-      "stockQuantity": 4440,
+      "stockQuantity": 4300,
       "createdAt": "2026-08-29T10:13:00.000Z"
     },
     {
@@ -175,7 +209,7 @@
       "name": "Pepinillos",
       "expiresInDays": 18,
       "stockMode": "weight",
-      "stockQuantity": 2770,
+      "stockQuantity": 2695,
       "createdAt": "2026-08-29T10:14:00.000Z"
     },
     {
@@ -183,7 +217,7 @@
       "name": "Tomate",
       "expiresInDays": 5,
       "stockMode": "weight",
-      "stockQuantity": 4130,
+      "stockQuantity": 3945,
       "createdAt": "2026-08-29T10:15:00.000Z"
     },
     {
@@ -215,7 +249,7 @@
       "name": "Tortilla wrap",
       "expiresInDays": 7,
       "stockMode": "unit",
-      "stockQuantity": 60,
+      "stockQuantity": 59,
       "createdAt": "2026-08-29T10:19:00.000Z"
     },
     {
@@ -223,7 +257,7 @@
       "name": "Zanahoria",
       "expiresInDays": 10,
       "stockMode": "weight",
-      "stockQuantity": 3000,
+      "stockQuantity": 2965,
       "createdAt": "2026-08-29T10:20:00.000Z"
     },
     {
@@ -231,7 +265,7 @@
       "name": "Palta",
       "expiresInDays": 4,
       "stockMode": "weight",
-      "stockQuantity": 2500,
+      "stockQuantity": 2455,
       "createdAt": "2026-08-29T10:21:00.000Z"
     },
     {
@@ -239,7 +273,7 @@
       "name": "Limon",
       "expiresInDays": 12,
       "stockMode": "unit",
-      "stockQuantity": 78,
+      "stockQuantity": 70,
       "createdAt": "2026-08-29T10:22:00.000Z"
     },
     {
@@ -247,7 +281,7 @@
       "name": "Azucar",
       "expiresInDays": 60,
       "stockMode": "weight",
-      "stockQuantity": 5965,
+      "stockQuantity": 5825,
       "createdAt": "2026-08-29T10:23:00.000Z"
     },
     {
@@ -255,7 +289,7 @@
       "name": "Agua filtrada",
       "expiresInDays": 3,
       "stockMode": "weight",
-      "stockQuantity": 29550,
+      "stockQuantity": 27750,
       "createdAt": "2026-08-29T10:24:00.000Z"
     },
     {
@@ -263,7 +297,7 @@
       "name": "Hielo",
       "expiresInDays": 2,
       "stockMode": "weight",
-      "stockQuantity": 19880,
+      "stockQuantity": 19400,
       "createdAt": "2026-08-29T10:25:00.000Z"
     },
     {
@@ -271,48 +305,62 @@
       "name": "Bebida cola 500 ml",
       "expiresInDays": 90,
       "stockMode": "unit",
-      "stockQuantity": 71,
+      "stockQuantity": 68,
       "createdAt": "2026-08-29T10:26:00.000Z"
     }
   ],
   "menuProducts": [
     {
-      "id": "menu020920261904290741",
-      "name": "Hamburguesas + papas + bebida",
-      "price": 14999,
-      "description": "Hamburguesas + papas + bebida",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
+      "id": "menu030920260319316712",
+      "name": "Bebida agua  500 ml",
+      "price": 2000,
+      "category": "bebida",
+      "recipeItems": [
         {
-          "type": "product",
-          "menuProductId": "menu-hamburguesa-completa",
-          "menuProductName": "Hamburguesa completa",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu-papas",
-          "menuProductName": "Papas",
-          "quantity": 1
-        },
-        {
-          "type": "category",
-          "category": "bebida",
-          "categoryName": "Bebida",
-          "quantity": 1
+          "ingredientId": "ing030920260319001047",
+          "ingredientName": "Agua embotellada 50 ml",
+          "quantity": 1,
+          "stockMode": "unit"
         }
       ],
-      "createdAt": "2026-09-02T22:04:29.602Z",
-      "updatedAt": "2026-09-02T22:18:04.622Z"
+      "kind": "menu",
+      "createdAt": "2026-09-03T06:19:31.970Z",
+      "updatedAt": "2026-09-03T06:19:41.819Z"
     },
     {
-      "id": "menu-hamburguesa-completa",
-      "name": "Hamburguesa completa",
-      "price": 6800,
+      "id": "menu030920260316475608",
+      "name": "Limonada sin azucar casera",
+      "price": 4000,
+      "description": "Limonada fresca con limon, agua, azucar y hielo.",
+      "category": "bebida",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-limon",
+          "ingredientName": "Limon",
+          "quantity": 2,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-agua-filtrada",
+          "ingredientName": "Agua filtrada",
+          "quantity": 450,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-hielo",
+          "ingredientName": "Hielo",
+          "quantity": 120,
+          "stockMode": "weight"
+        }
+      ],
+      "kind": "menu",
+      "createdAt": "2026-09-03T06:16:47.616Z"
+    },
+    {
+      "id": "menu030920260315089653",
+      "name": "Hamburguesa doble",
+      "price": 13000,
       "description": "Pan, medallon, cheddar, lechuga, tomate, cebolla, pepinillos, mayonesa y ketchup.",
-      "imageUrl": "food-hamburger.png",
       "category": "hamburguesa",
       "recipeItems": [
         {
@@ -322,15 +370,9 @@
           "stockMode": "unit"
         },
         {
-          "ingredientId": "ing-medallon-carne",
-          "ingredientName": "Medallon de carne",
-          "quantity": 1,
-          "stockMode": "unit"
-        },
-        {
           "ingredientId": "ing-cheddar-feta",
           "ingredientName": "Cheddar feta",
-          "quantity": 1,
+          "quantity": 2,
           "stockMode": "unit"
         },
         {
@@ -368,10 +410,219 @@
           "ingredientName": "Ketchup",
           "quantity": 15,
           "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-medallon-carne",
+          "ingredientName": "Medallon de carne",
+          "quantity": 2,
+          "stockMode": "unit"
         }
       ],
       "kind": "menu",
-      "createdAt": "2026-08-29T13:00:00.000Z"
+      "createdAt": "2026-09-03T06:15:08.186Z"
+    },
+    {
+      "id": "menu030920260312014783",
+      "name": "Hamburguesa triple + papas cheddar bacon + bebida",
+      "price": 20000,
+      "description": "Hamburguesa doble + papas cheddar bacon + bebida",
+      "category": "hamburguesa",
+      "recipeItems": [],
+      "kind": "combo",
+      "comboItems": [
+        {
+          "type": "product",
+          "menuProductId": "menu-hamburguesa-completa",
+          "menuProductName": "Hamburguesa triple",
+          "quantity": 1
+        },
+        {
+          "type": "product",
+          "menuProductId": "menu-papas-cheddar-bacon",
+          "menuProductName": "Papas con cheddar y bacon",
+          "quantity": 1
+        },
+        {
+          "type": "category",
+          "category": "bebida",
+          "categoryName": "Bebida",
+          "allowedMenuProductIds": [
+            "menu030920260213232841",
+            "menu030920260215433038",
+            "menu-bebida-cola"
+          ],
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-03T06:12:01.073Z"
+    },
+    {
+      "id": "menu030920260229022930",
+      "name": "Hamburguesa doble + papas cheddar bacon + bebida",
+      "price": 20000,
+      "description": "Hamburguesa doble + papas cheddar bacon + bebida",
+      "category": "hamburguesa",
+      "recipeItems": [],
+      "kind": "combo",
+      "comboItems": [
+        {
+          "type": "product",
+          "menuProductId": "menu-papas-cheddar-bacon",
+          "menuProductName": "Papas con cheddar y bacon",
+          "quantity": 1
+        },
+        {
+          "type": "category",
+          "category": "bebida",
+          "categoryName": "Bebida",
+          "allowedMenuProductIds": [
+            "menu030920260213232841",
+            "menu030920260215433038",
+            "menu-bebida-cola"
+          ],
+          "quantity": 1
+        },
+        {
+          "type": "product",
+          "menuProductId": "menu030920260315089653",
+          "menuProductName": "Hamburguesa doble",
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-03T05:29:02.372Z",
+      "updatedAt": "2026-09-03T06:15:27.945Z"
+    },
+    {
+      "id": "menu030920260215433038",
+      "name": "Bebida Coca cola 500 ml",
+      "price": 2500,
+      "category": "bebida",
+      "recipeItems": [
+        {
+          "ingredientId": "ing030920260214057448",
+          "ingredientName": "Coca cola  500 ml",
+          "quantity": 1,
+          "stockMode": "unit"
+        }
+      ],
+      "kind": "menu",
+      "createdAt": "2026-09-03T05:15:43.972Z",
+      "updatedAt": "2026-09-03T05:29:43.831Z"
+    },
+    {
+      "id": "menu030920260213232841",
+      "name": "Bebida pomelo 500 ml",
+      "price": 2500,
+      "category": "bebida",
+      "recipeItems": [
+        {
+          "ingredientId": "ing030920260211375394",
+          "ingredientName": "pomelo paso de los toros 500ml",
+          "quantity": 1,
+          "stockMode": "unit"
+        }
+      ],
+      "kind": "menu",
+      "createdAt": "2026-09-03T05:13:23.518Z",
+      "updatedAt": "2026-09-03T05:29:33.727Z"
+    },
+    {
+      "id": "menu020920261904290741",
+      "name": "Hamburguesas + papas + bebida",
+      "price": 14999,
+      "description": "Hamburguesas + papas + bebida",
+      "category": "hamburguesa",
+      "recipeItems": [],
+      "kind": "combo",
+      "comboItems": [
+        {
+          "type": "product",
+          "menuProductId": "menu-hamburguesa-completa",
+          "menuProductName": "Hamburguesa triple",
+          "quantity": 1
+        },
+        {
+          "type": "product",
+          "menuProductId": "menu-papas",
+          "menuProductName": "Papas",
+          "quantity": 1
+        },
+        {
+          "type": "category",
+          "category": "bebida",
+          "categoryName": "Bebida",
+          "allowedMenuProductIds": [],
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-02T22:04:29.602Z",
+      "updatedAt": "2026-09-02T22:18:04.622Z"
+    },
+    {
+      "id": "menu-hamburguesa-completa",
+      "name": "Hamburguesa triple",
+      "price": 18000,
+      "description": "Pan, medallon, cheddar, lechuga, tomate, cebolla, pepinillos, mayonesa y ketchup.",
+      "category": "hamburguesa",
+      "recipeItems": [
+        {
+          "ingredientId": "ing-pan-hamburguesa",
+          "ingredientName": "Pan hamburguesas",
+          "quantity": 1,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-cheddar-feta",
+          "ingredientName": "Cheddar feta",
+          "quantity": 3,
+          "stockMode": "unit"
+        },
+        {
+          "ingredientId": "ing-lechuga",
+          "ingredientName": "Lechuga",
+          "quantity": 25,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-tomate",
+          "ingredientName": "Tomate",
+          "quantity": 35,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-cebolla",
+          "ingredientName": "Cebolla",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-pepinillos",
+          "ingredientName": "Pepinillos",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-mayonesa",
+          "ingredientName": "Mayonesa",
+          "quantity": 20,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-ketchup",
+          "ingredientName": "Ketchup",
+          "quantity": 15,
+          "stockMode": "weight"
+        },
+        {
+          "ingredientId": "ing-medallon-carne",
+          "ingredientName": "Medallon de carne",
+          "quantity": 3,
+          "stockMode": "unit"
+        }
+      ],
+      "kind": "menu",
+      "createdAt": "2026-08-29T13:00:00.000Z",
+      "updatedAt": "2026-09-03T06:11:30.535Z"
     },
     {
       "id": "menu-hamburguesa-bacon",
@@ -472,9 +723,8 @@
     {
       "id": "menu-bebida-limonada",
       "name": "Limonada casera",
-      "price": 2500,
+      "price": 4000,
       "description": "Limonada fresca con limon, agua, azucar y hielo.",
-      "imageUrl": "food-drinks.png",
       "category": "bebida",
       "recipeItems": [
         {
@@ -503,7 +753,8 @@
         }
       ],
       "kind": "menu",
-      "createdAt": "2026-08-29T13:15:00.000Z"
+      "createdAt": "2026-08-29T13:15:00.000Z",
+      "updatedAt": "2026-09-03T05:21:20.580Z"
     },
     {
       "id": "menu-bebida-cola",
@@ -536,7 +787,7 @@
         {
           "type": "product",
           "menuProductId": "menu-hamburguesa-completa",
-          "menuProductName": "Hamburguesa completa",
+          "menuProductName": "Hamburguesa triple",
           "quantity": 1
         },
         {
@@ -549,6 +800,7 @@
           "type": "category",
           "category": "bebida",
           "categoryName": "Bebida",
+          "allowedMenuProductIds": [],
           "quantity": 1
         }
       ],
@@ -580,6 +832,7 @@
           "type": "category",
           "category": "bebida",
           "categoryName": "Bebida",
+          "allowedMenuProductIds": [],
           "quantity": 1
         }
       ],
@@ -917,6 +1170,20 @@
   "requests": [],
   "stocks": [
     {
+      "id": "se030920260156564573",
+      "productId": "food-agua-500",
+      "quantity": -1,
+      "description": "Venta orden or030920260156559099",
+      "createdAt": "2026-09-03T04:56:56.941Z"
+    },
+    {
+      "id": "se030920260152574825",
+      "productId": "food-agua-500",
+      "quantity": -1,
+      "description": "Venta orden or030920260152301723",
+      "createdAt": "2026-09-03T04:52:57.320Z"
+    },
+    {
       "id": "se290820261945509296",
       "productId": "food-agua-500",
       "quantity": -1,
@@ -955,6 +1222,186 @@
     }
   ],
   "orders": [
+    {
+      "id": "or030920260159516484",
+      "items": [
+        {
+          "productId": "menu:menu020920261904290741",
+          "productName": "Hamburguesas + papas + bebida",
+          "unitPrice": 14999,
+          "quantity": 1,
+          "comboItems": [
+            {
+              "menuProductId": "menu-hamburguesa-completa",
+              "menuProductName": "Hamburguesa completa",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-papas",
+              "menuProductName": "Papas",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [
+            {
+              "category": "bebida",
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera"
+            }
+          ]
+        },
+        {
+          "productId": "menu:menu-papas-cheddar-bacon",
+          "productName": "Papas con cheddar y bacon",
+          "unitPrice": 5400,
+          "quantity": 2
+        },
+        {
+          "productId": "menu:menu-papas-cheddar",
+          "productName": "Papas con cheddar",
+          "unitPrice": 4700,
+          "quantity": 1
+        },
+        {
+          "productId": "menu:menu-bebida-cola",
+          "productName": "Bebida cola 500 ml",
+          "unitPrice": 1800,
+          "quantity": 1
+        },
+        {
+          "productId": "menu:menu-hamburguesa-bacon",
+          "productName": "Hamburguesa bacon cheddar",
+          "unitPrice": 7600,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-09-03T04:59:51.458Z",
+      "status": "pagada",
+      "total": 47499,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or030920260156559099",
+      "items": [
+        {
+          "productId": "menu:menu020920261904290741",
+          "productName": "Hamburguesas + papas + bebida",
+          "unitPrice": 14999,
+          "quantity": 2,
+          "comboItems": [
+            {
+              "menuProductId": "menu-hamburguesa-completa",
+              "menuProductName": "Hamburguesa completa",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-papas",
+              "menuProductName": "Papas",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [
+            {
+              "category": "bebida",
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera"
+            }
+          ]
+        },
+        {
+          "productId": "menu:menu-papas-cheddar-bacon",
+          "productName": "Papas con cheddar y bacon",
+          "unitPrice": 5400,
+          "quantity": 2
+        },
+        {
+          "productId": "menu:menu-wrap-vegano",
+          "productName": "Wrap vegano fresco",
+          "unitPrice": 5600,
+          "quantity": 1
+        },
+        {
+          "productId": "food-agua-500",
+          "productName": "Agua mineral 500 ml",
+          "unitPrice": 1400,
+          "quantity": 1
+        },
+        {
+          "productId": "menu:menu-bebida-cola",
+          "productName": "Bebida cola 500 ml",
+          "unitPrice": 1800,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-09-03T04:56:55.162Z",
+      "status": "pagada",
+      "total": 51398,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or030920260152301723",
+      "items": [
+        {
+          "productId": "menu:menu020920261904290741",
+          "productName": "Hamburguesas + papas + bebida",
+          "unitPrice": 14999,
+          "quantity": 1,
+          "comboItems": [
+            {
+              "menuProductId": "menu-hamburguesa-completa",
+              "menuProductName": "Hamburguesa completa",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-papas",
+              "menuProductName": "Papas",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [
+            {
+              "category": "bebida",
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera"
+            }
+          ]
+        },
+        {
+          "productId": "food-agua-500",
+          "productName": "Agua mineral 500 ml",
+          "unitPrice": 1400,
+          "quantity": 1
+        },
+        {
+          "productId": "menu:menu-papas-cheddar-bacon",
+          "productName": "Papas con cheddar y bacon",
+          "unitPrice": 5400,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-03T04:52:30.065Z",
+      "status": "pagada",
+      "total": 21799,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
     {
       "id": "or030920260151460942",
       "items": [
@@ -1103,6 +1550,30 @@
   ],
   "invoices": [
     {
+      "id": "fc030920260159525294",
+      "orderId": "or030920260159516484",
+      "createdAt": "2026-09-03T04:59:52.818Z",
+      "total": 47499,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc030920260156567835",
+      "orderId": "or030920260156559099",
+      "createdAt": "2026-09-03T04:56:56.953Z",
+      "total": 51398,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc030920260152575077",
+      "orderId": "or030920260152301723",
+      "createdAt": "2026-09-03T04:52:57.331Z",
+      "total": 21799,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
       "id": "fc030920260149559307",
       "orderId": "or030920260149497546",
       "createdAt": "2026-09-03T04:49:55.420Z",
@@ -1141,7 +1612,10 @@
       "operator": "admin",
       "startedAt": "2026-09-03T04:46:30.598Z",
       "orderIds": [
-        "or030920260149497546"
+        "or030920260149497546",
+        "or030920260152301723",
+        "or030920260156559099",
+        "or030920260159516484"
       ],
       "status": "open",
       "openingDeclaredAmount": 5000,
@@ -1202,9 +1676,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 59098,
+      "currentBalance": 179794,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T04:51:46.903Z"
+      "updatedAt": "2026-09-03T06:19:41.820Z"
     },
     {
       "id": "account-gains",
@@ -1212,9 +1686,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 49098,
+      "currentBalance": 169794,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T04:51:46.903Z"
+      "updatedAt": "2026-09-03T06:19:41.820Z"
     },
     {
       "id": "account-expenses",
@@ -1224,7 +1698,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T04:51:46.903Z"
+      "updatedAt": "2026-09-03T06:19:41.820Z"
     },
     {
       "id": "account-food-categories",
@@ -1234,10 +1708,130 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T04:51:46.903Z"
+      "updatedAt": "2026-09-03T06:19:41.820Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-sale-cash-or030920260159516484",
+      "createdAt": "2026-09-03T04:59:51.458Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or030920260159516484",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 47499,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or030920260159516484",
+      "orderId": "or030920260159516484",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or030920260159516484",
+      "createdAt": "2026-09-03T04:59:51.458Z",
+      "type": "sale-income",
+      "title": "Venta pagada or030920260159516484",
+      "description": "Venta registrada por admin por 47499.",
+      "amount": 47499,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or030920260159516484",
+      "orderId": "or030920260159516484",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-sale-cash-or030920260156559099",
+      "createdAt": "2026-09-03T04:56:55.162Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or030920260156559099",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 51398,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or030920260156559099",
+      "orderId": "or030920260156559099",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or030920260156559099",
+      "createdAt": "2026-09-03T04:56:55.162Z",
+      "type": "sale-income",
+      "title": "Venta pagada or030920260156559099",
+      "description": "Venta registrada por admin por 51398.",
+      "amount": 51398,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or030920260156559099",
+      "orderId": "or030920260156559099",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-sale-cash-or030920260152301723",
+      "createdAt": "2026-09-03T04:52:30.065Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or030920260152301723",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 21799,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or030920260152301723",
+      "orderId": "or030920260152301723",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or030920260152301723",
+      "createdAt": "2026-09-03T04:52:30.065Z",
+      "type": "sale-income",
+      "title": "Venta pagada or030920260152301723",
+      "description": "Venta registrada por admin por 21799.",
+      "amount": 21799,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or030920260152301723",
+      "orderId": "or030920260152301723",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
     {
       "id": "txn-sale-cash-or030920260149497546",
       "createdAt": "2026-09-03T04:49:49.515Z",
@@ -1455,6 +2049,73 @@
   ],
   "licenses": [],
   "notifications": [
+    {
+      "id": "nt030920260159529837",
+      "type": "sale-created",
+      "title": "Venta registrada: or030920260159516484",
+      "description": "Venta por 47499 (admin).",
+      "createdAt": "2026-09-03T04:59:52.806Z",
+      "dueAt": "2026-09-04T04:59:52.806Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or030920260159516484",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260156567005",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Agua mineral 500 ml",
+      "description": "Se registro un ingreso de -1 unidades para Agua mineral 500 ml.",
+      "createdAt": "2026-09-03T04:56:56.941Z",
+      "dueAt": "2026-09-10T04:56:56.941Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "bebida",
+      "entityType": "stock",
+      "entityId": "se030920260156564573",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260156563614",
+      "type": "sale-created",
+      "title": "Venta registrada: or030920260156559099",
+      "description": "Venta por 51398 (admin).",
+      "createdAt": "2026-09-03T04:56:56.930Z",
+      "dueAt": "2026-09-04T04:56:56.930Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or030920260156559099",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260152578869",
+      "type": "stock-created",
+      "title": "Ingreso de stock: Agua mineral 500 ml",
+      "description": "Se registro un ingreso de -1 unidades para Agua mineral 500 ml.",
+      "createdAt": "2026-09-03T04:52:57.320Z",
+      "dueAt": "2026-09-10T04:52:57.320Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "category": "bebida",
+      "entityType": "stock",
+      "entityId": "se030920260152574825",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260152575834",
+      "type": "sale-created",
+      "title": "Venta registrada: or030920260152301723",
+      "description": "Venta por 21799 (admin).",
+      "createdAt": "2026-09-03T04:52:57.308Z",
+      "dueAt": "2026-09-04T04:52:57.308Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or030920260152301723",
+      "status": "active"
+    },
     {
       "id": "nt030920260149556308",
       "type": "sale-created",

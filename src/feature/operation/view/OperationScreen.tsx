@@ -219,9 +219,9 @@ export default function OperationScreen() {
             <h2 className={styles.groupTitle}>Productos</h2>
             <div className={styles.grid}>
               <BigBtn title="Creacion de Menu" subtitle="Recetas para vender" onClick={() => nav("/menu-products")} variant="menu" />
-              <BigBtn title="Ingredientes" subtitle="Definicion y caducidad" onClick={() => nav("/ingredients")} />
+              <BigBtn title="Ingredientes y productos" subtitle="Definicion y caducidad" onClick={() => nav("/ingredients")} />
               {isAdmin ? (
-                <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
+                <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} disabled />
               ) : null}
               <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} disabled />
               <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} disabled />

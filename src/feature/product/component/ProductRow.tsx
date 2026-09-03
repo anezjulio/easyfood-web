@@ -20,6 +20,7 @@ export default function ProductRow({
   showImageThumbnail = false,
   showCategory = false,
   showDateColumn = true,
+  salesCompactLayout = false,
   existenceAlign = "left",
   dateValue,
 }: {
@@ -36,9 +37,11 @@ export default function ProductRow({
   showImageThumbnail?: boolean;
   showCategory?: boolean;
   showDateColumn?: boolean;
+  salesCompactLayout?: boolean;
   existenceAlign?: "left" | "center" | "right";
   dateValue?: string;
 }) {
+  const salesColumnTemplate = "minmax(280px, 1fr) 120px 120px";
   const columnCount =
     2 +
     (showImageThumbnail ? 1 : 0) +
@@ -47,7 +50,7 @@ export default function ProductRow({
     (showExistence ? 1 : 0) +
     (showCategory ? 1 : 0) +
     (showDateColumn ? 1 : 0);
-  const minTableWidth = Math.max(showImageThumbnail ? 520 : 620, columnCount * 140);
+  const minTableWidth = salesCompactLayout ? 560 : Math.max(showImageThumbnail ? 520 : 620, columnCount * 140);
   const isEven = rowIndex % 2 === 0;
   const baseBg = isEven ? "#f8fafc" : "white";
   const isOutOfStock = Number(product.existencia || 0) <= 0;
@@ -66,13 +69,13 @@ export default function ProductRow({
       }}
       style={{
         ...rowStyle,
-        gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
+        gridTemplateColumns: salesCompactLayout ? salesColumnTemplate : `repeat(${columnCount}, minmax(0, 1fr))`,
         minWidth: `${minTableWidth}px`,
         background: selected ? "#e2e8f0" : baseBg,
         opacity: isOutOfStock ? 0.5 : 1,
       }}
     >
-      {showImageThumbnail ? (
+      {showImageThumbnail && !salesCompactLayout ? (
         <div style={imageCellStyle}>
           {imageUrl ? (
             <img src={imageUrl} alt="" style={imageStyle} loading="lazy" />
@@ -88,9 +91,20 @@ export default function ProductRow({
         </div>
       ) : null}
 
-      <div style={{ fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-        {product.name}
-      </div>
+      {salesCompactLayout ? (
+        <div style={salesProductCellStyle}>
+          {imageUrl ? (
+            <img src={imageUrl} alt="" style={salesImageStyle} loading="lazy" />
+          ) : (
+            <div style={salesImageFallbackStyle}>{product.name.slice(0, 1).toUpperCase()}</div>
+          )}
+          <span style={salesProductNameStyle}>{product.name}</span>
+        </div>
+      ) : (
+        <div style={{ fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {product.name}
+        </div>
+      )}
 
       {showBrand ? (
         <div style={{ textAlign: "left", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -99,7 +113,7 @@ export default function ProductRow({
       ) : null}
 
       {showCategory ? (
-        <div style={{ textAlign: "left", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <div style={{ textAlign: salesCompactLayout ? "right" : "left", fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {formatCategory(product.category)}
         </div>
       ) : null}
@@ -110,7 +124,7 @@ export default function ProductRow({
         </div>
       ) : null}
 
-      <div style={{ textAlign: "left", fontWeight: 900, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+      <div style={{ textAlign: salesCompactLayout ? "right" : "left", fontWeight: 900, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
         {formatMoney(product.price)}
       </div>
 
@@ -153,5 +167,38 @@ const imageFallbackStyle: React.CSSProperties = {
   display: "grid",
   placeItems: "center",
   color: "#0f172a",
+  fontWeight: 900,
+};
+
+const salesProductCellStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  minWidth: 0,
+};
+
+const salesImageStyle: React.CSSProperties = {
+  width: 46,
+  height: 46,
+  objectFit: "cover",
+  border: "1px solid #e2e8f0",
+  background: "#ffffff",
+  display: "block",
+  flex: "0 0 auto",
+};
+
+const salesImageFallbackStyle: React.CSSProperties = {
+  ...salesImageStyle,
+  display: "grid",
+  placeItems: "center",
+  color: "#0f172a",
+  fontWeight: 900,
+};
+
+const salesProductNameStyle: React.CSSProperties = {
+  minWidth: 0,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
   fontWeight: 900,
 };

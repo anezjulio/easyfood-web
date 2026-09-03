@@ -28,7 +28,6 @@ import {
   fetchTaxSettingsApi,
   updateOrderStatusApi,
 } from "../service/sale.api";
-import { createStockEntryApi } from "../../stock/service/stock.api";
 import { resolveImageUrl } from "../../../shared/image/image.service";
 import {
   addOrderToCurrentWorkdayApi,
@@ -46,6 +45,11 @@ type CartItem = {
   quantity: number;
   comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
   comboSelections?: Array<{ category: string; menuProductId: string; menuProductName: string }>;
+  comboUnits?: Array<{
+    label: string;
+    comboItems: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
+    comboSelections?: Array<{ category: string; menuProductId: string; menuProductName: string }>;
+  }>;
 };
 
 type SellableProduct = Product & {
@@ -56,10 +60,6 @@ type SellableProduct = Product & {
 
 function buildMenuSaleProductId(menuProductId: string): string {
   return `menu:${menuProductId}`;
-}
-
-function isMenuSaleProductId(productId: string): boolean {
-  return productId.startsWith("menu:");
 }
 
 function formatCategoryLabel(category: string) {
@@ -114,6 +114,18 @@ function getComboCategoryOptions(comboItem: NonNullable<MenuProduct["comboItems"
     if (product.saleSource !== "menu" || product.menuProduct?.kind === "combo" || product.category !== comboItem.category) return false;
     return allowedIds.size === 0 || allowedIds.has(product.menuProductId || "");
   });
+}
+
+function getFixedComboItems(product: SellableProduct | null | undefined) {
+  return (product?.menuProduct?.comboItems || []).filter((item) => item.type === "product" && item.menuProductId);
+}
+
+function mapSelectionsByCategory(selections: CartItem["comboSelections"]) {
+  return Object.fromEntries((selections || []).map((item) => [item.category, buildMenuSaleProductId(item.menuProductId)]));
+}
+
+function hasVariableComboItems(product: SellableProduct | null | undefined) {
+  return (product?.menuProduct?.comboItems || []).some((item) => item.type === "category" && item.category);
 }
 
 function generateOrderCode() {
@@ -304,8 +316,8 @@ export default function SalesScreen() {
   );
   const selectedImageUrl = resolveImageUrl(selectedProduct?.imageUrl?.trim() || "");
 
-  const selectedProductIsMenu = selectedProduct?.saleSource === "menu" || isMenuSaleProductId(selectedProduct?.id || "");
-  const selectedProductStock = selectedProductIsMenu ? Number.POSITIVE_INFINITY : Math.max(0, Math.trunc(Number(selectedProduct?.existencia || 0)));
+  const selectedProductStock = resolveProductStock(selectedProduct);
+  const selectedProductStockLabel = selectedProduct ? `Disponibles: ${formatStockLimit(selectedProductStock)}` : "";
   const hasPendingPayment = pendingOrder?.status === "por pagar";
 
   useEffect(() => {
@@ -527,14 +539,14 @@ export default function SalesScreen() {
     if (key === "createdAt") setCreatedAtFilter(value);
   }
 
-  function resolveProductStock(product: SellableProduct | null | undefined): number {
+  function resolveProductStock(product: SellableProduct | null | undefined, selections = comboSelections): number {
+    void selections;
     if (!product) return 0;
-    if (product.saleSource === "menu" || isMenuSaleProductId(product.id)) return Number.POSITIVE_INFINITY;
-    return Math.max(0, Math.trunc(Number(product.existencia || 0)));
+    return Number.POSITIVE_INFINITY;
   }
 
   function formatStockLimit(value: number): string {
-    return Number.isFinite(value) ? String(value) : "disponible";
+    return Number.isFinite(value) ? String(value) : "ilimitado";
   }
 
   function addProductToCart(product: SellableProduct, rawQuantity: number) {
@@ -571,6 +583,13 @@ export default function SalesScreen() {
     const selectionList = resolvedSelections.filter((selection): selection is NonNullable<typeof selection> => !!selection);
     const componentList = resolveComboItems(product, selectionList, products);
     const cartItemId = `${product.id}:${selectionList.map((selection) => selection.menuProductId).join(",") || "fixed"}`;
+    const comboUnits = hasVariableComboItems(product)
+      ? Array.from({ length: nextQuantity }, (_, index) => ({
+          label: `Combo ${index + 1}`,
+          comboItems: componentList,
+          comboSelections: selectionList,
+        }))
+      : undefined;
 
     setSelectedProductId(product.id);
     setCart((current) => {
@@ -586,6 +605,7 @@ export default function SalesScreen() {
             quantity: nextQuantity,
             comboItems: componentList.length ? componentList : undefined,
             comboSelections: selectionList.length ? selectionList : undefined,
+            comboUnits,
           },
         ];
       }
@@ -598,7 +618,20 @@ export default function SalesScreen() {
 
       return current.map((item) => {
         if (item.id !== cartItemId) return item;
-        return { ...item, quantity: combinedQuantity };
+        return {
+          ...item,
+          quantity: combinedQuantity,
+          comboUnits: item.comboUnits
+            ? [
+                ...item.comboUnits,
+                ...Array.from({ length: nextQuantity }, (_, index) => ({
+                  label: `Combo ${item.comboUnits!.length + index + 1}`,
+                  comboItems: componentList,
+                  comboSelections: selectionList,
+                })),
+              ]
+            : undefined,
+        };
       });
     });
   }
@@ -628,7 +661,7 @@ export default function SalesScreen() {
     if (!Number.isFinite(parsed) || parsed < 1) return;
 
     const cartItem = cart.find((item) => item.id === cartItemId);
-    const productStock = resolveProductStock(products.find((item) => item.id === cartItem?.productId));
+    const productStock = resolveProductStock(products.find((item) => item.id === cartItem?.productId), mapSelectionsByCategory(cartItem?.comboSelections));
 
     const maxAllowed = Math.max(1, productStock);
     const clamped = Math.min(parsed, maxAllowed);
@@ -643,23 +676,56 @@ export default function SalesScreen() {
     setCart((current) =>
       current.map((item) => {
         if (item.id !== cartItemId) return item;
-        return { ...item, quantity: clamped };
+        const product = products.find((node) => node.id === item.productId);
+        const baseUnit = item.comboUnits?.[item.comboUnits.length - 1];
+        return {
+          ...item,
+          quantity: clamped,
+          comboUnits: item.comboUnits && product
+            ? Array.from({ length: clamped }, (_, index) => {
+                const currentUnit = item.comboUnits?.[index] || baseUnit;
+                return {
+                  label: `Combo ${index + 1}`,
+                  comboItems: currentUnit?.comboItems || item.comboItems || [],
+                  comboSelections: currentUnit?.comboSelections || item.comboSelections,
+                };
+              })
+            : item.comboUnits,
+        };
       }),
     );
   }
 
-  function updateCartComboSelection(cartItemId: string, comboItemCategory: string, productId: string) {
+  function updateCartComboSelection(cartItemId: string, comboItemCategory: string, productId: string, comboUnitIndex?: number) {
     if (hasPendingPayment) return;
     const cartItem = cart.find((item) => item.id === cartItemId);
     const product = products.find((item) => item.id === cartItem?.productId);
     const comboItem = product?.menuProduct?.comboItems?.find((item) => item.type === "category" && item.category === comboItemCategory);
     const selected = comboItem ? getComboCategoryOptions(comboItem, products).find((item) => item.id === productId) : null;
     if (!cartItem || !product || !comboItem || !selected?.menuProductId) return;
+    const selectedMenuProductId = selected.menuProductId;
     const comboSelections = [
       ...(cartItem.comboSelections || []).filter((item) => item.category !== comboItemCategory),
-      { category: comboItemCategory, menuProductId: selected.menuProductId, menuProductName: selected.name },
+      { category: comboItemCategory, menuProductId: selectedMenuProductId, menuProductName: selected.name },
     ];
     const comboItems = resolveComboItems(product, comboSelections, products);
+    if (typeof comboUnitIndex === "number") {
+      setCart((current) =>
+        current.map((item) => {
+          if (item.id !== cartItemId) return item;
+          const comboUnits = item.comboUnits?.map((unit, index) => {
+            if (index !== comboUnitIndex) return unit;
+            const unitSelections = [
+              ...(unit.comboSelections || []).filter((selection) => selection.category !== comboItemCategory),
+              { category: comboItemCategory, menuProductId: selectedMenuProductId, menuProductName: selected.name },
+            ];
+            return { ...unit, comboSelections: unitSelections, comboItems: resolveComboItems(product, unitSelections, products) };
+          });
+          return { ...item, comboUnits };
+        }),
+      );
+      return;
+    }
     setCart((current) =>
       current.map((item) => (item.id === cartItemId ? { ...item, comboSelections, comboItems: comboItems.length ? comboItems : undefined } : item)),
     );
@@ -675,7 +741,7 @@ export default function SalesScreen() {
     const product = products.find((item) => item.id === currentItem?.productId);
     if (!product || !currentItem) return;
 
-    const productStock = resolveProductStock(product);
+    const productStock = resolveProductStock(product, mapSelectionsByCategory(currentItem.comboSelections));
     const nextQuantity = currentItem.quantity + 1;
     if (nextQuantity > productStock) {
       setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${product.name}.`);
@@ -684,7 +750,17 @@ export default function SalesScreen() {
 
     setError("");
     setCart((current) =>
-      current.map((item) => (item.id === cartItemId ? { ...item, quantity: item.quantity + 1 } : item)),
+      current.map((item) => {
+        if (item.id !== cartItemId) return item;
+        const lastUnit = item.comboUnits?.[item.comboUnits.length - 1];
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+          comboUnits: item.comboUnits && lastUnit
+            ? [...item.comboUnits, { ...lastUnit, label: `Combo ${item.comboUnits.length + 1}` }]
+            : item.comboUnits,
+        };
+      }),
     );
   }
 
@@ -704,7 +780,7 @@ export default function SalesScreen() {
     }
 
     setCart((current) =>
-      current.map((item) => (item.id === cartItemId ? { ...item, quantity: item.quantity - 1 } : item)),
+      current.map((item) => (item.id === cartItemId ? { ...item, quantity: item.quantity - 1, comboUnits: item.comboUnits?.slice(0, -1) } : item)),
     );
   }
 
@@ -750,6 +826,7 @@ export default function SalesScreen() {
           quantity: item.quantity,
           comboItems: item.comboItems,
           comboSelections: item.comboSelections,
+          comboUnits: item.comboUnits,
         })),
         operator: auth.user?.username || "operator",
       });
@@ -815,15 +892,6 @@ export default function SalesScreen() {
         paymentMethod,
         total: finalTotalForPayment,
       });
-
-      for (const item of pendingOrder.items) {
-        if (isMenuSaleProductId(item.productId)) continue;
-        await createStockEntryApi({
-          productId: item.productId,
-          quantity: -Math.trunc(item.quantity),
-          description: `Venta orden ${pendingOrder.id}`,
-        });
-      }
 
       const createdInvoice = await createInvoiceApi({
         orderId: pendingOrder.id,
@@ -914,43 +982,68 @@ export default function SalesScreen() {
                     <div className={styles.selectedLabel}>Producto seleccionado</div>
                     <p className={styles.selectedName}>{selectedProduct?.name || "Sin seleccionar"}</p>
                     <p className={styles.selectedStock}>
-                      {selectedProductIsMenu ? "Tipo: producto de menu" : `Existencia: ${selectedProductStock}`}
+                      {selectedProductStockLabel}
                     </p>
                   </div>
 
                   <div className={styles.quantityActionRow}>
+                    <div className={styles.selectedAddRow}>
+                      <label className={styles.quantityRow}>
+                        <span>Cantidad</span>
+                        <input
+                          type="number"
+                          min={1}
+                          max={Number.isFinite(selectedProductStock) ? selectedProductStock : undefined}
+                          value={quantityToAdd}
+                          onChange={(event) => setQuantityToAdd(event.target.value)}
+                          className={`${styles.input} ${styles.quantityInput}`}
+                          disabled={!selectedProduct || hasPendingPayment}
+                        />
+                      </label>
+
+                      <button
+                        type="button"
+                        className={`${styles.secondaryBtn} ${styles.addProductBtn}`}
+                        onClick={addSelectedProductToCart}
+                        disabled={!selectedProduct || hasPendingPayment}
+                      >
+                        Agregar producto
+                      </button>
+                    </div>
+                    {getFixedComboItems(selectedProduct).length ? (
+                      <div className={styles.comboIncludedGroup}>
+                        <span>Incluye</span>
+                        <div className={styles.comboIncludedList}>
+                          {getFixedComboItems(selectedProduct).map((item) => (
+                            <span key={item.menuProductId}>
+                              + {item.quantity > 1 ? `${item.quantity} x ` : ""}{item.menuProductName}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
                     {(selectedProduct?.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category).map((item) => {
                       const options = getComboCategoryOptions(item, products);
                       return (
-                      <label key={item.category} className={styles.quantityRow}>
+                      <div key={item.category} className={styles.comboChoiceGroup}>
                         <span>{item.categoryName || formatCategoryLabel(item.category!)} a eleccion</span>
-                        <select className={styles.input} value={comboSelections[item.category!] || ""} onChange={(event) => setComboSelections((current) => ({ ...current, [item.category!]: event.target.value }))} disabled={hasPendingPayment}>
-                          <option value="">Seleccionar</option>
-                          {options.map((product) => <option key={product.id} value={product.id}>{product.name}</option>)}
-                        </select>
-                      </label>
+                        <div className={styles.comboChoiceList}>
+                          {options.map((product) => (
+                            <label key={product.id} className={styles.comboChoiceOption}>
+                              <input
+                                type="radio"
+                                name={`selected-${selectedProduct?.id}-${item.category}`}
+                                value={product.id}
+                                checked={comboSelections[item.category!] === product.id}
+                                onChange={() => setComboSelections((current) => ({ ...current, [item.category!]: product.id }))}
+                                disabled={hasPendingPayment}
+                              />
+                              <span>{product.name}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
                     )})}
-                    <label className={styles.quantityRow}>
-                      <span>Cantidad</span>
-                      <input
-                        type="number"
-                        min={1}
-                        max={Number.isFinite(selectedProductStock) ? selectedProductStock : undefined}
-                        value={quantityToAdd}
-                        onChange={(event) => setQuantityToAdd(event.target.value)}
-                        className={`${styles.input} ${styles.quantityInput}`}
-                        disabled={!selectedProduct || selectedProductStock < 1 || hasPendingPayment}
-                      />
-                    </label>
-
-                    <button
-                      type="button"
-                      className={`${styles.secondaryBtn} ${styles.addProductBtn}`}
-                      onClick={addSelectedProductToCart}
-                      disabled={!selectedProduct || selectedProductStock < 1 || hasPendingPayment}
-                    >
-                      Agregar producto
-                    </button>
                   </div>
                 </div>
               </div>
@@ -978,29 +1071,62 @@ export default function SalesScreen() {
                     >
                       <div className={styles.cellProduct}>
                         <span>{item.productName}</span>
-                        {(products.find((product) => product.id === item.productId)?.menuProduct?.comboItems || [])
-                          .filter((comboItem) => comboItem.type === "category" && comboItem.category)
-                          .map((comboItem) => {
-                            const product = products.find((node) => node.id === item.productId);
-                            const options = product ? getComboCategoryOptions(comboItem, products) : [];
-                            return (
-                              <label key={comboItem.category} className={styles.comboSelectRow}>
-                                <span>{comboItem.categoryName || formatCategoryLabel(comboItem.category!)}</span>
-                                <select
-                                  value={item.comboSelections?.find((selection) => selection.category === comboItem.category)?.menuProductId || ""}
-                                  onChange={(event) => updateCartComboSelection(item.id, comboItem.category!, buildMenuSaleProductId(event.target.value))}
-                                  disabled={hasPendingPayment}
-                                >
-                                  {options.map((option) => (
-                                    <option key={option.id} value={option.menuProductId}>
-                                      {option.name}
-                                    </option>
-                                  ))}
-                                </select>
-                              </label>
-                            );
-                          })}
-                        {item.comboItems?.length ? (
+                        {getFixedComboItems(products.find((product) => product.id === item.productId)).length ? (
+                          <div className={styles.comboIncludedGroup}>
+                            <span>Incluye</span>
+                            <div className={styles.comboIncludedList}>
+                              {getFixedComboItems(products.find((product) => product.id === item.productId)).map((comboItem) => (
+                                <span key={comboItem.menuProductId}>
+                                  + {comboItem.quantity > 1 ? `${comboItem.quantity} x ` : ""}{comboItem.menuProductName}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+                        {item.comboUnits?.length ? (
+                          <div className={styles.comboUnits}>
+                            {item.comboUnits.map((unit, unitIndex) => {
+                              const product = products.find((node) => node.id === item.productId);
+                              return (
+                                <div key={`${item.id}-unit-${unitIndex}`} className={styles.comboUnit}>
+                                  <strong>{unit.label}</strong>
+                                  <div className={styles.comboItems}>
+                                    {unit.comboItems.map((comboItem) => (
+                                      <span key={comboItem.menuProductId}>
+                                        + {comboItem.quantity > 1 ? `${comboItem.quantity} x ` : ""}{comboItem.menuProductName}
+                                      </span>
+                                    ))}
+                                  </div>
+                                  {(product?.menuProduct?.comboItems || [])
+                                    .filter((comboItem) => comboItem.type === "category" && comboItem.category)
+                                    .map((comboItem) => {
+                                      const options = getComboCategoryOptions(comboItem, products);
+                                      return (
+                                        <div key={`${unit.label}-${comboItem.category}`} className={styles.comboCartChoiceGroup}>
+                                          <span>{comboItem.categoryName || formatCategoryLabel(comboItem.category!)}</span>
+                                          <div className={styles.comboChoiceList}>
+                                            {options.map((option) => (
+                                              <label key={option.id} className={styles.comboChoiceOption}>
+                                                <input
+                                                  type="radio"
+                                                  name={`cart-${item.id}-${unitIndex}-${comboItem.category}`}
+                                                  value={option.menuProductId}
+                                                  checked={unit.comboSelections?.find((selection) => selection.category === comboItem.category)?.menuProductId === option.menuProductId}
+                                                  onChange={() => updateCartComboSelection(item.id, comboItem.category!, option.id, unitIndex)}
+                                                  disabled={hasPendingPayment}
+                                                />
+                                                <span>{option.name}</span>
+                                              </label>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : item.comboItems?.length ? (
                           <div className={styles.comboItems}>
                             {item.comboItems.map((comboItem) => (
                               <span key={comboItem.menuProductId}>
@@ -1024,7 +1150,7 @@ export default function SalesScreen() {
                           <input
                             type="number"
                             min={1}
-                            max={Number.isFinite(resolveProductStock(products.find((p) => p.id === item.productId))) ? resolveProductStock(products.find((p) => p.id === item.productId)) : undefined}
+                            max={Number.isFinite(resolveProductStock(products.find((p) => p.id === item.productId), mapSelectionsByCategory(item.comboSelections))) ? resolveProductStock(products.find((p) => p.id === item.productId), mapSelectionsByCategory(item.comboSelections)) : undefined}
                             value={item.quantity}
                             onChange={(e) => updateCartItemQuantity(item.id, e.target.value)}
                             className={styles.cartQtyInput}
@@ -1123,6 +1249,7 @@ export default function SalesScreen() {
               showBrand={false}
               showBarcode={false}
               showImageThumbnail
+              salesCompactLayout
               showHeaderFilters={false}
               showDateColumn={false}
               topMargin={0}

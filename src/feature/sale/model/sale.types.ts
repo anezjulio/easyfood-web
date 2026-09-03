@@ -43,6 +43,19 @@ export type OrderItem = {
     menuProductId: string;
     menuProductName: string;
   }>;
+  comboUnits?: Array<{
+    label: string;
+    comboItems: Array<{
+      menuProductId: string;
+      menuProductName: string;
+      quantity: number;
+    }>;
+    comboSelections?: Array<{
+      category: string;
+      menuProductId: string;
+      menuProductName: string;
+    }>;
+  }>;
 };
 
 export type Order = {

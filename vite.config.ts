@@ -180,6 +180,7 @@ type OrderItem = {
   quantity: number;
   comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
   comboSelections?: Array<{ category: NonNullable<Product["category"]>; menuProductId: string; menuProductName: string }>;
+  comboUnits?: Array<{ label: string; comboItems: Array<{ menuProductId: string; menuProductName: string; quantity: number }>; comboSelections?: Array<{ category: NonNullable<Product["category"]>; menuProductId: string; menuProductName: string }> }>;
 };
 
 type Order = {
@@ -209,6 +210,7 @@ type ReceiptItem = {
   quantity: number;
   comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
   comboSelections?: Array<{ category: NonNullable<Product["category"]>; menuProductId: string; menuProductName: string }>;
+  comboUnits?: Array<{ label: string; comboItems: Array<{ menuProductId: string; menuProductName: string; quantity: number }>; comboSelections?: Array<{ category: NonNullable<Product["category"]>; menuProductId: string; menuProductName: string }> }>;
 };
 
 type Receipt = {
@@ -2227,18 +2229,6 @@ function mockDbPlugin(): Plugin {
               if (consumption.error) {
                 return sendJson(res, 400, { message: consumption.error });
               }
-              const insufficient = [...consumption.quantities.entries()].find(([ingredientId, quantity]) => {
-                const ingredient = db.ingredients.find((item) => item.id === ingredientId);
-                return !ingredient || ingredient.stockQuantity < quantity;
-              });
-              if (insufficient) {
-                const ingredient = db.ingredients.find((item) => item.id === insufficient[0]);
-                return sendJson(res, 409, { message: `Insufficient stock for ${ingredient?.name || insufficient[0]}` });
-              }
-              db.ingredients = db.ingredients.map((ingredient) => ({
-                ...ingredient,
-                stockQuantity: Math.max(0, ingredient.stockQuantity - (consumption.quantities.get(ingredient.id) || 0)),
-              }));
             }
 
             db.orders[index] = {
@@ -5533,9 +5523,16 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     .map((item) => {
       const quantity = Number.isFinite(item.quantity) ? Math.max(0, Math.trunc(item.quantity)) : 0;
       const subtotal = Math.max(0, Math.trunc(item.unitPrice * quantity));
-      const comboLines = (item.comboItems || [])
-        .map((comboItem) => `  <p class="combo-item">+ ${comboItem.quantity > 1 ? `${escapeHtml(String(comboItem.quantity))} x ` : ""}${escapeHtml(comboItem.menuProductName)}</p>`)
-        .join("\n");
+      const comboLines = item.comboUnits?.length
+        ? item.comboUnits
+            .map((unit) => [
+              `  <p class="combo-unit">${escapeHtml(unit.label)}</p>`,
+              ...unit.comboItems.map((comboItem) => `  <p class="combo-item">+ ${comboItem.quantity > 1 ? `${escapeHtml(String(comboItem.quantity))} x ` : ""}${escapeHtml(comboItem.menuProductName)}</p>`),
+            ].join("\n"))
+            .join("\n")
+        : (item.comboItems || [])
+            .map((comboItem) => `  <p class="combo-item">+ ${comboItem.quantity > 1 ? `${escapeHtml(String(comboItem.quantity))} x ` : ""}${escapeHtml(comboItem.menuProductName)}</p>`)
+            .join("\n");
       return [
         "<article class=\"item\">",
         `  <p class="item-name">${escapeHtml(item.productName)}</p>`,
@@ -5575,6 +5572,7 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     "    .value { text-align: left; word-break: break-word; }",
     "    .items { display: grid; gap: 6px; }",
     "    .item-name { margin: 0; font-weight: 700; word-break: break-word; }",
+    "    .combo-unit { margin: 4px 0 0 8px; color: #0f172a; font-size: 11px; font-weight: 700; word-break: break-word; }",
     "    .combo-item { margin: 2px 0 0 10px; color: #334155; font-size: 11px; word-break: break-word; }",
     "    .item-meta { margin: 2px 0 0; display: flex; align-items: center; gap: 6px; white-space: nowrap; }",
     "    .dots { flex: 1; border-bottom: 1px dotted #64748b; transform: translateY(-1px); }",
@@ -5758,16 +5756,21 @@ function resolveMenuIngredientConsumption(
     if (!menuProduct) return { quantities, error: `Menu product not found: ${orderItem.productName}` };
 
     if (menuProduct.kind === "combo") {
-      for (const comboItem of menuProduct.comboItems || []) {
-        const selectedProductId = comboItem.type === "category"
-          ? orderItem.comboSelections?.find((selection) => selection.category === comboItem.category)?.menuProductId
-          : comboItem.menuProductId;
-        if (comboItem.type === "category" && comboItem.allowedMenuProductIds?.length && !comboItem.allowedMenuProductIds.includes(selectedProductId || "")) {
-          return { quantities, error: `Combo component not allowed: ${comboItem.categoryName || comboItem.category}` };
+      const unitSelections = orderItem.comboUnits?.length
+        ? orderItem.comboUnits.map((unit) => unit.comboSelections || [])
+        : Array.from({ length: orderItem.quantity }, () => orderItem.comboSelections || []);
+      for (const selections of unitSelections) {
+        for (const comboItem of menuProduct.comboItems || []) {
+          const selectedProductId = comboItem.type === "category"
+            ? selections.find((selection) => selection.category === comboItem.category)?.menuProductId
+            : comboItem.menuProductId;
+          if (comboItem.type === "category" && comboItem.allowedMenuProductIds?.length && !comboItem.allowedMenuProductIds.includes(selectedProductId || "")) {
+            return { quantities, error: `Combo component not allowed: ${comboItem.categoryName || comboItem.category}` };
+          }
+          const component = menuProducts.find((item) => item.id === selectedProductId && item.kind !== "combo" && (comboItem.type !== "category" || item.category === comboItem.category));
+          if (!component) return { quantities, error: `Combo component not selected: ${comboItem.type === "category" ? comboItem.categoryName : comboItem.menuProductName}` };
+          addRecipe(component, comboItem.quantity);
         }
-        const component = menuProducts.find((item) => item.id === selectedProductId && item.kind !== "combo" && (comboItem.type !== "category" || item.category === comboItem.category));
-        if (!component) return { quantities, error: `Combo component not selected: ${comboItem.type === "category" ? comboItem.categoryName : comboItem.menuProductName}` };
-        addRecipe(component, comboItem.quantity * orderItem.quantity);
       }
     } else {
       addRecipe(menuProduct, orderItem.quantity);
@@ -5783,6 +5786,23 @@ function enrichReceiptComboItems(items: ReceiptItem[], menuProducts: MenuProduct
     const menuProduct = menuProducts.find((node) => node.id === item.productId.slice("menu:".length));
     if (menuProduct?.kind !== "combo") return item;
     const itemQuantity = Math.max(1, Math.trunc(Number(item.quantity || 1)));
+    if (item.comboUnits?.length) {
+      return {
+        ...item,
+        comboUnits: item.comboUnits.map((unit, index) => ({
+          ...unit,
+          label: unit.label || `Combo ${index + 1}`,
+          comboItems: (unit.comboItems || []).map((comboItem) => {
+            const currentProduct = menuProducts.find((node) => node.id === comboItem.menuProductId);
+            return {
+              menuProductId: comboItem.menuProductId,
+              menuProductName: currentProduct?.name || comboItem.menuProductName,
+              quantity: Math.max(1, Math.trunc(Number(comboItem.quantity || 1))),
+            };
+          }),
+        })),
+      };
+    }
     const rebuiltItems = (menuProduct.comboItems || [])
       .map((comboItem) => {
         const selectedProductId =
@@ -6294,6 +6314,7 @@ function sanitizeOrderItem(input: unknown): OrderItem | null {
     quantity?: unknown;
     comboItems?: unknown;
     comboSelections?: unknown;
+    comboUnits?: unknown;
   };
 
   const productId = String(obj.productId || "").trim();
@@ -6327,8 +6348,40 @@ function sanitizeOrderItem(input: unknown): OrderItem | null {
         })
         .filter(Boolean) as OrderItem["comboItems"]
     : undefined;
+  const comboUnits = Array.isArray(obj.comboUnits)
+    ? obj.comboUnits
+        .map((unit, index) => {
+          const item = (unit || {}) as { label?: unknown; comboItems?: unknown; comboSelections?: unknown };
+          const unitItems = Array.isArray(item.comboItems)
+            ? item.comboItems
+                .map((selection) => {
+                  const comboItem = (selection || {}) as { menuProductId?: unknown; menuProductName?: unknown; quantity?: unknown };
+                  const menuProductId = String(comboItem.menuProductId || "").trim();
+                  const menuProductName = String(comboItem.menuProductName || "").trim();
+                  const itemQuantity = Math.max(1, Math.trunc(Number(comboItem.quantity || 1)));
+                  return menuProductId && menuProductName ? { menuProductId, menuProductName, quantity: itemQuantity } : null;
+                })
+                .filter(Boolean) as NonNullable<OrderItem["comboUnits"]>[number]["comboItems"]
+            : [];
+          const unitSelections = Array.isArray(item.comboSelections)
+            ? item.comboSelections
+                .map((selection) => {
+                  const comboSelection = (selection || {}) as { category?: unknown; menuProductId?: unknown; menuProductName?: unknown };
+                  const category = normalizeCategory(comboSelection.category);
+                  const menuProductId = String(comboSelection.menuProductId || "").trim();
+                  const menuProductName = String(comboSelection.menuProductName || "").trim();
+                  if (!category || category === "combos" || !menuProductId || !menuProductName) return null;
+                  return { category, menuProductId, menuProductName };
+                })
+                .filter(Boolean) as NonNullable<OrderItem["comboUnits"]>[number]["comboSelections"]
+            : undefined;
+          if (unitItems.length === 0) return null;
+          return { label: String(item.label || `Combo ${index + 1}`).trim(), comboItems: unitItems, comboSelections: unitSelections };
+        })
+        .filter(Boolean) as OrderItem["comboUnits"]
+    : undefined;
 
-  return { productId, productName, unitPrice, quantity, comboItems, comboSelections };
+  return { productId, productName, unitPrice, quantity, comboItems, comboSelections, comboUnits };
 }
 
 function sanitizeOrderStatusDraft(input: unknown): { status?: OrderStatus; paymentMethod?: PaymentMethod; total?: number } {

@@ -38,6 +38,24 @@ function formatCategoryLabel(category: ProductCategory) {
   return category.charAt(0).toUpperCase() + category.slice(1);
 }
 
+function compareIngredientByGroup(a: Ingredient, b: Ingredient) {
+  return a.stockMode.localeCompare(b.stockMode) || a.name.localeCompare(b.name);
+}
+
+function compareRecipeItemByGroup(a: MenuRecipeItem, b: MenuRecipeItem) {
+  return a.stockMode.localeCompare(b.stockMode) || a.ingredientName.localeCompare(b.ingredientName);
+}
+
+function compareMenuProductByCategory(a: MenuProduct, b: MenuProduct) {
+  return (a.category || "").localeCompare(b.category || "") || a.name.localeCompare(b.name);
+}
+
+function compareComboItemByCategory(a: MenuComboItem, b: MenuComboItem) {
+  const categoryA = a.type === "category" ? a.categoryName || a.category || "" : "";
+  const categoryB = b.type === "category" ? b.categoryName || b.category || "" : "";
+  return categoryA.localeCompare(categoryB) || (a.menuProductName || "").localeCompare(b.menuProductName || "");
+}
+
 type MenuWorkspaceTab = "products" | "combos";
 
 type ComboWorkspaceProps = {
@@ -46,8 +64,8 @@ type ComboWorkspaceProps = {
 };
 
 function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
-  const availableProducts = menuProducts.filter((item) => item.kind !== "combo");
-  const combos = menuProducts.filter((item) => item.kind === "combo");
+  const availableProducts = menuProducts.filter((item) => item.kind !== "combo").sort(compareMenuProductByCategory);
+  const combos = menuProducts.filter((item) => item.kind === "combo").sort(compareMenuProductByCategory);
   const [selectedId, setSelectedId] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -63,7 +81,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
   const [error, setError] = useState("");
   const selectedCombo = combos.find((item) => item.id === selectedId) || null;
   const parsedPrice = Math.max(0, Math.trunc(toNumber(price)));
-  const categoryProducts = availableProducts.filter((item) => item.category === itemCategory);
+  const categoryProducts = availableProducts.filter((item) => item.category === itemCategory).sort(compareMenuProductByCategory);
 
   function clearForm() {
     setSelectedId("");
@@ -118,6 +136,26 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
     );
   }
 
+  function updateComboItemQuantity(target: MenuComboItem, value: string) {
+    const nextQuantity = Math.max(1, Math.trunc(toNumber(value)));
+    setComboItems((current) => current.map((item) => (item === target ? { ...item, quantity: nextQuantity } : item)));
+  }
+
+  function toggleComboItemAllowedProduct(target: MenuComboItem, productId: string) {
+    setComboItems((current) =>
+      current.map((item) => {
+        if (item !== target || item.type !== "category") return item;
+        const allowedIds = item.allowedMenuProductIds || [];
+        return {
+          ...item,
+          allowedMenuProductIds: allowedIds.includes(productId)
+            ? allowedIds.filter((id) => id !== productId)
+            : [...allowedIds, productId],
+        };
+      }),
+    );
+  }
+
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     if (!name.trim() || parsedPrice <= 0 || comboItems.length === 0) {
@@ -126,14 +164,17 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
     }
     try {
       const draft = { name: name.trim(), price: parsedPrice, description: description.trim() || undefined, category, recipeItems: [], kind: "combo" as const, comboItems };
-      const saved = selectedCombo ? await updateMenuProductApi(selectedCombo.id, draft) : await createMenuProductApi(draft);
+      const shouldCreateFromTemplate = selectedCombo && normalizeForSearch(selectedCombo.name) !== normalizeForSearch(name);
+      const saved = selectedCombo && !shouldCreateFromTemplate
+        ? await updateMenuProductApi(selectedCombo.id, draft)
+        : await createMenuProductApi(draft);
       if (!saved) {
         setError("No se pudo guardar el combo seleccionado.");
         return;
       }
       await onSaved();
       setSelectedId(saved.id);
-      setMessage(selectedCombo ? "Combo actualizado." : "Combo creado y disponible para vender.");
+      setMessage(selectedCombo && !shouldCreateFromTemplate ? "Combo actualizado." : "Combo creado y disponible para vender.");
       setError("");
     } catch {
       setError("No se pudo guardar el combo.");
@@ -197,7 +238,10 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
                 ))}
               </div>
             ) : null}
-            {comboItems.length === 0 ? <p className={styles.empty}>Todavia no agregaste productos al combo.</p> : <div className={styles.recipeList}>{comboItems.map((item) => <div key={item.type === "category" ? `category:${item.category}` : item.menuProductId} className={styles.recipeItem}><div><strong>{item.type === "category" ? `${item.categoryName} a eleccion` : item.menuProductName}</strong><span>{item.quantity} unidad{item.quantity === 1 ? "" : "es"}{item.type === "category" ? ` - ${(item.allowedMenuProductIds || []).length || "todos"} permitidos` : ""}</span></div><button type="button" className={styles.removeBtn} onClick={() => setComboItems((current) => current.filter((entry) => entry !== item))}>Quitar</button></div>)}</div>}
+            {comboItems.length === 0 ? <p className={styles.empty}>Todavia no agregaste productos al combo.</p> : <div className={styles.recipeList}>{[...comboItems].sort(compareComboItemByCategory).map((item) => {
+              const itemProducts = item.type === "category" ? availableProducts.filter((product) => product.category === item.category).sort(compareMenuProductByCategory) : [];
+              return <div key={item.type === "category" ? `category:${item.category}` : item.menuProductId} className={styles.recipeItem}><div><strong>{item.type === "category" ? `${item.categoryName} a eleccion` : item.menuProductName}</strong><span>{item.type === "category" ? `${(item.allowedMenuProductIds || []).length || "todos"} permitidos` : "Producto fijo"}</span>{item.type === "category" ? <div className={styles.inlineChecks}>{itemProducts.map((product) => <label key={product.id} className={styles.inlineCheck}><input type="checkbox" checked={(item.allowedMenuProductIds || []).includes(product.id)} onChange={() => toggleComboItemAllowedProduct(item, product.id)} /><span>{product.name}</span></label>)}</div> : null}</div><label className={styles.quantityEdit}><span>Cantidad</span><input type="number" min={1} step={1} value={item.quantity} onChange={(event) => updateComboItemQuantity(item, event.target.value)} /></label><button type="button" className={styles.removeBtn} onClick={() => setComboItems((current) => current.filter((entry) => entry !== item))}>Quitar</button></div>;
+            })}</div>}
           </section>
           <div className={styles.previewGrid}><div><span>Precio</span><strong>{parsedPrice > 0 ? formatMoneyARS(parsedPrice) : "-"}</strong></div><div><span>Incluye</span><strong>{comboItems.length} productos</strong></div></div>
           {error ? <div className={styles.errorBox}>{error}</div> : null}
@@ -207,7 +251,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
       </section>
       <section className={styles.listCard}>
         <h2 className={styles.cardTitle}>Combos actuales</h2>
-        {combos.length === 0 ? <p className={styles.empty}>No hay combos creados todavia.</p> : <div className={styles.menuList}>{combos.map((combo) => <button type="button" key={combo.id} className={`${styles.menuCard} ${selectedId === combo.id ? styles.menuCardActive : ""}`.trim()} onClick={() => selectCombo(combo)}><div className={styles.menuTop}><strong>{combo.name}</strong><span>{formatMoneyARS(combo.price)}</span></div>{combo.description ? <p className={styles.description}>{combo.description}</p> : null}<div className={styles.recipeChips}>{(combo.comboItems || []).map((item) => <span key={item.type === "category" ? `category:${item.category}` : item.menuProductId}>{item.quantity}x {item.type === "category" ? `${item.categoryName} a eleccion (${(item.allowedMenuProductIds || []).length || "todos"})` : item.menuProductName}</span>)}</div></button>)}</div>}
+        {combos.length === 0 ? <p className={styles.empty}>No hay combos creados todavia.</p> : <div className={styles.menuList}>{combos.map((combo) => <button type="button" key={combo.id} className={`${styles.menuCard} ${selectedId === combo.id ? styles.menuCardActive : ""}`.trim()} onClick={() => selectCombo(combo)}><div className={styles.menuTop}><strong>{combo.name}</strong><span>{formatMoneyARS(combo.price)}</span></div>{combo.description ? <p className={styles.description}>{combo.description}</p> : null}<div className={styles.recipeChips}>{[...(combo.comboItems || [])].sort(compareComboItemByCategory).map((item) => <span key={item.type === "category" ? `category:${item.category}` : item.menuProductId}>{item.quantity}x {item.type === "category" ? `${item.categoryName} a eleccion (${(item.allowedMenuProductIds || []).length || "todos"})` : item.menuProductName}</span>)}</div></button>)}</div>}
       </section>
     </div>
   );
@@ -337,7 +381,7 @@ export default function MenuProductsScreen() {
       return;
     }
 
-    const quantity = toNumber(ingredientQuantity);
+    const quantity = Math.trunc(toNumber(ingredientQuantity));
     if (!Number.isFinite(quantity) || quantity <= 0) {
       setError("Ingresa una cantidad valida para la receta.");
       return;
@@ -360,6 +404,13 @@ export default function MenuProductsScreen() {
 
   function removeRecipeItem(ingredientIdToRemove: string) {
     setRecipeItems((current) => current.filter((item) => item.ingredientId !== ingredientIdToRemove));
+  }
+
+  function updateRecipeItemQuantity(ingredientIdToUpdate: string, value: string) {
+    const nextQuantity = Math.max(1, Math.trunc(toNumber(value)));
+    setRecipeItems((current) =>
+      current.map((item) => (item.ingredientId === ingredientIdToUpdate ? { ...item, quantity: nextQuantity } : item)),
+    );
   }
 
   async function submitMenuProduct(event: React.FormEvent) {
@@ -389,14 +440,17 @@ export default function MenuProductsScreen() {
         description: description.trim() || undefined,
         recipeItems,
       };
-      const saved = isEditing ? await updateMenuProductApi(selectedMenuProduct.id, draft) : await createMenuProductApi(draft);
+      const shouldCreateFromTemplate = selectedMenuProduct && normalizeForSearch(selectedMenuProduct.name) !== normalizeForSearch(trimmedName);
+      const saved = selectedMenuProduct && !shouldCreateFromTemplate
+        ? await updateMenuProductApi(selectedMenuProduct.id, draft)
+        : await createMenuProductApi(draft);
       if (!saved) {
         setError("No se pudo guardar el producto de menu seleccionado.");
         return;
       }
       await reload(saved.id);
       selectMenuProduct(saved);
-      setMessage(isEditing ? "Producto de menu actualizado." : "Producto de menu creado.");
+      setMessage(selectedMenuProduct && !shouldCreateFromTemplate ? "Producto de menu actualizado." : "Producto de menu creado.");
     } catch {
       setError("No se pudo guardar el producto de menu.");
     }
@@ -487,16 +541,16 @@ export default function MenuProductsScreen() {
                       </option>
                     ))}
                   </select>
+                  <div className={styles.unitPill}>{selectedIngredient ? getIngredientQuantityUnitLabel(selectedIngredient.stockMode) : "-"}</div>
                   <input
                     className={styles.input}
                     type="number"
-                    min={0}
-                    step="0.01"
+                    min={1}
+                    step="1"
                     value={ingredientQuantity}
                     onChange={(event) => setIngredientQuantity(event.target.value)}
                     placeholder={selectedIngredient?.stockMode === "weight" ? "Gramos" : "Cantidad"}
                   />
-                  <div className={styles.unitPill}>{selectedIngredient ? getIngredientQuantityUnitLabel(selectedIngredient.stockMode) : "-"}</div>
                   <button type="button" className={styles.secondaryBtn} onClick={addRecipeItem}>Agregar</button>
                 </div>
 
@@ -510,6 +564,10 @@ export default function MenuProductsScreen() {
                           <strong>{item.ingredientName}</strong>
                           <span>{getRecipeLineLabel(item)}</span>
                         </div>
+                        <label className={styles.quantityEdit}>
+                          <span>{getIngredientQuantityUnitLabel(item.stockMode)}</span>
+                          <input type="number" min={1} step={1} value={item.quantity} onChange={(event) => updateRecipeItemQuantity(item.ingredientId, event.target.value)} />
+                        </label>
                         <button type="button" className={styles.removeBtn} onClick={() => removeRecipeItem(item.ingredientId)}>Quitar</button>
                       </div>
                     ))}

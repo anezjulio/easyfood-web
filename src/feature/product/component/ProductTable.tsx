@@ -52,6 +52,7 @@ export default function ProductTable({
   showBarcode = true,
   showImageThumbnail = false,
   showHeaderFilters = true,
+  salesCompactLayout = false,
 }: {
   products: Product[];
   loading: boolean;
@@ -79,7 +80,9 @@ export default function ProductTable({
   showBarcode?: boolean;
   showImageThumbnail?: boolean;
   showHeaderFilters?: boolean;
+  salesCompactLayout?: boolean;
 }) {
+  const salesColumnTemplate = "minmax(280px, 1fr) 120px 120px";
   const columnCount =
     2 +
     (showImageThumbnail ? 1 : 0) +
@@ -88,7 +91,7 @@ export default function ProductTable({
     (showExistence ? 1 : 0) +
     (showCategory ? 1 : 0) +
     (showDateColumn ? 1 : 0);
-  const minTableWidth = Math.max(showImageThumbnail ? 520 : 620, columnCount * 140);
+  const minTableWidth = salesCompactLayout ? 560 : Math.max(showImageThumbnail ? 520 : 620, columnCount * 140);
   const shouldShowFilters = !!filters && !!onFilterChange && showHeaderFilters;
   const categoryOptions = Array.from(
     new Set(
@@ -175,8 +178,8 @@ export default function ProductTable({
 
   return (
     <section style={cardStyle}>
-      <div style={{ ...headerStyle, gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`, minWidth: `${minTableWidth}px` }}>
-        {showImageThumbnail ? <div style={headerCellStyle} aria-label="Foto" /> : null}
+      <div style={{ ...headerStyle, gridTemplateColumns: salesCompactLayout ? salesColumnTemplate : `repeat(${columnCount}, minmax(0, 1fr))`, minWidth: `${minTableWidth}px` }}>
+        {showImageThumbnail && !salesCompactLayout ? <div style={headerCellStyle} aria-label="Foto" /> : null}
 
         {showBarcode ? (
           <div style={headerCellStyle}>
@@ -232,7 +235,7 @@ export default function ProductTable({
 
         {showCategory ? (
           <div style={headerCellStyle}>
-            {renderHeaderCell("Categoria", "category")}
+            {renderHeaderCell("Categoria", "category", salesCompactLayout ? "right" : "left")}
             {shouldShowFilters ? (
               <div style={filterInputWrapStyle}>
                 <select
@@ -291,7 +294,7 @@ export default function ProductTable({
         ) : null}
 
         <div style={headerCellStyle}>
-          {renderHeaderCell("Precio", "price")}
+          {renderHeaderCell("Precio", "price", salesCompactLayout ? "right" : "left")}
           {shouldShowFilters ? (
             <div style={filterInputWrapStyle}>
               <input
@@ -364,6 +367,7 @@ export default function ProductTable({
             showImageThumbnail={showImageThumbnail}
             showCategory={showCategory}
             showDateColumn={showDateColumn}
+            salesCompactLayout={salesCompactLayout}
             existenceAlign={existenceAlign}
             dateValue={p.ultimoIngreso || p.createdAt}
           />

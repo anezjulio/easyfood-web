@@ -114,9 +114,9 @@
 }
 
 .selectedProductInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display: grid;
+  align-content: start;
+  gap: 12px;
   padding: 10px;
 }
 
@@ -171,9 +171,16 @@
 }
 
 .quantityActionRow {
+  display: grid;
+  justify-items: start;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.selectedAddRow {
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 10px;
 }
 
@@ -276,32 +283,94 @@
   font-weight: 700;
 }
 
-.comboSelectRow {
+.comboChoiceGroup,
+.comboCartChoiceGroup,
+.comboIncludedGroup {
   display: grid;
-  grid-template-columns: 88px minmax(0, 220px);
   gap: 6px;
-  align-items: center;
   margin-top: 6px;
   color: #334155;
   font-size: 12px;
   font-weight: 800;
 }
 
-.comboSelectRow select {
-  min-width: 0;
-  height: 30px;
+.comboChoiceGroup > span,
+.comboCartChoiceGroup > span,
+.comboIncludedGroup > span {
+  color: #0f172a;
+}
+
+.comboIncludedList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.comboIncludedList span {
+  min-height: 26px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.comboChoiceList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.comboChoiceOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
   border: 1px solid #cbd5e1;
   background: #ffffff;
+  color: #334155;
+  padding: 0 8px;
+  cursor: pointer;
+}
+
+.comboChoiceOption input {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: #0f172a;
+}
+
+.comboChoiceOption:has(input:checked) {
+  border-color: #0f172a;
+  background: #f8fafc;
   color: #0f172a;
-  font: inherit;
-  font-size: 12px;
-  padding: 0 6px;
 }
 
 .comboItems span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.comboUnits {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.comboUnit {
+  border: 1px solid #dbe4ef;
+  background: #f8fafc;
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+}
+
+.comboUnit > strong {
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .cellQty,

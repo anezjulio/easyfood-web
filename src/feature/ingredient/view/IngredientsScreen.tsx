@@ -105,17 +105,24 @@ export default function IngredientsScreen() {
         name: trimmedName,
         expiresInDays: parsedDays,
         stockMode,
-        stockQuantity: selectedIngredient?.stockQuantity || 0,
+        stockQuantity: selectedIngredient && normalizeForSearch(selectedIngredient.name) === normalizeForSearch(trimmedName) ? selectedIngredient.stockQuantity : 0,
         entryQuantity: 0,
       };
-      const saved = isEditing ? await updateIngredientApi(selectedIngredient.id, draft) : await createIngredientApi(draft);
+      const shouldCreateFromTemplate = selectedIngredient && normalizeForSearch(selectedIngredient.name) !== normalizeForSearch(trimmedName);
+      const saved = selectedIngredient && !shouldCreateFromTemplate ? await updateIngredientApi(selectedIngredient.id, draft) : await createIngredientApi(draft);
       if (!saved) {
         setError("No se pudo guardar el ingrediente seleccionado.");
         return;
       }
-      await reload(saved.id);
-      selectIngredient(saved);
-      setMessage(isEditing ? "Ingrediente actualizado." : "Ingrediente creado.");
+      if (selectedIngredient && !shouldCreateFromTemplate) {
+        await reload(saved.id);
+        selectIngredient(saved);
+        setMessage("Ingrediente actualizado.");
+      } else {
+        await reload();
+        clearForm();
+        setMessage("Ingrediente creado.");
+      }
     } catch {
       setError("No se pudo guardar el ingrediente.");
     }
@@ -144,14 +151,14 @@ export default function IngredientsScreen() {
       <div className={styles.content}>
         <header className={styles.header}>
           <div>
-            <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Ingredientes" }]} asTitle />
-            <p className={styles.subtitle}>Alta de ingredientes, caducidad y stock por peso, paquete o unidad.</p>
+            <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Ingredientes y productos" }]} asTitle />
+            <p className={styles.subtitle}>Carga ingredientes de receta y productos envasados como bebidas, caducidad y stock por peso, paquete o unidad.</p>
           </div>
           <SessionStatusBar />
         </header>
 
         <section className={styles.summary}>
-          <p><strong>Ingredientes:</strong> {ingredients.length}</p>
+          <p><strong>Ingredientes y productos:</strong> {ingredients.length}</p>
           <p><strong>Por peso:</strong> {ingredients.filter((item) => item.stockMode === "weight").length}</p>
           <p><strong>Por unidad:</strong> {ingredients.filter((item) => item.stockMode === "unit").length}</p>
         </section>
@@ -159,7 +166,7 @@ export default function IngredientsScreen() {
         <div className={styles.layout}>
           <section className={styles.formCard}>
             <div className={styles.cardHeader}>
-              <h2 className={styles.cardTitle}>{isEditing ? "Editar ingrediente" : "Crear ingrediente"}</h2>
+              <h2 className={styles.cardTitle}>{isEditing ? "Editar ingrediente o producto" : "Crear ingrediente o producto"}</h2>
               <div className={styles.headerActions}>
                 <button type="button" className={styles.secondaryBtn} onClick={clearForm}>Nuevo</button>
                 <button type="button" className={styles.dangerBtn} onClick={() => void removeSelectedIngredient()} disabled={!selectedIngredient}>
@@ -171,7 +178,7 @@ export default function IngredientsScreen() {
             <form className={styles.form} onSubmit={submitIngredient}>
               <label className={styles.field}>
                 <span>Nombre</span>
-                <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Medallon de carne" />
+                <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Tomate, lechuga o Coca-Cola 500 ml" />
               </label>
 
               <label className={styles.field}>
@@ -187,7 +194,7 @@ export default function IngredientsScreen() {
               </label>
 
               <label className={styles.field}>
-                <span>Modo de manejo</span>
+                <span>Modo de stock</span>
                 <select className={styles.input} value={stockMode} onChange={(event) => setStockMode(event.target.value as IngredientStockMode)}>
                   <option value="weight">Por peso</option>
                   <option value="package">Por paquete</option>
@@ -204,16 +211,16 @@ export default function IngredientsScreen() {
               {message ? <div className={styles.successBox}>{message}</div> : null}
 
               <div className={styles.actions}>
-                <button type="submit" className={styles.primaryBtn}>{isEditing ? "Guardar cambios" : "Crear ingrediente"}</button>
+                <button type="submit" className={styles.primaryBtn}>{isEditing ? "Guardar cambios" : "Crear ingrediente o producto"}</button>
               </div>
             </form>
           </section>
 
           <section className={styles.listCard}>
             <div className={styles.listHead}>
-              <h2 className={styles.cardTitle}>Lista de ingredientes</h2>
+              <h2 className={styles.cardTitle}>Lista de ingredientes y productos</h2>
               <div className={styles.filters}>
-                <input className={styles.searchInput} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar ingrediente" />
+                <input className={styles.searchInput} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar ingrediente o producto" />
                 <select className={styles.filterSelect} value={stockModeFilter} onChange={(event) => setStockModeFilter(event.target.value as "all" | IngredientStockMode)}>
                   <option value="all">Todos</option>
                   <option value="weight">Peso</option>
@@ -224,9 +231,9 @@ export default function IngredientsScreen() {
             </div>
 
             {loading ? (
-              <p className={styles.empty}>Cargando ingredientes...</p>
+              <p className={styles.empty}>Cargando ingredientes y productos...</p>
             ) : filteredIngredients.length === 0 ? (
-              <p className={styles.empty}>No hay ingredientes para mostrar.</p>
+              <p className={styles.empty}>No hay ingredientes o productos para mostrar.</p>
             ) : (
               <div className={styles.tableWrap}>
                 <table className={styles.table}>

@@ -14,6 +14,10 @@ type SaleSummaryItem = {
   unitPrice: number;
   quantity: number;
   comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
+  comboUnits?: Array<{
+    label: string;
+    comboItems: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
+  }>;
 };
 
 type SaleSummaryState = {
@@ -146,7 +150,15 @@ export default function SalesSummaryScreen() {
               <div key={`${item.productId}-${index}`} className={styles.tableRow}>
                 <div className={styles.productCell}>
                   <span>{item.productName}</span>
-                  {item.comboItems?.length ? (
+                  {item.comboUnits?.length ? (
+                    <div className={styles.comboItems}>
+                      {item.comboUnits.map((unit, unitIndex) => (
+                        <span key={`${item.productId}-unit-${unitIndex}`}>
+                          {unit.label}: {unit.comboItems.map((comboItem) => `${comboItem.quantity > 1 ? `${comboItem.quantity} x ` : ""}${comboItem.menuProductName}`).join(" + ")}
+                        </span>
+                      ))}
+                    </div>
+                  ) : item.comboItems?.length ? (
                     <div className={styles.comboItems}>
                       {item.comboItems.map((comboItem) => (
                         <span key={comboItem.menuProductId}>
