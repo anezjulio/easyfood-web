@@ -38,24 +38,6 @@ function formatCategoryLabel(category: ProductCategory) {
   return category.charAt(0).toUpperCase() + category.slice(1);
 }
 
-function compareIngredientByGroup(a: Ingredient, b: Ingredient) {
-  return a.stockMode.localeCompare(b.stockMode) || a.name.localeCompare(b.name);
-}
-
-function compareRecipeItemByGroup(a: MenuRecipeItem, b: MenuRecipeItem) {
-  return a.stockMode.localeCompare(b.stockMode) || a.ingredientName.localeCompare(b.ingredientName);
-}
-
-function compareMenuProductByCategory(a: MenuProduct, b: MenuProduct) {
-  return (a.category || "").localeCompare(b.category || "") || a.name.localeCompare(b.name);
-}
-
-function compareComboItemByCategory(a: MenuComboItem, b: MenuComboItem) {
-  const categoryA = a.type === "category" ? a.categoryName || a.category || "" : "";
-  const categoryB = b.type === "category" ? b.categoryName || b.category || "" : "";
-  return categoryA.localeCompare(categoryB) || (a.menuProductName || "").localeCompare(b.menuProductName || "");
-}
-
 type MenuWorkspaceTab = "products" | "combos";
 
 type ComboWorkspaceProps = {
@@ -64,8 +46,8 @@ type ComboWorkspaceProps = {
 };
 
 function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
-  const availableProducts = menuProducts.filter((item) => item.kind !== "combo").sort(compareMenuProductByCategory);
-  const combos = menuProducts.filter((item) => item.kind === "combo").sort(compareMenuProductByCategory);
+  const availableProducts = menuProducts.filter((item) => item.kind !== "combo");
+  const combos = menuProducts.filter((item) => item.kind === "combo");
   const [selectedId, setSelectedId] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -81,7 +63,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
   const [error, setError] = useState("");
   const selectedCombo = combos.find((item) => item.id === selectedId) || null;
   const parsedPrice = Math.max(0, Math.trunc(toNumber(price)));
-  const categoryProducts = availableProducts.filter((item) => item.category === itemCategory).sort(compareMenuProductByCategory);
+  const categoryProducts = availableProducts.filter((item) => item.category === itemCategory);
 
   function clearForm() {
     setSelectedId("");
@@ -238,8 +220,8 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
                 ))}
               </div>
             ) : null}
-            {comboItems.length === 0 ? <p className={styles.empty}>Todavia no agregaste productos al combo.</p> : <div className={styles.recipeList}>{[...comboItems].sort(compareComboItemByCategory).map((item) => {
-              const itemProducts = item.type === "category" ? availableProducts.filter((product) => product.category === item.category).sort(compareMenuProductByCategory) : [];
+            {comboItems.length === 0 ? <p className={styles.empty}>Todavia no agregaste productos al combo.</p> : <div className={styles.recipeList}>{comboItems.map((item) => {
+              const itemProducts = item.type === "category" ? availableProducts.filter((product) => product.category === item.category) : [];
               return <div key={item.type === "category" ? `category:${item.category}` : item.menuProductId} className={styles.recipeItem}><div><strong>{item.type === "category" ? `${item.categoryName} a eleccion` : item.menuProductName}</strong><span>{item.type === "category" ? `${(item.allowedMenuProductIds || []).length || "todos"} permitidos` : "Producto fijo"}</span>{item.type === "category" ? <div className={styles.inlineChecks}>{itemProducts.map((product) => <label key={product.id} className={styles.inlineCheck}><input type="checkbox" checked={(item.allowedMenuProductIds || []).includes(product.id)} onChange={() => toggleComboItemAllowedProduct(item, product.id)} /><span>{product.name}</span></label>)}</div> : null}</div><label className={styles.quantityEdit}><span>Cantidad</span><input type="number" min={1} step={1} value={item.quantity} onChange={(event) => updateComboItemQuantity(item, event.target.value)} /></label><button type="button" className={styles.removeBtn} onClick={() => setComboItems((current) => current.filter((entry) => entry !== item))}>Quitar</button></div>;
             })}</div>}
           </section>
@@ -251,7 +233,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
       </section>
       <section className={styles.listCard}>
         <h2 className={styles.cardTitle}>Combos actuales</h2>
-        {combos.length === 0 ? <p className={styles.empty}>No hay combos creados todavia.</p> : <div className={styles.menuList}>{combos.map((combo) => <button type="button" key={combo.id} className={`${styles.menuCard} ${selectedId === combo.id ? styles.menuCardActive : ""}`.trim()} onClick={() => selectCombo(combo)}><div className={styles.menuTop}><strong>{combo.name}</strong><span>{formatMoneyARS(combo.price)}</span></div>{combo.description ? <p className={styles.description}>{combo.description}</p> : null}<div className={styles.recipeChips}>{[...(combo.comboItems || [])].sort(compareComboItemByCategory).map((item) => <span key={item.type === "category" ? `category:${item.category}` : item.menuProductId}>{item.quantity}x {item.type === "category" ? `${item.categoryName} a eleccion (${(item.allowedMenuProductIds || []).length || "todos"})` : item.menuProductName}</span>)}</div></button>)}</div>}
+        {combos.length === 0 ? <p className={styles.empty}>No hay combos creados todavia.</p> : <div className={styles.menuList}>{combos.map((combo) => <button type="button" key={combo.id} className={`${styles.menuCard} ${selectedId === combo.id ? styles.menuCardActive : ""}`.trim()} onClick={() => selectCombo(combo)}><div className={styles.menuTop}><strong>{combo.name}</strong><span>{formatMoneyARS(combo.price)}</span></div>{combo.description ? <p className={styles.description}>{combo.description}</p> : null}<div className={styles.recipeChips}>{(combo.comboItems || []).map((item) => <span key={item.type === "category" ? `category:${item.category}` : item.menuProductId}>{item.quantity}x {item.type === "category" ? `${item.categoryName} a eleccion (${(item.allowedMenuProductIds || []).length || "todos"})` : item.menuProductName}</span>)}</div></button>)}</div>}
       </section>
     </div>
   );

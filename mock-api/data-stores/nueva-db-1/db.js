@@ -1223,6 +1223,231 @@
   ],
   "orders": [
     {
+      "id": "or030920260325276229",
+      "items": [
+        {
+          "productId": "menu:menu030920260312014783",
+          "productName": "Hamburguesa triple + papas cheddar bacon + bebida",
+          "unitPrice": 20000,
+          "quantity": 3,
+          "comboItems": [
+            {
+              "menuProductId": "menu-hamburguesa-completa",
+              "menuProductName": "Hamburguesa triple",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-papas-cheddar-bacon",
+              "menuProductName": "Papas con cheddar y bacon",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu030920260215433038",
+              "menuProductName": "Bebida Coca cola 500 ml",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [
+            {
+              "category": "bebida",
+              "menuProductId": "menu030920260215433038",
+              "menuProductName": "Bebida Coca cola 500 ml"
+            }
+          ],
+          "comboUnits": [
+            {
+              "label": "Combo 1",
+              "comboItems": [
+                {
+                  "menuProductId": "menu-hamburguesa-completa",
+                  "menuProductName": "Hamburguesa triple",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu-papas-cheddar-bacon",
+                  "menuProductName": "Papas con cheddar y bacon",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu030920260215433038",
+                  "menuProductName": "Bebida Coca cola 500 ml",
+                  "quantity": 1
+                }
+              ],
+              "comboSelections": [
+                {
+                  "category": "bebida",
+                  "menuProductId": "menu030920260215433038",
+                  "menuProductName": "Bebida Coca cola 500 ml"
+                }
+              ]
+            },
+            {
+              "label": "Combo 2",
+              "comboItems": [
+                {
+                  "menuProductId": "menu-hamburguesa-completa",
+                  "menuProductName": "Hamburguesa triple",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu-papas-cheddar-bacon",
+                  "menuProductName": "Papas con cheddar y bacon",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu030920260213232841",
+                  "menuProductName": "Bebida pomelo 500 ml",
+                  "quantity": 1
+                }
+              ],
+              "comboSelections": [
+                {
+                  "category": "bebida",
+                  "menuProductId": "menu030920260213232841",
+                  "menuProductName": "Bebida pomelo 500 ml"
+                }
+              ]
+            },
+            {
+              "label": "Combo 3",
+              "comboItems": [
+                {
+                  "menuProductId": "menu-hamburguesa-completa",
+                  "menuProductName": "Hamburguesa triple",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu-papas-cheddar-bacon",
+                  "menuProductName": "Papas con cheddar y bacon",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu-bebida-cola",
+                  "menuProductName": "Bebida cola 500 ml",
+                  "quantity": 1
+                }
+              ],
+              "comboSelections": [
+                {
+                  "category": "bebida",
+                  "menuProductId": "menu-bebida-cola",
+                  "menuProductName": "Bebida cola 500 ml"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "createdAt": "2026-09-03T06:25:27.872Z",
+      "status": "pagada",
+      "total": 60000,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or030920260324285866",
+      "items": [
+        {
+          "productId": "menu:menu030920260312014783",
+          "productName": "Hamburguesa triple + papas cheddar bacon + bebida",
+          "unitPrice": 20000,
+          "quantity": 2,
+          "comboItems": [
+            {
+              "menuProductId": "menu-hamburguesa-completa",
+              "menuProductName": "Hamburguesa triple",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-papas-cheddar-bacon",
+              "menuProductName": "Papas con cheddar y bacon",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu030920260215433038",
+              "menuProductName": "Bebida Coca cola 500 ml",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [
+            {
+              "category": "bebida",
+              "menuProductId": "menu030920260215433038",
+              "menuProductName": "Bebida Coca cola 500 ml"
+            }
+          ],
+          "comboUnits": [
+            {
+              "label": "Combo 1",
+              "comboItems": [
+                {
+                  "menuProductId": "menu-hamburguesa-completa",
+                  "menuProductName": "Hamburguesa triple",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu-papas-cheddar-bacon",
+                  "menuProductName": "Papas con cheddar y bacon",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu030920260213232841",
+                  "menuProductName": "Bebida pomelo 500 ml",
+                  "quantity": 1
+                }
+              ],
+              "comboSelections": [
+                {
+                  "category": "bebida",
+                  "menuProductId": "menu030920260213232841",
+                  "menuProductName": "Bebida pomelo 500 ml"
+                }
+              ]
+            },
+            {
+              "label": "Combo 2",
+              "comboItems": [
+                {
+                  "menuProductId": "menu-hamburguesa-completa",
+                  "menuProductName": "Hamburguesa triple",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu-papas-cheddar-bacon",
+                  "menuProductName": "Papas con cheddar y bacon",
+                  "quantity": 1
+                },
+                {
+                  "menuProductId": "menu030920260213232841",
+                  "menuProductName": "Bebida pomelo 500 ml",
+                  "quantity": 1
+                }
+              ],
+              "comboSelections": [
+                {
+                  "category": "bebida",
+                  "menuProductId": "menu030920260213232841",
+                  "menuProductName": "Bebida pomelo 500 ml"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "productId": "menu:menu030920260215433038",
+          "productName": "Bebida Coca cola 500 ml",
+          "unitPrice": 2500,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-03T06:24:28.427Z",
+      "status": "pagada",
+      "total": 42500,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
       "id": "or030920260159516484",
       "items": [
         {
@@ -1443,9 +1668,10 @@
         }
       ],
       "createdAt": "2026-09-03T04:51:46.902Z",
-      "status": "por pagar",
+      "status": "cancelada",
       "total": 17799,
-      "operator": "admin"
+      "operator": "admin",
+      "cancelledAt": "2026-09-03T06:24:28.427Z"
     },
     {
       "id": "or030920260149497546",
@@ -1550,6 +1776,22 @@
   ],
   "invoices": [
     {
+      "id": "fc030920260325293003",
+      "orderId": "or030920260325276229",
+      "createdAt": "2026-09-03T06:25:29.285Z",
+      "total": 60000,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc030920260324337266",
+      "orderId": "or030920260324285866",
+      "createdAt": "2026-09-03T06:24:33.536Z",
+      "total": 42500,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
       "id": "fc030920260159525294",
       "orderId": "or030920260159516484",
       "createdAt": "2026-09-03T04:59:52.818Z",
@@ -1611,15 +1853,47 @@
       "id": "wd030920260146309845",
       "operator": "admin",
       "startedAt": "2026-09-03T04:46:30.598Z",
+      "endedAt": "2026-09-03T06:27:34.395Z",
       "orderIds": [
-        "or030920260149497546",
-        "or030920260152301723",
+        "or030920260325276229",
+        "or030920260324285866",
+        "or030920260159516484",
         "or030920260156559099",
-        "or030920260159516484"
+        "or030920260152301723",
+        "or030920260149497546"
       ],
-      "status": "open",
+      "status": "closed",
       "openingDeclaredAmount": 5000,
-      "openingDifferenceAmount": 0
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-09-03T06:26:34.231Z",
+      "closeSummary": {
+        "totalSales": 245795,
+        "totalByPaymentMethod": {
+          "efectivo": 245795,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 245795,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 250795,
+        "declaredClosingCash": 250,
+        "closingDifference": -250545,
+        "balanceTotal": 250795
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-09-03T06:27:34.395Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        },
+        "mismatchReport": "El operador admin, en la jornada wd030920260146309845, presenta diferencias. Cierre en efectivo: esperado $ 250.795, declarado $ 250 (falta $ 250.545)."
+      }
     },
     {
       "id": "wd290820261945438445",
@@ -1676,9 +1950,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 179794,
+      "currentBalance": 282294,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T06:19:41.820Z"
+      "updatedAt": "2026-09-03T06:27:34.396Z"
     },
     {
       "id": "account-gains",
@@ -1686,9 +1960,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 169794,
+      "currentBalance": 272294,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T06:19:41.820Z"
+      "updatedAt": "2026-09-03T06:27:34.396Z"
     },
     {
       "id": "account-expenses",
@@ -1698,7 +1972,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T06:19:41.820Z"
+      "updatedAt": "2026-09-03T06:27:34.396Z"
     },
     {
       "id": "account-food-categories",
@@ -1708,10 +1982,108 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T06:19:41.820Z"
+      "updatedAt": "2026-09-03T06:27:34.396Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-cash-close-wd030920260146309845",
+      "createdAt": "2026-09-03T06:27:34.395Z",
+      "type": "cash-close",
+      "title": "Cierre de caja wd030920260146309845",
+      "description": "Se dejo 250 al cerrar la jornada wd030920260146309845.",
+      "amount": 250,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd030920260146309845",
+      "workdayId": "wd030920260146309845",
+      "actor": "admin",
+      "countsInBalance": false,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-cash-or030920260325276229",
+      "createdAt": "2026-09-03T06:25:27.872Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or030920260325276229",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 60000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or030920260325276229",
+      "orderId": "or030920260325276229",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or030920260325276229",
+      "createdAt": "2026-09-03T06:25:27.872Z",
+      "type": "sale-income",
+      "title": "Venta pagada or030920260325276229",
+      "description": "Venta registrada por admin por 60000.",
+      "amount": 60000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or030920260325276229",
+      "orderId": "or030920260325276229",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-sale-cash-or030920260324285866",
+      "createdAt": "2026-09-03T06:24:28.427Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or030920260324285866",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 42500,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or030920260324285866",
+      "orderId": "or030920260324285866",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or030920260324285866",
+      "createdAt": "2026-09-03T06:24:28.427Z",
+      "type": "sale-income",
+      "title": "Venta pagada or030920260324285866",
+      "description": "Venta registrada por admin por 42500.",
+      "amount": 42500,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or030920260324285866",
+      "orderId": "or030920260324285866",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
     {
       "id": "txn-sale-cash-or030920260159516484",
       "createdAt": "2026-09-03T04:59:51.458Z",
@@ -2050,6 +2422,73 @@
   "licenses": [],
   "notifications": [
     {
+      "id": "nt030920260327341413",
+      "type": "cash",
+      "title": "Diferencias detectadas en cierre: admin",
+      "description": "El operador admin, en la jornada wd030920260146309845, presenta diferencias. Cierre en efectivo: esperado $ 250.795, declarado $ 250 (falta $ 250.545).",
+      "createdAt": "2026-09-03T06:27:34.395Z",
+      "dueAt": "2026-09-10T06:27:34.395Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd030920260146309845",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260327340171",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd030920260146309845.",
+      "createdAt": "2026-09-03T06:27:34.395Z",
+      "dueAt": "2026-09-04T06:27:34.395Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd030920260146309845",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260326348577",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd030920260146309845 fue enviada para auditoria.",
+      "createdAt": "2026-09-03T06:26:34.231Z",
+      "dueAt": "2026-09-10T06:26:34.231Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd030920260146309845",
+      "status": "received",
+      "receivedAt": "2026-09-03T06:27:34.395Z"
+    },
+    {
+      "id": "nt030920260325294795",
+      "type": "sale-created",
+      "title": "Venta registrada: or030920260325276229",
+      "description": "Venta por 60000 (admin).",
+      "createdAt": "2026-09-03T06:25:29.271Z",
+      "dueAt": "2026-09-04T06:25:29.271Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or030920260325276229",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260324332887",
+      "type": "sale-created",
+      "title": "Venta registrada: or030920260324285866",
+      "description": "Venta por 42500 (admin).",
+      "createdAt": "2026-09-03T06:24:33.524Z",
+      "dueAt": "2026-09-04T06:24:33.524Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or030920260324285866",
+      "status": "active"
+    },
+    {
       "id": "nt030920260159529837",
       "type": "sale-created",
       "title": "Venta registrada: or030920260159516484",
@@ -2140,7 +2579,8 @@
       "requiresAction": false,
       "entityType": "workday",
       "entityId": "wd030920260146309845",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-09-03T06:27:34.395Z"
     },
     {
       "id": "nt030920260146230317",
