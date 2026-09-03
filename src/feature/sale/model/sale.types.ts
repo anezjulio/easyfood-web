@@ -33,6 +33,11 @@ export type OrderItem = {
   productName: string;
   unitPrice: number;
   quantity: number;
+  comboItems?: Array<{
+    menuProductId: string;
+    menuProductName: string;
+    quantity: number;
+  }>;
   comboSelections?: Array<{
     category: string;
     menuProductId: string;

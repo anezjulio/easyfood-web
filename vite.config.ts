@@ -177,6 +177,7 @@ type OrderItem = {
   productName: string;
   unitPrice: number;
   quantity: number;
+  comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
   comboSelections?: Array<{ category: NonNullable<Product["category"]>; menuProductId: string; menuProductName: string }>;
 };
 
@@ -205,6 +206,7 @@ type ReceiptItem = {
   productName: string;
   unitPrice: number;
   quantity: number;
+  comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
 };
 
 type Receipt = {
@@ -5523,9 +5525,13 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     .map((item, index) => {
       const quantity = Number.isFinite(item.quantity) ? Math.max(0, Math.trunc(item.quantity)) : 0;
       const subtotal = Math.max(0, Math.trunc(item.unitPrice * quantity));
+      const comboLines = (item.comboItems || [])
+        .map((comboItem) => `  <p class="combo-item">+ ${comboItem.quantity > 1 ? `${escapeHtml(String(comboItem.quantity))} x ` : ""}${escapeHtml(comboItem.menuProductName)}</p>`)
+        .join("\n");
       return [
         "<article class=\"item\">",
         `  <p class="item-name">${index + 1}. ${escapeHtml(item.productName)}</p>`,
+        comboLines,
         `  <p class="item-meta">${quantity} x ${escapeHtml(formatReceiptMoney(item.unitPrice))}<span class="dots"></span>${escapeHtml(formatReceiptMoney(subtotal))}</p>`,
         "</article>",
       ].join("\n");
@@ -5561,6 +5567,7 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
     "    .value { text-align: left; word-break: break-word; }",
     "    .items { display: grid; gap: 6px; }",
     "    .item-name { margin: 0; font-weight: 700; word-break: break-word; }",
+    "    .combo-item { margin: 2px 0 0 10px; color: #334155; font-size: 11px; word-break: break-word; }",
     "    .item-meta { margin: 2px 0 0; display: flex; align-items: center; gap: 6px; white-space: nowrap; }",
     "    .dots { flex: 1; border-bottom: 1px dotted #64748b; transform: translateY(-1px); }",
     "    .totals { display: grid; gap: 4px; }",
@@ -6231,6 +6238,7 @@ function sanitizeOrderItem(input: unknown): OrderItem | null {
     productName?: unknown;
     unitPrice?: unknown;
     quantity?: unknown;
+    comboItems?: unknown;
     comboSelections?: unknown;
   };
 
@@ -6254,8 +6262,19 @@ function sanitizeOrderItem(input: unknown): OrderItem | null {
         })
         .filter(Boolean) as OrderItem["comboSelections"]
     : undefined;
+  const comboItems = Array.isArray(obj.comboItems)
+    ? obj.comboItems
+        .map((selection) => {
+          const item = (selection || {}) as { menuProductId?: unknown; menuProductName?: unknown; quantity?: unknown };
+          const menuProductId = String(item.menuProductId || "").trim();
+          const menuProductName = String(item.menuProductName || "").trim();
+          const itemQuantity = Math.max(1, Math.trunc(Number(item.quantity || 1)));
+          return menuProductId && menuProductName ? { menuProductId, menuProductName, quantity: itemQuantity } : null;
+        })
+        .filter(Boolean) as OrderItem["comboItems"]
+    : undefined;
 
-  return { productId, productName, unitPrice, quantity, comboSelections };
+  return { productId, productName, unitPrice, quantity, comboItems, comboSelections };
 }
 
 function sanitizeOrderStatusDraft(input: unknown): { status?: OrderStatus; paymentMethod?: PaymentMethod; total?: number } {

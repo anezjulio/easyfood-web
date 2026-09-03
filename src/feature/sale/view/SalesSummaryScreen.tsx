@@ -13,6 +13,7 @@ type SaleSummaryItem = {
   productName: string;
   unitPrice: number;
   quantity: number;
+  comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
 };
 
 type SaleSummaryState = {
@@ -141,9 +142,20 @@ export default function SalesSummaryScreen() {
               <div className={styles.cellRight}>Subtotal</div>
             </div>
 
-            {state.items.map((item) => (
-              <div key={item.productId} className={styles.tableRow}>
-                <div>{item.productName}</div>
+            {state.items.map((item, index) => (
+              <div key={`${item.productId}-${index}`} className={styles.tableRow}>
+                <div className={styles.productCell}>
+                  <span>{item.productName}</span>
+                  {item.comboItems?.length ? (
+                    <div className={styles.comboItems}>
+                      {item.comboItems.map((comboItem) => (
+                        <span key={comboItem.menuProductId}>
+                          + {comboItem.quantity > 1 ? `${comboItem.quantity} x ` : ""}{comboItem.menuProductName}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
                 <div className={styles.cellRight}>{item.quantity}</div>
                 <div className={styles.cellRight}>{formatMoneyARS(item.unitPrice)}</div>
                 <div className={styles.cellRight}>{formatMoneyARS(item.unitPrice * item.quantity)}</div>

@@ -63,10 +63,6 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
   const selectedCombo = combos.find((item) => item.id === selectedId) || null;
   const parsedPrice = Math.max(0, Math.trunc(toNumber(price)));
 
-  useEffect(() => {
-    setMenuProductId((current) => current || availableProducts[0]?.id || "");
-  }, [availableProducts]);
-
   function clearForm() {
     setSelectedId("");
     setName("");
@@ -92,7 +88,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
 
   function addComboItem() {
     const parsedQuantity = Math.trunc(toNumber(quantity));
-    const menuProduct = availableProducts.find((item) => item.id === menuProductId);
+    const menuProduct = availableProducts.find((item) => item.id === (menuProductId || availableProducts[0]?.id));
     if (parsedQuantity <= 0 || (itemMode === "product" && !menuProduct)) {
       setError("Selecciona un producto o categoria e ingresa una cantidad valida.");
       return;
@@ -168,7 +164,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
                 <option value="product">Producto fijo</option>
                 <option value="category">Categoria a eleccion</option>
               </select>
-              {itemMode === "product" ? <select className={styles.input} value={menuProductId} onChange={(event) => setMenuProductId(event.target.value)}>
+              {itemMode === "product" ? <select className={styles.input} value={menuProductId || availableProducts[0]?.id || ""} onChange={(event) => setMenuProductId(event.target.value)}>
                 <option value="">Seleccionar producto</option>
                 {availableProducts.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
               </select> : <select className={styles.input} value={itemCategory} onChange={(event) => setItemCategory(event.target.value as ProductCategory)}>{PRODUCT_CATEGORIES.filter((category) => category !== "combos").map((category) => <option key={category} value={category}>{formatCategoryLabel(category)}</option>)}</select>}

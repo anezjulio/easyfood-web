@@ -1042,13 +1042,30 @@
       "operator": "admin",
       "startedAt": "2026-08-29T22:45:43.608Z",
       "orderIds": [
-        "or290820261945488199",
+        "or020920261911014877",
         "or020920261801468826",
-        "or020920261911014877"
+        "or290820261945488199"
       ],
-      "status": "open",
+      "status": "pending-close",
       "openingDeclaredAmount": 5000,
-      "openingDifferenceAmount": 0
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-09-03T04:43:40.603Z",
+      "closeSummary": {
+        "totalSales": 26499,
+        "totalByPaymentMethod": {
+          "efectivo": 26499,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 26499,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 31499,
+        "declaredClosingCash": 5000,
+        "closingDifference": -26499,
+        "balanceTotal": 31499
+      }
     }
   ],
   "cashOpeningAssignments": [],
@@ -1064,7 +1081,7 @@
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
       "currentBalance": 31499,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-02T22:18:04.623Z"
+      "updatedAt": "2026-09-03T04:43:40.604Z"
     },
     {
       "id": "account-gains",
@@ -1074,7 +1091,7 @@
       "description": "Ventas pagadas registradas por la plataforma.",
       "currentBalance": 26499,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-02T22:18:04.623Z"
+      "updatedAt": "2026-09-03T04:43:40.604Z"
     },
     {
       "id": "account-expenses",
@@ -1084,7 +1101,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-02T22:18:04.623Z"
+      "updatedAt": "2026-09-03T04:43:40.604Z"
     },
     {
       "id": "account-food-categories",
@@ -1094,10 +1111,28 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-02T22:18:04.623Z"
+      "updatedAt": "2026-09-03T04:43:40.604Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-cash-close-wd290820261945438445",
+      "createdAt": "2026-09-03T04:43:40.603Z",
+      "type": "cash-close",
+      "title": "Cierre de caja wd290820261945438445",
+      "description": "Se dejo 5000 al cerrar la jornada wd290820261945438445.",
+      "amount": 5000,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd290820261945438445",
+      "workdayId": "wd290820261945438445",
+      "actor": "admin",
+      "countsInBalance": false,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
     {
       "id": "txn-sale-cash-or020920261911014877",
       "createdAt": "2026-09-02T22:11:01.303Z",
@@ -1239,6 +1274,20 @@
   ],
   "licenses": [],
   "notifications": [
+    {
+      "id": "nt030920260143405642",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd290820261945438445 fue enviada para auditoria.",
+      "createdAt": "2026-09-03T04:43:40.603Z",
+      "dueAt": "2026-09-10T04:43:40.603Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd290820261945438445",
+      "status": "active"
+    },
     {
       "id": "nt020920261911021484",
       "type": "sale-created",

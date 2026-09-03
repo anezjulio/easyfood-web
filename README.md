@@ -34,6 +34,41 @@ npm run dev
 
 La app levanta por defecto en `http://localhost:5173`.
 
+## Docker (frontend de produccion)
+
+El contenedor construye el bundle con `npm ci` y `npm run build`, y lo sirve con Nginx. No ejecuta el servidor de desarrollo de Vite.
+
+```bash
+docker compose up -d --build
+```
+
+La interfaz queda disponible en `http://localhost:3000` y, desde otro equipo de la red local, en `http://IP_DEL_HOST:3000`.
+
+Comandos habituales:
+
+```bash
+# Ver estado y logs
+docker compose ps
+docker compose logs -f
+
+# Detener el contenedor
+docker compose down
+
+# Reconstruir luego de cambiar el codigo o una variable VITE_*
+docker compose up -d --build
+
+# Comprobar la respuesta HTTP localmente
+curl http://localhost:3000
+```
+
+Nginx aplica el fallback SPA, por lo que una ruta de React Router como `/dashboard` o `/sales` no devuelve 404 al actualizar la pagina.
+
+### Variables de build
+
+`docker-compose.yml` recibe las variables `VITE_*` desde el entorno o desde el archivo `.env` del proyecto. Se incorporan al JavaScript durante el build, asi que nunca deben contener secretos. Para cambiar una variable, actualiza `.env` o expórtala antes de reconstruir la imagen.
+
+El frontend actual depende de los endpoints REST que el mock backend publica dentro de `vite.config.ts` durante desarrollo. Nginx no ejecuta ese backend ni persiste sus datos. Para que los flujos que consumen `/users`, `/orders`, `/products` y demas endpoints funcionen en Docker, una etapa posterior debe desplegar ese backend como servicio independiente y configurar las URLs/proxy correspondientes.
+
 ## Login demo
 
 - La pantalla de login arranca en desarrollo con `admin / 1234` precargado.

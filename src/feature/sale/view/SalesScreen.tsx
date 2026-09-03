@@ -44,6 +44,7 @@ type CartItem = {
   productName: string;
   unitPrice: number;
   quantity: number;
+  comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
   comboSelections?: Array<{ category: string; menuProductId: string; menuProductName: string }>;
 };
 
@@ -80,6 +81,24 @@ function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProd
     menuProductId: menuProduct.id,
     menuProduct,
   };
+}
+
+function resolveComboItems(product: SellableProduct, selections: NonNullable<CartItem["comboSelections"]>, products: SellableProduct[]) {
+  return (product.menuProduct?.comboItems || [])
+    .map((item) => {
+      const selection = selections.find((node) => node.category === item.category);
+      const selectedProduct =
+        item.type === "category"
+          ? products.find((candidate) => candidate.menuProductId === selection?.menuProductId)
+          : products.find((candidate) => candidate.menuProductId === item.menuProductId);
+      if (!selectedProduct?.menuProductId) return null;
+      return {
+        menuProductId: selectedProduct.menuProductId,
+        menuProductName: selectedProduct.name,
+        quantity: Math.max(1, Math.trunc(Number(item.quantity || 1))),
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => !!item);
 }
 
 function generateOrderCode() {
@@ -535,6 +554,7 @@ export default function SalesScreen() {
       return;
     }
     const selectionList = resolvedSelections.filter((selection): selection is NonNullable<typeof selection> => !!selection);
+    const componentList = resolveComboItems(product, selectionList, products);
     const cartItemId = `${product.id}:${selectionList.map((selection) => selection.menuProductId).join(",") || "fixed"}`;
 
     setSelectedProductId(product.id);
@@ -549,6 +569,7 @@ export default function SalesScreen() {
             productName: product.name,
             unitPrice: product.price,
             quantity: nextQuantity,
+            comboItems: componentList.length ? componentList : undefined,
             comboSelections: selectionList.length ? selectionList : undefined,
           },
         ];
@@ -695,6 +716,7 @@ export default function SalesScreen() {
           productName: item.productName,
           unitPrice: item.unitPrice,
           quantity: item.quantity,
+          comboItems: item.comboItems,
           comboSelections: item.comboSelections,
         })),
         operator: auth.user?.username || "operator",
@@ -920,7 +942,18 @@ export default function SalesScreen() {
                       className={`${styles.cartRow} ${isOddRow ? styles.cartRowOdd : ""} ${isSelectedRow ? styles.cartRowSelected : ""}`}
                       key={item.id}
                     >
-                      <div className={styles.cellProduct}>{item.productName}</div>
+                      <div className={styles.cellProduct}>
+                        <span>{item.productName}</span>
+                        {item.comboItems?.length ? (
+                          <div className={styles.comboItems}>
+                            {item.comboItems.map((comboItem) => (
+                              <span key={comboItem.menuProductId}>
+                                + {comboItem.quantity > 1 ? `${comboItem.quantity} x ` : ""}{comboItem.menuProductName}
+                              </span>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
                       <div className={styles.cellQty}>
                         <div className={styles.cartQtyStepper}>
                           <button

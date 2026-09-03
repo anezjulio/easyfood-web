@@ -1,0 +1,16 @@
+services:
+  easyfood-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_USE_FAKE_API: ${VITE_USE_FAKE_API:-true}
+        VITE_FAKE_API_URL: ${VITE_FAKE_API_URL:-}
+        VITE_IMAGE_BASE_URL: ${VITE_IMAGE_BASE_URL:-}
+        VITE_IMAGE_UPLOAD_URL: ${VITE_IMAGE_UPLOAD_URL:-}
+        VITE_ORDER_PENDING_TIMEOUT_MINUTES: ${VITE_ORDER_PENDING_TIMEOUT_MINUTES:-15}
+    image: easyfood-web:latest
+    container_name: easyfood-web
+    restart: unless-stopped
+    ports:
+      - "3000:80"

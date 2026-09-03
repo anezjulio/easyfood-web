@@ -34,6 +34,7 @@ export default function OperationScreen() {
   const [alertsLoading, setAlertsLoading] = useState(true);
   const [alertsError, setAlertsError] = useState("");
   const [selectedAlertType, setSelectedAlertType] = useState<"all" | NotificationType>("all");
+  const [isAlertsOpen, setIsAlertsOpen] = useState(false);
 
   useEffect(() => {
     if (isTerminal) {
@@ -128,11 +129,11 @@ export default function OperationScreen() {
           <section className={styles.alertsSection}>
             <div className={styles.groupHeading}>
               <div className={styles.groupTitleRow}>
-                <button type="button" className={styles.groupTitleLink} onClick={() => nav("/notifications")}>
+                <button type="button" className={styles.groupTitleLink} onClick={() => setIsAlertsOpen((current) => !current)}>
                   Alertas
                 </button>
                 <span className={styles.countBadge}>{alertCountLabel}</span>
-                {!alertsLoading && !alertsError ? (
+                {isAlertsOpen && !alertsLoading && !alertsError ? (
                   <div className={styles.alertFilters}>
                     <button
                       type="button"
@@ -156,30 +157,32 @@ export default function OperationScreen() {
               </div>
             </div>
 
-            {alertsLoading ? (
-              <AlertStatusPanel
-                title="Cargando alertas"
-                description="Estamos consultando vencimientos, mercancia, stock y otras alertas operativas."
-                tone="neutral"
-              />
-            ) : alertsError ? (
-              <AlertStatusPanel title="Alertas no disponibles" description={alertsError} tone="critical" />
-            ) : (
-              <section className={styles.alertListPanel}>
-                {filteredAlerts.length === 0 ? (
-                  <div className={styles.alertEmptyState}>
-                    <strong>Sin resultados</strong>
-                    <span>No hay alertas activas para el filtro seleccionado.</span>
-                  </div>
-                ) : (
-                  <div className={styles.alertListCompact}>
-                    {filteredAlerts.map((item) => (
-                      <AlertRailItem key={item.id} item={item} />
-                    ))}
-                  </div>
-                )}
-              </section>
-            )}
+            {isAlertsOpen ? (
+              alertsLoading ? (
+                <AlertStatusPanel
+                  title="Cargando alertas"
+                  description="Estamos consultando vencimientos, mercancia, stock y otras alertas operativas."
+                  tone="neutral"
+                />
+              ) : alertsError ? (
+                <AlertStatusPanel title="Alertas no disponibles" description={alertsError} tone="critical" />
+              ) : (
+                <section className={styles.alertListPanel}>
+                  {filteredAlerts.length === 0 ? (
+                    <div className={styles.alertEmptyState}>
+                      <strong>Sin resultados</strong>
+                      <span>No hay alertas activas para el filtro seleccionado.</span>
+                    </div>
+                  ) : (
+                    <div className={styles.alertListCompact}>
+                      {filteredAlerts.map((item) => (
+                        <AlertRailItem key={item.id} item={item} />
+                      ))}
+                    </div>
+                  )}
+                </section>
+              )
+            ) : null}
           </section>
         ) : null}
 
