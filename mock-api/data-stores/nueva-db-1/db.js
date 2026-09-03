@@ -63,7 +63,7 @@
       "name": "Pan hamburguesas",
       "expiresInDays": 5,
       "stockMode": "unit",
-      "stockQuantity": 79,
+      "stockQuantity": 77,
       "createdAt": "2026-08-29T10:00:00.000Z"
     },
     {
@@ -79,7 +79,7 @@
       "name": "Medallon de carne",
       "expiresInDays": 3,
       "stockMode": "unit",
-      "stockQuantity": 99,
+      "stockQuantity": 97,
       "createdAt": "2026-08-29T10:02:00.000Z"
     },
     {
@@ -111,7 +111,7 @@
       "name": "Cheddar feta",
       "expiresInDays": 7,
       "stockMode": "unit",
-      "stockQuantity": 179,
+      "stockQuantity": 176,
       "createdAt": "2026-08-29T10:06:00.000Z"
     },
     {
@@ -119,7 +119,7 @@
       "name": "Tocino",
       "expiresInDays": 5,
       "stockMode": "weight",
-      "stockQuantity": 2500,
+      "stockQuantity": 2465,
       "createdAt": "2026-08-29T10:07:00.000Z"
     },
     {
@@ -135,7 +135,7 @@
       "name": "Papa baston",
       "expiresInDays": 12,
       "stockMode": "weight",
-      "stockQuantity": 17700,
+      "stockQuantity": 17400,
       "createdAt": "2026-08-29T10:09:00.000Z"
     },
     {
@@ -143,7 +143,7 @@
       "name": "Mayonesa",
       "expiresInDays": 30,
       "stockMode": "weight",
-      "stockQuantity": 4980,
+      "stockQuantity": 4940,
       "createdAt": "2026-08-29T10:10:00.000Z"
     },
     {
@@ -151,7 +151,7 @@
       "name": "Ketchup",
       "expiresInDays": 30,
       "stockMode": "weight",
-      "stockQuantity": 4985,
+      "stockQuantity": 4955,
       "createdAt": "2026-08-29T10:11:00.000Z"
     },
     {
@@ -159,7 +159,7 @@
       "name": "Lechuga",
       "expiresInDays": 4,
       "stockMode": "weight",
-      "stockQuantity": 3175,
+      "stockQuantity": 3150,
       "createdAt": "2026-08-29T10:12:00.000Z"
     },
     {
@@ -167,7 +167,7 @@
       "name": "Cebolla",
       "expiresInDays": 10,
       "stockMode": "weight",
-      "stockQuantity": 4480,
+      "stockQuantity": 4440,
       "createdAt": "2026-08-29T10:13:00.000Z"
     },
     {
@@ -175,7 +175,7 @@
       "name": "Pepinillos",
       "expiresInDays": 18,
       "stockMode": "weight",
-      "stockQuantity": 2785,
+      "stockQuantity": 2770,
       "createdAt": "2026-08-29T10:14:00.000Z"
     },
     {
@@ -183,7 +183,7 @@
       "name": "Tomate",
       "expiresInDays": 5,
       "stockMode": "weight",
-      "stockQuantity": 4165,
+      "stockQuantity": 4130,
       "createdAt": "2026-08-29T10:15:00.000Z"
     },
     {
@@ -239,7 +239,7 @@
       "name": "Limon",
       "expiresInDays": 12,
       "stockMode": "unit",
-      "stockQuantity": 80,
+      "stockQuantity": 78,
       "createdAt": "2026-08-29T10:22:00.000Z"
     },
     {
@@ -247,7 +247,7 @@
       "name": "Azucar",
       "expiresInDays": 60,
       "stockMode": "weight",
-      "stockQuantity": 6000,
+      "stockQuantity": 5965,
       "createdAt": "2026-08-29T10:23:00.000Z"
     },
     {
@@ -255,7 +255,7 @@
       "name": "Agua filtrada",
       "expiresInDays": 3,
       "stockMode": "weight",
-      "stockQuantity": 30000,
+      "stockQuantity": 29550,
       "createdAt": "2026-08-29T10:24:00.000Z"
     },
     {
@@ -263,7 +263,7 @@
       "name": "Hielo",
       "expiresInDays": 2,
       "stockMode": "weight",
-      "stockQuantity": 20000,
+      "stockQuantity": 19880,
       "createdAt": "2026-08-29T10:25:00.000Z"
     },
     {
@@ -956,6 +956,97 @@
   ],
   "orders": [
     {
+      "id": "or030920260151460942",
+      "items": [
+        {
+          "productId": "menu:menu020920261904290741",
+          "productName": "Hamburguesas + papas + bebida",
+          "unitPrice": 14999,
+          "quantity": 1,
+          "comboItems": [
+            {
+              "menuProductId": "menu-hamburguesa-completa",
+              "menuProductName": "Hamburguesa completa",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-papas",
+              "menuProductName": "Papas",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [
+            {
+              "category": "bebida",
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera"
+            }
+          ]
+        },
+        {
+          "productId": "food-agua-500",
+          "productName": "Agua mineral 500 ml",
+          "unitPrice": 1400,
+          "quantity": 2
+        }
+      ],
+      "createdAt": "2026-09-03T04:51:46.902Z",
+      "status": "por pagar",
+      "total": 17799,
+      "operator": "admin"
+    },
+    {
+      "id": "or030920260149497546",
+      "items": [
+        {
+          "productId": "menu:menu020920261904290741",
+          "productName": "Hamburguesas + papas + bebida",
+          "unitPrice": 14999,
+          "quantity": 1,
+          "comboItems": [
+            {
+              "menuProductId": "menu-hamburguesa-completa",
+              "menuProductName": "Hamburguesa completa",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-papas",
+              "menuProductName": "Papas",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [
+            {
+              "category": "bebida",
+              "menuProductId": "menu-bebida-limonada",
+              "menuProductName": "Limonada casera"
+            }
+          ]
+        },
+        {
+          "productId": "menu:menu-hamburguesa-bacon",
+          "productName": "Hamburguesa bacon cheddar",
+          "unitPrice": 7600,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-03T04:49:49.515Z",
+      "status": "pagada",
+      "total": 22599,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
       "id": "or020920261911014877",
       "items": [
         {
@@ -1012,6 +1103,14 @@
   ],
   "invoices": [
     {
+      "id": "fc030920260149559307",
+      "orderId": "or030920260149497546",
+      "createdAt": "2026-09-03T04:49:55.420Z",
+      "total": 22599,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
       "id": "fc020920261911028310",
       "orderId": "or020920261911014877",
       "createdAt": "2026-09-02T22:11:02.486Z",
@@ -1038,15 +1137,27 @@
   ],
   "workdays": [
     {
+      "id": "wd030920260146309845",
+      "operator": "admin",
+      "startedAt": "2026-09-03T04:46:30.598Z",
+      "orderIds": [
+        "or030920260149497546"
+      ],
+      "status": "open",
+      "openingDeclaredAmount": 5000,
+      "openingDifferenceAmount": 0
+    },
+    {
       "id": "wd290820261945438445",
       "operator": "admin",
       "startedAt": "2026-08-29T22:45:43.608Z",
+      "endedAt": "2026-09-03T04:46:23.229Z",
       "orderIds": [
         "or020920261911014877",
         "or020920261801468826",
         "or290820261945488199"
       ],
-      "status": "pending-close",
+      "status": "closed",
       "openingDeclaredAmount": 5000,
       "openingDifferenceAmount": 0,
       "closeRequestedAt": "2026-09-03T04:43:40.603Z",
@@ -1065,6 +1176,18 @@
         "declaredClosingCash": 5000,
         "closingDifference": -26499,
         "balanceTotal": 31499
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-09-03T04:46:23.229Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        },
+        "mismatchReport": "El operador admin, en la jornada wd290820261945438445, presenta diferencias. Cierre en efectivo: esperado $ 31.499, declarado $ 5.000 (falta $ 26.499)."
       }
     }
   ],
@@ -1079,9 +1202,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 31499,
+      "currentBalance": 59098,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T04:43:40.604Z"
+      "updatedAt": "2026-09-03T04:51:46.903Z"
     },
     {
       "id": "account-gains",
@@ -1089,9 +1212,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 26499,
+      "currentBalance": 49098,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T04:43:40.604Z"
+      "updatedAt": "2026-09-03T04:51:46.903Z"
     },
     {
       "id": "account-expenses",
@@ -1101,7 +1224,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T04:43:40.604Z"
+      "updatedAt": "2026-09-03T04:51:46.903Z"
     },
     {
       "id": "account-food-categories",
@@ -1111,13 +1234,71 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T04:43:40.604Z"
+      "updatedAt": "2026-09-03T04:51:46.903Z"
     }
   ],
   "financialTransactions": [
     {
+      "id": "txn-sale-cash-or030920260149497546",
+      "createdAt": "2026-09-03T04:49:49.515Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or030920260149497546",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 22599,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or030920260149497546",
+      "orderId": "or030920260149497546",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or030920260149497546",
+      "createdAt": "2026-09-03T04:49:49.515Z",
+      "type": "sale-income",
+      "title": "Venta pagada or030920260149497546",
+      "description": "Venta registrada por admin por 22599.",
+      "amount": 22599,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or030920260149497546",
+      "orderId": "or030920260149497546",
+      "workdayId": "wd030920260146309845",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-cash-opening-wd030920260146309845",
+      "createdAt": "2026-09-03T04:46:30.598Z",
+      "type": "cash-opening",
+      "title": "Apertura de caja wd030920260146309845",
+      "description": "Apertura declarada por admin.",
+      "amount": 5000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd030920260146309845",
+      "workdayId": "wd030920260146309845",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
       "id": "txn-cash-close-wd290820261945438445",
-      "createdAt": "2026-09-03T04:43:40.603Z",
+      "createdAt": "2026-09-03T04:46:23.229Z",
       "type": "cash-close",
       "title": "Cierre de caja wd290820261945438445",
       "description": "Se dejo 5000 al cerrar la jornada wd290820261945438445.",
@@ -1275,6 +1456,58 @@
   "licenses": [],
   "notifications": [
     {
+      "id": "nt030920260149556308",
+      "type": "sale-created",
+      "title": "Venta registrada: or030920260149497546",
+      "description": "Venta por 22599 (admin).",
+      "createdAt": "2026-09-03T04:49:55.407Z",
+      "dueAt": "2026-09-04T04:49:55.407Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or030920260149497546",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260146305523",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 5000.",
+      "createdAt": "2026-09-03T04:46:30.598Z",
+      "dueAt": "2026-09-04T04:46:30.598Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd030920260146309845",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260146230317",
+      "type": "cash",
+      "title": "Diferencias detectadas en cierre: admin",
+      "description": "El operador admin, en la jornada wd290820261945438445, presenta diferencias. Cierre en efectivo: esperado $ 31.499, declarado $ 5.000 (falta $ 26.499).",
+      "createdAt": "2026-09-03T04:46:23.229Z",
+      "dueAt": "2026-09-10T04:46:23.229Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd290820261945438445",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260146230146",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd290820261945438445.",
+      "createdAt": "2026-09-03T04:46:23.229Z",
+      "dueAt": "2026-09-04T04:46:23.229Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd290820261945438445",
+      "status": "active"
+    },
+    {
       "id": "nt030920260143405642",
       "type": "cash",
       "title": "Cierre de caja pendiente: admin",
@@ -1286,7 +1519,8 @@
       "actionLabel": "Auditar cierre",
       "entityType": "workday",
       "entityId": "wd290820261945438445",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-09-03T04:46:23.229Z"
     },
     {
       "id": "nt020920261911021484",
@@ -1352,7 +1586,8 @@
       "requiresAction": false,
       "entityType": "workday",
       "entityId": "wd290820261945438445",
-      "status": "active"
+      "status": "received",
+      "receivedAt": "2026-09-03T04:46:23.229Z"
     }
   ],
   "notificationSettings": [
