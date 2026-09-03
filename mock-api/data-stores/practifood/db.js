@@ -77,7 +77,46 @@
   "stocks": [],
   "orders": [],
   "invoices": [],
-  "workdays": [],
+  "workdays": [
+    {
+      "id": "wd030920260524295407",
+      "operator": "admin",
+      "startedAt": "2026-09-03T08:24:29.482Z",
+      "endedAt": "2026-09-03T08:24:37.485Z",
+      "orderIds": [],
+      "status": "closed",
+      "openingDeclaredAmount": 5000,
+      "openingDifferenceAmount": 0,
+      "closeRequestedAt": "2026-09-03T08:24:34.945Z",
+      "closeSummary": {
+        "totalSales": 0,
+        "totalByPaymentMethod": {
+          "efectivo": 0,
+          "tarjeta debito": 0,
+          "tarjeta credito": 0,
+          "mercadopago": 0
+        },
+        "cashSales": 0,
+        "totalExpenses": 0,
+        "totalSupplyReturns": 0,
+        "expectedClosingCash": 5000,
+        "declaredClosingCash": 5000,
+        "closingDifference": 0,
+        "balanceTotal": 5000
+      },
+      "adminReview": {
+        "reviewedBy": "admin",
+        "reviewedAt": "2026-09-03T08:24:37.485Z",
+        "checks": {
+          "openingAmount": true,
+          "cashSales": true,
+          "expenses": true,
+          "supplyReturns": true,
+          "balance": true
+        }
+      }
+    }
+  ],
   "cashOpeningAssignments": [],
   "supplyOrders": [],
   "expenses": [],
@@ -89,9 +128,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 0,
+      "currentBalance": 5000,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-09-03T04:42:20.732Z"
+      "updatedAt": "2026-09-03T08:24:37.486Z"
     },
     {
       "id": "account-gains",
@@ -101,7 +140,7 @@
       "description": "Ventas pagadas registradas por la plataforma.",
       "currentBalance": 0,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-09-03T04:42:20.732Z"
+      "updatedAt": "2026-09-03T08:24:37.486Z"
     },
     {
       "id": "account-expenses",
@@ -111,7 +150,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-09-03T04:42:20.732Z"
+      "updatedAt": "2026-09-03T08:24:37.486Z"
     },
     {
       "id": "account-food-categories",
@@ -121,12 +160,92 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-09-03T04:42:20.732Z"
+      "updatedAt": "2026-09-03T08:24:37.486Z"
     }
   ],
-  "financialTransactions": [],
+  "financialTransactions": [
+    {
+      "id": "txn-cash-close-wd030920260524295407",
+      "createdAt": "2026-09-03T08:24:37.485Z",
+      "type": "cash-close",
+      "title": "Cierre de caja wd030920260524295407",
+      "description": "Se dejo 5000 al cerrar la jornada wd030920260524295407.",
+      "amount": 5000,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd030920260524295407",
+      "workdayId": "wd030920260524295407",
+      "actor": "admin",
+      "countsInBalance": false,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-cash-opening-wd030920260524295407",
+      "createdAt": "2026-09-03T08:24:29.482Z",
+      "type": "cash-opening",
+      "title": "Apertura de caja wd030920260524295407",
+      "description": "Apertura declarada por admin.",
+      "amount": 5000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd030920260524295407",
+      "workdayId": "wd030920260524295407",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    }
+  ],
   "licenses": [],
-  "notifications": [],
+  "notifications": [
+    {
+      "id": "nt030920260524371773",
+      "type": "cash-closed",
+      "title": "Caja cerrada: admin",
+      "description": "Se cerro la jornada wd030920260524295407.",
+      "createdAt": "2026-09-03T08:24:37.485Z",
+      "dueAt": "2026-09-04T08:24:37.485Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd030920260524295407",
+      "status": "active"
+    },
+    {
+      "id": "nt030920260524341669",
+      "type": "cash",
+      "title": "Cierre de caja pendiente: admin",
+      "description": "La jornada wd030920260524295407 fue enviada para auditoria.",
+      "createdAt": "2026-09-03T08:24:34.945Z",
+      "dueAt": "2026-09-10T08:24:34.945Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Auditar cierre",
+      "entityType": "workday",
+      "entityId": "wd030920260524295407",
+      "status": "received",
+      "receivedAt": "2026-09-03T08:24:37.485Z"
+    },
+    {
+      "id": "nt030920260524295570",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 5000.",
+      "createdAt": "2026-09-03T08:24:29.482Z",
+      "dueAt": "2026-09-04T08:24:29.482Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd030920260524295407",
+      "status": "received",
+      "receivedAt": "2026-09-03T08:24:37.485Z"
+    }
+  ],
   "notificationSettings": [
     {
       "type": "license-required",
