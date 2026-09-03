@@ -1850,6 +1850,15 @@
   ],
   "workdays": [
     {
+      "id": "wd030920260439508962",
+      "operator": "admin",
+      "startedAt": "2026-09-03T07:39:50.287Z",
+      "orderIds": [],
+      "status": "open",
+      "openingDeclaredAmount": 50000,
+      "openingDifferenceAmount": 0
+    },
+    {
       "id": "wd030920260146309845",
       "operator": "admin",
       "startedAt": "2026-09-03T04:46:30.598Z",
@@ -1950,9 +1959,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 282294,
+      "currentBalance": 332294,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T06:27:34.396Z"
+      "updatedAt": "2026-09-03T07:39:50.288Z"
     },
     {
       "id": "account-gains",
@@ -1962,7 +1971,7 @@
       "description": "Ventas pagadas registradas por la plataforma.",
       "currentBalance": 272294,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T06:27:34.396Z"
+      "updatedAt": "2026-09-03T07:39:50.288Z"
     },
     {
       "id": "account-expenses",
@@ -1972,7 +1981,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T06:27:34.396Z"
+      "updatedAt": "2026-09-03T07:39:50.288Z"
     },
     {
       "id": "account-food-categories",
@@ -1982,10 +1991,28 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-03-17T03:39:00.633Z",
-      "updatedAt": "2026-09-03T06:27:34.396Z"
+      "updatedAt": "2026-09-03T07:39:50.288Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-cash-opening-wd030920260439508962",
+      "createdAt": "2026-09-03T07:39:50.287Z",
+      "type": "cash-opening",
+      "title": "Apertura de caja wd030920260439508962",
+      "description": "Apertura declarada por admin.",
+      "amount": 50000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "cash",
+      "referenceId": "wd030920260439508962",
+      "workdayId": "wd030920260439508962",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
     {
       "id": "txn-cash-close-wd030920260146309845",
       "createdAt": "2026-09-03T06:27:34.395Z",
@@ -2421,6 +2448,19 @@
   ],
   "licenses": [],
   "notifications": [
+    {
+      "id": "nt030920260439509614",
+      "type": "cash-opened",
+      "title": "Caja abierta: admin",
+      "description": "Se abrio caja para admin con 50000.",
+      "createdAt": "2026-09-03T07:39:50.287Z",
+      "dueAt": "2026-09-04T07:39:50.287Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "workday",
+      "entityId": "wd030920260439508962",
+      "status": "active"
+    },
     {
       "id": "nt030920260327341413",
       "type": "cash",

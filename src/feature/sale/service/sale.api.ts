@@ -118,3 +118,4 @@ export async function updateTaxSettingsApi(draft: Partial<TaxSettings>): Promise
   });
   return await readJsonOrThrow<TaxSettings>(response);
 }
+  

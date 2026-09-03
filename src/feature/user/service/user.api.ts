@@ -1,5 +1,5 @@
 import type { AppUserRecord, AppUserRole } from "../model/user.types";
-import { md5 } from "../../../shared/crypto/md5";
+import { readJsonOrThrow } from "../../../shared/http/http";
 
 export type UserDraft = {
   name: string;
@@ -21,109 +21,40 @@ export type UserUpdateDraft = {
   endHour: string;
 };
 
-const STORAGE_KEY = "easyfood_users";
-
-const DEFAULT_USERS: AppUserRecord[] = [
-  {
-    id: "1",
-    name: "Administrador",
-    email: "admin@easyfood.local",
-    username: "admin",
-    role: "admin",
-    password: md5("1234"),
-    startHour: "00:00",
-    endHour: "23:59",
-  } as AppUserRecord,
-];
-
-function readUsers(): AppUserRecord[] {
-  const stored = localStorage.getItem(STORAGE_KEY);
-
-  if (!stored) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_USERS));
-    return DEFAULT_USERS;
-  }
-
-  try {
-    return JSON.parse(stored) as AppUserRecord[];
-  } catch {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_USERS));
-    return DEFAULT_USERS;
-  }
-}
-
-function saveUsers(users: AppUserRecord[]): void {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
-}
-
 export async function fetchUsersApi(): Promise<AppUserRecord[]> {
-  return readUsers();
+  const response = await fetch("/users");
+  return await readJsonOrThrow<AppUserRecord[]>(response);
 }
 
-export async function createUserApi(
-  draft: UserDraft,
-): Promise<AppUserRecord> {
-  const users = readUsers();
+export async function createUserApi(draft: UserDraft): Promise<AppUserRecord> {
+  const response = await fetch("/users", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
 
-  const newUser = {
-    ...draft,
-    id: crypto.randomUUID(),
-    password: md5(draft.password),
-  } as AppUserRecord;
-
-  users.push(newUser);
-  saveUsers(users);
-
-  return newUser;
+  return await readJsonOrThrow<AppUserRecord>(response);
 }
 
 export async function updateUserApi(
   id: string,
   draft: UserUpdateDraft,
 ): Promise<AppUserRecord> {
-  const users = readUsers();
+  const response = await fetch(`/users/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
 
-  const index = users.findIndex(
-    (user) => String(user.id) === String(id),
-  );
-
-  if (index === -1) {
-    throw new Error("Usuario no encontrado");
-  }
-
-  const current = users[index];
-
-  const updated = {
-    ...current,
-    ...draft,
-    password: draft.password
-      ? md5(draft.password)
-      : current.password,
-  } as AppUserRecord;
-
-  users[index] = updated;
-  saveUsers(users);
-
-  return updated;
+  return await readJsonOrThrow<AppUserRecord>(response);
 }
 
 export async function deleteUserApi(
   id: string,
 ): Promise<{ ok: boolean; id: string }> {
-  const users = readUsers();
+  const response = await fetch(`/users/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
 
-  const filtered = users.filter(
-    (user) => String(user.id) !== String(id),
-  );
-
-  if (filtered.length === users.length) {
-    throw new Error("Usuario no encontrado");
-  }
-
-  saveUsers(filtered);
-
-  return {
-    ok: true,
-    id,
-  };
+  return await readJsonOrThrow<{ ok: boolean; id: string }>(response);
 }

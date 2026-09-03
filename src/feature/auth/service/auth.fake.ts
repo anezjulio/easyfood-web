@@ -9,7 +9,9 @@ export async function fakeLogin(username: string, password: string): Promise<Use
   const hashedPassword = md5(password);
 
   const found = users.find(
-    (item) => item.username.trim().toLowerCase() === normalizedUsername && item.password === hashedPassword,
+    (item) =>
+      item.username.trim().toLowerCase() === normalizedUsername &&
+      item.password === hashedPassword,
   );
 
   if (!found) {
