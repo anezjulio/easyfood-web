@@ -207,6 +207,7 @@ type ReceiptItem = {
   unitPrice: number;
   quantity: number;
   comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
+  comboSelections?: Array<{ category: NonNullable<Product["category"]>; menuProductId: string; menuProductName: string }>;
 };
 
 type Receipt = {
@@ -2318,7 +2319,7 @@ function mockDbPlugin(): Plugin {
               return sendJson(res, 404, { message: "Invoice not found for receipt" });
             }
 
-            const items = draft.items.length ? draft.items : order.items;
+            const items = enrichReceiptComboItems(draft.items.length ? draft.items : order.items, db.menuProducts);
             if (!items.length) {
               return sendJson(res, 400, { message: "Invalid receipt draft: items are required" });
             }
@@ -5522,7 +5523,7 @@ async function writeReceiptCopy(receiptId: string, html: string) {
 
 function buildSaleReceiptHtml(receipt: Receipt): string {
   const itemBlocks = receipt.items
-    .map((item, index) => {
+    .map((item) => {
       const quantity = Number.isFinite(item.quantity) ? Math.max(0, Math.trunc(item.quantity)) : 0;
       const subtotal = Math.max(0, Math.trunc(item.unitPrice * quantity));
       const comboLines = (item.comboItems || [])
@@ -5530,7 +5531,7 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
         .join("\n");
       return [
         "<article class=\"item\">",
-        `  <p class="item-name">${index + 1}. ${escapeHtml(item.productName)}</p>`,
+        `  <p class="item-name">${escapeHtml(item.productName)}</p>`,
         comboLines,
         `  <p class="item-meta">${quantity} x ${escapeHtml(formatReceiptMoney(item.unitPrice))}<span class="dots"></span>${escapeHtml(formatReceiptMoney(subtotal))}</p>`,
         "</article>",
@@ -5764,6 +5765,33 @@ function resolveMenuIngredientConsumption(
   }
 
   return { quantities };
+}
+
+function enrichReceiptComboItems(items: ReceiptItem[], menuProducts: MenuProduct[]): ReceiptItem[] {
+  return items.map((item) => {
+    if (!item.productId.startsWith("menu:")) return item;
+    const menuProduct = menuProducts.find((node) => node.id === item.productId.slice("menu:".length));
+    if (menuProduct?.kind !== "combo") return item;
+    const itemQuantity = Math.max(1, Math.trunc(Number(item.quantity || 1)));
+    const comboItems = (menuProduct.comboItems || [])
+      .map((comboItem) => {
+        const selectedProductId =
+          comboItem.type === "category"
+            ? item.comboSelections?.find((selection) => selection.category === comboItem.category)?.menuProductId
+            : comboItem.menuProductId;
+        const component = menuProducts.find(
+          (node) => node.id === selectedProductId && node.kind !== "combo" && (comboItem.type !== "category" || node.category === comboItem.category),
+        );
+        if (!component) return null;
+        return {
+          menuProductId: component.id,
+          menuProductName: component.name,
+          quantity: Math.max(1, Math.trunc(Number(comboItem.quantity || 1))) * itemQuantity,
+        };
+      })
+      .filter((comboItem): comboItem is NonNullable<typeof comboItem> => !!comboItem);
+    return comboItems.length ? { ...item, comboItems } : item;
+  });
 }
 
 function sanitizeStockEntryDraft(input: unknown) {
