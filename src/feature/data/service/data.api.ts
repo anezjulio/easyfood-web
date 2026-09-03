@@ -1,6 +1,8 @@
 import { md5 } from "../../../shared/crypto/md5";
 import { readJsonOrThrow } from "../../../shared/http/http";
 
+export const DATA_STORE_CHANGED_EVENT = "easyfood-data-store-changed";
+
 type ResetDatabaseDraft = {
   requestedBy: string;
   adminPassword: string;
@@ -67,6 +69,11 @@ function toAdminPayload(requestedBy: string, adminPassword: string) {
   };
 }
 
+function notifyDataStoreChanged(storeId?: string) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(DATA_STORE_CHANGED_EVENT, { detail: { storeId } }));
+}
+
 export async function fetchDataStoresApi(): Promise<DataStoresState> {
   const response = await fetch("/admin/data/stores");
   return await readJsonOrThrow<DataStoresState>(response);
@@ -82,7 +89,9 @@ export async function createDataStoreApi(draft: CreateDataStoreDraft): Promise<C
       storeId: String(draft.storeId || "").trim(),
     }),
   });
-  return await readJsonOrThrow<CreateDataStoreResult>(response);
+  const result = await readJsonOrThrow<CreateDataStoreResult>(response);
+  notifyDataStoreChanged(result.activeStoreId);
+  return result;
 }
 
 export async function switchDataStoreApi(draft: SwitchDataStoreDraft): Promise<SwitchDataStoreResult> {
@@ -94,7 +103,9 @@ export async function switchDataStoreApi(draft: SwitchDataStoreDraft): Promise<S
       storeId: String(draft.storeId || "").trim(),
     }),
   });
-  return await readJsonOrThrow<SwitchDataStoreResult>(response);
+  const result = await readJsonOrThrow<SwitchDataStoreResult>(response);
+  notifyDataStoreChanged(result.activeStoreId);
+  return result;
 }
 
 export async function downloadDataStoreBackupApi(
@@ -125,5 +136,7 @@ export async function resetDatabaseApi(draft: ResetDatabaseDraft): Promise<Reset
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(toAdminPayload(draft.requestedBy, draft.adminPassword)),
   });
-  return await readJsonOrThrow<ResetDatabaseResult>(response);
+  const result = await readJsonOrThrow<ResetDatabaseResult>(response);
+  notifyDataStoreChanged(result.activeStoreId);
+  return result;
 }

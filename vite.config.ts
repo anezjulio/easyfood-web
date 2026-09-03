@@ -1276,10 +1276,11 @@ function mockDbPlugin(): Plugin {
             await writeDb(buildClearedOperationalDb(activeDb), newStore);
             await ensureDataStoreMediaDirs(newStore);
             state.stores.push(newStore);
+            state.activeStoreId = newStore.id;
             await writeDataStoresState(state);
             return sendJson(res, 201, {
               ok: true,
-              message: "Nueva base creada correctamente.",
+              message: "Nueva base creada y activada correctamente.",
               activeStoreId: state.activeStoreId,
               store: mapDataStoreForApi(newStore),
             });

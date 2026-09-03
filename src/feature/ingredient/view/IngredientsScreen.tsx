@@ -4,6 +4,7 @@ import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { formatDateAR } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
+import { DATA_STORE_CHANGED_EVENT } from "../../data/service/data.api";
 import {
   getIngredientStockModeLabel,
   type Ingredient,
@@ -48,6 +49,15 @@ export default function IngredientsScreen() {
 
   useEffect(() => {
     void reload();
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      clearForm();
+      void reload();
+    };
+    window.addEventListener(DATA_STORE_CHANGED_EVENT, handler);
+    return () => window.removeEventListener(DATA_STORE_CHANGED_EVENT, handler);
   }, []);
 
   const selectedIngredient = useMemo(

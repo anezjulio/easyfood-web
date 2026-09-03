@@ -35,6 +35,7 @@ import {
   onCashStatusChanged,
 } from "../../cash/service/cash.api";
 import { openCashWithAmount, syncCashState as syncCashStateService } from "../../cash/service/cash.operation";
+import { DATA_STORE_CHANGED_EVENT } from "../../data/service/data.api";
 import styles from "./SalesScreen.module.css";
 
 type CartItem = {
@@ -226,6 +227,19 @@ export default function SalesScreen() {
 
   useEffect(() => {
     void reloadProducts();
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      setCart([]);
+      setPendingOrder(null);
+      setSelectedProductId(null);
+      setQuantityToAdd("1");
+      setComboSelections({});
+      void reloadProducts();
+    };
+    window.addEventListener(DATA_STORE_CHANGED_EVENT, handler);
+    return () => window.removeEventListener(DATA_STORE_CHANGED_EVENT, handler);
   }, []);
 
   useEffect(() => {
