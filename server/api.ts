@@ -6800,4 +6800,3 @@ function contentTypeFromExt(fileExt: string): string {
   if (fileExt === ".svg") return "image/svg+xml";
   return "application/octet-stream";
 }
-
