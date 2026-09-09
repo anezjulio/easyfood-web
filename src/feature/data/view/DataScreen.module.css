@@ -172,6 +172,33 @@
   gap: 8px;
 }
 
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(15 23 42 / 0.42);
+}
+
+.modalCard {
+  width: min(100%, 440px);
+  border: 1px solid #0f172a;
+  background: #ffffff;
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  box-shadow: 6px 6px 0 #0f172a;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .success {
   margin: 14px 0 0;
   padding: 10px 14px;

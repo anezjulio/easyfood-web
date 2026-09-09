@@ -1251,6 +1251,50 @@ export function installApi(middlewares: Server) {
             });
           }
 
+          if (pathname === "/admin/data/stores/import" && method === "POST") {
+            const activeDb = await readDb();
+            const draft = sanitizeAdminDataStoreImportDraft(await readJsonBody(req));
+            const credential = validateAdminCredentials(activeDb, draft.requestedBy, draft.adminPasswordHash);
+            if (!credential.ok) {
+              return sendJson(res, credential.status, { message: credential.message });
+            }
+            const nextStoreId = normalizeDataStoreId(draft.storeId || draft.name);
+            if (!nextStoreId || nextStoreId === DEFAULT_DATA_STORE_ID) {
+              return sendJson(res, 400, { message: "Debes indicar un identificador valido para la base importada." });
+            }
+            let importedDb: Partial<MockDb>;
+            try {
+              importedDb = parseImportedMockDb(draft.content);
+            } catch (error) {
+              return sendJson(res, 400, { message: error instanceof Error ? error.message : "Archivo importado invalido." });
+            }
+            const state = await readDataStoresState();
+            if (state.stores.some((item) => item.id === nextStoreId)) {
+              return sendJson(res, 409, { message: "Ya existe una base con ese identificador." });
+            }
+            const createdAt = new Date().toISOString();
+            const newStore: DataStoreRecord = {
+              id: nextStoreId,
+              name: draft.name || nextStoreId,
+              ...buildDataStorePaths(nextStoreId),
+              createdAt,
+            };
+            await mkdir(dirname(newStore.dbPath), { recursive: true });
+            await ensureDataStoreMediaDirs(newStore);
+            await writeFile(newStore.dbPath, JSON.stringify(importedDb, null, 2) + "\n", "utf8");
+            const normalizedDb = await readDb(newStore);
+            await writeDb(normalizedDb, newStore);
+            state.stores.push(newStore);
+            state.activeStoreId = newStore.id;
+            await writeDataStoresState(state);
+            return sendJson(res, 201, {
+              ok: true,
+              message: "Base importada y activada correctamente.",
+              activeStoreId: state.activeStoreId,
+              store: mapDataStoreForApi(newStore),
+            });
+          }
+
           if (pathname === "/admin/data/stores/active" && method === "PUT") {
             const activeDb = await readDb();
             const draft = sanitizeAdminDataStoreSwitchDraft(await readJsonBody(req));
@@ -5975,6 +6019,29 @@ function sanitizeAdminDataStoreCreateDraft(input: unknown): {
   };
 }
 
+function sanitizeAdminDataStoreImportDraft(input: unknown): {
+  requestedBy: string;
+  adminPasswordHash: string;
+  name: string;
+  storeId: string;
+  content: string;
+} {
+  const obj = (input || {}) as {
+    requestedBy?: unknown;
+    adminPasswordHash?: unknown;
+    name?: unknown;
+    storeId?: unknown;
+    content?: unknown;
+  };
+  return {
+    requestedBy: String(obj.requestedBy || "").trim(),
+    adminPasswordHash: String(obj.adminPasswordHash || "").trim().toLowerCase(),
+    name: String(obj.name || "").trim(),
+    storeId: String(obj.storeId || "").trim(),
+    content: String(obj.content || "").trim(),
+  };
+}
+
 function sanitizeAdminDataStoreSwitchDraft(input: unknown): {
   requestedBy: string;
   adminPasswordHash: string;
@@ -5990,6 +6057,20 @@ function sanitizeAdminDataStoreSwitchDraft(input: unknown): {
     adminPasswordHash: String(obj.adminPasswordHash || "").trim().toLowerCase(),
     storeId: String(obj.storeId || "").trim(),
   };
+}
+
+function parseImportedMockDb(content: string): Partial<MockDb> {
+  const trimmed = content.trim();
+  if (!trimmed) {
+    throw new Error("El archivo importado esta vacio.");
+  }
+  const jsMatch = trimmed.match(/^(?:module\.exports\s*=\s*|export\s+default\s+)([\s\S]*?);?\s*$/);
+  const jsonText = jsMatch ? jsMatch[1].trim() : trimmed;
+  const parsed = JSON.parse(jsonText) as unknown;
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error("El archivo importado debe contener un objeto de base de datos.");
+  }
+  return parsed as Partial<MockDb>;
 }
 
 function sanitizeAdminDataResetDraft(input: unknown): { requestedBy: string; adminPasswordHash: string } {

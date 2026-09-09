@@ -36,6 +36,10 @@ type CreateDataStoreDraft = {
   storeId?: string;
 };
 
+type ImportDataStoreDraft = CreateDataStoreDraft & {
+  content: string;
+};
+
 type CreateDataStoreResult = {
   ok: boolean;
   message: string;
@@ -87,6 +91,22 @@ export async function createDataStoreApi(draft: CreateDataStoreDraft): Promise<C
       ...toAdminPayload(draft.requestedBy, draft.adminPassword),
       name: String(draft.name || "").trim(),
       storeId: String(draft.storeId || "").trim(),
+    }),
+  });
+  const result = await readJsonOrThrow<CreateDataStoreResult>(response);
+  notifyDataStoreChanged(result.activeStoreId);
+  return result;
+}
+
+export async function importDataStoreApi(draft: ImportDataStoreDraft): Promise<CreateDataStoreResult> {
+  const response = await fetch("/admin/data/stores/import", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...toAdminPayload(draft.requestedBy, draft.adminPassword),
+      name: String(draft.name || "").trim(),
+      storeId: String(draft.storeId || "").trim(),
+      content: draft.content,
     }),
   });
   const result = await readJsonOrThrow<CreateDataStoreResult>(response);
