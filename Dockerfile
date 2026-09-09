@@ -17,4 +17,4 @@ ENV VITE_ORDER_PENDING_TIMEOUT_MINUTES=$VITE_ORDER_PENDING_TIMEOUT_MINUTES
 
 RUN npm run build
 
-CMD ["sh", "-c", "npm start -- --host 0.0.0.0 --port ${PORT}"]
+CMD ["npm", "start"]

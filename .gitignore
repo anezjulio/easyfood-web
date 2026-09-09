@@ -24,3 +24,7 @@ mock-api/receipts/
 *.njsproj
 *.sln
 *.sw?
+
+dist-server
+test-results/
+playwright-report/

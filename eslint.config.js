@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'mock-api/data-stores/**/db.js']),
+  globalIgnores(['dist', 'dist-server', 'test-results', 'mock-api/data-stores/**/db.js']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
