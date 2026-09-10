@@ -327,6 +327,55 @@
   gap: 6px;
 }
 
+.recipeConfirmList {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  display: grid;
+}
+
+.recipeConfirmItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 30px 30px 30px;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 4px 6px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.recipeConfirmItem:first-child {
+  border-top: 0;
+}
+
+.recipeConfirmItem span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.recipeConfirmItem strong {
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.recipeConfirmItem button {
+  width: 30px;
+  min-height: 28px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
 .selectedChip {
   border: 1px solid #cbd5e1;
   background: #f8fafc;
@@ -429,8 +478,9 @@
 .menuCompactMeta {
   margin: 0;
   color: #475569;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
+  white-space: nowrap;
 }
 
 .previewGrid {

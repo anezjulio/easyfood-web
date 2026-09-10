@@ -19,6 +19,7 @@ export type Product = {
   imageUrl?: string;
   barcode?: string;
   brand?: string;
+  description?: string;
   category?: ProductCategory;
   supplyOrderId?: string;
   existencia?: number;

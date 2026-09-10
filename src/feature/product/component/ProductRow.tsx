@@ -6,6 +6,34 @@ function formatCategory(value?: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+type ComboItemPreview = {
+  type?: "product" | "category";
+  menuProductName?: string;
+  categoryName?: string;
+  category?: string;
+  quantity?: number;
+  allowedMenuProductIds?: string[];
+};
+
+type SalesProductExtras = Product & {
+  description?: string;
+  menuProduct?: {
+    kind?: string;
+    comboItems?: ComboItemPreview[];
+  };
+};
+
+function formatComboPreviewItem(item: ComboItemPreview) {
+  const quantity = Math.max(1, Math.trunc(Number(item.quantity || 1)));
+  if (item.type === "category") {
+    const name = item.categoryName || item.category || "Categoria";
+    const options = (item.allowedMenuProductIds || []).length;
+    const optionsText = options ? ` (${options})` : "";
+    return `${quantity}x ${formatCategory(name)} a eleccion${optionsText}`;
+  }
+  return `${quantity}x ${item.menuProductName || "Producto"}`;
+}
+
 export default function ProductRow({
   product,
   formatMoney,
@@ -55,6 +83,8 @@ export default function ProductRow({
   const baseBg = isEven ? "#f8fafc" : "white";
   const isOutOfStock = Number(product.existencia || 0) <= 0;
   const imageUrl = resolveImageUrl(product.imageUrl);
+  const salesExtras = product as SalesProductExtras;
+  const comboPreviewItems = salesExtras.menuProduct?.kind === "combo" ? salesExtras.menuProduct.comboItems || [] : [];
 
   return (
     <div
@@ -98,7 +128,13 @@ export default function ProductRow({
           ) : (
             <div style={salesImageFallbackStyle}>{product.name.slice(0, 1).toUpperCase()}</div>
           )}
-          <span style={salesProductNameStyle}>{product.name}</span>
+          <div style={salesProductTextStyle}>
+            <span style={salesProductNameStyle}>{product.name}</span>
+            {salesExtras.description ? <span style={salesProductDescriptionStyle}>{salesExtras.description}</span> : null}
+            {comboPreviewItems.length > 0 ? (
+              <span style={salesComboItemsStyle}>{comboPreviewItems.map(formatComboPreviewItem).join(" + ")}</span>
+            ) : null}
+          </div>
         </div>
       ) : (
         <div style={{ fontWeight: 800, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -140,9 +176,9 @@ export default function ProductRow({
 const rowStyle: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-  padding: 12,
+  padding: 10,
   borderTop: "1px solid #e2e8f0",
-  alignItems: "center",
+  alignItems: "start",
   cursor: "pointer",
   userSelect: "none",
   WebkitUserSelect: "none",
@@ -195,10 +231,37 @@ const salesImageFallbackStyle: React.CSSProperties = {
   fontWeight: 900,
 };
 
+const salesProductTextStyle: React.CSSProperties = {
+  display: "grid",
+  gap: 2,
+  minWidth: 0,
+};
+
 const salesProductNameStyle: React.CSSProperties = {
   minWidth: 0,
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
-  fontWeight: 900,
+  fontSize: 15,
+  fontWeight: 950,
+};
+
+const salesProductDescriptionStyle: React.CSSProperties = {
+  minWidth: 0,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  color: "#64748b",
+  fontSize: 11,
+  fontWeight: 700,
+};
+
+const salesComboItemsStyle: React.CSSProperties = {
+  minWidth: 0,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  color: "#334155",
+  fontSize: 11,
+  fontWeight: 850,
 };

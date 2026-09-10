@@ -77,6 +77,7 @@ function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProd
     costPrice: 0,
     createdAt: menuProduct.createdAt,
     imageUrl: menuProduct.imageUrl,
+    description: menuProduct.description,
     category: menuProduct.category || "hamburguesa",
     brand: "Menu",
     existencia: 9999,
@@ -1236,6 +1237,17 @@ export default function SalesScreen() {
           </section>
 
           <section ref={listCardRef} className={styles.listCard}>
+            <div className={styles.salesFilters}>
+              <label className={styles.salesFilterField}>
+                <span>Nombre</span>
+                <input value={nameFilter} onChange={(event) => setNameFilter(event.target.value)} placeholder="Filtrar por nombre" />
+              </label>
+              <label className={styles.salesFilterField}>
+                <span>Precio</span>
+                <input value={priceFilter} onChange={(event) => setPriceFilter(event.target.value)} placeholder="Filtrar por precio" inputMode="numeric" />
+              </label>
+            </div>
+
             <div className={styles.categoryFilters} aria-label="Categorias de productos">
               <button
                 type="button"

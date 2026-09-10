@@ -33,10 +33,6 @@ function calculateAvailableServings(menuProduct: MenuProduct, ingredients: Ingre
   return Number.isFinite(min) ? Math.max(0, min) : null;
 }
 
-function getRecipeLineLabel(item: MenuRecipeItem) {
-  return `${formatIngredientQuantity(item.quantity, item.stockMode)} de ${item.ingredientName}`;
-}
-
 function formatCategoryLabel(category: ProductCategory, categories: MenuCategory[] = []) {
   return categories.find((item) => item.id === category)?.name || category.charAt(0).toUpperCase() + category.slice(1);
 }
@@ -787,10 +783,11 @@ export default function MenuProductsScreen() {
                 {recipeItems.length === 0 ? (
                   <p className={styles.empty}>Todavia no agregaste ingredientes.</p>
                 ) : (
-                  <div className={styles.selectedChipList}>
+                  <div className={styles.recipeConfirmList} aria-label="Ingredientes seleccionados">
                     {[...recipeItems].sort(compareRecipeItemByGroup).map((item) => (
-                      <div key={item.ingredientId} className={styles.selectedChip}>
-                        <span>{getRecipeLineLabel(item)}</span>
+                      <div key={item.ingredientId} className={styles.recipeConfirmItem}>
+                        <span>{item.ingredientName}</span>
+                        <strong>{formatIngredientQuantity(item.quantity, item.stockMode)}</strong>
                         <button type="button" onClick={() => decrementRecipeItemQuantity(item)}>-</button>
                         <button type="button" onClick={() => incrementRecipeItemQuantity(item)}>+</button>
                         <button type="button" onClick={() => removeRecipeItem(item.ingredientId)}>X</button>
