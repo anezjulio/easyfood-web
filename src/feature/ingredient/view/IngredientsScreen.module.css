@@ -97,7 +97,7 @@
 
 .nameRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 150px;
   gap: 10px;
   align-items: end;
 }
@@ -105,11 +105,19 @@
 .inlineToggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  width: fit-content;
+  min-height: 42px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  padding: 0 12px;
   color: #334155;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 900;
+}
+
+.inlineToggle:has(input:disabled) {
+  color: #94a3b8;
 }
 
 .inlineToggle input {

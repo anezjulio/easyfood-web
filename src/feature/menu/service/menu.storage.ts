@@ -210,7 +210,7 @@ function normalizeDraft(draft: MenuProductDraft) {
   const price = Math.max(0, Math.trunc(Number(draft.price) || 0));
   const description = draft.description?.trim() || undefined;
   const imageUrl = draft.imageUrl?.trim() || undefined;
-  const category = normalizeMenuCategory(draft.category) || "hamburguesa";
+  const category = normalizeMenuCategory(draft.category);
   const recipeItems = normalizeRecipeItems(draft.recipeItems);
   const kind: MenuProductKind = draft.kind === "combo" ? "combo" : "menu";
   const comboItems = normalizeComboItems(draft.comboItems);

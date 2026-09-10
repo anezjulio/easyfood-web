@@ -5850,7 +5850,7 @@ function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[], men
     price: Math.max(0, Math.trunc(Number(obj.price) || 0)),
     description: String(obj.description || "").trim() || undefined,
     imageUrl: String(obj.imageUrl || "").trim() || undefined,
-    category: normalizeCategory(obj.category) || "hamburguesa",
+    category: normalizeCategory(obj.category),
     recipeItems: normalizeMenuRecipeItems(obj.recipeItems, ingredients),
     kind: obj.kind === "combo" ? "combo" as const : "menu" as const,
     comboItems: normalizeMenuComboItems(obj.comboItems, menuProducts),

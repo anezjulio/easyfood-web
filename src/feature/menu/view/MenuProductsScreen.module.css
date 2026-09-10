@@ -106,7 +106,7 @@
 
 .nameRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) 150px;
   gap: 10px;
   align-items: end;
 }
@@ -187,74 +187,87 @@
   align-items: stretch;
 }
 
-.ingredientButtonGrid {
-  max-height: 220px;
-  overflow-y: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
-  gap: 5px;
-  padding-right: 4px;
+.chipPickerGrid,
+.categoryChipList,
+.assignmentChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: flex-start;
 }
 
-.ingredientPick {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 26px;
-  border: 1px solid #dbe4ef;
-  background: #ffffff;
-}
-
-.ingredientPickActive {
-  border-color: #ea580c;
-  background: #fff7ed;
-}
-
-.ingredientPickBtn,
-.ingredientMinusBtn {
-  min-height: 28px;
-  border: 0;
-  background: transparent;
+.pickChip,
+.productPickChip {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
   color: #0f172a;
+  min-height: 30px;
+  padding: 0 8px;
   font: inherit;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 900;
   cursor: pointer;
 }
 
-.ingredientPickBtn {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 4px;
-  align-items: center;
-  padding: 0 5px;
-  text-align: left;
+.pickChip strong,
+.productPickChip strong {
+  color: #334155;
 }
 
-.ingredientPickBtn span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.ingredientPickBtn strong {
+.pickChipActive,
+.productPickChipActive {
+  border-color: #ea580c;
+  background: #fff7ed;
   color: #c2410c;
 }
 
-.ingredientMinusBtn {
-  border-left: 1px solid #dbe4ef;
+.productPickChip {
+  display: inline-flex;
+  align-items: center;
   padding: 0;
 }
 
-.ingredientMinusBtn:disabled {
+.productPickChip button {
+  min-height: 30px;
+  border: 0;
+  border-left: 1px solid #cbd5e1;
+  background: transparent;
+  color: inherit;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.productPickChip button:first-child {
+  border-left: 0;
+}
+
+.productPickChip button:disabled {
   color: #cbd5e1;
   cursor: not-allowed;
 }
 
-.comboControls {
+.comboModeRow {
   display: grid;
-  grid-template-columns: 170px minmax(0, 1fr) 110px 96px auto;
+  grid-template-columns: minmax(220px, 320px);
   gap: 8px;
   align-items: stretch;
+}
+
+.groupedPicker,
+.pickGroup {
+  display: grid;
+  gap: 8px;
+}
+
+.pickGroup h4 {
+  margin: 6px 0 0;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .unitPill {
@@ -306,6 +319,41 @@
 .recipeList {
   display: grid;
   gap: 8px;
+}
+
+.selectedChipList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.selectedChip {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #0f172a;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.selectedChip > span {
+  padding: 6px 8px;
+}
+
+.selectedChip button {
+  min-height: 30px;
+  border: 0;
+  border-left: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 0 8px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
 }
 
 .recipeItem {
@@ -519,11 +567,19 @@
 .inlineToggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  width: fit-content;
+  min-height: 42px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  padding: 0 12px;
   color: #334155;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 900;
+}
+
+.inlineToggle:has(input:disabled) {
+  color: #94a3b8;
 }
 
 .inlineToggle input {
@@ -546,44 +602,59 @@
   font-weight: 800;
 }
 
-.categoryManager {
-  margin-top: 12px;
+.categoryLayout {
+  margin-top: 16px;
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: minmax(340px, 0.75fr) minmax(0, 1.25fr);
+  gap: 16px;
   align-items: start;
 }
 
-.categoryColumn,
+.categoryChipList {
+  margin-top: 12px;
+}
+
 .assignmentColumn {
   display: grid;
   gap: 8px;
 }
 
-.categoryRow {
-  border: 1px solid #e2e8f0;
-  background: #ffffff;
+.assignmentChipWrap {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.assignmentChip {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
   color: #0f172a;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
+  min-height: 30px;
+  padding: 0 8px;
   font: inherit;
-  font-weight: 800;
-  text-align: left;
+  font-size: 12px;
+  font-weight: 900;
   cursor: pointer;
 }
 
-.categoryRow span {
-  color: #64748b;
+.assignmentInlineEditor {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.assignmentInlineEditor .input {
+  width: 180px;
+  height: 32px;
+  padding: 0 8px;
   font-size: 12px;
 }
 
-.categoryRowActive,
-.categoryRow:hover {
-  border-color: #ea580c;
-  background: #fff7ed;
-  color: #9a3412;
+.assignmentInlineEditor .secondaryBtn,
+.assignmentInlineEditor .removeBtn {
+  min-height: 32px;
+  height: 32px;
 }
 
 .assignmentRow {
@@ -612,8 +683,8 @@
   .layout,
   .previewGrid,
   .recipeControls,
-  .comboControls,
-  .categoryManager,
+  .comboModeRow,
+  .categoryLayout,
   .nameRow,
   .assignmentRow {
     grid-template-columns: 1fr;

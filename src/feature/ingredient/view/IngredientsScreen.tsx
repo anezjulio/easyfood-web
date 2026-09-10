@@ -194,7 +194,7 @@ export default function IngredientsScreen() {
                   <span>Nombre</span>
                   <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Tomate, lechuga o Coca-Cola 500 ml" />
                 </label>
-                {selectedIngredient ? <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelectedIngredient} onChange={(event) => setRenameSelectedIngredient(event.target.checked)} />Modificar</label> : null}
+                <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelectedIngredient} onChange={(event) => setRenameSelectedIngredient(event.target.checked)} disabled={!selectedIngredient} />Modificar</label>
               </div>
 
               <label className={styles.field}>

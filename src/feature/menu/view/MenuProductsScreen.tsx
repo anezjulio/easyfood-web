@@ -5,7 +5,7 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { formatMoneyARS } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
 import { DATA_STORE_CHANGED_EVENT } from "../../data/service/data.api";
-import { formatIngredientQuantity, getIngredientQuantityUnitLabel, type Ingredient } from "../../ingredient/model/ingredient.types";
+import { formatIngredientQuantity, type Ingredient } from "../../ingredient/model/ingredient.types";
 import type { ProductCategory } from "../../product/model/product.types";
 import { fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
 import type { MenuCategory } from "../model/menu-category.types";
@@ -53,6 +53,20 @@ function compareMenuProductByCategory(a: MenuProduct, b: MenuProduct) {
   return (a.category || "").localeCompare(b.category || "") || a.name.localeCompare(b.name);
 }
 
+function groupMenuProductsByCategory(products: MenuProduct[], categories: MenuCategory[]) {
+  const rows = categories.map((category) => ({
+    category,
+    products: products.filter((item) => item.category === category.id).sort(compareMenuProductByCategory),
+  }));
+  const uncategorized = products.filter((item) => !item.category || !categories.some((category) => category.id === item.category));
+  return [
+    ...(uncategorized.length
+      ? [{ category: { id: "", name: "Sin categoria", createdAt: "" }, products: uncategorized.sort(compareMenuProductByCategory) }]
+      : []),
+    ...rows.filter((row) => row.products.length > 0),
+  ];
+}
+
 function compareComboItemByCategory(a: MenuComboItem, b: MenuComboItem) {
   const categoryA = a.type === "category" ? a.categoryName || a.category || "" : "";
   const categoryB = b.type === "category" ? b.categoryName || b.category || "" : "";
@@ -77,7 +91,6 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<ProductCategory>(assignableCategories[0]?.id || "hamburguesa");
-  const [menuProductId, setMenuProductId] = useState(availableProducts[0]?.id || "");
   const [itemMode, setItemMode] = useState<"product" | "category">("product");
   const [itemCategory, setItemCategory] = useState<ProductCategory>(assignableCategories[0]?.id || "bebida");
   const [allowedMenuProductIds, setAllowedMenuProductIds] = useState<string[]>([]);
@@ -88,6 +101,7 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
   const selectedCombo = combos.find((item) => item.id === selectedId) || null;
   const parsedPrice = Math.max(0, Math.trunc(toNumber(price)));
   const categoryProducts = availableProducts.filter((item) => item.category === itemCategory).sort(compareMenuProductByCategory);
+  const groupedProducts = groupMenuProductsByCategory(availableProducts, assignableCategories);
 
   function clearForm() {
     setSelectedId("");
@@ -117,20 +131,14 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
 
   function addComboItem() {
     const parsedQuantity = Math.trunc(toNumber(quantity));
-    const menuProduct = availableProducts.find((item) => item.id === (menuProductId || availableProducts[0]?.id));
     const selectedAllowedIds = allowedMenuProductIds.filter((id) => categoryProducts.some((item) => item.id === id));
-    if (parsedQuantity <= 0 || (itemMode === "product" && !menuProduct) || (itemMode === "category" && selectedAllowedIds.length === 0)) {
-      setError("Selecciona un producto o categoria e ingresa una cantidad valida.");
+    if (parsedQuantity <= 0 || selectedAllowedIds.length === 0) {
+      setError("Selecciona una categoria e ingresa una cantidad valida.");
       return;
     }
     setComboItems((current) => {
-      if (itemMode === "category") {
-        const existing = current.find((item) => item.type === "category" && item.category === itemCategory);
-        const nextItem: MenuComboItem = { type: "category", category: itemCategory, categoryName: formatCategoryLabel(itemCategory, categories), allowedMenuProductIds: selectedAllowedIds, quantity: parsedQuantity };
-        return existing ? current.map((item) => (item === existing ? nextItem : item)) : [...current, nextItem];
-      }
-      const existing = current.find((item) => item.type === "product" && item.menuProductId === menuProduct!.id);
-      const nextItem: MenuComboItem = { type: "product", menuProductId: menuProduct!.id, menuProductName: menuProduct!.name, quantity: parsedQuantity };
+      const existing = current.find((item) => item.type === "category" && item.category === itemCategory);
+      const nextItem: MenuComboItem = { type: "category", category: itemCategory, categoryName: formatCategoryLabel(itemCategory, categories), allowedMenuProductIds: selectedAllowedIds, quantity: parsedQuantity };
       return existing ? current.map((item) => (item === existing ? nextItem : item)) : [...current, nextItem];
     });
     setQuantity("1");
@@ -144,9 +152,30 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
     );
   }
 
-  function updateComboItemQuantity(target: MenuComboItem, value: string) {
-    const nextQuantity = Math.max(1, Math.trunc(toNumber(value)));
-    setComboItems((current) => current.map((item) => (item === target ? { ...item, quantity: nextQuantity } : item)));
+  function addProductComboItem(menuProduct: MenuProduct) {
+    setComboItems((current) => {
+      const existing = current.find((item) => item.type === "product" && item.menuProductId === menuProduct.id);
+      if (existing) {
+        return current.map((item) => (item === existing ? { ...item, quantity: item.quantity + 1 } : item));
+      }
+      return [
+        ...current,
+        { type: "product", menuProductId: menuProduct.id, menuProductName: menuProduct.name, quantity: 1 },
+      ];
+    });
+    setError("");
+  }
+
+  function changeComboItemQuantity(target: MenuComboItem, amount: number) {
+    setComboItems((current) =>
+      current
+        .map((item) => (item === target ? { ...item, quantity: Math.max(0, item.quantity + amount) } : item))
+        .filter((item) => item.quantity > 0),
+    );
+  }
+
+  function getComboProductQuantity(menuProductIdToFind: string) {
+    return comboItems.find((item) => item.type === "product" && item.menuProductId === menuProductIdToFind)?.quantity || 0;
   }
 
   function toggleComboItemAllowedProduct(target: MenuComboItem, productId: string) {
@@ -214,7 +243,7 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
         <form className={styles.form} onSubmit={(event) => void submit(event)}>
           <div className={styles.nameRow}>
             <label className={styles.field}><span>Nombre del combo</span><input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Hamburguesa doble + papas + bebida" /></label>
-            {selectedCombo ? <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelected} onChange={(event) => setRenameSelected(event.target.checked)} />Modificar</label> : null}
+            <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelected} onChange={(event) => setRenameSelected(event.target.checked)} disabled={!selectedCombo} />Modificar</label>
           </div>
           <label className={styles.field}><span>Precio de venta</span><input className={styles.input} type="number" min={1} value={price} onChange={(event) => setPrice(event.target.value)} placeholder="0" /></label>
           <label className={styles.field}><span>Categoria del combo</span><select className={styles.input} value={category} onChange={(event) => setCategory(event.target.value)}>{assignableCategories.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
@@ -222,21 +251,38 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
           <section className={styles.recipeEditor}>
             <h3 className={styles.sectionTitle}>Productos incluidos</h3>
             <p className={styles.meta}>Al vender el combo se descuenta la receta de cada producto incluido.</p>
-            <div className={styles.comboControls}>
+            <div className={styles.comboModeRow}>
               <select className={styles.input} value={itemMode} onChange={(event) => setItemMode(event.target.value as "product" | "category")}>
                 <option value="product">Producto fijo</option>
                 <option value="category">Categoria a eleccion</option>
               </select>
-              {itemMode === "product" ? <select className={styles.input} value={menuProductId || availableProducts[0]?.id || ""} onChange={(event) => setMenuProductId(event.target.value)}>
-                <option value="">Seleccionar producto</option>
-                {availableProducts.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-              </select> : <select className={styles.input} value={itemCategory} onChange={(event) => { setItemCategory(event.target.value); setAllowedMenuProductIds([]); }}>{assignableCategories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select>}
-              <input className={styles.input} type="number" min={1} step={1} value={quantity} onChange={(event) => setQuantity(event.target.value)} placeholder="Cantidad" />
-              <div className={styles.unitPill}>unidades</div>
-              <button type="button" className={styles.secondaryBtn} onClick={addComboItem}>Agregar</button>
             </div>
-            {itemMode === "category" ? (
+            {itemMode === "product" ? (
+              <div className={styles.groupedPicker}>
+                {groupedProducts.map((group) => (
+                  <section key={group.category.id || "none"} className={styles.pickGroup}>
+                    <h4>{group.category.name}</h4>
+                    <div className={styles.chipPickerGrid}>
+                      {group.products.map((item) => {
+                        const selectedQuantity = getComboProductQuantity(item.id);
+                        const selectedItem = comboItems.find((entry) => entry.type === "product" && entry.menuProductId === item.id);
+                        return (
+                          <div key={item.id} className={`${styles.productPickChip} ${selectedQuantity > 0 ? styles.productPickChipActive : ""}`.trim()}>
+                            <button type="button" onClick={() => addProductComboItem(item)}>{item.name} <strong>{selectedQuantity}</strong></button>
+                            <button type="button" onClick={() => selectedItem && changeComboItemQuantity(selectedItem, -1)} disabled={!selectedItem}>-</button>
+                            <button type="button" onClick={() => addProductComboItem(item)}>+</button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </section>
+                ))}
+              </div>
+            ) : (
               <div className={styles.allowedProducts}>
+                <select className={styles.input} value={itemCategory} onChange={(event) => { setItemCategory(event.target.value); setAllowedMenuProductIds([]); }}>{assignableCategories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select>
+                <input className={styles.input} type="number" min={1} step={1} value={quantity} onChange={(event) => setQuantity(event.target.value)} placeholder="Cantidad" />
+                <button type="button" className={styles.secondaryBtn} onClick={addComboItem}>Agregar categoria</button>
                 <div className={styles.allowedHeader}>
                   <strong>Productos permitidos</strong>
                   <button type="button" className={styles.miniBtn} onClick={() => setAllowedMenuProductIds(categoryProducts.map((item) => item.id))}>Todos</button>
@@ -248,10 +294,10 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
                   </label>
                 ))}
               </div>
-            ) : null}
-            {comboItems.length === 0 ? <p className={styles.empty}>Todavia no agregaste productos al combo.</p> : <div className={styles.recipeList}>{[...comboItems].sort(compareComboItemByCategory).map((item) => {
+            )}
+            {comboItems.length === 0 ? <p className={styles.empty}>Todavia no agregaste productos al combo.</p> : <div className={styles.selectedChipList}>{[...comboItems].sort(compareComboItemByCategory).map((item) => {
               const itemProducts = item.type === "category" ? availableProducts.filter((product) => product.category === item.category).sort(compareMenuProductByCategory) : [];
-              return <div key={item.type === "category" ? `category:${item.category}` : item.menuProductId} className={styles.recipeItem}><div><strong>{item.type === "category" ? `${item.categoryName} a eleccion` : item.menuProductName}</strong><span>{item.type === "category" ? `${(item.allowedMenuProductIds || []).length || "todos"} permitidos` : "Producto fijo"}</span>{item.type === "category" ? <div className={styles.inlineChecks}>{itemProducts.map((product) => <label key={product.id} className={styles.inlineCheck}><input type="checkbox" checked={(item.allowedMenuProductIds || []).includes(product.id)} onChange={() => toggleComboItemAllowedProduct(item, product.id)} /><span>{product.name}</span></label>)}</div> : null}</div><label className={styles.quantityEdit}><span>Cantidad</span><input type="number" min={1} step={1} value={item.quantity} onChange={(event) => updateComboItemQuantity(item, event.target.value)} /></label><button type="button" className={styles.removeBtn} onClick={() => setComboItems((current) => current.filter((entry) => entry !== item))}>Quitar</button></div>;
+              return <div key={item.type === "category" ? `category:${item.category}` : item.menuProductId} className={styles.selectedChip}><span>{item.quantity}x {item.type === "category" ? `${item.categoryName} a eleccion` : item.menuProductName}</span><button type="button" onClick={() => changeComboItemQuantity(item, -1)}>-</button><button type="button" onClick={() => changeComboItemQuantity(item, 1)}>+</button><button type="button" onClick={() => setComboItems((current) => current.filter((entry) => entry !== item))}>X</button>{item.type === "category" ? <div className={styles.inlineChecks}>{itemProducts.map((product) => <label key={product.id} className={styles.inlineCheck}><input type="checkbox" checked={(item.allowedMenuProductIds || []).includes(product.id)} onChange={() => toggleComboItemAllowedProduct(item, product.id)} /><span>{product.name}</span></label>)}</div> : null}</div>;
             })}</div>}
           </section>
           <div className={styles.previewGrid}><div><span>Precio</span><strong>{parsedPrice > 0 ? formatMoneyARS(parsedPrice) : "-"}</strong></div><div><span>Incluye</span><strong>{comboItems.length} productos</strong></div></div>
@@ -277,15 +323,19 @@ type CategoryWorkspaceProps = {
 function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorkspaceProps) {
   const assignableProducts = menuProducts.sort(compareMenuProductByCategory);
   const [selectedId, setSelectedId] = useState(categories[0]?.id || "");
+  const [expandedProductId, setExpandedProductId] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const selectedCategory = categories.find((item) => item.id === selectedId) || null;
   const assignedProducts = assignableProducts.filter((item) => item.category === selectedId);
   const unassignedProducts = assignableProducts.filter((item) => item.category !== selectedId);
+  const groupedAssignedProducts = groupMenuProductsByCategory(assignedProducts, categories).filter((group) => group.category.id !== "");
+  const groupedAvailableProducts = groupMenuProductsByCategory(unassignedProducts, categories);
 
   function clearForm() {
     setSelectedId("");
+    setExpandedProductId("");
     setName("");
     setMessage("");
     setError("");
@@ -293,6 +343,7 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
 
   function selectCategory(category: MenuCategory) {
     setSelectedId(category.id);
+    setExpandedProductId("");
     setName(category.name);
     setMessage("");
     setError("");
@@ -335,6 +386,7 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
       const updated = await updateMenuProductApi(item.id, { ...item, category });
       if (!updated) return setError("No se pudo actualizar el producto.");
       await onSaved();
+      setExpandedProductId("");
       setMessage("Asignacion actualizada.");
       setError("");
     } catch {
@@ -342,8 +394,32 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
     }
   }
 
+  function renderProductChips(items: MenuProduct[], mode: "assigned" | "available") {
+    return (
+      <div className={styles.assignmentChips}>
+        {items.map((item) => (
+          <div key={item.id} className={styles.assignmentChipWrap}>
+            <button type="button" className={styles.assignmentChip} onClick={() => setExpandedProductId((current) => (current === item.id ? "" : item.id))}>
+              {item.name}
+            </button>
+            {expandedProductId === item.id ? (
+              <div className={styles.assignmentInlineEditor}>
+                <select className={styles.input} value={item.category || ""} onChange={(event) => void moveMenuProduct(item, event.target.value)}>
+                  <option value="">Sin categoria</option>
+                  {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+                </select>
+                {mode === "assigned" ? <button type="button" className={styles.removeBtn} onClick={() => void moveMenuProduct(item, "")}>-</button> : null}
+                {mode === "available" ? <button type="button" className={styles.secondaryBtn} disabled={!selectedId} onClick={() => void moveMenuProduct(item, selectedId)}>Asignar</button> : null}
+              </div>
+            ) : null}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.layout}>
+    <div className={styles.categoryLayout}>
       <section className={styles.formCard}>
         <div className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>{selectedCategory ? "Editar categoria" : "Crear categoria"}</h2>
@@ -357,7 +433,6 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
             <span>Nombre</span>
             <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Promos" />
           </label>
-          {selectedCategory ? <p className={styles.meta}>ID: {selectedCategory.id}</p> : null}
           {assignedProducts.length > 0 ? <p className={styles.meta}>Desvincula los productos antes de eliminar.</p> : null}
           {error ? <div className={styles.errorBox}>{error}</div> : null}
           {message ? <div className={styles.successBox}>{message}</div> : null}
@@ -365,45 +440,33 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
             <button type="submit" className={styles.primaryBtn}>{selectedCategory ? "Guardar categoria" : "Crear categoria"}</button>
           </div>
         </form>
+        <div className={styles.categoryChipList}>
+          {categories.map((category) => (
+            <button type="button" key={category.id} className={`${styles.pickChip} ${selectedId === category.id ? styles.pickChipActive : ""}`.trim()} onClick={() => selectCategory(category)}>
+              {category.name} <strong>{menuProducts.filter((item) => item.category === category.id).length}</strong>
+            </button>
+          ))}
+        </div>
       </section>
 
       <section className={styles.listCard}>
-        <h2 className={styles.cardTitle}>Categorias</h2>
-        <div className={styles.categoryManager}>
-          <div className={styles.categoryColumn}>
-            {categories.map((category) => (
-              <button type="button" key={category.id} className={`${styles.categoryRow} ${selectedId === category.id ? styles.categoryRowActive : ""}`.trim()} onClick={() => selectCategory(category)}>
-                <strong>{category.name}</strong>
-                <span>{menuProducts.filter((item) => item.category === category.id).length}</span>
-              </button>
-            ))}
-          </div>
+        <h2 className={styles.cardTitle}>Productos</h2>
+        <div className={styles.assignmentColumn}>
+          <h3 className={styles.sectionTitle}>Asignados</h3>
+          {groupedAssignedProducts.length === 0 ? <p className={styles.empty}>No hay productos ni combos en esta categoria.</p> : groupedAssignedProducts.map((group) => (
+            <section key={group.category.id} className={styles.pickGroup}>
+              <h4>{group.category.name}</h4>
+              {renderProductChips(group.products, "assigned")}
+            </section>
+          ))}
 
-          <div className={styles.assignmentColumn}>
-            <h3 className={styles.sectionTitle}>Asignados</h3>
-            {assignedProducts.length === 0 ? <p className={styles.empty}>No hay productos ni combos en esta categoria.</p> : assignedProducts.map((item) => (
-              <div key={item.id} className={styles.assignmentRow}>
-                <div>
-                  <strong>{item.name}</strong>
-                  <span>{item.kind === "combo" ? "Combo" : "Producto"}</span>
-                </div>
-                <select className={styles.input} value={item.category || ""} onChange={(event) => void moveMenuProduct(item, event.target.value)}>
-                  {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
-                </select>
-              </div>
-            ))}
-
-            <h3 className={styles.sectionTitle}>Disponibles</h3>
-            {unassignedProducts.length === 0 ? <p className={styles.empty}>Todos estan asignados a esta categoria.</p> : unassignedProducts.map((item) => (
-              <div key={item.id} className={styles.assignmentRow}>
-                <div>
-                  <strong>{item.name}</strong>
-                  <span>{item.kind === "combo" ? "Combo" : `Categoria: ${formatCategoryLabel(item.category || "", categories)}`}</span>
-                </div>
-                <button type="button" className={styles.secondaryBtn} disabled={!selectedId} onClick={() => void moveMenuProduct(item, selectedId)}>Asignar</button>
-              </div>
-            ))}
-          </div>
+          <h3 className={styles.sectionTitle}>Disponibles</h3>
+          {groupedAvailableProducts.length === 0 ? <p className={styles.empty}>Todos estan asignados a esta categoria.</p> : groupedAvailableProducts.map((group) => (
+            <section key={group.category.id || "none"} className={styles.pickGroup}>
+              <h4>{group.category.name}</h4>
+              {renderProductChips(group.products, "available")}
+            </section>
+          ))}
         </div>
       </section>
     </div>
@@ -565,11 +628,17 @@ export default function MenuProductsScreen() {
     });
   }
 
-  function decrementRecipeItem(ingredient: Ingredient) {
+  function incrementRecipeItemQuantity(item: MenuRecipeItem) {
+    setRecipeItems((current) =>
+      current.map((entry) => (entry.ingredientId === item.ingredientId ? { ...entry, quantity: entry.quantity + 1 } : entry)),
+    );
+  }
+
+  function decrementRecipeItemQuantity(item: MenuRecipeItem) {
     setRecipeItems((current) =>
       current
-        .map((item) => (item.ingredientId === ingredient.id ? { ...item, quantity: Math.max(0, item.quantity - 1) } : item))
-        .filter((item) => item.quantity > 0),
+        .map((entry) => (entry.ingredientId === item.ingredientId ? { ...entry, quantity: Math.max(0, entry.quantity - 1) } : entry))
+        .filter((entry) => entry.quantity > 0),
     );
   }
 
@@ -579,13 +648,6 @@ export default function MenuProductsScreen() {
 
   function removeRecipeItem(ingredientIdToRemove: string) {
     setRecipeItems((current) => current.filter((item) => item.ingredientId !== ingredientIdToRemove));
-  }
-
-  function updateRecipeItemQuantity(ingredientIdToUpdate: string, value: string) {
-    const nextQuantity = Math.max(1, Math.trunc(toNumber(value)));
-    setRecipeItems((current) =>
-      current.map((item) => (item.ingredientId === ingredientIdToUpdate ? { ...item, quantity: nextQuantity } : item)),
-    );
   }
 
   async function submitMenuProduct(event: React.FormEvent) {
@@ -685,7 +747,7 @@ export default function MenuProductsScreen() {
                   <span>Nombre</span>
                   <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Hamburguesa doble" />
                 </label>
-                {selectedMenuProduct ? <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelectedMenuProduct} onChange={(event) => setRenameSelectedMenuProduct(event.target.checked)} />Modificar</label> : null}
+                <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelectedMenuProduct} onChange={(event) => setRenameSelectedMenuProduct(event.target.checked)} disabled={!selectedMenuProduct} />Modificar</label>
               </div>
 
               <label className={styles.field}>
@@ -711,19 +773,13 @@ export default function MenuProductsScreen() {
 
               <section className={styles.recipeEditor}>
                 <h3 className={styles.sectionTitle}>Receta</h3>
-                <div className={styles.ingredientButtonGrid}>
+                <div className={styles.chipPickerGrid}>
                   {[...ingredients].sort(compareIngredientByGroup).map((item) => {
                     const selectedQuantity = getRecipeItemQuantity(item.id);
                     return (
-                      <div key={item.id} className={`${styles.ingredientPick} ${selectedQuantity > 0 ? styles.ingredientPickActive : ""}`.trim()}>
-                        <button type="button" className={styles.ingredientPickBtn} onClick={() => addRecipeItem(item)}>
-                          <span>{item.name}</span>
-                          <strong>{selectedQuantity}</strong>
-                        </button>
-                        <button type="button" className={styles.ingredientMinusBtn} onClick={() => decrementRecipeItem(item)} disabled={selectedQuantity === 0}>
-                          -
-                        </button>
-                      </div>
+                      <button type="button" key={item.id} className={`${styles.pickChip} ${selectedQuantity > 0 ? styles.pickChipActive : ""}`.trim()} onClick={() => addRecipeItem(item)}>
+                        {item.name} <strong>{selectedQuantity}</strong>
+                      </button>
                     );
                   })}
                 </div>
@@ -731,18 +787,13 @@ export default function MenuProductsScreen() {
                 {recipeItems.length === 0 ? (
                   <p className={styles.empty}>Todavia no agregaste ingredientes.</p>
                 ) : (
-                  <div className={styles.recipeList}>
+                  <div className={styles.selectedChipList}>
                     {[...recipeItems].sort(compareRecipeItemByGroup).map((item) => (
-                      <div key={item.ingredientId} className={styles.recipeItem}>
-                        <div>
-                          <strong>{item.ingredientName}</strong>
-                          <span>{getRecipeLineLabel(item)}</span>
-                        </div>
-                        <label className={styles.quantityEdit}>
-                          <span>{getIngredientQuantityUnitLabel(item.stockMode)}</span>
-                          <input type="number" min={1} step={1} value={item.quantity} onChange={(event) => updateRecipeItemQuantity(item.ingredientId, event.target.value)} />
-                        </label>
-                        <button type="button" className={styles.removeBtn} onClick={() => removeRecipeItem(item.ingredientId)}>Quitar</button>
+                      <div key={item.ingredientId} className={styles.selectedChip}>
+                        <span>{getRecipeLineLabel(item)}</span>
+                        <button type="button" onClick={() => decrementRecipeItemQuantity(item)}>-</button>
+                        <button type="button" onClick={() => incrementRecipeItemQuantity(item)}>+</button>
+                        <button type="button" onClick={() => removeRecipeItem(item.ingredientId)}>X</button>
                       </div>
                     ))}
                   </div>

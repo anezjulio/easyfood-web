@@ -24,6 +24,14 @@
       "imagesDir": "C:\\project\\easyfood-web\\images\\practifood",
       "receiptsDir": "C:\\project\\easyfood-web\\mock-api\\receipts\\stores\\practifood",
       "createdAt": "2026-09-03T04:42:20.730Z"
+    },
+    {
+      "id": "practifood-backup-20260909221249",
+      "name": "practifood backup 20260909221249",
+      "dbPath": "C:\\project\\easyfood-web\\mock-api\\data-stores\\practifood-backup-20260909221249\\db.js",
+      "imagesDir": "C:\\project\\easyfood-web\\images\\practifood-backup-20260909221249",
+      "receiptsDir": "C:\\project\\easyfood-web\\mock-api\\receipts\\stores\\practifood-backup-20260909221249",
+      "createdAt": "2026-09-09T22:12:49.000Z"
     }
   ]
 }
