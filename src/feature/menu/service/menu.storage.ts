@@ -1,5 +1,5 @@
 import { loadIngredients } from "../../ingredient/service/ingredient.storage";
-import { PRODUCT_CATEGORIES, type ProductCategory } from "../../product/model/product.types";
+import type { ProductCategory } from "../../product/model/product.types";
 import type { MenuComboItem, MenuProduct, MenuProductDraft, MenuProductKind, MenuRecipeItem } from "../model/menu.types";
 
 const KEY = "easyfood_menu_product_v1";
@@ -166,7 +166,7 @@ function normalizeComboItems(input: unknown): MenuComboItem[] {
 
 function normalizeMenuCategory(value: unknown): ProductCategory | undefined {
   const raw = String(value || "").trim().toLowerCase();
-  return PRODUCT_CATEGORIES.includes(raw as ProductCategory) ? (raw as ProductCategory) : undefined;
+  return raw || undefined;
 }
 
 function normalizeMenuProductRecord(input: unknown): MenuProduct | null {

@@ -59,6 +59,8 @@ Envuelve acceso a datos. La mayoria de los servicios son wrappers finos sobre `f
 Ejemplos:
 
 - `product.api.ts`
+- `menu.api.ts`
+- `menu-category.api.ts`
 - `sale.api.ts`
 - `cash.api.ts`
 - `request.api.ts`
@@ -116,7 +118,7 @@ Piezas reutilizables dentro de una feature. Ejemplos reales:
 
 ## Backend embebido y arquitectura de desarrollo
 
-El frontend no corre contra un backend separado en desarrollo. El mock backend real vive dentro de `vite.config.ts` como middleware de Vite y maneja:
+El frontend no corre contra un backend separado en desarrollo. El mock backend real vive en `server/api.ts`, se monta como middleware de Vite y maneja:
 
 - persistencia en archivos
 - multiples bases
@@ -144,14 +146,14 @@ La forma mas fiel de entender el proyecto hoy es:
 
 1. `app/` define sesion, proteccion y shell.
 2. Cada `feature/` concentra un modulo funcional completo.
-3. `service/` habla con el mock backend de `vite.config.ts`.
+3. `service/` habla con el mock backend de `server/api.ts`.
 4. `shared/` evita duplicacion.
 5. `viewmodel/` existe solo en features donde hoy se justifico.
 
 ## Deuda tecnica visible
 
 - No todas las pantallas complejas tienen `viewmodel/`.
-- El mock backend convive con el frontend y crecio bastante dentro de `vite.config.ts`.
+- El mock backend convive con el frontend y concentra los endpoints en `server/api.ts`.
 - Algunos modulos dependen de coordinacion entre varias entidades sin una capa de orquestacion comun.
 
 Nada de eso bloquea el trabajo actual, pero conviene tenerlo presente si se avanza hacia backend real o testeo automatizado por dominio.

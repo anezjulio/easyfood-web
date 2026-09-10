@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Este documento resume lo que hoy cubre la aplicacion desde el punto de vista funcional. La referencia es el comportamiento actual del frontend y del mock backend embebido en `vite.config.ts`.
+Este documento resume lo que hoy cubre la aplicacion desde el punto de vista funcional. La referencia es el comportamiento actual del frontend y del mock backend en `server/api.ts`.
 
 ## Roles actuales
 
@@ -16,6 +16,7 @@ La mayoria de los modulos operativos pueden ser usados por `admin` y `operator`,
 
 - Acceso y sesion
 - Menu operativo
+- Creacion de menu
 - Productos
 - Precios
 - Finanzas
@@ -70,6 +71,24 @@ Casos de uso:
 
 - operador navega a ventas, stock, caja, pedidos, solicitudes y gastos
 - admin navega ademas a usuarios, finanzas, aprobaciones, licencias, data, transacciones y notificaciones
+
+## Creacion de menu
+
+Ruta: `/menu-products`
+
+Flujos cubiertos:
+
+- alta y edicion de productos vendibles con receta
+- alta y edicion de combos con productos fijos o categoria a eleccion
+- creacion, renombrado y baja de categorias comerciales de menu
+- visualizacion de productos y combos por categoria seleccionada
+- reasignacion de productos/combos a otra categoria o asignacion directa desde disponibles
+
+Casos de uso:
+
+- admin agrega una categoria nueva para organizar la venta
+- admin selecciona una categoria y mueve productos o combos entre categorias
+- el sistema bloquea eliminar una categoria que todavia tiene productos, combos o elecciones de combo vinculadas
 
 ## Productos
 

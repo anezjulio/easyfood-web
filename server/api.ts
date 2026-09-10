@@ -26,7 +26,7 @@ type Product = {
   imageUrl?: string;
   barcode?: string;
   brand?: string;
-  category?: "bebida" | "hamburguesa" | "pancho" | "combos" | "papas" | "pollo" | "vegano";
+  category?: string;
   supplyOrderId?: string;
 };
 
@@ -71,6 +71,13 @@ type MenuComboItem = {
 };
 
 type MenuProductKind = "menu" | "combo";
+
+type MenuCategory = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt?: string;
+};
 
 type MenuProduct = {
   id: string;
@@ -530,6 +537,7 @@ type MockDb = {
   products: Product[];
   productPrices: ProductPrice[];
   ingredients: Ingredient[];
+  menuCategories: MenuCategory[];
   menuProducts: MenuProduct[];
   users: AppUserRecord[];
   deleteRequests: DeleteRequest[];
@@ -773,10 +781,21 @@ const defaultMenuProductSeed: MenuProduct[] = [
   },
 ];
 
+const defaultMenuCategorySeed: MenuCategory[] = [
+  { id: "bebida", name: "Bebida", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "hamburguesa", name: "Hamburguesa", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "pancho", name: "Pancho", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "combos", name: "Combos", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "papas", name: "Papas", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "pollo", name: "Pollo", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "vegano", name: "Vegano", createdAt: "2026-02-01T10:00:00.000Z" },
+];
+
 const defaultDb: MockDb = {
   products: [],
   productPrices: [],
   ingredients: defaultIngredientSeed,
+  menuCategories: defaultMenuCategorySeed,
   menuProducts: defaultMenuProductSeed,
   users: [],
   deleteRequests: [],
@@ -1123,15 +1142,7 @@ function findUserByUsername(db: MockDb, username: string): AppUserRecord | undef
 }
 
 function isProductCategoryValue(value: string): value is NonNullable<Product["category"]> {
-  return (
-    value === "bebida" ||
-    value === "hamburguesa" ||
-    value === "pancho" ||
-    value === "combos" ||
-    value === "papas" ||
-    value === "pollo" ||
-    value === "vegano"
-  );
+  return normalizeCategoryId(value) === value;
 }
 
 function normalizeOperationRequestItems(items: unknown, products: Product[]): OperationRequestItem[] {
@@ -1744,6 +1755,66 @@ export function installApi(middlewares: Server) {
             if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, db.menuProducts);
+          }
+
+          if (pathname === "/menu-categories" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
+            const db = await readDb();
+            return sendJson(res, 200, db.menuCategories);
+          }
+
+          if (pathname === "/menu-categories" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeMenuCategoryDraft(await readJsonBody(req));
+            if (!draft.name || !draft.id) {
+              return sendJson(res, 400, { message: "Invalid menu category draft" });
+            }
+            if (db.menuCategories.some((item) => item.id === draft.id)) {
+              return sendJson(res, 409, { message: "Menu category already exists" });
+            }
+            const category: MenuCategory = {
+              id: draft.id,
+              name: draft.name,
+              createdAt: new Date().toISOString(),
+            };
+            db.menuCategories.unshift(category);
+            await writeDb(db);
+            return sendJson(res, 201, category);
+          }
+
+          const menuCategoryId = extractMenuCategoryId(pathname);
+          if (menuCategoryId && method === "PUT") {
+            const db = await readDb();
+            const draft = sanitizeMenuCategoryDraft(await readJsonBody(req));
+            if (!draft.name) {
+              return sendJson(res, 400, { message: "Invalid menu category draft" });
+            }
+            const index = db.menuCategories.findIndex((item) => item.id === menuCategoryId);
+            if (index < 0) {
+              return sendJson(res, 404, { message: "Menu category not found" });
+            }
+            db.menuCategories[index] = {
+              ...db.menuCategories[index],
+              name: draft.name,
+              updatedAt: new Date().toISOString(),
+            };
+            await writeDb(db);
+            return sendJson(res, 200, db.menuCategories[index]);
+          }
+
+          if (menuCategoryId && method === "DELETE") {
+            const db = await readDb();
+            if (db.menuProducts.some((item) => item.category === menuCategoryId)) {
+              return sendJson(res, 409, { message: "Menu category is assigned to menu products" });
+            }
+            if (db.menuProducts.some((item) => item.comboItems?.some((comboItem) => comboItem.category === menuCategoryId))) {
+              return sendJson(res, 409, { message: "Menu category is used by combo choices" });
+            }
+            const before = db.menuCategories.length;
+            db.menuCategories = db.menuCategories.filter((item) => item.id !== menuCategoryId);
+            const removed = db.menuCategories.length !== before;
+            if (removed) await writeDb(db);
+            return sendJson(res, 200, { ok: removed });
           }
 
           if (pathname === "/menu-products" && method === "POST") {
@@ -3350,6 +3421,10 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
         .map((item) => normalizeMenuProductRecord(item, normalizedIngredients))
         .filter((item): item is MenuProduct => !!item)
     : defaultMenuProductSeed;
+  const normalizedMenuCategories = normalizeMenuCategories(
+    (parsed as { menuCategories?: unknown }).menuCategories,
+    normalizedMenuProducts,
+  );
   const db: MockDb = {
     products: Array.isArray(parsed.products)
       ? parsed.products
@@ -3360,6 +3435,7 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
       ? ((parsed as { productPrices: ProductPrice[] }).productPrices)
       : [],
     ingredients: normalizedIngredients,
+    menuCategories: normalizedMenuCategories,
     menuProducts: normalizedMenuProducts,
     users: Array.isArray((parsed as { users?: unknown[] }).users)
       ? ((parsed as { users: AppUserRecord[] }).users)
@@ -3541,6 +3617,7 @@ function buildClearedOperationalDb(db: MockDb): MockDb {
     products: [],
     productPrices: [],
     ingredients: [],
+    menuCategories: db.menuCategories,
     menuProducts: [],
     deleteRequests: [],
     requests: [],
@@ -4144,18 +4221,56 @@ function normalizeCategory(value: unknown): Product["category"] | undefined {
   const raw = String(value || "").trim().toLowerCase();
   if (raw === "no perecedero" || raw === "vivere") return "bebida";
   if (raw === "combo") return "combos";
-  if (
-    raw === "bebida" ||
-    raw === "hamburguesa" ||
-    raw === "pancho" ||
-    raw === "combos" ||
-    raw === "papas" ||
-    raw === "pollo" ||
-    raw === "vegano"
-  ) {
-    return raw;
+  return normalizeCategoryId(raw) || undefined;
+}
+
+function normalizeCategoryId(value: unknown): string {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function formatCategoryNameFromId(id: string): string {
+  return id
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function normalizeMenuCategoryRecord(input: unknown): MenuCategory | null {
+  const draft = (input || {}) as Partial<MenuCategory>;
+  const id = normalizeCategoryId(draft.id || draft.name);
+  const name = String(draft.name || "").trim() || formatCategoryNameFromId(id);
+  if (!id || !name) return null;
+  return {
+    id,
+    name,
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    updatedAt: String(draft.updatedAt || "").trim() || undefined,
+  };
+}
+
+function normalizeMenuCategories(input: unknown, menuProducts: MenuProduct[]): MenuCategory[] {
+  const byId = new Map<string, MenuCategory>();
+  for (const category of defaultMenuCategorySeed) byId.set(category.id, category);
+  if (Array.isArray(input)) {
+    for (const item of input) {
+      const normalized = normalizeMenuCategoryRecord(item);
+      if (normalized) byId.set(normalized.id, normalized);
+    }
   }
-  return undefined;
+  for (const item of menuProducts) {
+    const id = normalizeCategory(item.category);
+    if (id && !byId.has(id)) {
+      byId.set(id, { id, name: formatCategoryNameFromId(id), createdAt: item.createdAt || new Date().toISOString() });
+    }
+  }
+  return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 function normalizeProductRecord(input: unknown): Product | null {
@@ -5742,6 +5857,12 @@ function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[], men
   };
 }
 
+function sanitizeMenuCategoryDraft(input: unknown): { id: string; name: string } {
+  const obj = (input || {}) as { name?: unknown };
+  const name = String(obj.name || "").trim();
+  return { id: normalizeCategoryId(name), name };
+}
+
 function resolveMenuIngredientConsumption(
   orderItems: OrderItem[],
   menuProducts: MenuProduct[],
@@ -6201,6 +6322,12 @@ function extractIngredientId(pathname: string): string | null {
 function extractMenuProductId(pathname: string): string | null {
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 2 && parts[0] === "menu-products") return parts[1];
+  return null;
+}
+
+function extractMenuCategoryId(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 2 && parts[0] === "menu-categories") return normalizeCategoryId(parts[1]);
   return null;
 }
 

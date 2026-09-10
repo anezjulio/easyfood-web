@@ -3,7 +3,7 @@
 ## Contexto actual
 
 - La UI consume endpoints REST con `fetch`.
-- El backend de desarrollo esta embebido en `vite.config.ts`.
+- El backend mock esta implementado en `server/api.ts` y se monta en Vite/dev, preview y produccion local.
 - El patron comun en frontend es `service/*.api.ts` + `readJsonOrThrow`.
 - Solo productos/precios/margenes pueden caer a `localStorage` cuando `VITE_USE_FAKE_API=false`.
 - El resto de los modulos siempre usa rutas HTTP relativas.
@@ -70,6 +70,22 @@
     - `GET /tax-settings`
     - `PUT /tax-settings`
   - Notas: es configuracion comercial/fiscal. Solo admin.
+
+### Menu y categorias
+
+- `/menu-products`
+  - Servicios: `menu.api.ts`, `menu-category.api.ts`, `ingredient.api.ts`
+  - Endpoints:
+    - `GET /menu-products`
+    - `POST /menu-products`
+    - `PUT /menu-products/:id`
+    - `DELETE /menu-products/:id`
+    - `GET /menu-categories`
+    - `POST /menu-categories`
+    - `PUT /menu-categories/:id`
+    - `DELETE /menu-categories/:id`
+    - `GET /ingredients`
+  - Notas: administra productos de menu, combos y categorias comerciales. `kind` separa producto/combo; `category` sigue siendo filtro/asignacion comercial.
 
 ### Usuarios, stock y ventas
 
@@ -276,6 +292,17 @@
 - `POST /delete-requests`
 - `GET /delete-requests`
 - `PUT /delete-requests/:id/status`
+
+### Menu y categorias
+
+- `GET /menu-products`
+- `POST /menu-products`
+- `PUT /menu-products/:id`
+- `DELETE /menu-products/:id`
+- `GET /menu-categories`
+- `POST /menu-categories`
+- `PUT /menu-categories/:id`
+- `DELETE /menu-categories/:id`
 
 ### Ventas y fiscal/comercial
 

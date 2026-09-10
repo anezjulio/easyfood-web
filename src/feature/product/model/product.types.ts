@@ -8,7 +8,7 @@ export const PRODUCT_CATEGORIES = [
   "vegano",
 ] as const;
 
-export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
+export type ProductCategory = string;
 
 export type Product = {
   id: string;

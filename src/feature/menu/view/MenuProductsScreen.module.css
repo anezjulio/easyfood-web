@@ -449,11 +449,75 @@
   font-weight: 800;
 }
 
+.categoryManager {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.categoryColumn,
+.assignmentColumn {
+  display: grid;
+  gap: 8px;
+}
+
+.categoryRow {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font: inherit;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+
+.categoryRow span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.categoryRowActive,
+.categoryRow:hover {
+  border-color: #ea580c;
+  background: #fff7ed;
+  color: #9a3412;
+}
+
+.assignmentRow {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 9px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 260px);
+  gap: 8px;
+  align-items: center;
+}
+
+.assignmentRow div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.assignmentRow span {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 @media (max-width: 1050px) {
   .layout,
   .previewGrid,
   .recipeControls,
-  .comboControls {
+  .comboControls,
+  .categoryManager,
+  .assignmentRow {
     grid-template-columns: 1fr;
   }
 

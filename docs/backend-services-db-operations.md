@@ -5,7 +5,7 @@
 Este documento lista los servicios que hoy necesita el frontend para leer y escribir datos persistidos. La referencia real es:
 
 - servicios frontend en `src/feature/**/service/*.ts`
-- contratos implementados en el mock server de `vite.config.ts`
+- contratos implementados en el mock server de `server/api.ts`
 
 ## Convenciones del contrato
 
@@ -43,6 +43,8 @@ Colecciones persistidas hoy en la base activa:
 
 - `products`
 - `productPrices`
+- `menuCategories`
+- `menuProducts`
 - `users`
 - `deleteRequests`
 - `requests`
@@ -96,7 +98,29 @@ Reglas importantes:
 - El backend valida unicidad de barcode en create/update.
 - Si `VITE_USE_FAKE_API=false`, solo este dominio cae a `localStorage`.
 
-### 2. Usuarios
+### 2. Menu y categorias
+
+Servicio frontend: `src/feature/menu/service/menu.api.ts`, `src/feature/menu/service/menu-category.api.ts`
+
+| Operacion | Endpoint | Lee DB | Escribe DB |
+| --- | --- | --- | --- |
+| Listar productos de menu y combos | `GET /menu-products` | `menuProducts` | - |
+| Crear producto de menu o combo | `POST /menu-products` | `ingredients`, `menuProducts` | `menuProducts` |
+| Editar producto de menu o combo | `PUT /menu-products/:id` | `ingredients`, `menuProducts` | `menuProducts` |
+| Eliminar producto de menu o combo | `DELETE /menu-products/:id` | `menuProducts` | `menuProducts` |
+| Listar categorias de menu | `GET /menu-categories` | `menuCategories`, `menuProducts` | - |
+| Crear categoria de menu | `POST /menu-categories` | `menuCategories` | `menuCategories` |
+| Renombrar categoria de menu | `PUT /menu-categories/:id` | `menuCategories` | `menuCategories` |
+| Eliminar categoria de menu | `DELETE /menu-categories/:id` | `menuCategories`, `menuProducts` | `menuCategories` |
+
+Reglas importantes:
+
+- `MenuProduct.kind` define si el item es `menu` o `combo`; `category` es solo asignacion comercial.
+- `GET /menu-categories` debe completar categorias faltantes desde defaults y categorias ya usadas en `menuProducts`.
+- `DELETE /menu-categories/:id` falla si la categoria esta asignada a productos/combos o usada por elecciones de combo.
+- La asignacion y desvinculacion de productos/combos se realiza editando `category` con `PUT /menu-products/:id`.
+
+### 3. Usuarios
 
 Servicio frontend: `src/feature/user/service/user.api.ts`
 
@@ -107,7 +131,7 @@ Servicio frontend: `src/feature/user/service/user.api.ts`
 | Editar usuario | `PUT /users/:id` | `users` | `users`, `notifications` |
 | Eliminar usuario | `DELETE /users/:id` | `users` | `users`, `notifications` |
 
-### 3. Solicitudes operativas
+### 4. Solicitudes operativas
 
 Servicio frontend: `src/feature/request/service/request.api.ts`
 
@@ -125,7 +149,7 @@ Reglas importantes:
 - `requestType=permissions` sigue siendo principalmente descriptiva.
 - Al resolver una solicitud se marca como `received` la notificacion de accion original y se crea `operation-request-reviewed`.
 
-### 4. Pedidos a proveedor
+### 5. Pedidos a proveedor
 
 Servicio frontend: `src/feature/supply/service/supply.api.ts`
 
@@ -145,7 +169,7 @@ Reglas importantes:
 - por cada item recibido se genera ingreso de stock automatico
 - la notificacion fija `supply-pending-receive` pasa a `received` al completar la recepcion
 
-### 5. Stock
+### 6. Stock
 
 Servicio frontend: `src/feature/stock/service/stock.api.ts`
 
@@ -160,7 +184,7 @@ Reglas importantes:
 - si llega `supplyOrderId`, el pedido debe existir y estar `received`
 - el backend puede disparar notificaciones de stock bajo o resolverlas cuando el minimo deja de estar incumplido
 
-### 6. Gastos
+### 7. Gastos
 
 Servicio frontend: `src/feature/expense/service/expense.api.ts`
 
@@ -176,7 +200,7 @@ Reglas importantes:
 - si el monto final cambia, `confirmationComment` es obligatorio
 - al confirmar, el libro financiero derivado se recalcula
 
-### 7. Ventas, facturas y recibos
+### 8. Ventas, facturas y recibos
 
 Servicio frontend: `src/feature/sale/service/sale.api.ts`
 
@@ -198,7 +222,7 @@ Reglas importantes:
 - la venta pagada genera notificacion `sale-created`
 - las transacciones financieras se recalculan segun forma de pago y categorias especiales
 
-### 8. Caja y jornadas
+### 9. Caja y jornadas
 
 Servicio frontend: `src/feature/cash/service/cash.api.ts`
 
@@ -220,7 +244,7 @@ Reglas importantes:
 - solicitar cierre crea una notificacion `cash` que requiere accion
 - el cierre admin puede generar `cash-closed` y otra `cash` si hay diferencias
 
-### 9. Feedback
+### 10. Feedback
 
 Servicio frontend: `src/feature/feedback/service/feedback.api.ts`
 
@@ -229,7 +253,7 @@ Servicio frontend: `src/feature/feedback/service/feedback.api.ts`
 | Listar feedback | `GET /feedback` | `feedbackEntries` | - |
 | Crear entrada | `POST /feedback` | - | `feedbackEntries` |
 
-### 10. Licencias
+### 11. Licencias
 
 Servicio frontend: `src/feature/license/service/license.api.ts`
 
@@ -240,7 +264,7 @@ Servicio frontend: `src/feature/license/service/license.api.ts`
 | Editar licencia | `PUT /licenses/:id` | `licenses` | `licenses`, `notifications` |
 | Agregar emision o renovacion | `POST /licenses/:id/issuances` | `licenses` | `licenses`, `notifications` |
 
-### 11. Notificaciones, settings y minimos de stock
+### 12. Notificaciones, settings y minimos de stock
 
 Servicio frontend: `src/feature/notification/service/notification.api.ts`
 
@@ -263,7 +287,7 @@ Reglas importantes:
 - ciertas notificaciones fijas se autocorrigen a `received` cuando cambia el estado real de la entidad
 - el admin puede marcar recibida, deshabilitar o reactivar
 
-### 12. Libro financiero derivado
+### 13. Libro financiero derivado
 
 Servicio frontend: `src/feature/transaction/service/transaction.api.ts`
 
@@ -277,7 +301,7 @@ Notas:
 - el modulo es de solo lectura
 - los tipos actuales incluyen `sale-income`, `sale-cash`, `sale-tobacco`, `expense-payment`, `expense-cash`, `supply-payment`, `supply-cash`, `supply-return`, `cash-opening`, `cash-close`
 
-### 13. Administracion de bases
+### 14. Administracion de bases
 
 Servicio frontend: `src/feature/data/service/data.api.ts`
 

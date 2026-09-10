@@ -121,7 +121,7 @@ export default function AutoSaleScreen() {
 
   const categoryStats = useMemo(
     () =>
-      PRODUCT_CATEGORIES.map((category) => ({
+      PRODUCT_CATEGORIES.map((category: ProductCategory) => ({
         category,
         count: products.filter((product) => (product.category || "bebida") === category).length,
       })),

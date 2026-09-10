@@ -6,9 +6,11 @@ import { formatMoneyARS } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
 import { DATA_STORE_CHANGED_EVENT } from "../../data/service/data.api";
 import { formatIngredientQuantity, getIngredientQuantityUnitLabel, type Ingredient } from "../../ingredient/model/ingredient.types";
-import { PRODUCT_CATEGORIES, type ProductCategory } from "../../product/model/product.types";
+import type { ProductCategory } from "../../product/model/product.types";
 import { fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
+import type { MenuCategory } from "../model/menu-category.types";
 import type { MenuComboItem, MenuProduct, MenuRecipeItem } from "../model/menu.types";
+import { createMenuCategoryApi, deleteMenuCategoryApi, fetchMenuCategoriesApi, updateMenuCategoryApi } from "../service/menu-category.api";
 import { createMenuProductApi, deleteMenuProductApi, fetchMenuProductsApi, updateMenuProductApi } from "../service/menu.api";
 import styles from "./MenuProductsScreen.module.css";
 
@@ -35,8 +37,8 @@ function getRecipeLineLabel(item: MenuRecipeItem) {
   return `${formatIngredientQuantity(item.quantity, item.stockMode)} de ${item.ingredientName}`;
 }
 
-function formatCategoryLabel(category: ProductCategory) {
-  return category.charAt(0).toUpperCase() + category.slice(1);
+function formatCategoryLabel(category: ProductCategory, categories: MenuCategory[] = []) {
+  return categories.find((item) => item.id === category)?.name || category.charAt(0).toUpperCase() + category.slice(1);
 }
 
 function compareIngredientByGroup(a: Ingredient, b: Ingredient) {
@@ -57,24 +59,26 @@ function compareComboItemByCategory(a: MenuComboItem, b: MenuComboItem) {
   return categoryA.localeCompare(categoryB) || (a.menuProductName || "").localeCompare(b.menuProductName || "");
 }
 
-type MenuWorkspaceTab = "products" | "combos";
+type MenuWorkspaceTab = "products" | "combos" | "categories";
 
 type ComboWorkspaceProps = {
+  categories: MenuCategory[];
   menuProducts: MenuProduct[];
   onSaved: () => Promise<void>;
 };
 
-function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
+function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspaceProps) {
+  const assignableCategories = categories.filter((item) => item.id !== "combos");
   const availableProducts = menuProducts.filter((item) => item.kind !== "combo").sort(compareMenuProductByCategory);
   const combos = menuProducts.filter((item) => item.kind === "combo").sort(compareMenuProductByCategory);
   const [selectedId, setSelectedId] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState<ProductCategory>("hamburguesa");
+  const [category, setCategory] = useState<ProductCategory>(assignableCategories[0]?.id || "hamburguesa");
   const [menuProductId, setMenuProductId] = useState(availableProducts[0]?.id || "");
   const [itemMode, setItemMode] = useState<"product" | "category">("product");
-  const [itemCategory, setItemCategory] = useState<ProductCategory>("bebida");
+  const [itemCategory, setItemCategory] = useState<ProductCategory>(assignableCategories[0]?.id || "bebida");
   const [allowedMenuProductIds, setAllowedMenuProductIds] = useState<string[]>([]);
   const [quantity, setQuantity] = useState("1");
   const [comboItems, setComboItems] = useState<MenuComboItem[]>([]);
@@ -89,7 +93,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
     setName("");
     setPrice("");
     setDescription("");
-    setCategory("hamburguesa");
+    setCategory(assignableCategories[0]?.id || "hamburguesa");
     setComboItems([]);
     setAllowedMenuProductIds([]);
     setQuantity("1");
@@ -119,7 +123,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
     setComboItems((current) => {
       if (itemMode === "category") {
         const existing = current.find((item) => item.type === "category" && item.category === itemCategory);
-        const nextItem: MenuComboItem = { type: "category", category: itemCategory, categoryName: formatCategoryLabel(itemCategory), allowedMenuProductIds: selectedAllowedIds, quantity: parsedQuantity };
+        const nextItem: MenuComboItem = { type: "category", category: itemCategory, categoryName: formatCategoryLabel(itemCategory, categories), allowedMenuProductIds: selectedAllowedIds, quantity: parsedQuantity };
         return existing ? current.map((item) => (item === existing ? nextItem : item)) : [...current, nextItem];
       }
       const existing = current.find((item) => item.type === "product" && item.menuProductId === menuProduct!.id);
@@ -207,7 +211,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
         <form className={styles.form} onSubmit={(event) => void submit(event)}>
           <label className={styles.field}><span>Nombre del combo</span><input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Hamburguesa doble + papas + bebida" /></label>
           <label className={styles.field}><span>Precio de venta</span><input className={styles.input} type="number" min={1} value={price} onChange={(event) => setPrice(event.target.value)} placeholder="0" /></label>
-          <label className={styles.field}><span>Categoria del combo</span><select className={styles.input} value={category} onChange={(event) => setCategory(event.target.value as ProductCategory)}>{PRODUCT_CATEGORIES.filter((item) => item !== "combos").map((item) => <option key={item} value={item}>{formatCategoryLabel(item)}</option>)}</select></label>
+          <label className={styles.field}><span>Categoria del combo</span><select className={styles.input} value={category} onChange={(event) => setCategory(event.target.value)}>{assignableCategories.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
           <label className={styles.field}><span>Descripcion</span><textarea className={styles.textarea} rows={3} value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Detalle visible para caja" /></label>
           <section className={styles.recipeEditor}>
             <h3 className={styles.sectionTitle}>Productos incluidos</h3>
@@ -220,7 +224,7 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
               {itemMode === "product" ? <select className={styles.input} value={menuProductId || availableProducts[0]?.id || ""} onChange={(event) => setMenuProductId(event.target.value)}>
                 <option value="">Seleccionar producto</option>
                 {availableProducts.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
-              </select> : <select className={styles.input} value={itemCategory} onChange={(event) => { setItemCategory(event.target.value as ProductCategory); setAllowedMenuProductIds([]); }}>{PRODUCT_CATEGORIES.filter((category) => category !== "combos").map((category) => <option key={category} value={category}>{formatCategoryLabel(category)}</option>)}</select>}
+              </select> : <select className={styles.input} value={itemCategory} onChange={(event) => { setItemCategory(event.target.value); setAllowedMenuProductIds([]); }}>{assignableCategories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}</select>}
               <input className={styles.input} type="number" min={1} step={1} value={quantity} onChange={(event) => setQuantity(event.target.value)} placeholder="Cantidad" />
               <div className={styles.unitPill}>unidades</div>
               <button type="button" className={styles.secondaryBtn} onClick={addComboItem}>Agregar</button>
@@ -258,8 +262,151 @@ function ComboWorkspace({ menuProducts, onSaved }: ComboWorkspaceProps) {
   );
 }
 
+type CategoryWorkspaceProps = {
+  categories: MenuCategory[];
+  menuProducts: MenuProduct[];
+  onSaved: () => Promise<void>;
+};
+
+function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorkspaceProps) {
+  const assignableProducts = menuProducts.sort(compareMenuProductByCategory);
+  const [selectedId, setSelectedId] = useState(categories[0]?.id || "");
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const selectedCategory = categories.find((item) => item.id === selectedId) || null;
+  const assignedProducts = assignableProducts.filter((item) => item.category === selectedId);
+  const unassignedProducts = assignableProducts.filter((item) => item.category !== selectedId);
+
+  function clearForm() {
+    setSelectedId("");
+    setName("");
+    setMessage("");
+    setError("");
+  }
+
+  function selectCategory(category: MenuCategory) {
+    setSelectedId(category.id);
+    setName(category.name);
+    setMessage("");
+    setError("");
+  }
+
+  async function saveCategory(event: React.FormEvent) {
+    event.preventDefault();
+    const trimmedName = name.trim();
+    if (!trimmedName) return setError("Ingresa el nombre de la categoria.");
+    try {
+      const saved = selectedCategory
+        ? await updateMenuCategoryApi(selectedCategory.id, { name: trimmedName })
+        : await createMenuCategoryApi({ name: trimmedName });
+      if (!saved) return setError("No se pudo guardar la categoria.");
+      await onSaved();
+      setSelectedId(saved.id);
+      setName(saved.name);
+      setMessage(selectedCategory ? "Categoria actualizada." : "Categoria creada.");
+      setError("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo guardar la categoria.");
+    }
+  }
+
+  async function removeSelectedCategory() {
+    if (!selectedCategory) return;
+    try {
+      const removed = await deleteMenuCategoryApi(selectedCategory.id);
+      if (!removed) return setError("No se pudo eliminar la categoria.");
+      clearForm();
+      await onSaved();
+      setMessage("Categoria eliminada.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo eliminar la categoria.");
+    }
+  }
+
+  async function moveMenuProduct(item: MenuProduct, category: ProductCategory) {
+    try {
+      const updated = await updateMenuProductApi(item.id, { ...item, category });
+      if (!updated) return setError("No se pudo actualizar el producto.");
+      await onSaved();
+      setMessage("Asignacion actualizada.");
+      setError("");
+    } catch {
+      setError("No se pudo actualizar la asignacion.");
+    }
+  }
+
+  return (
+    <div className={styles.layout}>
+      <section className={styles.formCard}>
+        <div className={styles.cardHeader}>
+          <h2 className={styles.cardTitle}>{selectedCategory ? "Editar categoria" : "Crear categoria"}</h2>
+          <div className={styles.headerActions}>
+            <button type="button" className={styles.secondaryBtn} onClick={clearForm}>Nueva</button>
+            <button type="button" className={styles.dangerBtn} onClick={() => void removeSelectedCategory()} disabled={!selectedCategory || assignedProducts.length > 0}>Eliminar</button>
+          </div>
+        </div>
+        <form className={styles.form} onSubmit={(event) => void saveCategory(event)}>
+          <label className={styles.field}>
+            <span>Nombre</span>
+            <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Promos" />
+          </label>
+          {selectedCategory ? <p className={styles.meta}>ID: {selectedCategory.id}</p> : null}
+          {assignedProducts.length > 0 ? <p className={styles.meta}>Desvincula los productos antes de eliminar.</p> : null}
+          {error ? <div className={styles.errorBox}>{error}</div> : null}
+          {message ? <div className={styles.successBox}>{message}</div> : null}
+          <div className={styles.actions}>
+            <button type="submit" className={styles.primaryBtn}>{selectedCategory ? "Guardar categoria" : "Crear categoria"}</button>
+          </div>
+        </form>
+      </section>
+
+      <section className={styles.listCard}>
+        <h2 className={styles.cardTitle}>Categorias</h2>
+        <div className={styles.categoryManager}>
+          <div className={styles.categoryColumn}>
+            {categories.map((category) => (
+              <button type="button" key={category.id} className={`${styles.categoryRow} ${selectedId === category.id ? styles.categoryRowActive : ""}`.trim()} onClick={() => selectCategory(category)}>
+                <strong>{category.name}</strong>
+                <span>{menuProducts.filter((item) => item.category === category.id).length}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className={styles.assignmentColumn}>
+            <h3 className={styles.sectionTitle}>Asignados</h3>
+            {assignedProducts.length === 0 ? <p className={styles.empty}>No hay productos ni combos en esta categoria.</p> : assignedProducts.map((item) => (
+              <div key={item.id} className={styles.assignmentRow}>
+                <div>
+                  <strong>{item.name}</strong>
+                  <span>{item.kind === "combo" ? "Combo" : "Producto"}</span>
+                </div>
+                <select className={styles.input} value={item.category || ""} onChange={(event) => void moveMenuProduct(item, event.target.value)}>
+                  {categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+                </select>
+              </div>
+            ))}
+
+            <h3 className={styles.sectionTitle}>Disponibles</h3>
+            {unassignedProducts.length === 0 ? <p className={styles.empty}>Todos estan asignados a esta categoria.</p> : unassignedProducts.map((item) => (
+              <div key={item.id} className={styles.assignmentRow}>
+                <div>
+                  <strong>{item.name}</strong>
+                  <span>{item.kind === "combo" ? "Combo" : `Categoria: ${formatCategoryLabel(item.category || "", categories)}`}</span>
+                </div>
+                <button type="button" className={styles.secondaryBtn} disabled={!selectedId} onClick={() => void moveMenuProduct(item, selectedId)}>Asignar</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
 export default function MenuProductsScreen() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [categories, setCategories] = useState<MenuCategory[]>([]);
   const [menuProducts, setMenuProducts] = useState<MenuProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState("");
@@ -281,9 +428,14 @@ export default function MenuProductsScreen() {
     setLoading(true);
     setError("");
     try {
-      const [ingredientList, menuList] = await Promise.all([fetchIngredientsApi(), fetchMenuProductsApi()]);
+      const [ingredientList, menuList, categoryList] = await Promise.all([
+        fetchIngredientsApi(),
+        fetchMenuProductsApi(),
+        fetchMenuCategoriesApi(),
+      ]);
       setIngredients(ingredientList);
       setMenuProducts(menuList);
+      setCategories(categoryList);
       if (typeof nextSelectedId === "string") setSelectedId(nextSelectedId);
       setIngredientId((current) => current || ingredientList[0]?.id || "");
     } catch {
@@ -299,7 +451,15 @@ export default function MenuProductsScreen() {
 
   useEffect(() => {
     const handler = () => {
-      clearForm();
+      setSelectedId("");
+      setName("");
+      setPrice("");
+      setCategory("hamburguesa");
+      setDescription("");
+      setRecipeItems([]);
+      setIngredientQuantity("");
+      setMessage("");
+      setError("");
       void reload();
     };
     window.addEventListener(DATA_STORE_CHANGED_EVENT, handler);
@@ -330,14 +490,14 @@ export default function MenuProductsScreen() {
 
   const categoryCounts = useMemo(
     () =>
-      PRODUCT_CATEGORIES.reduce(
+      categories.reduce(
         (acc, item) => {
-          acc[item] = menuProducts.filter((product) => product.kind !== "combo" && product.category === item).length;
+          acc[item.id] = menuProducts.filter((product) => product.kind !== "combo" && product.category === item.id).length;
           return acc;
         },
         {} as Record<ProductCategory, number>,
       ),
-    [menuProducts],
+    [categories, menuProducts],
   );
 
   const isEditing = !!selectedMenuProduct;
@@ -363,7 +523,7 @@ export default function MenuProductsScreen() {
     setSelectedId("");
     setName("");
     setPrice("");
-    setCategory("hamburguesa");
+    setCategory(categories[0]?.id || "hamburguesa");
     setDescription("");
     setRecipeItems([]);
     setIngredientQuantity("");
@@ -498,6 +658,7 @@ export default function MenuProductsScreen() {
         <div className={styles.tabs} role="tablist" aria-label="Administracion del menu">
           <button type="button" role="tab" aria-selected={activeTab === "products"} className={`${styles.tabBtn} ${activeTab === "products" ? styles.tabBtnActive : ""}`.trim()} onClick={() => setActiveTab("products")}>Productos de menu</button>
           <button type="button" role="tab" aria-selected={activeTab === "combos"} className={`${styles.tabBtn} ${activeTab === "combos" ? styles.tabBtnActive : ""}`.trim()} onClick={() => setActiveTab("combos")}>Combos</button>
+          <button type="button" role="tab" aria-selected={activeTab === "categories"} className={`${styles.tabBtn} ${activeTab === "categories" ? styles.tabBtnActive : ""}`.trim()} onClick={() => setActiveTab("categories")}>Categorias</button>
         </div>
 
         {activeTab === "products" ? (
@@ -526,10 +687,10 @@ export default function MenuProductsScreen() {
 
               <label className={styles.field}>
                 <span>Categoria</span>
-                <select className={styles.input} value={category} onChange={(event) => setCategory(event.target.value as ProductCategory)}>
-                  {PRODUCT_CATEGORIES.map((option) => (
-                    <option key={option} value={option}>
-                      {formatCategoryLabel(option)}
+                <select className={styles.input} value={category} onChange={(event) => setCategory(event.target.value)}>
+                  {categories.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.name}
                     </option>
                   ))}
                 </select>
@@ -613,14 +774,14 @@ export default function MenuProductsScreen() {
               >
                 Todas <span>{menuProducts.filter((item) => item.kind !== "combo").length}</span>
               </button>
-              {PRODUCT_CATEGORIES.map((option) => (
+              {categories.map((option) => (
                 <button
                   type="button"
-                  key={option}
-                  className={`${styles.categoryFilterBtn} ${categoryFilter === option ? styles.categoryFilterBtnActive : ""}`.trim()}
-                  onClick={() => setCategoryFilter(option)}
+                  key={option.id}
+                  className={`${styles.categoryFilterBtn} ${categoryFilter === option.id ? styles.categoryFilterBtnActive : ""}`.trim()}
+                  onClick={() => setCategoryFilter(option.id)}
                 >
-                  {formatCategoryLabel(option)} <span>{categoryCounts[option] || 0}</span>
+                  {option.name} <span>{categoryCounts[option.id] || 0}</span>
                 </button>
               ))}
             </div>
@@ -644,7 +805,7 @@ export default function MenuProductsScreen() {
                         <strong>{item.name}</strong>
                         <span>{formatMoneyARS(item.price)}</span>
                       </div>
-                      <p className={styles.meta}>Categoria: {formatCategoryLabel(item.category || "hamburguesa")}</p>
+                      <p className={styles.meta}>Categoria: {formatCategoryLabel(item.category || "hamburguesa", categories)}</p>
                       {item.description ? <p className={styles.description}>{item.description}</p> : null}
                       <p className={styles.meta}>{item.recipeItems.length} ingredientes - {servings === null ? "-" : servings} porciones posibles</p>
                       <div className={styles.recipeChips}>
@@ -659,8 +820,10 @@ export default function MenuProductsScreen() {
             )}
           </section>
         </div>
+        ) : activeTab === "combos" ? (
+          <ComboWorkspace categories={categories} menuProducts={menuProducts} onSaved={async () => reload()} />
         ) : (
-          <ComboWorkspace menuProducts={menuProducts} onSaved={async () => reload()} />
+          <CategoryWorkspace categories={categories} menuProducts={menuProducts} onSaved={async () => reload()} />
         )}
       </div>
     </div>
