@@ -95,6 +95,28 @@
   font-weight: 700;
 }
 
+.nameRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.inlineToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.inlineToggle input {
+  margin: 0;
+  accent-color: #0f172a;
+}
+
 .input,
 .searchInput,
 .filterSelect,
@@ -256,6 +278,7 @@
 @media (max-width: 1000px) {
   .summary,
   .layout,
+  .nameRow,
   .previewGrid {
     grid-template-columns: 1fr;
   }

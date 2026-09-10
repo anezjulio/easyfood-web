@@ -8,6 +8,8 @@ import ProductTable from "../../product/component/ProductTable";
 import type { Product, ProductSortKey } from "../../product/model/product.types";
 import { fetchProducts } from "../../product/service/product.api";
 import type { MenuProduct } from "../../menu/model/menu.types";
+import type { MenuCategory } from "../../menu/model/menu-category.types";
+import { MENU_CATEGORIES_CHANGED_EVENT, fetchMenuCategoriesApi } from "../../menu/service/menu-category.api";
 import { fetchMenuProductsApi } from "../../menu/service/menu.api";
 import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
 import { matchesPriceFilter } from "../../../shared/product/product-filter";
@@ -63,8 +65,8 @@ function buildMenuSaleProductId(menuProductId: string): string {
   return `menu:${menuProductId}`;
 }
 
-function formatCategoryLabel(category: string) {
-  return category.charAt(0).toUpperCase() + category.slice(1);
+function formatCategoryLabel(category: string, categories: MenuCategory[] = []) {
+  return categories.find((item) => item.id === category)?.name || category.charAt(0).toUpperCase() + category.slice(1);
 }
 
 function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProduct {
@@ -173,6 +175,7 @@ export default function SalesScreen() {
   const cartCardRef = useRef<HTMLElement | null>(null);
   const listCardRef = useRef<HTMLElement | null>(null);
   const [products, setProducts] = useState<SellableProduct[]>([]);
+  const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [quantityToAdd, setQuantityToAdd] = useState("1");
@@ -215,11 +218,16 @@ export default function SalesScreen() {
   async function reloadProducts() {
     setLoading(true);
     try {
-      const [productList, menuProductList] = await Promise.all([fetchProducts(), fetchMenuProductsApi()]);
+      const [productList, menuProductList, categoryList] = await Promise.all([
+        fetchProducts(),
+        fetchMenuProductsApi(),
+        fetchMenuCategoriesApi(),
+      ]);
       const menuSellables = menuProductList.map((item) => mapMenuProductToSellableProduct(item));
       const menuNames = new Set(menuSellables.map((item) => normalizeForSearch(item.name)));
       const nonDuplicatedProducts = productList.filter((item) => !menuNames.has(normalizeForSearch(item.name)));
       setProducts([...menuSellables, ...nonDuplicatedProducts]);
+      setMenuCategories(categoryList);
     } finally {
       setLoading(false);
     }
@@ -240,6 +248,14 @@ export default function SalesScreen() {
     };
     window.addEventListener(DATA_STORE_CHANGED_EVENT, handler);
     return () => window.removeEventListener(DATA_STORE_CHANGED_EVENT, handler);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      void reloadProducts();
+    };
+    window.addEventListener(MENU_CATEGORIES_CHANGED_EVENT, handler);
+    return () => window.removeEventListener(MENU_CATEGORIES_CHANGED_EVENT, handler);
   }, []);
 
   useEffect(() => {
@@ -466,10 +482,13 @@ export default function SalesScreen() {
 
   const categoryOptions = useMemo(
     () =>
-      [...new Set(products.map((item) => (item.category || "").trim()).filter(Boolean))].sort((a, b) =>
-        a.localeCompare(b),
-      ),
-    [products],
+      menuCategories
+        .map((category) => ({
+          ...category,
+          count: products.filter((item) => item.category === category.id).length,
+        }))
+        .filter((item) => item.count > 0),
+    [menuCategories, products],
   );
 
   const cartBaseTotal = useMemo(
@@ -1040,7 +1059,7 @@ export default function SalesScreen() {
                       const options = getComboCategoryOptions(item, products);
                       return (
                       <div key={item.category} className={styles.comboChoiceGroup}>
-                        <span>{item.categoryName || formatCategoryLabel(item.category!)} a eleccion</span>
+                        <span>{item.categoryName || formatCategoryLabel(item.category!, menuCategories)} a eleccion</span>
                         <div className={styles.comboChoiceList}>
                           {options.map((product) => (
                             <label key={product.id} className={styles.comboChoiceOption}>
@@ -1117,7 +1136,7 @@ export default function SalesScreen() {
                                       const options = getComboCategoryOptions(comboItem, products);
                                       return (
                                         <div key={`${unit.label}-${comboItem.category}`} className={styles.comboCartChoiceGroup}>
-                                          <span>{comboItem.categoryName || formatCategoryLabel(comboItem.category!)}</span>
+                                          <span>{comboItem.categoryName || formatCategoryLabel(comboItem.category!, menuCategories)}</span>
                                           <div className={styles.comboChoiceList}>
                                             {options.map((option) => (
                                               <label key={option.id} className={styles.comboChoiceOption}>
@@ -1223,18 +1242,18 @@ export default function SalesScreen() {
                 className={`${styles.categoryFilterBtn} ${categoryFilter ? "" : styles.categoryFilterBtnActive}`.trim()}
                 onClick={() => setCategoryFilter("")}
               >
-                Todas
+                Todas ({products.length})
               </button>
               {categoryOptions.map((category) => (
                 <button
-                  key={category}
+                  key={category.id}
                   type="button"
                   className={`${styles.categoryFilterBtn} ${
-                    categoryFilter === category ? styles.categoryFilterBtnActive : ""
+                    categoryFilter === category.id ? styles.categoryFilterBtnActive : ""
                   }`.trim()}
-                  onClick={() => setCategoryFilter(category)}
+                  onClick={() => setCategoryFilter(category.id)}
                 >
-                  {formatCategoryLabel(category)}
+                  {category.name} ({category.count})
                 </button>
               ))}
             </div>

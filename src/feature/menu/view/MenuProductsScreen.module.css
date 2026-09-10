@@ -104,6 +104,13 @@
   font-weight: 700;
 }
 
+.nameRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: end;
+}
+
 .input,
 .textarea,
 .searchInput {
@@ -178,6 +185,69 @@
   grid-template-columns: minmax(0, 1fr) 72px 140px auto;
   gap: 8px;
   align-items: stretch;
+}
+
+.ingredientButtonGrid {
+  max-height: 220px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 5px;
+  padding-right: 4px;
+}
+
+.ingredientPick {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 26px;
+  border: 1px solid #dbe4ef;
+  background: #ffffff;
+}
+
+.ingredientPickActive {
+  border-color: #ea580c;
+  background: #fff7ed;
+}
+
+.ingredientPickBtn,
+.ingredientMinusBtn {
+  min-height: 28px;
+  border: 0;
+  background: transparent;
+  color: #0f172a;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.ingredientPickBtn {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px;
+  align-items: center;
+  padding: 0 5px;
+  text-align: left;
+}
+
+.ingredientPickBtn span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ingredientPickBtn strong {
+  color: #c2410c;
+}
+
+.ingredientMinusBtn {
+  border-left: 1px solid #dbe4ef;
+  padding: 0;
+}
+
+.ingredientMinusBtn:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
 }
 
 .comboControls {
@@ -308,6 +378,13 @@
   margin: 0;
 }
 
+.menuCompactMeta {
+  margin: 0;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .previewGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -408,10 +485,10 @@
   border: 1px solid #e2e8f0;
   background: #ffffff;
   color: #0f172a;
-  padding: 12px;
+  padding: 8px 10px;
   text-align: left;
   display: grid;
-  gap: 8px;
+  gap: 5px;
   cursor: pointer;
   font: inherit;
 }
@@ -430,8 +507,28 @@
 }
 
 .menuTop strong {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 900;
+}
+
+.description {
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.inlineToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.inlineToggle input {
+  margin: 0;
+  accent-color: #0f172a;
 }
 
 .recipeChips {
@@ -517,6 +614,7 @@
   .recipeControls,
   .comboControls,
   .categoryManager,
+  .nameRow,
   .assignmentRow {
     grid-template-columns: 1fr;
   }

@@ -28,6 +28,7 @@ export default function IngredientsScreen() {
   const [stockModeFilter, setStockModeFilter] = useState<"all" | IngredientStockMode>("all");
 
   const [name, setName] = useState("");
+  const [renameSelectedIngredient, setRenameSelectedIngredient] = useState(false);
   const [expiresInDays, setExpiresInDays] = useState("5");
   const [stockMode, setStockMode] = useState<IngredientStockMode>("unit");
   const [message, setMessage] = useState("");
@@ -79,6 +80,7 @@ export default function IngredientsScreen() {
   function clearForm() {
     setSelectedId("");
     setName("");
+    setRenameSelectedIngredient(false);
     setExpiresInDays("5");
     setStockMode("unit");
     setMessage("");
@@ -88,6 +90,7 @@ export default function IngredientsScreen() {
   function selectIngredient(item: Ingredient) {
     setSelectedId(item.id);
     setName(item.name);
+    setRenameSelectedIngredient(false);
     setExpiresInDays(String(item.expiresInDays));
     setStockMode(item.stockMode);
     setMessage("");
@@ -115,10 +118,10 @@ export default function IngredientsScreen() {
         name: trimmedName,
         expiresInDays: parsedDays,
         stockMode,
-        stockQuantity: selectedIngredient && normalizeForSearch(selectedIngredient.name) === normalizeForSearch(trimmedName) ? selectedIngredient.stockQuantity : 0,
+        stockQuantity: selectedIngredient ? selectedIngredient.stockQuantity : 0,
         entryQuantity: 0,
       };
-      const shouldCreateFromTemplate = selectedIngredient && normalizeForSearch(selectedIngredient.name) !== normalizeForSearch(trimmedName);
+      const shouldCreateFromTemplate = selectedIngredient && normalizeForSearch(selectedIngredient.name) !== normalizeForSearch(trimmedName) && !renameSelectedIngredient;
       const saved = selectedIngredient && !shouldCreateFromTemplate ? await updateIngredientApi(selectedIngredient.id, draft) : await createIngredientApi(draft);
       if (!saved) {
         setError("No se pudo guardar el ingrediente seleccionado.");
@@ -186,10 +189,13 @@ export default function IngredientsScreen() {
             </div>
 
             <form className={styles.form} onSubmit={submitIngredient}>
-              <label className={styles.field}>
-                <span>Nombre</span>
-                <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Tomate, lechuga o Coca-Cola 500 ml" />
-              </label>
+              <div className={styles.nameRow}>
+                <label className={styles.field}>
+                  <span>Nombre</span>
+                  <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Tomate, lechuga o Coca-Cola 500 ml" />
+                </label>
+                {selectedIngredient ? <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelectedIngredient} onChange={(event) => setRenameSelectedIngredient(event.target.checked)} />Modificar</label> : null}
+              </div>
 
               <label className={styles.field}>
                 <span>Dias antes de caducar</span>

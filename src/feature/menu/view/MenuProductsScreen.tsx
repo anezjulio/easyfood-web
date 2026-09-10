@@ -73,6 +73,7 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
   const combos = menuProducts.filter((item) => item.kind === "combo").sort(compareMenuProductByCategory);
   const [selectedId, setSelectedId] = useState("");
   const [name, setName] = useState("");
+  const [renameSelected, setRenameSelected] = useState(false);
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<ProductCategory>(assignableCategories[0]?.id || "hamburguesa");
@@ -91,6 +92,7 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
   function clearForm() {
     setSelectedId("");
     setName("");
+    setRenameSelected(false);
     setPrice("");
     setDescription("");
     setCategory(assignableCategories[0]?.id || "hamburguesa");
@@ -104,6 +106,7 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
   function selectCombo(combo: MenuProduct) {
     setSelectedId(combo.id);
     setName(combo.name);
+    setRenameSelected(false);
     setPrice(String(combo.price));
     setDescription(combo.description || "");
     setCategory(combo.category === "combos" || !combo.category ? "hamburguesa" : combo.category);
@@ -169,7 +172,7 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
     }
     try {
       const draft = { name: name.trim(), price: parsedPrice, description: description.trim() || undefined, category, recipeItems: [], kind: "combo" as const, comboItems };
-      const shouldCreateFromTemplate = selectedCombo && normalizeForSearch(selectedCombo.name) !== normalizeForSearch(name);
+      const shouldCreateFromTemplate = selectedCombo && normalizeForSearch(selectedCombo.name) !== normalizeForSearch(name) && !renameSelected;
       const saved = selectedCombo && !shouldCreateFromTemplate
         ? await updateMenuProductApi(selectedCombo.id, draft)
         : await createMenuProductApi(draft);
@@ -209,7 +212,10 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
           </div>
         </div>
         <form className={styles.form} onSubmit={(event) => void submit(event)}>
-          <label className={styles.field}><span>Nombre del combo</span><input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Hamburguesa doble + papas + bebida" /></label>
+          <div className={styles.nameRow}>
+            <label className={styles.field}><span>Nombre del combo</span><input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Hamburguesa doble + papas + bebida" /></label>
+            {selectedCombo ? <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelected} onChange={(event) => setRenameSelected(event.target.checked)} />Modificar</label> : null}
+          </div>
           <label className={styles.field}><span>Precio de venta</span><input className={styles.input} type="number" min={1} value={price} onChange={(event) => setPrice(event.target.value)} placeholder="0" /></label>
           <label className={styles.field}><span>Categoria del combo</span><select className={styles.input} value={category} onChange={(event) => setCategory(event.target.value)}>{assignableCategories.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>
           <label className={styles.field}><span>Descripcion</span><textarea className={styles.textarea} rows={3} value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Detalle visible para caja" /></label>
@@ -415,12 +421,11 @@ export default function MenuProductsScreen() {
   const [activeTab, setActiveTab] = useState<MenuWorkspaceTab>("products");
 
   const [name, setName] = useState("");
+  const [renameSelectedMenuProduct, setRenameSelectedMenuProduct] = useState(false);
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState<ProductCategory>("hamburguesa");
   const [description, setDescription] = useState("");
   const [recipeItems, setRecipeItems] = useState<MenuRecipeItem[]>([]);
-  const [ingredientId, setIngredientId] = useState("");
-  const [ingredientQuantity, setIngredientQuantity] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
@@ -437,7 +442,6 @@ export default function MenuProductsScreen() {
       setMenuProducts(menuList);
       setCategories(categoryList);
       if (typeof nextSelectedId === "string") setSelectedId(nextSelectedId);
-      setIngredientId((current) => current || ingredientList[0]?.id || "");
     } catch {
       setError("No se pudieron cargar ingredientes o productos del menu.");
     } finally {
@@ -453,11 +457,11 @@ export default function MenuProductsScreen() {
     const handler = () => {
       setSelectedId("");
       setName("");
+      setRenameSelectedMenuProduct(false);
       setPrice("");
       setCategory("hamburguesa");
       setDescription("");
       setRecipeItems([]);
-      setIngredientQuantity("");
       setMessage("");
       setError("");
       void reload();
@@ -469,11 +473,6 @@ export default function MenuProductsScreen() {
   const selectedMenuProduct = useMemo(
     () => menuProducts.find((item) => item.id === selectedId) || null,
     [menuProducts, selectedId],
-  );
-
-  const selectedIngredient = useMemo(
-    () => ingredients.find((item) => item.id === ingredientId) || null,
-    [ingredientId, ingredients],
   );
 
   const filteredMenuProducts = useMemo(() => {
@@ -522,11 +521,11 @@ export default function MenuProductsScreen() {
   function clearForm() {
     setSelectedId("");
     setName("");
+    setRenameSelectedMenuProduct(false);
     setPrice("");
     setCategory(categories[0]?.id || "hamburguesa");
     setDescription("");
     setRecipeItems([]);
-    setIngredientQuantity("");
     setMessage("");
     setError("");
   }
@@ -534,42 +533,48 @@ export default function MenuProductsScreen() {
   function selectMenuProduct(item: MenuProduct) {
     setSelectedId(item.id);
     setName(item.name);
+    setRenameSelectedMenuProduct(false);
     setPrice(String(item.price || ""));
     setCategory(item.category || "hamburguesa");
     setDescription(item.description || "");
     setRecipeItems(item.recipeItems);
-    setIngredientQuantity("");
     setMessage("");
     setError("");
   }
 
-  function addRecipeItem() {
+  function addRecipeItem(ingredient: Ingredient, amount = 1) {
     setError("");
     setMessage("");
-    if (!selectedIngredient) {
-      setError("Selecciona un ingrediente para agregar a la receta.");
-      return;
-    }
-
-    const quantity = Math.trunc(toNumber(ingredientQuantity));
+    const quantity = amount;
     if (!Number.isFinite(quantity) || quantity <= 0) {
       setError("Ingresa una cantidad valida para la receta.");
       return;
     }
 
     const nextItem: MenuRecipeItem = {
-      ingredientId: selectedIngredient.id,
-      ingredientName: selectedIngredient.name,
+      ingredientId: ingredient.id,
+      ingredientName: ingredient.name,
       quantity,
-      stockMode: selectedIngredient.stockMode,
+      stockMode: ingredient.stockMode,
     };
 
     setRecipeItems((current) => {
-      const existingIndex = current.findIndex((item) => item.ingredientId === selectedIngredient.id);
+      const existingIndex = current.findIndex((item) => item.ingredientId === ingredient.id);
       if (existingIndex < 0) return [...current, nextItem];
-      return current.map((item, index) => (index === existingIndex ? nextItem : item));
+      return current.map((item, index) => (index === existingIndex ? { ...item, quantity: item.quantity + quantity } : item));
     });
-    setIngredientQuantity("");
+  }
+
+  function decrementRecipeItem(ingredient: Ingredient) {
+    setRecipeItems((current) =>
+      current
+        .map((item) => (item.ingredientId === ingredient.id ? { ...item, quantity: Math.max(0, item.quantity - 1) } : item))
+        .filter((item) => item.quantity > 0),
+    );
+  }
+
+  function getRecipeItemQuantity(ingredientIdToFind: string) {
+    return recipeItems.find((item) => item.ingredientId === ingredientIdToFind)?.quantity || 0;
   }
 
   function removeRecipeItem(ingredientIdToRemove: string) {
@@ -610,7 +615,7 @@ export default function MenuProductsScreen() {
         description: description.trim() || undefined,
         recipeItems,
       };
-      const shouldCreateFromTemplate = selectedMenuProduct && normalizeForSearch(selectedMenuProduct.name) !== normalizeForSearch(trimmedName);
+      const shouldCreateFromTemplate = selectedMenuProduct && normalizeForSearch(selectedMenuProduct.name) !== normalizeForSearch(trimmedName) && !renameSelectedMenuProduct;
       const saved = selectedMenuProduct && !shouldCreateFromTemplate
         ? await updateMenuProductApi(selectedMenuProduct.id, draft)
         : await createMenuProductApi(draft);
@@ -675,10 +680,13 @@ export default function MenuProductsScreen() {
             </div>
 
             <form className={styles.form} onSubmit={submitMenuProduct}>
-              <label className={styles.field}>
-                <span>Nombre</span>
-                <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Hamburguesa doble" />
-              </label>
+              <div className={styles.nameRow}>
+                <label className={styles.field}>
+                  <span>Nombre</span>
+                  <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Hamburguesa doble" />
+                </label>
+                {selectedMenuProduct ? <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelectedMenuProduct} onChange={(event) => setRenameSelectedMenuProduct(event.target.checked)} />Modificar</label> : null}
+              </div>
 
               <label className={styles.field}>
                 <span>Precio de venta</span>
@@ -703,26 +711,21 @@ export default function MenuProductsScreen() {
 
               <section className={styles.recipeEditor}>
                 <h3 className={styles.sectionTitle}>Receta</h3>
-                <div className={styles.recipeControls}>
-                  <select className={styles.input} value={ingredientId} onChange={(event) => setIngredientId(event.target.value)}>
-                    <option value="">Seleccionar ingrediente</option>
-                    {[...ingredients].sort(compareIngredientByGroup).map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name} - stock {formatIngredientQuantity(item.stockQuantity, item.stockMode)}
-                      </option>
-                    ))}
-                  </select>
-                  <div className={styles.unitPill}>{selectedIngredient ? getIngredientQuantityUnitLabel(selectedIngredient.stockMode) : "-"}</div>
-                  <input
-                    className={styles.input}
-                    type="number"
-                    min={1}
-                    step="1"
-                    value={ingredientQuantity}
-                    onChange={(event) => setIngredientQuantity(event.target.value)}
-                    placeholder={selectedIngredient?.stockMode === "weight" ? "Gramos" : "Cantidad"}
-                  />
-                  <button type="button" className={styles.secondaryBtn} onClick={addRecipeItem}>Agregar</button>
+                <div className={styles.ingredientButtonGrid}>
+                  {[...ingredients].sort(compareIngredientByGroup).map((item) => {
+                    const selectedQuantity = getRecipeItemQuantity(item.id);
+                    return (
+                      <div key={item.id} className={`${styles.ingredientPick} ${selectedQuantity > 0 ? styles.ingredientPickActive : ""}`.trim()}>
+                        <button type="button" className={styles.ingredientPickBtn} onClick={() => addRecipeItem(item)}>
+                          <span>{item.name}</span>
+                          <strong>{selectedQuantity}</strong>
+                        </button>
+                        <button type="button" className={styles.ingredientMinusBtn} onClick={() => decrementRecipeItem(item)} disabled={selectedQuantity === 0}>
+                          -
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {recipeItems.length === 0 ? (
@@ -805,9 +808,10 @@ export default function MenuProductsScreen() {
                         <strong>{item.name}</strong>
                         <span>{formatMoneyARS(item.price)}</span>
                       </div>
-                      <p className={styles.meta}>Categoria: {formatCategoryLabel(item.category || "hamburguesa", categories)}</p>
+                      <p className={styles.menuCompactMeta}>
+                        {formatCategoryLabel(item.category || "hamburguesa", categories)} - {item.recipeItems.length} ingredientes - {servings === null ? "-" : servings} porciones
+                      </p>
                       {item.description ? <p className={styles.description}>{item.description}</p> : null}
-                      <p className={styles.meta}>{item.recipeItems.length} ingredientes - {servings === null ? "-" : servings} porciones posibles</p>
                       <div className={styles.recipeChips}>
                         {[...item.recipeItems].sort(compareRecipeItemByGroup).map((recipe) => (
                           <span key={recipe.ingredientId}>{recipe.ingredientName}: {formatIngredientQuantity(recipe.quantity, recipe.stockMode)}</span>
