@@ -1,0 +1,139 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 16px;
+  color: #0f172a;
+}
+
+.content {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 8px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  color: #475569;
+  font-weight: 600;
+}
+
+.panel {
+  margin-top: 14px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.settingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.description {
+  margin: 4px 0 0;
+  color: #475569;
+  font-weight: 700;
+}
+
+.switchControl {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #0f172a;
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  color: #0f172a;
+  min-height: 44px;
+  padding: 0 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.switchOn {
+  background: #dcfce7;
+}
+
+.switchOff {
+  background: #fee2e2;
+}
+
+.switchControl:disabled {
+  background: #9ca3af;
+  border-color: #9ca3af;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.switchTrack {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  border-radius: 999px;
+  background: #b91c1c;
+  box-shadow: inset 0 0 0 2px #7f1d1d;
+}
+
+.switchOn .switchTrack {
+  background: #16a34a;
+  box-shadow: inset 0 0 0 2px #166534;
+}
+
+.switchThumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgb(15 23 42 / 0.35);
+  transition: transform 160ms ease;
+}
+
+.switchOn .switchThumb {
+  transform: translateX(22px);
+}
+
+.status {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-weight: 800;
+}
+
+.success {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  background: #dcfce7;
+  color: #166534;
+  font-weight: 800;
+}
+
+.error {
+  margin: 14px 0 0;
+  padding: 10px 14px;
+  background: #fee2e2;
+  color: #991b1b;
+  font-weight: 800;
+}
