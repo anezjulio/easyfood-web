@@ -26,7 +26,14 @@ type Product = {
   imageUrl?: string;
   barcode?: string;
   brand?: string;
+  description?: string;
   category?: string;
+  categoryIds?: string[];
+  type?: "ingrediente" | "empaque" | "bebida" | "receta" | "combo";
+  stockMode?: "unit" | "weight";
+  stockType?: "ingrediente" | "empaque" | "bebida" | "receta" | "combo";
+  recipeId?: string;
+  comboId?: string;
   supplyOrderId?: string;
 };
 
@@ -44,13 +51,25 @@ type IngredientStockMode = "weight" | "package" | "unit";
 type Ingredient = {
   id: string;
   name: string;
+  productId?: string;
+  metric?: "unit" | "weight";
+  categoryId?: string;
   expiresInDays: number;
   stockMode: IngredientStockMode;
   stockQuantity: number;
+  minStockQuantity?: number;
+  portionSizeGrams?: number;
   createdAt: string;
   updatedAt?: string;
   lastEntryAt?: string;
   nextExpirationDate?: string;
+};
+
+type IngredientCategory = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt?: string;
 };
 
 type MenuRecipeItem = {
@@ -142,14 +161,57 @@ type OperationRequest = {
 type StockEntry = {
   id: string;
   productId: string;
-  manufactureDate?: string;
   expirationDate?: string;
+  movementDate?: string;
   quantity: number;
+  metric?: "unit" | "grams" | "kilos";
+  movementType?: "in" | "out";
   description?: string;
   supplyOrderId?: string;
   costPrice?: number;
-  salePrice?: number;
   createdAt: string;
+};
+
+type RecipeIngredient = {
+  ingredientId: string;
+  quantity: number;
+};
+
+type Recipe = {
+  id: string;
+  productId: string;
+  ingredients: RecipeIngredient[];
+  createdAt: string;
+  updatedAt?: string;
+};
+
+type ComboFixedItem = {
+  productId: string;
+  quantity: number;
+};
+
+type ComboOptionGroup = {
+  id: string;
+  name: string;
+  quantity: number;
+  productIds: string[];
+};
+
+type Combo = {
+  id: string;
+  productId: string;
+  items: ComboFixedItem[];
+  optionGroups: ComboOptionGroup[];
+  createdAt: string;
+  updatedAt?: string;
+};
+
+type Category = {
+  id: string;
+  name: string;
+  productIds: string[];
+  createdAt: string;
+  updatedAt?: string;
 };
 
 type PaymentMethod = "efectivo" | "tarjeta debito" | "tarjeta credito" | "mercadopago";
@@ -169,6 +231,10 @@ type TaxMode = "add_to_total" | "show_only";
 type TaxSettings = {
   ivaPercent: number;
   mode: TaxMode;
+};
+
+type SystemSettings = {
+  allowOutOfStockSales: boolean;
 };
 
 type OrderStatus = "por pagar" | "pagada" | "cancelada";
@@ -537,6 +603,10 @@ type MockDb = {
   products: Product[];
   productPrices: ProductPrice[];
   ingredients: Ingredient[];
+  ingredientCategories: IngredientCategory[];
+  recipes: Recipe[];
+  combos: Combo[];
+  categories: Category[];
   menuCategories: MenuCategory[];
   menuProducts: MenuProduct[];
   users: AppUserRecord[];
@@ -559,6 +629,7 @@ type MockDb = {
   priceMarginSettings: PriceMarginSettings;
   paymentMethodSettings: PaymentMethodSettings;
   taxSettings: TaxSettings;
+  systemSettings: SystemSettings;
 };
 
 type DataStoreRecord = {
@@ -791,10 +862,25 @@ const defaultMenuCategorySeed: MenuCategory[] = [
   { id: "vegano", name: "Vegano", createdAt: "2026-02-01T10:00:00.000Z" },
 ];
 
+const defaultIngredientCategorySeed: IngredientCategory[] = [
+  { id: "bebidas", name: "Bebidas", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "vegetales", name: "Vegetales", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "carnes", name: "Carnes", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "lacteos", name: "Lacteos", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "panificados", name: "Panificados", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "salsas", name: "Salsas", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "empaques", name: "Empaques", createdAt: "2026-02-01T10:00:00.000Z" },
+  { id: "varios", name: "Varios", createdAt: "2026-02-01T10:00:00.000Z" },
+];
+
 const defaultDb: MockDb = {
   products: [],
   productPrices: [],
   ingredients: defaultIngredientSeed,
+  ingredientCategories: defaultIngredientCategorySeed,
+  recipes: [],
+  combos: [],
+  categories: [],
   menuCategories: defaultMenuCategorySeed,
   menuProducts: defaultMenuProductSeed,
   users: [],
@@ -850,6 +936,9 @@ const defaultDb: MockDb = {
   taxSettings: {
     ivaPercent: 21,
     mode: "show_only",
+  },
+  systemSettings: {
+    allowOutOfStockSales: true,
   },
 };
 
@@ -1383,7 +1472,8 @@ export function installApi(middlewares: Server) {
             const draft = sanitizeDraft(await readJsonBody(req));
             const hasPrice = Number.isFinite(draft.price) && draft.price > 0;
             const hasCostPrice = Number.isFinite(draft.costPrice) && draft.costPrice > 0;
-            if (!draft.name || (!hasPrice && !hasCostPrice)) {
+            const requiresSalePrice = draft.type === "bebida" || draft.type === "receta" || draft.type === "combo";
+            if (!draft.name || (requiresSalePrice && !hasPrice && !hasCostPrice)) {
               return sendJson(res, 400, { message: "Invalid product draft" });
             }
             if (draft.barcode) {
@@ -1397,8 +1487,8 @@ export function installApi(middlewares: Server) {
               Number.isFinite(draft.marginPercent) && draft.marginPercent >= 0
                 ? normalizeMarginPercent(draft.marginPercent)
                 : getCategoryPriceMarginPercent(db, category);
-            const costPrice = Math.max(1, Math.trunc(hasCostPrice ? draft.costPrice : draft.price));
-            const salePrice = Math.max(1, Math.trunc(hasCostPrice ? calculateSalePriceFromCost(costPrice, effectiveMarginPercent) : draft.price));
+            const costPrice = Math.max(0, Math.trunc(hasCostPrice ? draft.costPrice : draft.price || 0));
+            const salePrice = Math.max(0, Math.trunc(hasCostPrice ? calculateSalePriceFromCost(costPrice, effectiveMarginPercent) : draft.price || 0));
             const now = new Date().toISOString();
             const product: Product = {
               id: buildEntityId("p"),
@@ -1409,7 +1499,12 @@ export function installApi(middlewares: Server) {
               imageUrl: draft.imageUrl,
               barcode: draft.barcode,
               brand: draft.brand,
+              description: draft.description,
               category,
+              categoryIds: draft.categoryIds.length ? draft.categoryIds : [category],
+              type: draft.type,
+              stockMode: draft.stockMode,
+              stockType: draft.type,
               supplyOrderId: draft.supplyOrderId,
             };
             db.products.unshift(product);
@@ -1645,7 +1740,12 @@ export function installApi(middlewares: Server) {
               imageUrl: draft.imageUrl,
               barcode: draft.barcode,
               brand: draft.brand,
+              description: draft.description,
               category,
+              categoryIds: draft.categoryIds.length ? draft.categoryIds : current.categoryIds || [category],
+              type: draft.type,
+              stockMode: draft.stockMode,
+              stockType: draft.type,
               supplyOrderId: typeof draft.supplyOrderId === "string" ? draft.supplyOrderId : current.supplyOrderId,
             };
             await writeDb(db);
@@ -1683,9 +1783,14 @@ export function installApi(middlewares: Server) {
             const ingredient: Ingredient = {
               id: buildEntityId("ing"),
               name: draft.name,
+              productId: draft.productId,
+              metric: draft.metric,
+              categoryId: draft.categoryId,
               expiresInDays: draft.expiresInDays,
               stockMode: draft.stockMode,
               stockQuantity: draft.stockQuantity + draft.entryQuantity,
+              minStockQuantity: draft.minStockQuantity,
+              portionSizeGrams: draft.portionSizeGrams,
               createdAt: now.toISOString(),
               lastEntryAt: draft.entryQuantity > 0 ? now.toISOString() : undefined,
               nextExpirationDate: draft.entryQuantity > 0 ? buildIngredientExpirationDate(draft.expiresInDays, now) : undefined,
@@ -1710,9 +1815,14 @@ export function installApi(middlewares: Server) {
             db.ingredients[index] = {
               ...db.ingredients[index],
               name: draft.name,
+              productId: draft.productId,
+              metric: draft.metric,
+              categoryId: draft.categoryId,
               expiresInDays: draft.expiresInDays,
               stockMode: draft.stockMode,
               stockQuantity: draft.stockQuantity + draft.entryQuantity,
+              minStockQuantity: draft.minStockQuantity,
+              portionSizeGrams: draft.portionSizeGrams,
               updatedAt: now.toISOString(),
               lastEntryAt: draft.entryQuantity > 0 ? now.toISOString() : db.ingredients[index].lastEntryAt,
               nextExpirationDate:
@@ -1749,6 +1859,179 @@ export function installApi(middlewares: Server) {
               await writeDb(db);
             }
             return sendJson(res, 200, { ok: removed });
+          }
+
+          if (pathname === "/ingredient-categories" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
+            const db = await readDb();
+            return sendJson(res, 200, db.ingredientCategories);
+          }
+
+          if (pathname === "/ingredient-categories" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeIngredientCategoryDraft(await readJsonBody(req));
+            if (!draft.name || !draft.id) {
+              return sendJson(res, 400, { message: "Invalid ingredient category draft" });
+            }
+            if (db.ingredientCategories.some((item) => item.id === draft.id)) {
+              return sendJson(res, 409, { message: "Ingredient category already exists" });
+            }
+            const category: IngredientCategory = {
+              id: draft.id,
+              name: draft.name,
+              createdAt: new Date().toISOString(),
+            };
+            db.ingredientCategories.unshift(category);
+            await writeDb(db);
+            return sendJson(res, 201, category);
+          }
+
+          const ingredientCategoryId = extractIngredientCategoryId(pathname);
+          if (ingredientCategoryId && method === "PUT") {
+            const db = await readDb();
+            const draft = sanitizeIngredientCategoryDraft(await readJsonBody(req));
+            if (!draft.name) {
+              return sendJson(res, 400, { message: "Invalid ingredient category draft" });
+            }
+            const index = db.ingredientCategories.findIndex((item) => item.id === ingredientCategoryId);
+            if (index < 0) {
+              return sendJson(res, 404, { message: "Ingredient category not found" });
+            }
+            db.ingredientCategories[index] = {
+              ...db.ingredientCategories[index],
+              name: draft.name,
+              updatedAt: new Date().toISOString(),
+            };
+            await writeDb(db);
+            return sendJson(res, 200, db.ingredientCategories[index]);
+          }
+
+          if (ingredientCategoryId && method === "DELETE") {
+            const db = await readDb();
+            if (db.ingredients.some((item) => item.categoryId === ingredientCategoryId)) {
+              return sendJson(res, 409, { message: "Ingredient category is assigned to ingredients" });
+            }
+            const before = db.ingredientCategories.length;
+            db.ingredientCategories = db.ingredientCategories.filter((item) => item.id !== ingredientCategoryId);
+            const removed = db.ingredientCategories.length !== before;
+            if (removed) await writeDb(db);
+            return sendJson(res, 200, { ok: removed });
+          }
+
+          if (pathname === "/categories" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
+            const db = await readDb();
+            return sendJson(res, 200, db.categories);
+          }
+
+          if (pathname === "/categories" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeCategoryDraft(await readJsonBody(req), db.products);
+            if (!draft.id || !draft.name) return sendJson(res, 400, { message: "Invalid category draft" });
+            if (db.categories.some((item) => item.id === draft.id)) return sendJson(res, 409, { message: "Category already exists" });
+            const category: Category = { id: draft.id, name: draft.name, productIds: draft.productIds, createdAt: new Date().toISOString() };
+            db.categories.unshift(category);
+            syncProductCategoryIds(db);
+            await writeDb(db);
+            return sendJson(res, 201, category);
+          }
+
+          const categoryId = extractCategoryId(pathname);
+          if (categoryId && method === "PUT") {
+            const db = await readDb();
+            const draft = sanitizeCategoryDraft(await readJsonBody(req), db.products);
+            const index = db.categories.findIndex((item) => item.id === categoryId);
+            if (index < 0) return sendJson(res, 404, { message: "Category not found" });
+            db.categories[index] = { ...db.categories[index], name: draft.name || db.categories[index].name, productIds: draft.productIds, updatedAt: new Date().toISOString() };
+            syncProductCategoryIds(db);
+            await writeDb(db);
+            return sendJson(res, 200, db.categories[index]);
+          }
+
+          if (categoryId && method === "DELETE") {
+            const db = await readDb();
+            const before = db.categories.length;
+            db.categories = db.categories.filter((item) => item.id !== categoryId);
+            const removed = db.categories.length !== before;
+            if (removed) {
+              syncProductCategoryIds(db);
+              await writeDb(db);
+            }
+            return sendJson(res, 200, { ok: removed });
+          }
+
+          if (pathname === "/recipes" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
+            const db = await readDb();
+            return sendJson(res, 200, db.recipes);
+          }
+
+          if (pathname === "/recipes" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeRecipeDraft(await readJsonBody(req), db.products, db.ingredients);
+            if (!draft.productId || draft.ingredients.length === 0) return sendJson(res, 400, { message: "Invalid recipe draft" });
+            const recipe: Recipe = { id: buildEntityId("rec"), productId: draft.productId, ingredients: draft.ingredients, createdAt: new Date().toISOString() };
+            db.recipes.unshift(recipe);
+            db.products = db.products.map((item) => item.id === recipe.productId ? { ...item, type: "receta", stockType: "receta", recipeId: recipe.id } : item);
+            await writeDb(db);
+            return sendJson(res, 201, recipe);
+          }
+
+          const recipeId = extractRecipeId(pathname);
+          if (recipeId && method === "PUT") {
+            const db = await readDb();
+            const draft = sanitizeRecipeDraft(await readJsonBody(req), db.products, db.ingredients);
+            const index = db.recipes.findIndex((item) => item.id === recipeId);
+            if (index < 0) return sendJson(res, 404, { message: "Recipe not found" });
+            db.recipes[index] = { ...db.recipes[index], productId: draft.productId || db.recipes[index].productId, ingredients: draft.ingredients, updatedAt: new Date().toISOString() };
+            await writeDb(db);
+            return sendJson(res, 200, db.recipes[index]);
+          }
+
+          if (recipeId && method === "DELETE") {
+            const db = await readDb();
+            const recipe = db.recipes.find((item) => item.id === recipeId);
+            db.recipes = db.recipes.filter((item) => item.id !== recipeId);
+            if (recipe) db.products = db.products.map((item) => item.recipeId === recipe.id ? { ...item, recipeId: undefined } : item);
+            await writeDb(db);
+            return sendJson(res, 200, { ok: !!recipe });
+          }
+
+          if (pathname === "/combos" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
+            const db = await readDb();
+            return sendJson(res, 200, db.combos);
+          }
+
+          if (pathname === "/combos" && method === "POST") {
+            const db = await readDb();
+            const draft = sanitizeComboDraft(await readJsonBody(req), db.products);
+            if (!draft.productId || (draft.items.length === 0 && draft.optionGroups.length === 0)) return sendJson(res, 400, { message: "Invalid combo draft" });
+            const combo: Combo = { id: buildEntityId("com"), productId: draft.productId, items: draft.items, optionGroups: draft.optionGroups, createdAt: new Date().toISOString() };
+            db.combos.unshift(combo);
+            db.products = db.products.map((item) => item.id === combo.productId ? { ...item, type: "combo", stockType: "combo", comboId: combo.id } : item);
+            await writeDb(db);
+            return sendJson(res, 201, combo);
+          }
+
+          const comboId = extractComboId(pathname);
+          if (comboId && method === "PUT") {
+            const db = await readDb();
+            const draft = sanitizeComboDraft(await readJsonBody(req), db.products);
+            const index = db.combos.findIndex((item) => item.id === comboId);
+            if (index < 0) return sendJson(res, 404, { message: "Combo not found" });
+            db.combos[index] = { ...db.combos[index], productId: draft.productId || db.combos[index].productId, items: draft.items, optionGroups: draft.optionGroups, updatedAt: new Date().toISOString() };
+            await writeDb(db);
+            return sendJson(res, 200, db.combos[index]);
+          }
+
+          if (comboId && method === "DELETE") {
+            const db = await readDb();
+            const combo = db.combos.find((item) => item.id === comboId);
+            db.combos = db.combos.filter((item) => item.id !== comboId);
+            if (combo) db.products = db.products.map((item) => item.comboId === combo.id ? { ...item, comboId: undefined } : item);
+            await writeDb(db);
+            return sendJson(res, 200, { ok: !!combo });
           }
 
           if (pathname === "/menu-products" && method === "GET") {
@@ -2306,10 +2589,16 @@ export function installApi(middlewares: Server) {
             }
 
             if (body.status === "pagada") {
-              const consumption = resolveMenuIngredientConsumption(currentOrder.items, db.menuProducts);
-              if (consumption.error) {
-                return sendJson(res, 400, { message: consumption.error });
+              const productConsumption = resolveOrderProductStockConsumption(db, currentOrder.items);
+              if (productConsumption.error) return sendJson(res, 400, { message: productConsumption.error });
+              if (!db.systemSettings.allowOutOfStockSales) {
+                const stockIssue = findProductStockIssue(db, productConsumption.entries);
+                if (stockIssue) return sendJson(res, 409, { message: stockIssue });
+                const ingredientStockIssue = findIngredientStockIssue(db, productConsumption.ingredientEntries);
+                if (ingredientStockIssue) return sendJson(res, 409, { message: ingredientStockIssue });
               }
+              applyIngredientStockConsumption(db, productConsumption.ingredientEntries);
+              for (const entry of productConsumption.entries) createStockEntryRecord(db, entry);
             }
 
             db.orders[index] = {
@@ -2947,19 +3236,17 @@ export function installApi(middlewares: Server) {
                     : Number.isFinite(Number(product?.price)) && Number(product?.price) > 0
                       ? Math.trunc(Number(product?.price))
                       : undefined;
-                const fallbackSalePrice =
-                  Number.isFinite(Number(product?.price)) && Number(product?.price) > 0 ? Math.trunc(Number(product?.price)) : undefined;
-
                 createStockEntryRecord(
                   db,
                   {
                     productId: item.productId,
                     expirationDate: item.expirationDate,
                     quantity: receivedQuantity,
+                    metric: product?.stockMode === "weight" ? "grams" : "unit",
+                    movementType: "in",
                     description: `Ingreso automatico por recepcion del pedido ${current.id}.`,
                     supplyOrderId: current.id,
                     costPrice: fallbackCostPrice,
-                    salePrice: fallbackSalePrice,
                   },
                   { createdAt: receivedAt },
                 );
@@ -3341,6 +3628,25 @@ export function installApi(middlewares: Server) {
             return sendJson(res, 200, db.taxSettings);
           }
 
+          if (pathname === "/system-settings" && method === "GET") {
+            const db = await readDb();
+            return sendJson(res, 200, db.systemSettings);
+          }
+
+          if (pathname === "/system-settings" && method === "PUT") {
+            const db = await readDb();
+            const draft = sanitizeSystemSettingsDraft(await readJsonBody(req));
+            if (typeof draft.allowOutOfStockSales === "undefined") {
+              return sendJson(res, 400, { message: "Invalid system settings draft" });
+            }
+            db.systemSettings = resolveSystemSettings({
+              ...db.systemSettings,
+              allowOutOfStockSales: draft.allowOutOfStockSales,
+            });
+            await writeDb(db);
+            return sendJson(res, 200, db.systemSettings);
+          }
+
           if (pathname === "/notifications/generate-test-cases" && method === "POST") {
             const db = await readDb();
             const createdCases = generateNotificationTestCases(db);
@@ -3416,6 +3722,9 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
         .map((item) => normalizeIngredientRecord(item))
         .filter((item): item is Ingredient => !!item)
     : defaultIngredientSeed;
+  const normalizedIngredientCategories = resolveIngredientCategories(
+    (parsed as { ingredientCategories?: unknown }).ingredientCategories,
+  );
   const normalizedMenuProducts = Array.isArray((parsed as { menuProducts?: unknown[] }).menuProducts)
     ? ((parsed as { menuProducts: unknown[] }).menuProducts)
         .map((item) => normalizeMenuProductRecord(item, normalizedIngredients))
@@ -3425,18 +3734,26 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
     (parsed as { menuCategories?: unknown }).menuCategories,
     normalizedMenuProducts,
   );
+  const migratedDomain = buildDomainFromLegacyMenuProducts(
+    Array.isArray(parsed.products) ? parsed.products : [],
+    (parsed as { recipes?: unknown }).recipes,
+    (parsed as { combos?: unknown }).combos,
+    (parsed as { categories?: unknown }).categories,
+    normalizedMenuProducts,
+    normalizedMenuCategories,
+  );
   const db: MockDb = {
-    products: Array.isArray(parsed.products)
-      ? parsed.products
-          .map((item) => normalizeProductRecord(item))
-          .filter((item): item is Product => !!item)
-      : [],
+    products: migratedDomain.products,
     productPrices: Array.isArray((parsed as { productPrices?: unknown[] }).productPrices)
       ? ((parsed as { productPrices: ProductPrice[] }).productPrices)
       : [],
     ingredients: normalizedIngredients,
+    ingredientCategories: normalizedIngredientCategories,
+    recipes: migratedDomain.recipes,
+    combos: migratedDomain.combos,
+    categories: migratedDomain.categories,
     menuCategories: normalizedMenuCategories,
-    menuProducts: normalizedMenuProducts,
+    menuProducts: [],
     users: Array.isArray((parsed as { users?: unknown[] }).users)
       ? ((parsed as { users: AppUserRecord[] }).users)
       : [],
@@ -3599,6 +3916,7 @@ async function readDb(store?: DataStoreRecord): Promise<MockDb> {
       (parsed as { paymentMethodSettings?: unknown }).paymentMethodSettings,
     ),
     taxSettings: resolveTaxSettings((parsed as { taxSettings?: unknown }).taxSettings),
+    systemSettings: resolveSystemSettings((parsed as { systemSettings?: unknown }).systemSettings),
   };
   syncFinancialData(db);
   return db;
@@ -3617,6 +3935,10 @@ function buildClearedOperationalDb(db: MockDb): MockDb {
     products: [],
     productPrices: [],
     ingredients: [],
+    ingredientCategories: db.ingredientCategories,
+    recipes: [],
+    combos: [],
+    categories: db.categories,
     menuCategories: db.menuCategories,
     menuProducts: [],
     deleteRequests: [],
@@ -3683,17 +4005,39 @@ function buildSupplyOrderItemsFromDraft(
   return [...mergedByProductId.values()];
 }
 
+function normalizeStockMetric(metric: unknown, stockMode?: Product["stockMode"]): NonNullable<StockEntry["metric"]> {
+  const raw = String(metric || "").trim().toLowerCase();
+  if (raw === "grams" || raw === "gramos" || raw === "grs") return "grams";
+  if (raw === "kilos" || raw === "kg") return "kilos";
+  if (stockMode === "weight") return "grams";
+  return "unit";
+}
+
+function normalizeStockQuantity(quantity: number, metric: NonNullable<StockEntry["metric"]>, movementType: NonNullable<StockEntry["movementType"]>) {
+  const absolute = Math.abs(Number(quantity) || 0);
+  const normalized = metric === "unit" ? Math.trunc(absolute) : absolute;
+  const signed = movementType === "out" ? -normalized : normalized;
+  return metric === "kilos" ? signed : signed;
+}
+
+function getStockQuantityInBaseUnit(stock: StockEntry): number {
+  const quantity = Number(stock.quantity) || 0;
+  if (stock.metric === "kilos") return quantity * 1000;
+  return quantity;
+}
+
 function createStockEntryRecord(
   db: MockDb,
   body: {
     productId: string;
-    manufactureDate?: string;
     expirationDate?: string;
+    movementDate?: string;
     quantity: number;
+    metric?: "unit" | "grams" | "kilos";
+    movementType?: "in" | "out";
     description?: string;
     supplyOrderId?: string;
     costPrice?: number;
-    salePrice?: number;
   },
   options?: { createdAt?: string },
 ): StockEntry {
@@ -3705,7 +4049,10 @@ function createStockEntryRecord(
   }
 
   const product = db.products.find((item) => item.id === body.productId);
-  if (body.quantity > 0 && !body.expirationDate) {
+  const metric = normalizeStockMetric(body.metric, product?.stockMode);
+  const movementType = body.movementType || (body.quantity < 0 ? "out" : "in");
+  const signedQuantity = normalizeStockQuantity(body.quantity, metric, movementType);
+  if (signedQuantity > 0 && !body.expirationDate) {
     throw new Error("Invalid stock entry: expirationDate required");
   }
   if (body.supplyOrderId) {
@@ -3716,20 +4063,19 @@ function createStockEntryRecord(
   }
 
   const rawCostPrice = Number(body.costPrice);
-  const rawSalePrice = Number(body.salePrice);
   const normalizedCostPrice = Number.isFinite(rawCostPrice) && rawCostPrice > 0 ? Math.trunc(rawCostPrice) : undefined;
-  const normalizedSalePrice = Number.isFinite(rawSalePrice) && rawSalePrice > 0 ? Math.trunc(rawSalePrice) : undefined;
 
   const entry: StockEntry = {
     id: buildEntityId("se"),
     productId: body.productId,
-    manufactureDate: body.manufactureDate,
     expirationDate: body.expirationDate,
-    quantity: Math.trunc(body.quantity),
+    movementDate: body.movementDate || options?.createdAt || new Date().toISOString(),
+    quantity: signedQuantity,
+    metric,
+    movementType,
     description: body.description,
     supplyOrderId: body.supplyOrderId,
     costPrice: normalizedCostPrice,
-    salePrice: normalizedSalePrice,
     createdAt: options?.createdAt || new Date().toISOString(),
   };
 
@@ -4278,8 +4624,12 @@ function normalizeProductRecord(input: unknown): Product | null {
   const id = String(draft.id || "").trim();
   const name = String(draft.name || "").trim();
   const price = Math.trunc(Number(draft.price));
-  if (!id || !name || !Number.isFinite(price) || price <= 0) return null;
+  if (!id || !name || !Number.isFinite(price) || price < 0) return null;
   const category = normalizeCategory(draft.category) || "bebida";
+  const type = normalizeProductType(draft.type || draft.stockType || category);
+  const categoryIds = Array.isArray(draft.categoryIds)
+    ? draft.categoryIds.map((item) => normalizeCategoryId(item)).filter(Boolean)
+    : [category].filter(Boolean);
   const rawCostPrice = Math.trunc(Number(draft.costPrice));
   const costPrice = Number.isFinite(rawCostPrice) && rawCostPrice > 0 ? rawCostPrice : price;
   return {
@@ -4291,9 +4641,197 @@ function normalizeProductRecord(input: unknown): Product | null {
     imageUrl: String(draft.imageUrl || "").trim() || undefined,
     barcode: String(draft.barcode || "").trim() || undefined,
     brand: String(draft.brand || "").trim() || undefined,
+    description: String(draft.description || "").trim() || undefined,
     category,
+    categoryIds,
+    type,
+    stockMode: draft.stockMode === "weight" ? "weight" : "unit",
+    stockType: type,
+    recipeId: String(draft.recipeId || "").trim() || undefined,
+    comboId: String(draft.comboId || "").trim() || undefined,
     supplyOrderId: String(draft.supplyOrderId || "").trim() || undefined,
   };
+}
+
+function normalizeProductType(value: unknown): NonNullable<Product["type"]> {
+  const raw = String(value || "").trim().toLowerCase();
+  if (raw === "ingrediente" || raw === "empaque" || raw === "bebida" || raw === "receta" || raw === "combo") return raw;
+  if (raw === "combos") return "combo";
+  if (raw === "recipe" || raw === "menu") return "receta";
+  return "bebida";
+}
+
+function normalizeRecipeRecord(input: unknown, products: Product[]): Recipe | null {
+  const draft = (input || {}) as Partial<Recipe> & { recipeItems?: unknown[] };
+  const id = String(draft.id || "").trim();
+  const productId = String(draft.productId || "").trim();
+  if (!id || !productId || !products.some((item) => item.id === productId)) return null;
+  const rawItems = Array.isArray(draft.ingredients) ? draft.ingredients : Array.isArray(draft.recipeItems) ? draft.recipeItems : [];
+  const ingredients = rawItems
+    .map((item) => {
+      const node = (item || {}) as { ingredientId?: unknown; quantity?: unknown };
+      const ingredientId = String(node.ingredientId || "").trim();
+      const quantity = Math.max(0, Number(node.quantity) || 0);
+      if (!ingredientId || quantity <= 0) return null;
+      return { ingredientId, quantity };
+    })
+    .filter((item): item is RecipeIngredient => !!item);
+  if (ingredients.length === 0) return null;
+  return {
+    id,
+    productId,
+    ingredients,
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    updatedAt: String(draft.updatedAt || "").trim() || undefined,
+  };
+}
+
+function normalizeComboRecord(input: unknown, products: Product[]): Combo | null {
+  const draft = (input || {}) as Partial<Combo>;
+  const id = String(draft.id || "").trim();
+  const productId = String(draft.productId || "").trim();
+  if (!id || !productId || !products.some((item) => item.id === productId)) return null;
+  const items = Array.isArray(draft.items)
+    ? draft.items
+        .map((item) => {
+          const node = (item || {}) as Partial<ComboFixedItem>;
+          const itemProductId = String(node.productId || "").trim();
+          const quantity = Math.max(1, Math.trunc(Number(node.quantity) || 1));
+          if (!itemProductId || !products.some((product) => product.id === itemProductId)) return null;
+          return { productId: itemProductId, quantity };
+        })
+        .filter((item): item is ComboFixedItem => !!item)
+    : [];
+  const optionGroups = Array.isArray(draft.optionGroups)
+    ? draft.optionGroups
+        .map((group) => {
+          const node = (group || {}) as Partial<ComboOptionGroup>;
+          const groupId = String(node.id || buildEntityId("cog")).trim();
+          const name = String(node.name || "").trim();
+          const quantity = Math.max(1, Math.trunc(Number(node.quantity) || 1));
+          const productIds = Array.isArray(node.productIds)
+            ? node.productIds.map((item) => String(item || "").trim()).filter((item) => products.some((product) => product.id === item))
+            : [];
+          if (!groupId || !name || productIds.length === 0) return null;
+          return { id: groupId, name, quantity, productIds };
+        })
+        .filter((item): item is ComboOptionGroup => !!item)
+    : [];
+  if (items.length === 0 && optionGroups.length === 0) return null;
+  return {
+    id,
+    productId,
+    items,
+    optionGroups,
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    updatedAt: String(draft.updatedAt || "").trim() || undefined,
+  };
+}
+
+function normalizeCategoryRecord(input: unknown, products: Product[]): Category | null {
+  const draft = (input || {}) as Partial<Category>;
+  const id = normalizeCategoryId(draft.id || draft.name);
+  const name = String(draft.name || "").trim();
+  if (!id || !name) return null;
+  const productIds = Array.isArray(draft.productIds)
+    ? draft.productIds.map((item) => String(item || "").trim()).filter((item) => products.some((product) => product.id === item))
+    : [];
+  return {
+    id,
+    name,
+    productIds,
+    createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+    updatedAt: String(draft.updatedAt || "").trim() || undefined,
+  };
+}
+
+function buildDomainFromLegacyMenuProducts(
+  productInput: unknown[],
+  recipeInput: unknown,
+  comboInput: unknown,
+  categoryInput: unknown,
+  menuProducts: MenuProduct[],
+  menuCategories: MenuCategory[],
+) {
+  const products = productInput.map((item) => normalizeProductRecord(item)).filter((item): item is Product => !!item);
+  const productIds = new Set(products.map((item) => item.id));
+  for (const menuProduct of menuProducts) {
+    const type = menuProduct.kind === "combo" ? "combo" : "receta";
+    if (productIds.has(menuProduct.id)) continue;
+    products.push({
+      id: menuProduct.id,
+      name: menuProduct.name,
+      price: menuProduct.price,
+      costPrice: 0,
+      createdAt: menuProduct.createdAt,
+      updatedAt: menuProduct.updatedAt,
+      imageUrl: menuProduct.imageUrl,
+      description: menuProduct.description,
+      category: menuProduct.category,
+      categoryIds: menuProduct.category ? [menuProduct.category] : [],
+      type,
+      stockMode: "unit",
+      stockType: type,
+      recipeId: type === "receta" ? `rec-${menuProduct.id}` : undefined,
+      comboId: type === "combo" ? `com-${menuProduct.id}` : undefined,
+    } as Product);
+    productIds.add(menuProduct.id);
+  }
+  const recipes = Array.isArray(recipeInput)
+    ? recipeInput.map((item) => normalizeRecipeRecord(item, products)).filter((item): item is Recipe => !!item)
+    : [];
+  const recipeIds = new Set(recipes.map((item) => item.productId));
+  for (const menuProduct of menuProducts.filter((item) => item.kind !== "combo" && item.recipeItems.length > 0)) {
+    if (recipeIds.has(menuProduct.id)) continue;
+    recipes.push({
+      id: `rec-${menuProduct.id}`,
+      productId: menuProduct.id,
+      ingredients: menuProduct.recipeItems.map((item) => ({ ingredientId: item.ingredientId, quantity: item.quantity })),
+      createdAt: menuProduct.createdAt,
+      updatedAt: menuProduct.updatedAt,
+    });
+  }
+  const combos = Array.isArray(comboInput)
+    ? comboInput.map((item) => normalizeComboRecord(item, products)).filter((item): item is Combo => !!item)
+    : [];
+  const comboIds = new Set(combos.map((item) => item.productId));
+  for (const menuProduct of menuProducts.filter((item) => item.kind === "combo")) {
+    if (comboIds.has(menuProduct.id)) continue;
+    combos.push({
+      id: `com-${menuProduct.id}`,
+      productId: menuProduct.id,
+      items: (menuProduct.comboItems || [])
+        .filter((item) => item.type === "product" && item.menuProductId)
+        .map((item) => ({ productId: item.menuProductId!, quantity: Math.max(1, Math.trunc(Number(item.quantity) || 1)) })),
+      optionGroups: (menuProduct.comboItems || [])
+        .filter((item) => item.type === "category" && item.category)
+        .map((item) => ({
+          id: `cog-${menuProduct.id}-${item.category}`,
+          name: item.categoryName || formatCategoryNameFromId(item.category || "opcion"),
+          quantity: Math.max(1, Math.trunc(Number(item.quantity) || 1)),
+          productIds: item.allowedMenuProductIds?.length
+            ? item.allowedMenuProductIds
+            : products.filter((product) => product.type === "receta" && product.category === item.category).map((product) => product.id),
+        })),
+      createdAt: menuProduct.createdAt,
+      updatedAt: menuProduct.updatedAt,
+    });
+  }
+  const categories = Array.isArray(categoryInput)
+    ? categoryInput.map((item) => normalizeCategoryRecord(item, products)).filter((item): item is Category => !!item)
+    : [];
+  const categoryIds = new Set(categories.map((item) => item.id));
+  for (const category of menuCategories) {
+    if (categoryIds.has(category.id)) continue;
+    categories.push({
+      id: category.id,
+      name: category.name,
+      productIds: products.filter((product) => product.category === category.id || product.categoryIds?.includes(category.id)).map((product) => product.id),
+      createdAt: category.createdAt,
+      updatedAt: category.updatedAt,
+    });
+  }
+  return { products, recipes, combos, categories };
 }
 
 function normalizeIngredientStockMode(value: unknown): IngredientStockMode {
@@ -4311,14 +4849,45 @@ function normalizeIngredientRecord(input: unknown): Ingredient | null {
   return {
     id,
     name,
+    productId: String(draft.productId || "").trim() || undefined,
+    metric: draft.metric === "weight" ? "weight" : "unit",
+    categoryId: String(draft.categoryId || "").trim() || undefined,
     expiresInDays: Math.max(0, Math.trunc(Number(draft.expiresInDays) || 0)),
     stockMode: normalizeIngredientStockMode(draft.stockMode),
     stockQuantity: Math.max(0, Number(draft.stockQuantity) || 0),
+    minStockQuantity: Math.max(0, Number(draft.minStockQuantity) || 0) || undefined,
+    portionSizeGrams: Math.max(0, Number(draft.portionSizeGrams) || 0) || undefined,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
     lastEntryAt: String(draft.lastEntryAt || "").trim() || undefined,
     nextExpirationDate: String(draft.nextExpirationDate || "").trim() || undefined,
   };
+}
+
+function resolveIngredientCategories(input: unknown): IngredientCategory[] {
+  const byId = new Map<string, IngredientCategory>();
+  for (const category of defaultIngredientCategorySeed) byId.set(category.id, category);
+  if (Array.isArray(input)) {
+    for (const item of input) {
+      const draft = (item || {}) as Partial<IngredientCategory>;
+      const id = normalizeCategoryId(draft.id || draft.name);
+      const name = String(draft.name || "").trim();
+      if (!id || !name) continue;
+      byId.set(id, {
+        id,
+        name,
+        createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
+        updatedAt: String(draft.updatedAt || "").trim() || undefined,
+      });
+    }
+  }
+  return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function sanitizeIngredientCategoryDraft(input: unknown): { id: string; name: string } {
+  const obj = (input || {}) as { name?: unknown };
+  const name = String(obj.name || "").trim();
+  return { id: normalizeCategoryId(name), name };
 }
 
 function normalizeMenuRecipeItems(input: unknown, ingredients: Ingredient[]): MenuRecipeItem[] {
@@ -4660,6 +5229,24 @@ function resolveTaxSettings(input: unknown): TaxSettings {
   return {
     ivaPercent: normalizeMarginPercent(Number(raw.ivaPercent)),
     mode: modeRaw === "add_to_total" || modeRaw === "show_only" ? (modeRaw as TaxMode) : defaultDb.taxSettings.mode,
+  };
+}
+
+function resolveSystemSettings(input: unknown): SystemSettings {
+  const raw = (input || {}) as { allowOutOfStockSales?: unknown };
+  return {
+    allowOutOfStockSales:
+      typeof raw.allowOutOfStockSales === "boolean"
+        ? raw.allowOutOfStockSales
+        : defaultDb.systemSettings.allowOutOfStockSales,
+  };
+}
+
+function sanitizeSystemSettingsDraft(input: unknown): Partial<SystemSettings> {
+  const raw = (input || {}) as { allowOutOfStockSales?: unknown };
+  return {
+    allowOutOfStockSales:
+      typeof raw.allowOutOfStockSales === "boolean" ? raw.allowOutOfStockSales : undefined,
   };
 }
 
@@ -5348,7 +5935,7 @@ function ensureLicenseNotifications(db: MockDb, license: LicenseRecord) {
 function getCurrentStockByProductId(db: MockDb, productId: string): number {
   return db.stocks
     .filter((item) => item.productId === productId)
-    .reduce((acc, item) => acc + Math.trunc(Number(item.quantity) || 0), 0);
+    .reduce((acc, item) => acc + getStockQuantityInBaseUnit(item), 0);
 }
 
 function getCategoryThreshold(db: MockDb, category: Product["category"] | undefined): number {
@@ -5802,7 +6389,12 @@ function sanitizeDraft(input: unknown) {
     imageUrl?: unknown;
     barcode?: unknown;
     brand?: unknown;
+    description?: unknown;
     category?: unknown;
+    categoryIds?: unknown;
+    type?: unknown;
+    stockMode?: unknown;
+    stockType?: unknown;
     supplyOrderId?: unknown;
   };
   const name = String(obj.name || "").trim();
@@ -5812,25 +6404,43 @@ function sanitizeDraft(input: unknown) {
   const imageUrl = String(obj.imageUrl || "").trim() || undefined;
   const barcode = String(obj.barcode || "").trim() || undefined;
   const brand = String(obj.brand || "").trim() || undefined;
+  const description = String(obj.description || "").trim() || undefined;
   const category = normalizeCategory(obj.category);
+  const categoryIds = Array.isArray(obj.categoryIds)
+    ? obj.categoryIds.map((item) => normalizeCategoryId(item)).filter(Boolean)
+    : category
+      ? [category]
+      : [];
   const supplyOrderId = String(obj.supplyOrderId || "").trim() || undefined;
-  return { name, price, costPrice, marginPercent, imageUrl, barcode, brand, category, supplyOrderId };
+  const type = normalizeProductType(obj.type || obj.stockType);
+  const stockMode = obj.stockMode === "weight" ? "weight" as const : "unit" as const;
+  return { name, price, costPrice, marginPercent, imageUrl, barcode, brand, description, category, categoryIds, type, stockMode, stockType: type, supplyOrderId };
 }
 
 function sanitizeIngredientDraft(input: unknown) {
   const obj = (input || {}) as {
     name?: unknown;
+    productId?: unknown;
+    metric?: unknown;
+    categoryId?: unknown;
     expiresInDays?: unknown;
     stockMode?: unknown;
     stockQuantity?: unknown;
     entryQuantity?: unknown;
+    minStockQuantity?: unknown;
+    portionSizeGrams?: unknown;
   };
   return {
     name: String(obj.name || "").trim(),
+    productId: String(obj.productId || "").trim() || undefined,
+    metric: obj.metric === "weight" ? "weight" as const : "unit" as const,
+    categoryId: String(obj.categoryId || "").trim() || undefined,
     expiresInDays: Math.max(0, Math.trunc(Number(obj.expiresInDays) || 0)),
     stockMode: normalizeIngredientStockMode(obj.stockMode),
     stockQuantity: Math.max(0, Number(obj.stockQuantity) || 0),
     entryQuantity: Math.max(0, Number(obj.entryQuantity) || 0),
+    minStockQuantity: Math.max(0, Number(obj.minStockQuantity) || 0) || undefined,
+    portionSizeGrams: Math.max(0, Number(obj.portionSizeGrams) || 0) || undefined,
   };
 }
 
@@ -5863,50 +6473,277 @@ function sanitizeMenuCategoryDraft(input: unknown): { id: string; name: string }
   return { id: normalizeCategoryId(name), name };
 }
 
-function resolveMenuIngredientConsumption(
-  orderItems: OrderItem[],
-  menuProducts: MenuProduct[],
-): { quantities: Map<string, number>; error?: string } {
-  const quantities = new Map<string, number>();
+function sanitizeCategoryDraft(input: unknown, products: Product[]): { id: string; name: string; productIds: string[] } {
+  const obj = (input || {}) as { id?: unknown; name?: unknown; productIds?: unknown };
+  const name = String(obj.name || "").trim();
+  const id = normalizeCategoryId(obj.id || name);
+  const productIds = Array.isArray(obj.productIds)
+    ? obj.productIds.map((item) => String(item || "").trim()).filter((item) => products.some((product) => product.id === item))
+    : [];
+  return { id, name, productIds };
+}
 
-  function addRecipe(product: MenuProduct, multiplier: number) {
-    for (const recipeItem of product.recipeItems) {
-      quantities.set(
-        recipeItem.ingredientId,
-        (quantities.get(recipeItem.ingredientId) || 0) + recipeItem.quantity * multiplier,
-      );
+function sanitizeRecipeDraft(input: unknown, products: Product[], ingredients: Ingredient[]): { productId: string; ingredients: RecipeIngredient[] } {
+  const obj = (input || {}) as { productId?: unknown; ingredients?: unknown };
+  const productId = String(obj.productId || "").trim();
+  const ingredientsList = Array.isArray(obj.ingredients)
+    ? obj.ingredients
+        .map((item) => {
+          const node = (item || {}) as { ingredientId?: unknown; quantity?: unknown };
+          const ingredientId = String(node.ingredientId || "").trim();
+          const quantity = Math.max(0, Number(node.quantity) || 0);
+          if (!ingredientId || !ingredients.some((ingredient) => ingredient.id === ingredientId) || quantity <= 0) return null;
+          return { ingredientId, quantity };
+        })
+        .filter((item): item is RecipeIngredient => !!item)
+    : [];
+  if (!products.some((product) => product.id === productId && product.type === "receta")) return { productId: "", ingredients: [] };
+  return { productId, ingredients: ingredientsList };
+}
+
+function sanitizeComboDraft(input: unknown, products: Product[]): { productId: string; items: ComboFixedItem[]; optionGroups: ComboOptionGroup[] } {
+  const obj = (input || {}) as { productId?: unknown; items?: unknown; optionGroups?: unknown };
+  const productId = String(obj.productId || "").trim();
+  const items = Array.isArray(obj.items)
+    ? obj.items
+        .map((item) => {
+          const node = (item || {}) as { productId?: unknown; quantity?: unknown };
+          const itemProductId = String(node.productId || "").trim();
+          const quantity = Math.max(1, Math.trunc(Number(node.quantity) || 1));
+          const product = products.find((candidate) => candidate.id === itemProductId);
+          if (!product || (product.type !== "receta" && product.type !== "bebida")) return null;
+          return { productId: itemProductId, quantity };
+        })
+        .filter((item): item is ComboFixedItem => !!item)
+    : [];
+  const optionGroups = Array.isArray(obj.optionGroups)
+    ? obj.optionGroups
+        .map((group) => {
+          const node = (group || {}) as { id?: unknown; name?: unknown; quantity?: unknown; productIds?: unknown };
+          const id = String(node.id || buildEntityId("cog")).trim();
+          const name = String(node.name || "").trim();
+          const quantity = Math.max(1, Math.trunc(Number(node.quantity) || 1));
+          const productIds = Array.isArray(node.productIds)
+            ? node.productIds
+                .map((item) => String(item || "").trim())
+                .filter((item) => {
+                  const product = products.find((candidate) => candidate.id === item);
+                  return product?.type === "receta" || product?.type === "bebida";
+                })
+            : [];
+          if (!id || !name || productIds.length === 0) return null;
+          return { id, name, quantity, productIds };
+        })
+        .filter((item): item is ComboOptionGroup => !!item)
+    : [];
+  if (!products.some((product) => product.id === productId && product.type === "combo")) return { productId: "", items: [], optionGroups: [] };
+  return { productId, items, optionGroups };
+}
+
+function syncProductCategoryIds(db: MockDb) {
+  db.products = db.products.map((product) => ({
+    ...product,
+    categoryIds: db.categories.filter((category) => category.productIds.includes(product.id)).map((category) => category.id),
+  }));
+}
+
+function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]): {
+  entries: Array<Parameters<typeof createStockEntryRecord>[1]>;
+  ingredientEntries: Array<{ ingredientId: string; quantity: number }>;
+  error?: string;
+} {
+  const quantities = new Map<string, { quantity: number; metric: NonNullable<StockEntry["metric"]> }>();
+  const ingredientQuantities = new Map<string, number>();
+
+  function addProductStock(productId: string, quantity: number, metric: NonNullable<StockEntry["metric"]>) {
+    if (!productId || quantity <= 0) return;
+    const current = quantities.get(productId);
+    if (current) {
+      current.quantity += quantity;
+      current.metric = current.metric === "kilos" || metric === "kilos" ? "grams" : current.metric;
+      return;
     }
+    quantities.set(productId, { quantity, metric });
+  }
+
+  function addIngredientStock(ingredientId: string, quantity: number) {
+    if (!ingredientId || quantity <= 0) return;
+    ingredientQuantities.set(ingredientId, (ingredientQuantities.get(ingredientId) || 0) + quantity);
+  }
+
+  function resolveProductId(rawProductId: string) {
+    return rawProductId.startsWith("menu:") ? rawProductId.slice("menu:".length) : rawProductId;
+  }
+
+  function consumeProduct(productId: string, multiplier: number): string | null {
+    if (productId.startsWith("menu:")) return consumeMenuProduct(productId.slice("menu:".length), multiplier, []);
+
+    const product = db.products.find((item) => item.id === resolveProductId(productId));
+    if (!product) return `Product not found: ${productId}`;
+
+    if (product.type === "receta") {
+      const recipe = db.recipes.find((item) => item.id === product.recipeId || item.productId === product.id);
+      if (!recipe) return `Recipe not found: ${product.name}`;
+      for (const recipeItem of recipe.ingredients) {
+        const ingredient = db.ingredients.find((item) => item.id === recipeItem.ingredientId);
+        if (!ingredient) return `Ingredient not found: ${recipeItem.ingredientId}`;
+        const sourceProductId = ingredient.productId || ingredient.id;
+        const sourceProduct = db.products.find((item) => item.id === sourceProductId);
+        const metric = ingredient.metric === "weight" || sourceProduct?.stockMode === "weight" ? "grams" : "unit";
+        const quantity = metric === "grams"
+          ? Math.max(0, Number(ingredient.portionSizeGrams) || 0) * recipeItem.quantity * multiplier
+          : recipeItem.quantity * multiplier;
+        addProductStock(sourceProductId, quantity, metric);
+      }
+      return null;
+    }
+
+    if (product.type === "combo") {
+      const combo = db.combos.find((item) => item.id === product.comboId || item.productId === product.id);
+      if (!combo) return `Combo not found: ${product.name}`;
+      for (const item of combo.items) {
+        const error = consumeProduct(item.productId, item.quantity * multiplier);
+        if (error) return error;
+      }
+      return null;
+    }
+
+    addProductStock(product.id, multiplier, product.stockMode === "weight" ? "grams" : "unit");
+    return null;
+  }
+
+  function consumeMenuProduct(menuProductId: string, multiplier: number, selections: OrderItem["comboSelections"]): string | null {
+    const menuProduct = db.menuProducts.find((item) => item.id === menuProductId);
+    if (!menuProduct) return `Menu product not found: ${menuProductId}`;
+
+    if (menuProduct.kind === "combo") {
+      for (const comboItem of menuProduct.comboItems || []) {
+        const selectedProductId =
+          comboItem.type === "category"
+            ? selections?.find((selection) => selection.category === comboItem.category)?.menuProductId
+            : comboItem.menuProductId;
+        if (!selectedProductId) return `Combo option not selected: ${comboItem.categoryName || comboItem.category || menuProduct.name}`;
+        if (comboItem.type === "category" && comboItem.allowedMenuProductIds?.length && !comboItem.allowedMenuProductIds.includes(selectedProductId)) {
+          return `Combo option not allowed: ${comboItem.categoryName || comboItem.category || menuProduct.name}`;
+        }
+        const error = consumeMenuProduct(selectedProductId, Math.max(1, Math.trunc(Number(comboItem.quantity || 1))) * multiplier, []);
+        if (error) return error;
+      }
+      return null;
+    }
+
+    for (const recipeItem of menuProduct.recipeItems) {
+      const ingredient = db.ingredients.find((item) => item.id === recipeItem.ingredientId);
+      if (!ingredient) return `Ingredient not found: ${recipeItem.ingredientName || recipeItem.ingredientId}`;
+      addIngredientStock(ingredient.id, recipeItem.quantity * multiplier);
+    }
+    return null;
   }
 
   for (const orderItem of orderItems) {
-    if (!orderItem.productId.startsWith("menu:")) continue;
-    const menuProductId = orderItem.productId.slice("menu:".length);
-    const menuProduct = menuProducts.find((item) => item.id === menuProductId);
-    if (!menuProduct) return { quantities, error: `Menu product not found: ${orderItem.productName}` };
+    if (orderItem.productId.startsWith("menu:")) {
+      const menuProductId = orderItem.productId.slice("menu:".length);
+      const menuProduct = db.menuProducts.find((item) => item.id === menuProductId);
+      if (!menuProduct) return { entries: [], ingredientEntries: [], error: `Menu product not found: ${orderItem.productName}` };
+      if (menuProduct.kind === "combo") {
+        const unitSelections = orderItem.comboUnits?.length
+          ? orderItem.comboUnits.map((unit) => unit.comboSelections || [])
+          : Array.from({ length: orderItem.quantity }, () => orderItem.comboSelections || []);
+        for (const selections of unitSelections) {
+          const error = consumeMenuProduct(menuProduct.id, 1, selections);
+          if (error) return { entries: [], ingredientEntries: [], error };
+        }
+        continue;
+      }
+      const error = consumeMenuProduct(menuProduct.id, orderItem.quantity, orderItem.comboSelections || []);
+      if (error) return { entries: [], ingredientEntries: [], error };
+      continue;
+    }
 
-    if (menuProduct.kind === "combo") {
+    const productId = resolveProductId(orderItem.productId);
+    const product = db.products.find((item) => item.id === productId);
+    if (!product) return { entries: [], ingredientEntries: [], error: `Product not found: ${orderItem.productName}` };
+
+    if (product.type === "combo") {
+      const combo = db.combos.find((item) => item.id === product.comboId || item.productId === product.id);
+      if (!combo) return { entries: [], ingredientEntries: [], error: `Combo not found: ${product.name}` };
       const unitSelections = orderItem.comboUnits?.length
         ? orderItem.comboUnits.map((unit) => unit.comboSelections || [])
         : Array.from({ length: orderItem.quantity }, () => orderItem.comboSelections || []);
       for (const selections of unitSelections) {
-        for (const comboItem of menuProduct.comboItems || []) {
-          const selectedProductId = comboItem.type === "category"
-            ? selections.find((selection) => selection.category === comboItem.category)?.menuProductId
-            : comboItem.menuProductId;
-          if (comboItem.type === "category" && comboItem.allowedMenuProductIds?.length && !comboItem.allowedMenuProductIds.includes(selectedProductId || "")) {
-            return { quantities, error: `Combo component not allowed: ${comboItem.categoryName || comboItem.category}` };
+        for (const item of combo.items) {
+          const error = consumeProduct(item.productId, item.quantity);
+          if (error) return { entries: [], ingredientEntries: [], error };
+        }
+        for (const group of combo.optionGroups) {
+          const selectedProductId = selections.find((selection) => selection.category === group.id || selection.category === group.name)?.menuProductId;
+          if (!selectedProductId || !group.productIds.includes(resolveProductId(selectedProductId))) {
+            return { entries: [], ingredientEntries: [], error: `Combo option not selected: ${group.name}` };
           }
-          const component = menuProducts.find((item) => item.id === selectedProductId && item.kind !== "combo" && (comboItem.type !== "category" || item.category === comboItem.category));
-          if (!component) return { quantities, error: `Combo component not selected: ${comboItem.type === "category" ? comboItem.categoryName : comboItem.menuProductName}` };
-          addRecipe(component, comboItem.quantity);
+          const error = consumeProduct(selectedProductId, group.quantity);
+          if (error) return { entries: [], ingredientEntries: [], error };
         }
       }
-    } else {
-      addRecipe(menuProduct, orderItem.quantity);
+      continue;
     }
+
+    const error = consumeProduct(product.id, orderItem.quantity);
+    if (error) return { entries: [], ingredientEntries: [], error };
   }
 
-  return { quantities };
+  return {
+    entries: [...quantities.entries()].map(([productId, item]) => ({
+      productId,
+      quantity: item.quantity,
+      metric: item.metric,
+      movementType: "out" as const,
+      movementDate: new Date().toISOString(),
+      description: "Venta",
+    })),
+    ingredientEntries: [...ingredientQuantities.entries()].map(([ingredientId, quantity]) => ({ ingredientId, quantity })),
+  };
+}
+
+function findIngredientStockIssue(db: MockDb, entries: Array<{ ingredientId: string; quantity: number }>): string | null {
+  for (const entry of entries) {
+    const ingredient = db.ingredients.find((item) => item.id === entry.ingredientId);
+    if (!ingredient) return `Ingredient not found: ${entry.ingredientId}`;
+    const available = Math.max(0, Number(ingredient.stockQuantity) || 0);
+    const required = Math.max(0, Number(entry.quantity) || 0);
+    if (available < required) return `Stock insuficiente para ${ingredient.name}. Disponible ${available}, requerido ${required}.`;
+  }
+  return null;
+}
+
+function applyIngredientStockConsumption(db: MockDb, entries: Array<{ ingredientId: string; quantity: number }>) {
+  const now = new Date().toISOString();
+  db.ingredients = db.ingredients.map((ingredient) => {
+    const required = entries.find((entry) => entry.ingredientId === ingredient.id)?.quantity || 0;
+    if (required <= 0) return ingredient;
+    return {
+      ...ingredient,
+      stockQuantity: Math.max(0, (Number(ingredient.stockQuantity) || 0) - required),
+      updatedAt: now,
+    };
+  });
+}
+
+function findProductStockIssue(db: MockDb, entries: Array<Parameters<typeof createStockEntryRecord>[1]>): string | null {
+  for (const entry of entries) {
+    const product = db.products.find((item) => item.id === entry.productId);
+    if (!product) return `Product not found: ${entry.productId}`;
+    const available = getCurrentStockByProductId(db, entry.productId);
+    const required = Math.abs(getStockQuantityInBaseUnit({
+      id: "draft",
+      productId: entry.productId,
+      quantity: entry.quantity,
+      metric: entry.metric,
+      movementType: entry.movementType,
+      createdAt: new Date().toISOString(),
+    }));
+    if (available < required) return `Stock insuficiente para ${product.name}. Disponible ${available}, requerido ${required}.`;
+  }
+  return null;
 }
 
 function enrichReceiptComboItems(items: ReceiptItem[], menuProducts: MenuProduct[]): ReceiptItem[] {
@@ -6270,7 +7107,7 @@ function enrichProductsWithStocks(products: Product[], stocks: StockEntry[]) {
     const productId = String(stock.productId || "").trim();
     if (!productId) continue;
     const prev = totals.get(productId) || { existencia: 0, ultimoIngreso: undefined };
-    const nextExistencia = prev.existencia + Math.trunc(Number(stock.quantity) || 0);
+    const nextExistencia = prev.existencia + getStockQuantityInBaseUnit(stock);
 
     const prevDate = prev.ultimoIngreso ? new Date(prev.ultimoIngreso).getTime() : 0;
     const nextDate = stock.createdAt ? new Date(stock.createdAt).getTime() : 0;
@@ -6316,6 +7153,30 @@ function extractProductId(pathname: string): string | null {
 function extractIngredientId(pathname: string): string | null {
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 2 && parts[0] === "ingredients") return parts[1];
+  return null;
+}
+
+function extractIngredientCategoryId(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 2 && parts[0] === "ingredient-categories") return normalizeCategoryId(parts[1]);
+  return null;
+}
+
+function extractCategoryId(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 2 && parts[0] === "categories") return normalizeCategoryId(parts[1]);
+  return null;
+}
+
+function extractRecipeId(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 2 && parts[0] === "recipes") return parts[1];
+  return null;
+}
+
+function extractComboId(pathname: string): string | null {
+  const parts = pathname.split("/").filter(Boolean);
+  if (parts.length === 2 && parts[0] === "combos") return parts[1];
   return null;
 }
 

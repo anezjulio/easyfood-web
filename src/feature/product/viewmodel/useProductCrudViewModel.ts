@@ -6,6 +6,9 @@ import {
   type PriceMarginSettings,
   type Product,
   type ProductCategory,
+  type ProductStockMode,
+  type ProductStockType,
+  type ProductType,
   type ProductSortKey,
 } from "../model/product.types";
 import { findBarcodeConflict, generateUniqueAutoBarcode, normalizeBarcodeInput } from "../model/product.barcode";
@@ -25,12 +28,15 @@ import { uploadImageFromFile } from "../../../shared/image/image.service";
 import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
 import { matchesNumericContainsFilter, matchesPriceFilter } from "../../../shared/product/product-filter";
 import { normalizeForSearch } from "../../../shared/search/search";
+import type { Category } from "../../category/model/category.types";
+import { fetchCategoriesApi } from "../../category/service/category.api";
 
 export function useProductCrudViewModel() {
   const auth = useAuth();
   const isAdmin = auth.user?.role === "admin";
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [marginSettings, setMarginSettings] = useState<PriceMarginSettings | null>(null);
@@ -50,8 +56,13 @@ export function useProductCrudViewModel() {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [barcode, setBarcode] = useState("");
   const [brand, setBrand] = useState("");
+  const [description, setDescription] = useState("");
   const [autoGenerateBarcodeOnSubmit, setAutoGenerateBarcodeOnSubmit] = useState(false);
   const [category, setCategory] = useState<ProductCategory>("bebida");
+  const [categoryIds, setCategoryIds] = useState<string[]>(["bebida"]);
+  const [productType, setProductType] = useState<ProductType>("bebida");
+  const [stockMode, setStockMode] = useState<ProductStockMode>("unit");
+  const [stockType, setStockType] = useState<ProductStockType>("bebida");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [categoryMarginDraft, setCategoryMarginDraft] = useState("30");
@@ -65,16 +76,22 @@ export function useProductCrudViewModel() {
     setImageUrl("");
     setBarcode("");
     setBrand("");
+    setDescription("");
     setAutoGenerateBarcodeOnSubmit(false);
     setCategory("bebida");
+    setCategoryIds(["bebida"]);
+    setProductType("bebida");
+    setStockMode("unit");
+    setStockType("bebida");
     setNewProductUseMarginOverride(false);
     setNewProductMarginDraft(String(marginSettings?.categoryMargins?.bebida ?? 30));
   }, [marginSettings?.categoryMargins?.bebida]);
 
   const reloadProducts = useCallback(async (nextSelectedId?: string | null) => {
     setLoading(true);
-    const list = await fetchProducts();
+    const [list, categoryList] = await Promise.all([fetchProducts(), fetchCategoriesApi()]);
     setProducts(list);
+    setCategories(categoryList.filter((item) => item.id !== "ingrediente"));
     setLoading(false);
     if (typeof nextSelectedId !== "undefined") {
       setSelectedProductId(nextSelectedId);
@@ -209,7 +226,12 @@ export function useProductCrudViewModel() {
     setImageUrl(selectedProduct.imageUrl || "");
     setBarcode(selectedProduct.barcode || "");
     setBrand(selectedProduct.brand || "");
+    setDescription(selectedProduct.description || "");
     setCategory(selectedProduct.category || "bebida");
+    setCategoryIds(selectedProduct.categoryIds?.length ? selectedProduct.categoryIds : selectedProduct.category ? [selectedProduct.category] : ["bebida"]);
+    setProductType(selectedProduct.type || (selectedProduct.stockType === "recipe" ? "receta" : selectedProduct.stockType === "stock" ? "bebida" : selectedProduct.stockType || "bebida"));
+    setStockMode(selectedProduct.stockMode || "unit");
+    setStockType(selectedProduct.stockType || selectedProduct.type || "bebida");
   }, [effectiveMarginPercent, marginSettings, selectedProduct]);
 
   function handleSortChange(nextKey: ProductSortKey) {
@@ -231,9 +253,27 @@ export function useProductCrudViewModel() {
   function handleFilterChange(key: "name" | "barcode" | "category" | "price" | "existencia" | "createdAt", value: string) {
     if (key === "name") setNameFilter(value);
     if (key === "barcode") setBarcodeFilter(value);
+    if (key === "category") setNameFilter(value ? `${value} ${nameFilter}`.trim() : nameFilter);
     if (key === "price") setPriceFilter(value);
     if (key === "existencia") setExistenciaFilter(value);
     if (key === "createdAt") setCreatedAtFilter(value);
+  }
+
+  function toggleCategoryId(id: string) {
+    setCategoryIds((current) => {
+      const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+      const safeNext = next.length ? next : [category];
+      setCategory(safeNext[0] || "bebida");
+      return safeNext;
+    });
+  }
+
+  function changeProductType(nextType: ProductType) {
+    setProductType(nextType);
+    setStockType(nextType);
+    if (nextType !== "ingrediente") {
+      setStockMode("unit");
+    }
   }
 
   function selectProduct(id: string) {
@@ -353,16 +393,19 @@ export function useProductCrudViewModel() {
       return;
     }
 
-    if (!Number.isFinite(parsedCost) || parsedCost <= 0) {
+    const requiresCommercialPrice = productType === "bebida" || productType === "receta" || productType === "combo";
+    if (requiresCommercialPrice && (!Number.isFinite(parsedCost) || parsedCost <= 0)) {
       setError("Ingresa un precio de coste valido mayor a 0.");
       return;
     }
 
-    const nextSalePrice = calculateSalePrice(parsedCost, effectiveMarginPercent);
-    if (!Number.isFinite(nextSalePrice) || nextSalePrice <= 0) {
+    const nextSalePrice = requiresCommercialPrice ? calculateSalePrice(parsedCost, effectiveMarginPercent) : 0;
+    if (requiresCommercialPrice && (!Number.isFinite(nextSalePrice) || nextSalePrice <= 0)) {
       setError("No se pudo calcular el precio de venta.");
       return;
     }
+    const nextCategoryIds = categoryIds.length ? categoryIds : [category];
+    const nextCategory = nextCategoryIds[0] || category;
     const typedBarcode = barcode.trim();
     const barcodeForCreate = typedBarcode || (autoGenerateBarcodeOnSubmit ? generateUniqueAutoBarcode(products, selectedProductId) : "");
     const nextBarcode = selectedProductId ? typedBarcode : barcodeForCreate;
@@ -390,7 +433,12 @@ export function useProductCrudViewModel() {
           imageUrl,
           barcode: nextBarcode,
           brand,
-          category,
+          description,
+          category: nextCategory,
+          categoryIds: nextCategoryIds,
+          type: productType,
+          stockMode,
+          stockType,
         });
 
         if (!updated) {
@@ -411,7 +459,12 @@ export function useProductCrudViewModel() {
         imageUrl,
         barcode: nextBarcode,
         brand,
-        category,
+        description,
+        category: nextCategory,
+        categoryIds: nextCategoryIds,
+        type: productType,
+        stockMode,
+        stockType,
       });
 
       if (isAdmin && newProductUseMarginOverride) {
@@ -455,6 +508,7 @@ export function useProductCrudViewModel() {
   return {
     loading,
     products: filteredProducts,
+    categories,
     selectedProductId,
     selectProduct,
     sortKey,
@@ -484,10 +538,20 @@ export function useProductCrudViewModel() {
     setBarcode,
     brand,
     setBrand,
+    description,
+    setDescription,
     autoGenerateBarcodeOnSubmit,
     setAutoGenerateBarcodeOnSubmit: toggleAutoGenerateBarcodeOnSubmit,
     category,
     setCategory,
+    categoryIds,
+    toggleCategoryId,
+    productType,
+    setProductType: changeProductType,
+    stockMode,
+    setStockMode,
+    stockType,
+    setStockType,
     categoryMarginDraft,
     setCategoryMarginDraft,
     saveCategoryMargin,

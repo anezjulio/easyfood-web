@@ -9,6 +9,9 @@ export const PRODUCT_CATEGORIES = [
 ] as const;
 
 export type ProductCategory = string;
+export type ProductType = "ingrediente" | "empaque" | "bebida" | "receta" | "combo";
+export type ProductStockMode = "unit" | "weight";
+export type ProductStockType = ProductType | "stock" | "recipe";
 
 export type Product = {
   id: string;
@@ -16,11 +19,18 @@ export type Product = {
   price: number;
   costPrice?: number;
   createdAt: string; // ISO string
+  updatedAt?: string;
   imageUrl?: string;
   barcode?: string;
   brand?: string;
   description?: string;
   category?: ProductCategory;
+  categoryIds?: string[];
+  type?: ProductType;
+  stockMode?: ProductStockMode;
+  stockType?: ProductStockType;
+  recipeId?: string;
+  comboId?: string;
   supplyOrderId?: string;
   existencia?: number;
   ultimoIngreso?: string;

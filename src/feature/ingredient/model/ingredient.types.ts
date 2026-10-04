@@ -5,9 +5,14 @@ export type IngredientStockMode = (typeof INGREDIENT_STOCK_MODES)[number];
 export type Ingredient = {
   id: string;
   name: string;
+  productId?: string;
+  metric?: "unit" | "weight";
+  categoryId?: string;
   expiresInDays: number;
   stockMode: IngredientStockMode;
   stockQuantity: number;
+  minStockQuantity?: number;
+  portionSizeGrams?: number;
   createdAt: string;
   updatedAt?: string;
   lastEntryAt?: string;
@@ -16,10 +21,26 @@ export type Ingredient = {
 
 export type IngredientDraft = {
   name: string;
+  productId?: string;
+  metric?: "unit" | "weight";
+  categoryId?: string;
   expiresInDays: number;
   stockMode: IngredientStockMode;
   stockQuantity?: number;
   entryQuantity?: number;
+  minStockQuantity?: number;
+  portionSizeGrams?: number;
+};
+
+export type IngredientCategory = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt?: string;
+};
+
+export type IngredientCategoryDraft = {
+  name: string;
 };
 
 export function getIngredientStockModeLabel(mode: IngredientStockMode): string {

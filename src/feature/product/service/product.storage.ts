@@ -36,7 +36,14 @@ export type ProductDraft = {
   imageUrl?: string;
   barcode?: string;
   brand?: string;
+  description?: string;
   category?: Product["category"];
+  categoryIds?: string[];
+  type?: Product["type"];
+  stockMode?: Product["stockMode"];
+  stockType?: Product["stockType"];
+  recipeId?: string;
+  comboId?: string;
   supplyOrderId?: string;
 };
 
@@ -174,6 +181,19 @@ function normalizeProducts(products: Product[]): Product[] {
     const parsedCostPrice = Math.trunc(Number((p as { costPrice?: unknown }).costPrice));
     const costPrice = Number.isFinite(parsedCostPrice) && parsedCostPrice > 0 ? parsedCostPrice : fallbackCostPrice;
     const supplyOrderId = String((p as { supplyOrderId?: unknown }).supplyOrderId || "").trim() || undefined;
+    const rawStockType = (p as { stockType?: unknown }).stockType;
+    const stockType: Product["stockType"] =
+      rawStockType === "ingrediente" || rawStockType === "empaque" || rawStockType === "bebida" || rawStockType === "receta" || rawStockType === "combo"
+        ? rawStockType
+        : rawStockType === "recipe"
+          ? "receta"
+          : "bebida";
+    const type: Product["type"] =
+      p.type === "ingrediente" || p.type === "empaque" || p.type === "bebida" || p.type === "receta" || p.type === "combo"
+        ? p.type
+        : stockType;
+    const stockMode: Product["stockMode"] = p.stockMode === "weight" ? "weight" : "unit";
+    const categoryIds = Array.isArray(p.categoryIds) ? p.categoryIds : category ? [category] : [];
     if (
       fixedName !== p.name ||
       barcode !== p.barcode ||
@@ -181,9 +201,12 @@ function normalizeProducts(products: Product[]): Product[] {
       category !== p.category ||
       costPrice !== p.costPrice ||
       supplyOrderId !== p.supplyOrderId
+      || stockType !== p.stockType
+      || type !== p.type
+      || stockMode !== p.stockMode
     ) {
       changed = true;
-      return { ...p, name: fixedName, barcode, brand, category, costPrice, supplyOrderId };
+      return { ...p, name: fixedName, barcode, brand, category, categoryIds, costPrice, supplyOrderId, stockType, type, stockMode };
     }
     return p;
   });
@@ -242,24 +265,32 @@ export function createProduct(draft: ProductDraft): Product {
   const rawCostPrice = Math.trunc(Number(draft.costPrice));
   const hasPrice = Number.isFinite(rawPrice) && rawPrice > 0;
   const hasCostPrice = Number.isFinite(rawCostPrice) && rawCostPrice > 0;
-  if (!hasPrice && !hasCostPrice) {
+  const requiresSalePrice = draft.type === "bebida" || draft.type === "receta" || draft.type === "combo";
+  if (requiresSalePrice && !hasPrice && !hasCostPrice) {
     throw new Error("Product must define a valid price or costPrice");
   }
 
-  const costPrice = hasCostPrice ? rawCostPrice : rawPrice;
-  const salePrice = hasCostPrice ? calculateSalePrice(costPrice, effectiveMargin) : rawPrice;
+  const costPrice = hasCostPrice ? rawCostPrice : Math.max(0, rawPrice || 0);
+  const salePrice = hasCostPrice ? calculateSalePrice(costPrice, effectiveMargin) : Math.max(0, rawPrice || 0);
 
   const now = new Date().toISOString();
   const product: Product = {
     id: buildEntityId("p"),
     name: draft.name.trim(),
-    price: Math.max(1, Math.trunc(salePrice)),
-    costPrice: Math.max(1, Math.trunc(costPrice)),
+    price: Math.max(0, Math.trunc(salePrice)),
+    costPrice: Math.max(0, Math.trunc(costPrice)),
     createdAt: now,
     imageUrl: draft.imageUrl?.trim() || undefined,
     barcode: draft.barcode?.trim() || undefined,
     brand: draft.brand?.trim() || undefined,
+    description: draft.description?.trim() || undefined,
     category,
+    categoryIds: draft.categoryIds?.length ? draft.categoryIds : [category],
+    type: draft.type || (draft.stockType === "recipe" ? "receta" : "bebida"),
+    stockMode: draft.stockMode || "unit",
+    stockType: draft.stockType || draft.type || "bebida",
+    recipeId: draft.recipeId?.trim() || undefined,
+    comboId: draft.comboId?.trim() || undefined,
     supplyOrderId: draft.supplyOrderId?.trim() || undefined,
   };
 
@@ -313,7 +344,14 @@ export function updateProduct(id: string, draft: ProductDraft): Product | null {
       imageUrl: draft.imageUrl?.trim() || undefined,
       barcode: draft.barcode?.trim() || undefined,
       brand: draft.brand?.trim() || undefined,
+      description: draft.description?.trim() || undefined,
       category: nextCategory,
+      categoryIds: draft.categoryIds?.length ? draft.categoryIds : item.categoryIds || [nextCategory],
+      type: draft.type || item.type || (draft.stockType === "recipe" ? "receta" : "bebida"),
+      stockMode: draft.stockMode || item.stockMode || "unit",
+      stockType: draft.stockType || draft.type || item.stockType || "bebida",
+      recipeId: draft.recipeId?.trim() || item.recipeId,
+      comboId: draft.comboId?.trim() || item.comboId,
       supplyOrderId: typeof draft.supplyOrderId === "string" ? draft.supplyOrderId.trim() || undefined : item.supplyOrderId,
     };
     return updated;

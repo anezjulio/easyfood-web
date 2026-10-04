@@ -1,10 +1,701 @@
 {
-  "products": [],
+  "products": [
+    {
+      "id": "menu090920261743296363",
+      "name": "Tequeños Promo x12",
+      "price": 10000,
+      "costPrice": 0,
+      "createdAt": "2026-09-09T17:43:29.555Z",
+      "updatedAt": "2026-09-09T22:03:29.250Z",
+      "category": "combos",
+      "categoryIds": [
+        "combos"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu090920261743296363"
+    },
+    {
+      "id": "menu090920261513169389",
+      "name": "Hamburguesa Explosiva",
+      "price": 14000,
+      "costPrice": 0,
+      "createdAt": "2026-09-09T15:13:16.167Z",
+      "description": "Doble carne lechuga tomate cebolla huevo frito papas pay jamon queso bacon y salsas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu090920261513169389"
+    },
+    {
+      "id": "menu080920262233236954",
+      "name": "Perro Caliente Especial",
+      "price": 6000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T22:33:23.200Z",
+      "updatedAt": "2026-09-08T23:09:37.855Z",
+      "description": "Perro Caliente Especial (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
+      "category": "pancho",
+      "categoryIds": [
+        "pancho"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920262233236954"
+    },
+    {
+      "id": "menu080920262121530765",
+      "name": "Tequeños x6",
+      "price": 7000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T21:21:53.613Z",
+      "updatedAt": "2026-09-08T21:44:17.303Z",
+      "description": "12 Tequeños venezolanos",
+      "category": "combos",
+      "categoryIds": [
+        "combos"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920262121530765"
+    },
+    {
+      "id": "menu080920262121103490",
+      "name": "Tequeños x12",
+      "price": 13000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T21:21:10.551Z",
+      "updatedAt": "2026-09-08T21:44:09.409Z",
+      "description": "12 Tequeños venezolanos",
+      "category": "combos",
+      "categoryIds": [
+        "combos"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920262121103490"
+    },
+    {
+      "id": "menu080920262038282615",
+      "name": "Pancho Simple Promo Apertura",
+      "price": 1000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T20:38:28.437Z",
+      "description": "Pancho Simple (Pan de pancho, Salchicha, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
+      "category": "pancho",
+      "categoryIds": [
+        "pancho"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920262038282615"
+    },
+    {
+      "id": "menu080920262032031181",
+      "name": "Perro Caliente Tradicional",
+      "price": 4000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T20:32:03.060Z",
+      "updatedAt": "2026-09-08T23:08:46.179Z",
+      "description": "Perro Caliente Tradicional (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
+      "category": "pancho",
+      "categoryIds": [
+        "pancho"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920262032031181"
+    },
+    {
+      "id": "menu080920262020581434",
+      "name": "Pancho de la Casa",
+      "price": 3000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T20:20:58.480Z",
+      "description": "Pancho de la casa (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
+      "category": "pancho",
+      "categoryIds": [
+        "pancho"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920262020581434"
+    },
+    {
+      "id": "menu080920261954472297",
+      "name": "Hamburguesa Pollo Bacon + Papas",
+      "price": 12000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:54:47.881Z",
+      "description": "Hamburguesa Pollo Bacon + Papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261954472297"
+    },
+    {
+      "id": "menu080920261954184932",
+      "name": "Hamburguesa Pollo Doble + Papas",
+      "price": 15000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:54:18.942Z",
+      "description": "Hamburguesa Pollo Doble + Papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261954184932"
+    },
+    {
+      "id": "menu080920261953420897",
+      "name": "Hamburguesa Pollo Simple + Papas",
+      "price": 8500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:53:42.792Z",
+      "description": "Hamburguesa Pollo Simple + Papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261953420897"
+    },
+    {
+      "id": "menu080920261952442755",
+      "name": "Hamburguesa Mixta (carne y pollo) + Papas",
+      "price": 15000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:52:44.247Z",
+      "description": "Hamburguesa Mixta (carne y pollo) + Papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261952442755"
+    },
+    {
+      "id": "menu080920261951184585",
+      "name": "Hamburguesa Carne Triple Bacon + Papas",
+      "price": 20000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:51:18.239Z",
+      "description": "Hamburguesa Carne Triple con Cheddar + papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261951184585"
+    },
+    {
+      "id": "menu080920261950493382",
+      "name": "Hamburguesa Carne Doble Bacon + Papas",
+      "price": 17000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:50:49.491Z",
+      "description": "Hamburguesa Carne Doble con Cheddar + papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261950493382"
+    },
+    {
+      "id": "menu080920261931172153",
+      "name": "Hamburguesa Carne Bacon + Papas",
+      "price": 13000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:31:17.204Z",
+      "updatedAt": "2026-09-08T19:55:31.632Z",
+      "description": "Hamburguesa Carne Bacon + Papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261931172153"
+    },
+    {
+      "id": "menu080920261926110899",
+      "name": "Hamburguesa Carne Doble con Cheddar + Papas",
+      "price": 14000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:26:11.051Z",
+      "updatedAt": "2026-09-08T19:31:26.115Z",
+      "description": "Hamburguesa Carne Doble con Cheddar + papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261926110899"
+    },
+    {
+      "id": "menu080920261925118847",
+      "name": "Hamburguesa Carne Simple + Papas",
+      "price": 9000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:25:11.309Z",
+      "description": "Hamburguesa Carne Simple + Papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "combo",
+      "stockMode": "unit",
+      "stockType": "combo",
+      "comboId": "com-menu080920261925118847"
+    },
+    {
+      "id": "menu080920261919394277",
+      "name": "Hamburguesa Carne Triple Bacon",
+      "price": 17500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:19:39.748Z",
+      "updatedAt": "2026-09-08T20:00:28.590Z",
+      "description": "Tres hamburguesas de carne, panceta,  cheddar, lechuga, tomate, y cebolla, pepinillo, salsas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261919394277"
+    },
+    {
+      "id": "menu080920261913323090",
+      "name": "Hamburguesa Carne Doble Bacon",
+      "price": 14500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:13:32.529Z",
+      "updatedAt": "2026-09-08T19:57:31.744Z",
+      "description": "Dos hamburguesas de carne, panceta,  cheddar, lechuga, tomate, y cebolla, pepinillo, salsas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261913323090"
+    },
+    {
+      "id": "menu080920261907232794",
+      "name": "Hamburguesa Carne Bacon",
+      "price": 10500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T19:07:23.574Z",
+      "updatedAt": "2026-09-08T19:57:10.712Z",
+      "description": "Hamburguesa de carne, panceta, cheddar, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261907232794"
+    },
+    {
+      "id": "menu080920261851286352",
+      "name": "Hamburguesa Pollo Doble",
+      "price": 12500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T18:51:28.286Z",
+      "updatedAt": "2026-09-08T20:01:06.556Z",
+      "description": "Dos hamburguesas de pollo, lechuga, doble panceta, doble cheddar,  tomate, y cebolla, pepinillo, salsas y papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261851286352"
+    },
+    {
+      "id": "menu080920261851062448",
+      "name": "Hamburguesa Carne Doble con Cheddar",
+      "price": 11500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T18:51:06.884Z",
+      "updatedAt": "2026-09-08T19:57:46.174Z",
+      "description": "Dos hamburguesas de carne, lechuga, doble cheddar,  tomate, y cebolla, pepinillo, salsas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261851062448"
+    },
+    {
+      "id": "menu080920261849311003",
+      "name": "Hamburguesa Pollo Simple",
+      "price": 6000,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T18:49:31.811Z",
+      "updatedAt": "2026-09-08T20:01:23.643Z",
+      "description": "Hamburguesa de pollo, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261849311003"
+    },
+    {
+      "id": "menu080920261848447277",
+      "name": "Hamburguesa Carne Simple",
+      "price": 6500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T18:48:44.719Z",
+      "updatedAt": "2026-09-08T19:58:17.889Z",
+      "description": "Hamburguesa de carne, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261848447277"
+    },
+    {
+      "id": "menu080920261848213749",
+      "name": "Hamburguesa Mixta (carne y pollo)",
+      "price": 12500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T18:48:21.119Z",
+      "updatedAt": "2026-09-08T20:00:41.353Z",
+      "description": "Hamburguesas de carne, hamburguesas de pollo, lechuga, doble cheddar,  tomate, y cebolla, pepinillo, salsas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261848213749"
+    },
+    {
+      "id": "menu080920261842174993",
+      "name": "Raciòn de papas",
+      "price": 2500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T18:42:17.452Z",
+      "description": "Raciòn de papas fritas 250gr",
+      "category": "papas",
+      "categoryIds": [
+        "papas"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261842174993"
+    },
+    {
+      "id": "menu080920261826458529",
+      "name": "Hamburguesa Pollo Bacon",
+      "price": 9500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T18:26:45.572Z",
+      "updatedAt": "2026-09-08T20:00:55.672Z",
+      "description": "hamburguesas de pollo, lechuga, panceta, cheddar,  tomate, y cebolla, pepinillo, salsas y papas",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261826458529"
+    },
+    {
+      "id": "menu080920261752062063",
+      "name": "7 UP Zero (600ml)",
+      "price": 2500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T17:52:06.055Z",
+      "description": "7 UP Zero 600 ml",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261752062063"
+    },
+    {
+      "id": "menu080920261751275871",
+      "name": "7 UP (600ml)",
+      "price": 2500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T17:51:27.763Z",
+      "description": "7 UP 600 ml original",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261751275871"
+    },
+    {
+      "id": "menu080920261725073896",
+      "name": "Coca cola Zero (600ml)",
+      "price": 2500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T17:25:07.011Z",
+      "updatedAt": "2026-09-08T17:25:25.563Z",
+      "description": "Coca cola 600 ml Zero",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261725073896"
+    },
+    {
+      "id": "menu080920261724360851",
+      "name": "Coca cola (600ml)",
+      "price": 2500,
+      "costPrice": 0,
+      "createdAt": "2026-09-08T17:24:36.011Z",
+      "description": "Coca cola 500 ml original",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu080920261724360851"
+    },
+    {
+      "id": "menu070920262002191608",
+      "name": "Pan de Miga (Jamon y Queso)",
+      "price": 2500,
+      "costPrice": 0,
+      "createdAt": "2026-09-07T20:02:19.757Z",
+      "description": "Pan de Miga de Jamon y Queso",
+      "category": "hamburguesa",
+      "categoryIds": [
+        "hamburguesa"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu070920262002191608"
+    },
+    {
+      "id": "menu070920261533094009",
+      "name": "Huevos x6",
+      "price": 5000,
+      "costPrice": 0,
+      "createdAt": "2026-09-07T15:33:09.386Z",
+      "description": "6 Huevos Cocidos de Almuerzo",
+      "category": "pollo",
+      "categoryIds": [
+        "pollo"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu070920261533094009"
+    },
+    {
+      "id": "menu070920261532128669",
+      "name": "Huevos x12",
+      "price": 9000,
+      "costPrice": 0,
+      "createdAt": "2026-09-07T15:32:12.099Z",
+      "description": "12 Huevos para Almuerzo",
+      "category": "pollo",
+      "categoryIds": [
+        "pollo"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu070920261532128669"
+    },
+    {
+      "id": "menu070920261531146383",
+      "name": "Papa Entera",
+      "price": 1500,
+      "costPrice": 0,
+      "createdAt": "2026-09-07T15:31:14.093Z",
+      "description": "Papas de Almuerzo",
+      "category": "papas",
+      "categoryIds": [
+        "papas"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu070920261531146383"
+    },
+    {
+      "id": "menu070920261520266564",
+      "name": "Suprema (250g)",
+      "price": 9000,
+      "costPrice": 0,
+      "createdAt": "2026-09-07T15:20:26.302Z",
+      "description": "250g de pollo para almuerzo",
+      "category": "pollo",
+      "categoryIds": [
+        "pollo"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu070920261520266564"
+    },
+    {
+      "id": "menu030920261933382276",
+      "name": "Pancho Simple",
+      "price": 2500,
+      "costPrice": 0,
+      "createdAt": "2026-09-03T19:33:38.891Z",
+      "updatedAt": "2026-09-03T19:35:16.163Z",
+      "description": "Pancho Simple (Pan de pancho, Salchicha, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
+      "category": "pancho",
+      "categoryIds": [
+        "pancho"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu030920261933382276"
+    },
+    {
+      "id": "menu030920261911111950",
+      "name": "Agua (500ml)",
+      "price": 1500,
+      "costPrice": 0,
+      "createdAt": "2026-09-03T19:11:11.728Z",
+      "description": "Agua (500ml)",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu030920261911111950"
+    },
+    {
+      "id": "menu030920261910319508",
+      "name": "Placer Pomelo (500ml)",
+      "price": 1500,
+      "costPrice": 0,
+      "createdAt": "2026-09-03T19:10:31.965Z",
+      "description": "Placer Pomelo (500ml)",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu030920261910319508"
+    },
+    {
+      "id": "menu030920261909491467",
+      "name": "Placer Pera (500ml)",
+      "price": 1500,
+      "costPrice": 0,
+      "createdAt": "2026-09-03T19:09:49.312Z",
+      "description": "Placer Pera (500ml)",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu030920261909491467"
+    },
+    {
+      "id": "menu030920261909215905",
+      "name": "Placer Manzana (500ml)",
+      "price": 1500,
+      "costPrice": 0,
+      "createdAt": "2026-09-03T19:09:21.366Z",
+      "description": "Placer Manzana (500ml)",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu030920261909215905"
+    },
+    {
+      "id": "menu030920261908344116",
+      "name": "Placer Naranja (500ml)",
+      "price": 1500,
+      "costPrice": 0,
+      "createdAt": "2026-09-03T19:08:34.915Z",
+      "description": "Placer Naranja (500ml)",
+      "category": "bebida",
+      "categoryIds": [
+        "bebida"
+      ],
+      "type": "receta",
+      "stockMode": "unit",
+      "stockType": "receta",
+      "recipeId": "rec-menu030920261908344116"
+    }
+  ],
   "productPrices": [],
   "ingredients": [
     {
       "id": "ing080920262309160008",
       "name": "Jamon",
+      "metric": "unit",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -13,6 +704,7 @@
     {
       "id": "ing080920262021486528",
       "name": "Queso Danbo Rallado",
+      "metric": "unit",
       "expiresInDays": 30,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -21,6 +713,7 @@
     {
       "id": "ing080920261921101195",
       "name": "Salsa de Barbacoa",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -29,6 +722,7 @@
     {
       "id": "ing080920261736309330",
       "name": "7 UP Zero 600ml",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -37,6 +731,7 @@
     {
       "id": "ing080920261736136082",
       "name": "7 UP 600ml",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -45,6 +740,7 @@
     {
       "id": "ing080920261628130193",
       "name": "Queso Azul",
+      "metric": "unit",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -54,6 +750,7 @@
     {
       "id": "ing080920261628020062",
       "name": "Queso Danbo",
+      "metric": "unit",
       "expiresInDays": 60,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -63,6 +760,7 @@
     {
       "id": "ing080920261627457656",
       "name": "Queso Cheddar",
+      "metric": "unit",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -72,6 +770,7 @@
     {
       "id": "ing080920261612371371",
       "name": "Salsa de la casa",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -81,6 +780,7 @@
     {
       "id": "ing080920261610039156",
       "name": "Hamburguesa de pollo",
+      "metric": "unit",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -89,6 +789,7 @@
     {
       "id": "ing080920261609447483",
       "name": "Hamburguesa de carne",
+      "metric": "unit",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -97,6 +798,7 @@
     {
       "id": "ing070920262001387189",
       "name": "Pan de Miga",
+      "metric": "unit",
       "expiresInDays": 14,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -105,6 +807,7 @@
     {
       "id": "ing030920261930011004",
       "name": "Papas Pay",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -114,6 +817,7 @@
     {
       "id": "ing030920261925467516",
       "name": "Pollo",
+      "metric": "unit",
       "expiresInDays": 24,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -123,6 +827,7 @@
     {
       "id": "ing030920261925116593",
       "name": "Huevo",
+      "metric": "unit",
       "expiresInDays": 30,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -131,6 +836,7 @@
     {
       "id": "ing030920261904052605",
       "name": "Placer Naranja (500ml)",
+      "metric": "unit",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -139,6 +845,7 @@
     {
       "id": "ing030920261902544029",
       "name": "Agua (500ml)",
+      "metric": "unit",
       "expiresInDays": 999,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -147,6 +854,7 @@
     {
       "id": "ing030920261902243547",
       "name": "Placer Pomelo (500ml)",
+      "metric": "unit",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -155,6 +863,7 @@
     {
       "id": "ing030920261902118349",
       "name": "Placer Manzana (500ml)",
+      "metric": "unit",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -163,6 +872,7 @@
     {
       "id": "ing030920261901557453",
       "name": "Placer Pera (500ml)",
+      "metric": "unit",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -171,6 +881,7 @@
     {
       "id": "ing030920261859217177",
       "name": "Salsa de Mostaza",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -180,6 +891,7 @@
     {
       "id": "ing030920261858536397",
       "name": "Salsa de Mayonesa",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -189,6 +901,7 @@
     {
       "id": "ing030920261858365479",
       "name": "Salsa de Tomate",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -198,6 +911,7 @@
     {
       "id": "ing030920261856321089",
       "name": "Berengena",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -207,6 +921,7 @@
     {
       "id": "ing030920261856176159",
       "name": "Morron",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -216,6 +931,7 @@
     {
       "id": "ing030920261856026387",
       "name": "Pepinillo",
+      "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -225,6 +941,7 @@
     {
       "id": "ing030920261854315753",
       "name": "Tequeños",
+      "metric": "unit",
       "expiresInDays": 30,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -234,6 +951,7 @@
     {
       "id": "ing030920261853310833",
       "name": "Panceta",
+      "metric": "unit",
       "expiresInDays": 60,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -243,6 +961,7 @@
     {
       "id": "ing030920261853119601",
       "name": "Jamon Crudo",
+      "metric": "unit",
       "expiresInDays": 60,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -252,6 +971,7 @@
     {
       "id": "ing030920261852446718",
       "name": "Jamon de Barra",
+      "metric": "unit",
       "expiresInDays": 60,
       "stockMode": "weight",
       "stockQuantity": 0,
@@ -261,6 +981,7 @@
     {
       "id": "ing030920261851342941",
       "name": "Papas",
+      "metric": "unit",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -269,6 +990,7 @@
     {
       "id": "ing030920261851237364",
       "name": "Coca-Cola Cero (600ml)",
+      "metric": "unit",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -277,6 +999,7 @@
     {
       "id": "ing030920261851117643",
       "name": "Coca-Cola (600ml)",
+      "metric": "unit",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -285,6 +1008,7 @@
     {
       "id": "ing030920261849172876",
       "name": "Pan de Pancho",
+      "metric": "unit",
       "expiresInDays": 14,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -293,6 +1017,7 @@
     {
       "id": "ing030920261849092695",
       "name": "Pan de Hamburguesa",
+      "metric": "unit",
       "expiresInDays": 14,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -301,6 +1026,7 @@
     {
       "id": "ing030920261848438389",
       "name": "Salchicha Ahumada",
+      "metric": "unit",
       "expiresInDays": 60,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -310,6 +1036,7 @@
     {
       "id": "ing030920261847273007",
       "name": "Cebolla",
+      "metric": "unit",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -318,6 +1045,7 @@
     {
       "id": "ing030920261847200343",
       "name": "Zanahoria",
+      "metric": "unit",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -326,6 +1054,7 @@
     {
       "id": "ing030920261846516671",
       "name": "Repollo",
+      "metric": "unit",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -334,6 +1063,7 @@
     {
       "id": "ing030920261846398391",
       "name": "Lechuga",
+      "metric": "unit",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -343,6 +1073,7 @@
     {
       "id": "ing030920261846327892",
       "name": "Tomate",
+      "metric": "unit",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
@@ -350,1576 +1081,1223 @@
       "updatedAt": "2026-09-03T18:47:04.451Z"
     }
   ],
-  "menuProducts": [
+  "ingredientCategories": [
     {
-      "id": "menu090920261743296363",
-      "name": "Tequeños Promo x12",
-      "price": 10000,
-      "category": "combos",
-      "recipeItems": [
+      "id": "bebidas",
+      "name": "Bebidas",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "carnes",
+      "name": "Carnes",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "empaques",
+      "name": "Empaques",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "lacteos",
+      "name": "Lacteos",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "panificados",
+      "name": "Panificados",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "salsas",
+      "name": "Salsas",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "varios",
+      "name": "Varios",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "vegetales",
+      "name": "Vegetales",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "rec-menu090920261743296363",
+      "productId": "menu090920261743296363",
+      "ingredients": [
         {
           "ingredientId": "ing030920261854315753",
-          "ingredientName": "Tequeños",
-          "quantity": 12,
-          "stockMode": "unit"
+          "quantity": 12
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-09T17:43:29.555Z",
       "updatedAt": "2026-09-09T22:03:29.250Z"
     },
     {
-      "id": "menu090920261513169389",
-      "name": "Hamburguesa Explosiva",
-      "price": 14000,
-      "description": "Doble carne lechuga tomate cebolla huevo frito papas pay jamon queso bacon y salsas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu090920261513169389",
+      "productId": "menu090920261513169389",
+      "ingredients": [
         {
           "ingredientId": "ing080920262309160008",
-          "ingredientName": "Jamon",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261853310833",
-          "ingredientName": "Panceta",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920262021486528",
-          "ingredientName": "Queso Danbo Rallado",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261609447483",
-          "ingredientName": "Hamburguesa de carne",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         },
         {
           "ingredientId": "ing030920261925116593",
-          "ingredientName": "Huevo",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-09T15:13:16.167Z"
     },
     {
-      "id": "menu080920262233236954",
-      "name": "Perro Caliente Especial",
-      "price": 6000,
-      "description": "Perro Caliente Especial (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
-      "category": "pancho",
-      "recipeItems": [
+      "id": "rec-menu080920262233236954",
+      "productId": "menu080920262233236954",
+      "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "ingredientName": "Papas Pay",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261849172876",
-          "ingredientName": "Pan de Pancho",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261848438389",
-          "ingredientName": "Salchicha Ahumada",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846516671",
-          "ingredientName": "Repollo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847200343",
-          "ingredientName": "Zanahoria",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920262021486528",
-          "ingredientName": "Queso Danbo Rallado",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261853310833",
-          "ingredientName": "Panceta",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920262309160008",
-          "ingredientName": "Jamon",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T22:33:23.200Z",
       "updatedAt": "2026-09-08T23:09:37.855Z"
     },
     {
-      "id": "menu080920262121530765",
-      "name": "Tequeños x6",
-      "price": 7000,
-      "description": "12 Tequeños venezolanos",
-      "category": "combos",
-      "recipeItems": [
+      "id": "rec-menu080920262121530765",
+      "productId": "menu080920262121530765",
+      "ingredients": [
         {
           "ingredientId": "ing030920261854315753",
-          "ingredientName": "Tequeños",
-          "quantity": 12,
-          "stockMode": "unit"
+          "quantity": 12
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T21:21:53.613Z",
       "updatedAt": "2026-09-08T21:44:17.303Z"
     },
     {
-      "id": "menu080920262121103490",
-      "name": "Tequeños x12",
-      "price": 13000,
-      "description": "12 Tequeños venezolanos",
-      "category": "combos",
-      "recipeItems": [
+      "id": "rec-menu080920262121103490",
+      "productId": "menu080920262121103490",
+      "ingredients": [
         {
           "ingredientId": "ing030920261854315753",
-          "ingredientName": "Tequeños",
-          "quantity": 12,
-          "stockMode": "unit"
+          "quantity": 12
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T21:21:10.551Z",
       "updatedAt": "2026-09-08T21:44:09.409Z"
     },
     {
-      "id": "menu080920262038282615",
-      "name": "Pancho Simple Promo Apertura",
-      "price": 1000,
-      "description": "Pancho Simple (Pan de pancho, Salchicha, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
-      "category": "pancho",
-      "recipeItems": [
+      "id": "rec-menu080920262038282615",
+      "productId": "menu080920262038282615",
+      "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "ingredientName": "Papas Pay",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261849172876",
-          "ingredientName": "Pan de Pancho",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261848438389",
-          "ingredientName": "Salchicha Ahumada",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T20:38:28.437Z"
     },
     {
-      "id": "menu080920262032031181",
-      "name": "Perro Caliente Tradicional",
-      "price": 4000,
-      "description": "Perro Caliente Tradicional (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
-      "category": "pancho",
-      "recipeItems": [
+      "id": "rec-menu080920262032031181",
+      "productId": "menu080920262032031181",
+      "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "ingredientName": "Papas Pay",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261849172876",
-          "ingredientName": "Pan de Pancho",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261848438389",
-          "ingredientName": "Salchicha Ahumada",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846516671",
-          "ingredientName": "Repollo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920262021486528",
-          "ingredientName": "Queso Danbo Rallado",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847200343",
-          "ingredientName": "Zanahoria",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T20:32:03.060Z",
       "updatedAt": "2026-09-08T23:08:46.179Z"
     },
     {
-      "id": "menu080920262020581434",
-      "name": "Pancho de la Casa",
-      "price": 3000,
-      "description": "Pancho de la casa (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
-      "category": "pancho",
-      "recipeItems": [
+      "id": "rec-menu080920262020581434",
+      "productId": "menu080920262020581434",
+      "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "ingredientName": "Papas Pay",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261849172876",
-          "ingredientName": "Pan de Pancho",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261848438389",
-          "ingredientName": "Salchicha Ahumada",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T20:20:58.480Z"
     },
     {
-      "id": "menu080920261954472297",
-      "name": "Hamburguesa Pollo Bacon + Papas",
-      "price": 12000,
-      "description": "Hamburguesa Pollo Bacon + Papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261826458529",
-          "menuProductName": "Hamburguesa Pollo Bacon",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:54:47.881Z"
-    },
-    {
-      "id": "menu080920261954184932",
-      "name": "Hamburguesa Pollo Doble + Papas",
-      "price": 15000,
-      "description": "Hamburguesa Pollo Doble + Papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261851286352",
-          "menuProductName": "Hamburguesa Pollo Doble",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:54:18.942Z"
-    },
-    {
-      "id": "menu080920261953420897",
-      "name": "Hamburguesa Pollo Simple + Papas",
-      "price": 8500,
-      "description": "Hamburguesa Pollo Simple + Papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261849311003",
-          "menuProductName": "Hamburguesa Pollo Simple",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:53:42.792Z"
-    },
-    {
-      "id": "menu080920261952442755",
-      "name": "Hamburguesa Mixta (carne y pollo) + Papas",
-      "price": 15000,
-      "description": "Hamburguesa Mixta (carne y pollo) + Papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261848213749",
-          "menuProductName": "Hamburguesa Mixta (carne y pollo)",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:52:44.247Z"
-    },
-    {
-      "id": "menu080920261951184585",
-      "name": "Hamburguesa Carne Triple Bacon + Papas",
-      "price": 20000,
-      "description": "Hamburguesa Carne Triple con Cheddar + papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261919394277",
-          "menuProductName": "Hamburguesa Carne Triple Bacon",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:51:18.239Z"
-    },
-    {
-      "id": "menu080920261950493382",
-      "name": "Hamburguesa Carne Doble Bacon + Papas",
-      "price": 17000,
-      "description": "Hamburguesa Carne Doble con Cheddar + papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261913323090",
-          "menuProductName": "Hamburguesa Carne Doble Bacon",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:50:49.491Z"
-    },
-    {
-      "id": "menu080920261931172153",
-      "name": "Hamburguesa Carne Bacon + Papas",
-      "price": 13000,
-      "description": "Hamburguesa Carne Bacon + Papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261907232794",
-          "menuProductName": "Hamburguesa Carne Bacon",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:31:17.204Z",
-      "updatedAt": "2026-09-08T19:55:31.632Z"
-    },
-    {
-      "id": "menu080920261926110899",
-      "name": "Hamburguesa Carne Doble con Cheddar + Papas",
-      "price": 14000,
-      "description": "Hamburguesa Carne Doble con Cheddar + papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261851062448",
-          "menuProductName": "Hamburguesa Carne Doble con Cheddar",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:26:11.051Z",
-      "updatedAt": "2026-09-08T19:31:26.115Z"
-    },
-    {
-      "id": "menu080920261925118847",
-      "name": "Hamburguesa Carne Simple + Papas",
-      "price": 9000,
-      "description": "Hamburguesa Carne Simple + Papas",
-      "category": "hamburguesa",
-      "recipeItems": [],
-      "kind": "combo",
-      "comboItems": [
-        {
-          "type": "product",
-          "menuProductId": "menu080920261848447277",
-          "menuProductName": "Hamburguesa Carne Simple",
-          "quantity": 1
-        },
-        {
-          "type": "product",
-          "menuProductId": "menu080920261842174993",
-          "menuProductName": "Raciòn de papas",
-          "quantity": 1
-        }
-      ],
-      "createdAt": "2026-09-08T19:25:11.309Z"
-    },
-    {
-      "id": "menu080920261919394277",
-      "name": "Hamburguesa Carne Triple Bacon",
-      "price": 17500,
-      "description": "Tres hamburguesas de carne, panceta,  cheddar, lechuga, tomate, y cebolla, pepinillo, salsas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261919394277",
+      "productId": "menu080920261919394277",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261627457656",
-          "ingredientName": "Queso Cheddar",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261609447483",
-          "ingredientName": "Hamburguesa de carne",
-          "quantity": 3,
-          "stockMode": "unit"
+          "quantity": 3
         },
         {
           "ingredientId": "ing030920261853310833",
-          "ingredientName": "Panceta",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T19:19:39.748Z",
       "updatedAt": "2026-09-08T20:00:28.590Z"
     },
     {
-      "id": "menu080920261913323090",
-      "name": "Hamburguesa Carne Doble Bacon",
-      "price": 14500,
-      "description": "Dos hamburguesas de carne, panceta,  cheddar, lechuga, tomate, y cebolla, pepinillo, salsas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261913323090",
+      "productId": "menu080920261913323090",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261627457656",
-          "ingredientName": "Queso Cheddar",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261609447483",
-          "ingredientName": "Hamburguesa de carne",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         },
         {
           "ingredientId": "ing030920261853310833",
-          "ingredientName": "Panceta",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261921101195",
-          "ingredientName": "Salsa de Barbacoa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T19:13:32.529Z",
       "updatedAt": "2026-09-08T19:57:31.744Z"
     },
     {
-      "id": "menu080920261907232794",
-      "name": "Hamburguesa Carne Bacon",
-      "price": 10500,
-      "description": "Hamburguesa de carne, panceta, cheddar, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261907232794",
+      "productId": "menu080920261907232794",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261609447483",
-          "ingredientName": "Hamburguesa de carne",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261853310833",
-          "ingredientName": "Panceta",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261627457656",
-          "ingredientName": "Queso Cheddar",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T19:07:23.574Z",
       "updatedAt": "2026-09-08T19:57:10.712Z"
     },
     {
-      "id": "menu080920261851286352",
-      "name": "Hamburguesa Pollo Doble",
-      "price": 12500,
-      "description": "Dos hamburguesas de pollo, lechuga, doble panceta, doble cheddar,  tomate, y cebolla, pepinillo, salsas y papas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261851286352",
+      "productId": "menu080920261851286352",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261610039156",
-          "ingredientName": "Hamburguesa de pollo",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         },
         {
           "ingredientId": "ing030920261853310833",
-          "ingredientName": "Panceta",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         },
         {
           "ingredientId": "ing080920261627457656",
-          "ingredientName": "Queso Cheddar",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T18:51:28.286Z",
       "updatedAt": "2026-09-08T20:01:06.556Z"
     },
     {
-      "id": "menu080920261851062448",
-      "name": "Hamburguesa Carne Doble con Cheddar",
-      "price": 11500,
-      "description": "Dos hamburguesas de carne, lechuga, doble cheddar,  tomate, y cebolla, pepinillo, salsas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261851062448",
+      "productId": "menu080920261851062448",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261627457656",
-          "ingredientName": "Queso Cheddar",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         },
         {
           "ingredientId": "ing080920261609447483",
-          "ingredientName": "Hamburguesa de carne",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T18:51:06.884Z",
       "updatedAt": "2026-09-08T19:57:46.174Z"
     },
     {
-      "id": "menu080920261849311003",
-      "name": "Hamburguesa Pollo Simple",
-      "price": 6000,
-      "description": "Hamburguesa de pollo, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261849311003",
+      "productId": "menu080920261849311003",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261610039156",
-          "ingredientName": "Hamburguesa de pollo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T18:49:31.811Z",
       "updatedAt": "2026-09-08T20:01:23.643Z"
     },
     {
-      "id": "menu080920261848447277",
-      "name": "Hamburguesa Carne Simple",
-      "price": 6500,
-      "description": "Hamburguesa de carne, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261848447277",
+      "productId": "menu080920261848447277",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261609447483",
-          "ingredientName": "Hamburguesa de carne",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T18:48:44.719Z",
       "updatedAt": "2026-09-08T19:58:17.889Z"
     },
     {
-      "id": "menu080920261848213749",
-      "name": "Hamburguesa Mixta (carne y pollo)",
-      "price": 12500,
-      "description": "Hamburguesas de carne, hamburguesas de pollo, lechuga, doble cheddar,  tomate, y cebolla, pepinillo, salsas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261848213749",
+      "productId": "menu080920261848213749",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261627457656",
-          "ingredientName": "Queso Cheddar",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         },
         {
           "ingredientId": "ing080920261609447483",
-          "ingredientName": "Hamburguesa de carne",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         },
         {
           "ingredientId": "ing030920261853310833",
-          "ingredientName": "Panceta",
-          "quantity": 2,
-          "stockMode": "unit"
+          "quantity": 2
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T18:48:21.119Z",
       "updatedAt": "2026-09-08T20:00:41.353Z"
     },
     {
-      "id": "menu080920261842174993",
-      "name": "Raciòn de papas",
-      "price": 2500,
-      "description": "Raciòn de papas fritas 250gr",
-      "category": "papas",
-      "recipeItems": [
+      "id": "rec-menu080920261842174993",
+      "productId": "menu080920261842174993",
+      "ingredients": [
         {
           "ingredientId": "ing030920261851342941",
-          "ingredientName": "Papas",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T18:42:17.452Z"
     },
     {
-      "id": "menu080920261826458529",
-      "name": "Hamburguesa Pollo Bacon",
-      "price": 9500,
-      "description": "hamburguesas de pollo, lechuga, panceta, cheddar,  tomate, y cebolla, pepinillo, salsas y papas",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu080920261826458529",
+      "productId": "menu080920261826458529",
+      "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "ingredientName": "Pan de Hamburguesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846398391",
-          "ingredientName": "Lechuga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261847273007",
-          "ingredientName": "Cebolla",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261856026387",
-          "ingredientName": "Pepinillo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261612371371",
-          "ingredientName": "Salsa de la casa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261846327892",
-          "ingredientName": "Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261610039156",
-          "ingredientName": "Hamburguesa de pollo",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261853310833",
-          "ingredientName": "Panceta",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing080920261627457656",
-          "ingredientName": "Queso Cheddar",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T18:26:45.572Z",
       "updatedAt": "2026-09-08T20:00:55.672Z"
     },
     {
-      "id": "menu080920261752062063",
-      "name": "7 UP Zero (600ml)",
-      "price": 2500,
-      "description": "7 UP Zero 600 ml",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu080920261752062063",
+      "productId": "menu080920261752062063",
+      "ingredients": [
         {
           "ingredientId": "ing080920261736309330",
-          "ingredientName": "7 UP Zero 600ml",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T17:52:06.055Z"
     },
     {
-      "id": "menu080920261751275871",
-      "name": "7 UP (600ml)",
-      "price": 2500,
-      "description": "7 UP 600 ml original",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu080920261751275871",
+      "productId": "menu080920261751275871",
+      "ingredients": [
         {
           "ingredientId": "ing080920261736136082",
-          "ingredientName": "7 UP 600ml",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T17:51:27.763Z"
     },
     {
-      "id": "menu080920261725073896",
-      "name": "Coca cola Zero (600ml)",
-      "price": 2500,
-      "description": "Coca cola 600 ml Zero",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu080920261725073896",
+      "productId": "menu080920261725073896",
+      "ingredients": [
         {
           "ingredientId": "ing030920261851237364",
-          "ingredientName": "Coca-Cola Cero (600ml)",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T17:25:07.011Z",
       "updatedAt": "2026-09-08T17:25:25.563Z"
     },
     {
-      "id": "menu080920261724360851",
-      "name": "Coca cola (600ml)",
-      "price": 2500,
-      "description": "Coca cola 500 ml original",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu080920261724360851",
+      "productId": "menu080920261724360851",
+      "ingredients": [
         {
           "ingredientId": "ing030920261851117643",
-          "ingredientName": "Coca-Cola (600ml)",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-08T17:24:36.011Z"
     },
     {
-      "id": "menu070920262002191608",
-      "name": "Pan de Miga (Jamon y Queso)",
-      "price": 2500,
-      "description": "Pan de Miga de Jamon y Queso",
-      "category": "hamburguesa",
-      "recipeItems": [
+      "id": "rec-menu070920262002191608",
+      "productId": "menu070920262002191608",
+      "ingredients": [
         {
           "ingredientId": "ing070920262001387189",
-          "ingredientName": "Pan de Miga",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-07T20:02:19.757Z"
     },
     {
-      "id": "menu070920261533094009",
-      "name": "Huevos x6",
-      "price": 5000,
-      "description": "6 Huevos Cocidos de Almuerzo",
-      "category": "pollo",
-      "recipeItems": [
+      "id": "rec-menu070920261533094009",
+      "productId": "menu070920261533094009",
+      "ingredients": [
         {
           "ingredientId": "ing030920261925116593",
-          "ingredientName": "Huevo",
-          "quantity": 6,
-          "stockMode": "unit"
+          "quantity": 6
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-07T15:33:09.386Z"
     },
     {
-      "id": "menu070920261532128669",
-      "name": "Huevos x12",
-      "price": 9000,
-      "description": "12 Huevos para Almuerzo",
-      "category": "pollo",
-      "recipeItems": [
+      "id": "rec-menu070920261532128669",
+      "productId": "menu070920261532128669",
+      "ingredients": [
         {
           "ingredientId": "ing030920261925116593",
-          "ingredientName": "Huevo",
-          "quantity": 12,
-          "stockMode": "unit"
+          "quantity": 12
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-07T15:32:12.099Z"
     },
     {
-      "id": "menu070920261531146383",
-      "name": "Papa Entera",
-      "price": 1500,
-      "description": "Papas de Almuerzo",
-      "category": "papas",
-      "recipeItems": [
+      "id": "rec-menu070920261531146383",
+      "productId": "menu070920261531146383",
+      "ingredients": [
         {
           "ingredientId": "ing030920261851342941",
-          "ingredientName": "Papas",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-07T15:31:14.093Z"
     },
     {
-      "id": "menu070920261520266564",
-      "name": "Suprema (250g)",
-      "price": 9000,
-      "description": "250g de pollo para almuerzo",
-      "category": "pollo",
-      "recipeItems": [
+      "id": "rec-menu070920261520266564",
+      "productId": "menu070920261520266564",
+      "ingredients": [
         {
           "ingredientId": "ing030920261925467516",
-          "ingredientName": "Pollo",
-          "quantity": 250,
-          "stockMode": "unit"
+          "quantity": 250
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-07T15:20:26.302Z"
     },
     {
-      "id": "menu030920261933382276",
-      "name": "Pancho Simple",
-      "price": 2500,
-      "description": "Pancho Simple (Pan de pancho, Salchicha, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
-      "category": "pancho",
-      "recipeItems": [
+      "id": "rec-menu030920261933382276",
+      "productId": "menu030920261933382276",
+      "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "ingredientName": "Papas Pay",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261849172876",
-          "ingredientName": "Pan de Pancho",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261848438389",
-          "ingredientName": "Salchicha Ahumada",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858536397",
-          "ingredientName": "Salsa de Mayonesa",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261859217177",
-          "ingredientName": "Salsa de Mostaza",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         },
         {
           "ingredientId": "ing030920261858365479",
-          "ingredientName": "Salsa de Tomate",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-03T19:33:38.891Z",
       "updatedAt": "2026-09-03T19:35:16.163Z"
     },
     {
-      "id": "menu030920261911111950",
-      "name": "Agua (500ml)",
-      "price": 1500,
-      "description": "Agua (500ml)",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu030920261911111950",
+      "productId": "menu030920261911111950",
+      "ingredients": [
         {
           "ingredientId": "ing030920261902544029",
-          "ingredientName": "Agua (500ml)",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-03T19:11:11.728Z"
     },
     {
-      "id": "menu030920261910319508",
-      "name": "Placer Pomelo (500ml)",
-      "price": 1500,
-      "description": "Placer Pomelo (500ml)",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu030920261910319508",
+      "productId": "menu030920261910319508",
+      "ingredients": [
         {
           "ingredientId": "ing030920261902243547",
-          "ingredientName": "Placer Pomelo (500ml)",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-03T19:10:31.965Z"
     },
     {
-      "id": "menu030920261909491467",
-      "name": "Placer Pera (500ml)",
-      "price": 1500,
-      "description": "Placer Pera (500ml)",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu030920261909491467",
+      "productId": "menu030920261909491467",
+      "ingredients": [
         {
           "ingredientId": "ing030920261901557453",
-          "ingredientName": "Placer Pera (500ml)",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-03T19:09:49.312Z"
     },
     {
-      "id": "menu030920261909215905",
-      "name": "Placer Manzana (500ml)",
-      "price": 1500,
-      "description": "Placer Manzana (500ml)",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu030920261909215905",
+      "productId": "menu030920261909215905",
+      "ingredients": [
         {
           "ingredientId": "ing030920261902118349",
-          "ingredientName": "Placer Manzana (500ml)",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-03T19:09:21.366Z"
     },
     {
-      "id": "menu030920261908344116",
-      "name": "Placer Naranja (500ml)",
-      "price": 1500,
-      "description": "Placer Naranja (500ml)",
-      "category": "bebida",
-      "recipeItems": [
+      "id": "rec-menu030920261908344116",
+      "productId": "menu030920261908344116",
+      "ingredients": [
         {
           "ingredientId": "ing030920261904052605",
-          "ingredientName": "Placer Naranja (500ml)",
-          "quantity": 1,
-          "stockMode": "unit"
+          "quantity": 1
         }
       ],
-      "kind": "menu",
       "createdAt": "2026-09-03T19:08:34.915Z"
     }
   ],
+  "combos": [
+    {
+      "id": "com-menu080920261954472297",
+      "productId": "menu080920261954472297",
+      "items": [
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261826458529",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:54:47.881Z"
+    },
+    {
+      "id": "com-menu080920261954184932",
+      "productId": "menu080920261954184932",
+      "items": [
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261851286352",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:54:18.942Z"
+    },
+    {
+      "id": "com-menu080920261953420897",
+      "productId": "menu080920261953420897",
+      "items": [
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261849311003",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:53:42.792Z"
+    },
+    {
+      "id": "com-menu080920261952442755",
+      "productId": "menu080920261952442755",
+      "items": [
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261848213749",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:52:44.247Z"
+    },
+    {
+      "id": "com-menu080920261951184585",
+      "productId": "menu080920261951184585",
+      "items": [
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261919394277",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:51:18.239Z"
+    },
+    {
+      "id": "com-menu080920261950493382",
+      "productId": "menu080920261950493382",
+      "items": [
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261913323090",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:50:49.491Z"
+    },
+    {
+      "id": "com-menu080920261931172153",
+      "productId": "menu080920261931172153",
+      "items": [
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261907232794",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:31:17.204Z",
+      "updatedAt": "2026-09-08T19:55:31.632Z"
+    },
+    {
+      "id": "com-menu080920261926110899",
+      "productId": "menu080920261926110899",
+      "items": [
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261851062448",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:26:11.051Z",
+      "updatedAt": "2026-09-08T19:31:26.115Z"
+    },
+    {
+      "id": "com-menu080920261925118847",
+      "productId": "menu080920261925118847",
+      "items": [
+        {
+          "productId": "menu080920261848447277",
+          "quantity": 1
+        },
+        {
+          "productId": "menu080920261842174993",
+          "quantity": 1
+        }
+      ],
+      "optionGroups": [],
+      "createdAt": "2026-09-08T19:25:11.309Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "bebida",
+      "name": "Bebida",
+      "productIds": [
+        "menu080920261752062063",
+        "menu080920261751275871",
+        "menu080920261725073896",
+        "menu080920261724360851",
+        "menu030920261911111950",
+        "menu030920261910319508",
+        "menu030920261909491467",
+        "menu030920261909215905",
+        "menu030920261908344116"
+      ],
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "combos",
+      "name": "Combos",
+      "productIds": [
+        "menu090920261743296363",
+        "menu080920262121530765",
+        "menu080920262121103490"
+      ],
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "hamburguesa",
+      "name": "Hamburguesa",
+      "productIds": [
+        "menu090920261513169389",
+        "menu080920261954472297",
+        "menu080920261954184932",
+        "menu080920261953420897",
+        "menu080920261952442755",
+        "menu080920261951184585",
+        "menu080920261950493382",
+        "menu080920261931172153",
+        "menu080920261926110899",
+        "menu080920261925118847",
+        "menu080920261919394277",
+        "menu080920261913323090",
+        "menu080920261907232794",
+        "menu080920261851286352",
+        "menu080920261851062448",
+        "menu080920261849311003",
+        "menu080920261848447277",
+        "menu080920261848213749",
+        "menu080920261826458529",
+        "menu070920262002191608"
+      ],
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "pancho",
+      "name": "Pancho",
+      "productIds": [
+        "menu080920262233236954",
+        "menu080920262038282615",
+        "menu080920262032031181",
+        "menu080920262020581434",
+        "menu030920261933382276"
+      ],
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "papas",
+      "name": "Papas",
+      "productIds": [
+        "menu080920261842174993",
+        "menu070920261531146383"
+      ],
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "pollo",
+      "name": "Pollo",
+      "productIds": [
+        "menu070920261533094009",
+        "menu070920261532128669",
+        "menu070920261520266564"
+      ],
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "vegano",
+      "name": "Vegano",
+      "productIds": [],
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    }
+  ],
+  "menuCategories": [
+    {
+      "id": "bebida",
+      "name": "Bebida",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "combos",
+      "name": "Combos",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "hamburguesa",
+      "name": "Hamburguesa",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "pancho",
+      "name": "Pancho",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "papas",
+      "name": "Papas",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "pollo",
+      "name": "Pollo",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "vegano",
+      "name": "Vegano",
+      "createdAt": "2026-02-01T10:00:00.000Z"
+    }
+  ],
+  "menuProducts": [],
   "users": [
     {
       "id": "u080920261741278368",
@@ -2005,6 +2383,27 @@
   "requests": [],
   "stocks": [],
   "orders": [
+    {
+      "id": "or140920260242264596",
+      "items": [
+        {
+          "productId": "menu090920261743296363",
+          "productName": "Tequeños Promo x12",
+          "unitPrice": 10000,
+          "quantity": 2
+        },
+        {
+          "productId": "menu090920261513169389",
+          "productName": "Hamburguesa Explosiva",
+          "unitPrice": 14000,
+          "quantity": 1
+        }
+      ],
+      "createdAt": "2026-09-14T05:42:26.398Z",
+      "status": "por pagar",
+      "total": 34000,
+      "operator": "admin"
+    },
     {
       "id": "or090920262008414195",
       "items": [
@@ -3132,7 +3531,7 @@
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
       "currentBalance": 310100,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-09-09T22:03:29.250Z"
+      "updatedAt": "2026-09-14T05:42:26.399Z"
     },
     {
       "id": "account-gains",
@@ -3142,7 +3541,7 @@
       "description": "Ventas pagadas registradas por la plataforma.",
       "currentBalance": 305900,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-09-09T22:03:29.250Z"
+      "updatedAt": "2026-09-14T05:42:26.399Z"
     },
     {
       "id": "account-expenses",
@@ -3152,7 +3551,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-09-09T22:03:29.250Z"
+      "updatedAt": "2026-09-14T05:42:26.399Z"
     },
     {
       "id": "account-food-categories",
@@ -3162,7 +3561,7 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-09-09T22:03:29.250Z"
+      "updatedAt": "2026-09-14T05:42:26.399Z"
     }
   ],
   "financialTransactions": [
@@ -5270,5 +5669,8 @@
   "taxSettings": {
     "ivaPercent": 21,
     "mode": "show_only"
+  },
+  "systemSettings": {
+    "allowOutOfStockSales": false
   }
 }

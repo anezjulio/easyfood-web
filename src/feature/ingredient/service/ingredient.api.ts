@@ -1,5 +1,5 @@
 import { readJsonOrThrow } from "../../../shared/http/http";
-import type { Ingredient, IngredientDraft } from "../model/ingredient.types";
+import type { Ingredient, IngredientCategory, IngredientCategoryDraft, IngredientDraft } from "../model/ingredient.types";
 import { createIngredient, loadIngredients, removeIngredient, updateIngredient } from "./ingredient.storage";
 
 const USE_FAKE_API = import.meta.env.VITE_USE_FAKE_API === "true";
@@ -51,5 +51,37 @@ export async function deleteIngredientApi(id: string): Promise<boolean> {
     return !!data.ok;
   }
   return Promise.resolve(removeIngredient(id));
+}
+
+export async function fetchIngredientCategoriesApi(): Promise<IngredientCategory[]> {
+  const response = await fetch(getUrl("/ingredient-categories"));
+  return await readJsonOrThrow<IngredientCategory[]>(response);
+}
+
+export async function createIngredientCategoryApi(draft: IngredientCategoryDraft): Promise<IngredientCategory> {
+  const response = await fetch(getUrl("/ingredient-categories"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  return await readJsonOrThrow<IngredientCategory>(response);
+}
+
+export async function updateIngredientCategoryApi(id: string, draft: IngredientCategoryDraft): Promise<IngredientCategory | null> {
+  const response = await fetch(getUrl(`/ingredient-categories/${encodeURIComponent(id)}`), {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(draft),
+  });
+  if (response.status === 404) return null;
+  return await readJsonOrThrow<IngredientCategory>(response);
+}
+
+export async function deleteIngredientCategoryApi(id: string): Promise<boolean> {
+  const response = await fetch(getUrl(`/ingredient-categories/${encodeURIComponent(id)}`), {
+    method: "DELETE",
+  });
+  const data = await readJsonOrThrow<{ ok: boolean }>(response);
+  return !!data.ok;
 }
 

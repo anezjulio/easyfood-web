@@ -33,9 +33,20 @@ import { fetchSupplyOrdersApi } from "../../supply/service/supply.api";
 import { createStockEntryApi } from "../service/stock.api";
 import { resolveImageUrl, uploadImageFromFile } from "../../../shared/image/image.service";
 import { findBarcodeConflict, generateUniqueAutoBarcode, normalizeBarcodeInput } from "../../product/model/product.barcode";
+import type { Ingredient, IngredientCategory } from "../../ingredient/model/ingredient.types";
+import { formatIngredientQuantity, getIngredientStockModeLabel } from "../../ingredient/model/ingredient.types";
+import {
+  createIngredientCategoryApi,
+  deleteIngredientCategoryApi,
+  fetchIngredientCategoriesApi,
+  fetchIngredientsApi,
+  updateIngredientApi,
+  updateIngredientCategoryApi,
+} from "../../ingredient/service/ingredient.api";
 import styles from "./StockEntryScreen.module.css";
 
 type EntryMode = "existing" | "new";
+type StockTab = "products" | "raw" | "rawCategories";
 
 export default function StockEntryScreen() {
   const auth = useAuth();
@@ -47,7 +58,10 @@ export default function StockEntryScreen() {
   const merchandiseFormId = "stock-entry-form";
 
   const [mode, setMode] = useState<EntryMode>("existing");
+  const [activeTab, setActiveTab] = useState<StockTab>("raw");
   const [products, setProducts] = useState<Product[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [ingredientCategories, setIngredientCategories] = useState<IngredientCategory[]>([]);
   const [marginSettings, setMarginSettings] = useState<PriceMarginSettings | null>(null);
   const [receivedOrders, setReceivedOrders] = useState<SupplyOrder[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,8 +96,17 @@ export default function StockEntryScreen() {
   const [newProductUseMarginOverride, setNewProductUseMarginOverride] = useState(false);
   const [newProductMarginDraft, setNewProductMarginDraft] = useState("30");
   const [quantity, setQuantity] = useState("");
+  const [stockMetric, setStockMetric] = useState<"unit" | "grams" | "kilos">("unit");
   const [expirationDate, setExpirationDate] = useState("");
   const [description, setDescription] = useState("");
+  const [selectedIngredientId, setSelectedIngredientId] = useState("");
+  const [ingredientCategoryId, setIngredientCategoryId] = useState("varios");
+  const [ingredientQuantity, setIngredientQuantity] = useState("");
+  const [ingredientMetric, setIngredientMetric] = useState<"unit" | "grams" | "kilos">("unit");
+  const [ingredientExpirationDate, setIngredientExpirationDate] = useState("");
+  const [ingredientSearch, setIngredientSearch] = useState("");
+  const [selectedIngredientCategoryId, setSelectedIngredientCategoryId] = useState("");
+  const [ingredientCategoryName, setIngredientCategoryName] = useState("");
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -92,16 +115,20 @@ export default function StockEntryScreen() {
     setLoading(true);
     setError("");
     try {
-      const [productList, marginList, supplyOrders] = await Promise.all([
+      const [productList, marginList, supplyOrders, ingredientList, ingredientCategoryList] = await Promise.all([
         fetchProducts(),
         fetchPriceMarginSettingsApi(),
         fetchSupplyOrdersApi(),
+        fetchIngredientsApi(),
+        fetchIngredientCategoriesApi(),
       ]);
       const received = supplyOrders
         .filter((item) => item.status === "received")
         .sort((a, b) => new Date(b.receivedAt || b.createdAt).getTime() - new Date(a.receivedAt || a.createdAt).getTime());
 
       setProducts(productList);
+      setIngredients(ingredientList);
+      setIngredientCategories(ingredientCategoryList);
       setMarginSettings(marginList);
       setReceivedOrders(received);
       if (typeof nextSelectedId !== "undefined") {
@@ -122,6 +149,24 @@ export default function StockEntryScreen() {
   const selectedProduct = useMemo(
     () => products.find((item) => item.id === selectedProductId) || null,
     [products, selectedProductId],
+  );
+  const selectedIngredient = useMemo(
+    () => ingredients.find((item) => item.id === selectedIngredientId) || null,
+    [ingredients, selectedIngredientId],
+  );
+  const filteredIngredients = useMemo(() => {
+    const query = normalizeForSearch(ingredientSearch);
+    return ingredients
+      .filter((item) => (query ? normalizeForSearch(`${item.name} ${item.categoryId || ""}`).includes(query) : true))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [ingredientSearch, ingredients]);
+  const groupedIngredientCategories = useMemo(
+    () =>
+      ingredientCategories.map((category) => ({
+        category,
+        items: ingredients.filter((ingredient) => ingredient.categoryId === category.id).sort((a, b) => a.name.localeCompare(b.name)),
+      })),
+    [ingredientCategories, ingredients],
   );
 
   useEffect(() => {
@@ -207,6 +252,16 @@ export default function StockEntryScreen() {
     setExistingImageUrl(selectedProduct.imageUrl || "");
   }, [mode, selectedProduct]);
 
+  useEffect(() => {
+    if (!selectedIngredient) return;
+    setIngredientCategoryId(selectedIngredient.categoryId || ingredientCategories[0]?.id || "varios");
+    setIngredientMetric(selectedIngredient.stockMode === "weight" ? "grams" : "unit");
+  }, [ingredientCategories, selectedIngredient]);
+
+  useEffect(() => {
+    setStockMetric(selectedProduct?.stockMode === "weight" ? "grams" : "unit");
+  }, [selectedProduct]);
+
   const costPriceValue = parsePositiveIntFromTextMask(costPrice);
   const salePricePreview = calculateSalePrice(costPriceValue, activeMarginPercent);
 
@@ -214,7 +269,7 @@ export default function StockEntryScreen() {
     const q = normalizeForSearch(nameFilter);
     const p = (priceFilter || "").replace(/\D/g, "");
     const e = (existenciaFilter || "").replace(/\D/g, "");
-    let list = products;
+    let list = products.filter((item) => item.type !== "receta" && item.type !== "combo" && item.type !== "ingrediente");
 
     if (q) {
       list = list.filter((item) => normalizeForSearch(item.name).includes(q));
@@ -265,6 +320,7 @@ export default function StockEntryScreen() {
 
   function clearStockFields() {
     setQuantity("");
+    setStockMetric("unit");
     setExpirationDate("");
     setDescription("");
   }
@@ -360,6 +416,10 @@ export default function StockEntryScreen() {
       brand: existingBrand,
       barcode: typedBarcode || undefined,
       category: existingCategory,
+      categoryIds: selectedProduct.categoryIds?.length ? selectedProduct.categoryIds : [existingCategory],
+      type: selectedProduct.type || "bebida",
+      stockMode: stockMetric === "unit" ? "unit" : "weight",
+      stockType: selectedProduct.type || selectedProduct.stockType || "bebida",
       costPrice: costPriceValue,
       price: salePricePreview,
       marginPercent: activeMarginPercent,
@@ -440,7 +500,7 @@ export default function StockEntryScreen() {
     setError("");
     setMessage("");
 
-    const quantityToAdd = Math.trunc(Number(quantity));
+    const quantityToAdd = stockMetric === "unit" ? Math.trunc(Number(quantity)) : Number(quantity);
     if (!Number.isFinite(quantityToAdd) || quantityToAdd <= 0) {
       setError("Ingresa una cantidad valida.");
       return;
@@ -493,6 +553,10 @@ export default function StockEntryScreen() {
           brand: newBrand,
           barcode: barcodeToPersist,
           category: newCategory,
+          categoryIds: [newCategory],
+          type: "bebida",
+          stockMode: stockMetric === "unit" ? "unit" : "weight",
+          stockType: "bebida",
           costPrice: costPriceValue,
           price: salePricePreview,
           marginPercent: activeMarginPercent,
@@ -537,10 +601,11 @@ export default function StockEntryScreen() {
         productId: targetProductId,
         expirationDate: expirationDate || undefined,
         quantity: quantityToAdd,
+        metric: stockMetric,
+        movementType: "in",
         description: description.trim() || undefined,
         supplyOrderId: supplyOrderId || undefined,
         costPrice: costPriceValue,
-        salePrice: salePricePreview,
       });
 
       await reloadData(targetProductId);
@@ -550,6 +615,114 @@ export default function StockEntryScreen() {
       );
     } catch (error) {
       setError(error instanceof Error ? error.message : "No se pudo registrar el ingreso de mercaderia.");
+    }
+  }
+
+  async function submitIngredientStock(event: React.FormEvent) {
+    event.preventDefault();
+    setError("");
+    setMessage("");
+
+    if (!selectedIngredient) {
+      setError("Selecciona una materia prima.");
+      return;
+    }
+    const parsed = Number(ingredientQuantity);
+    const quantityToAdd = ingredientMetric === "unit" ? Math.trunc(parsed) : parsed;
+    const ingredientStockDelta = ingredientMetric === "kilos" ? Math.trunc(parsed * 1000) : ingredientMetric === "grams" ? Math.trunc(parsed) : Math.trunc(parsed);
+    if (!Number.isFinite(quantityToAdd) || quantityToAdd <= 0) {
+      setError("Ingresa una cantidad valida.");
+      return;
+    }
+    if (!ingredientExpirationDate) {
+      setError("La fecha de vencimiento es obligatoria para ingresar materia prima.");
+      return;
+    }
+
+    try {
+      const expirationMs = new Date(`${ingredientExpirationDate}T00:00:00`).getTime();
+      const todayMs = new Date(new Date().toISOString().slice(0, 10)).getTime();
+      const expiresInDays = Number.isFinite(expirationMs) ? Math.max(0, Math.ceil((expirationMs - todayMs) / 86_400_000)) : selectedIngredient.expiresInDays;
+      await createStockEntryApi({
+        productId: selectedIngredient.productId || selectedIngredient.id,
+        expirationDate: ingredientExpirationDate,
+        quantity: quantityToAdd,
+        metric: ingredientMetric,
+        movementType: "in",
+        description: `Ingreso de materia prima: ${selectedIngredient.name}`,
+      });
+      const saved = await updateIngredientApi(selectedIngredient.id, {
+        name: selectedIngredient.name,
+        categoryId: ingredientCategoryId || selectedIngredient.categoryId,
+        expiresInDays,
+        stockMode: selectedIngredient.stockMode,
+        stockQuantity: selectedIngredient.stockQuantity,
+        entryQuantity: ingredientStockDelta,
+        portionSizeGrams: selectedIngredient.portionSizeGrams,
+      });
+      if (!saved) {
+        setError("No se pudo actualizar la materia prima.");
+        return;
+      }
+      await reloadData(undefined);
+      setSelectedIngredientId(saved.id);
+      setIngredientQuantity("");
+      setIngredientExpirationDate("");
+      setMessage(`Materia prima ingresada: ${saved.name}.`);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "No se pudo registrar la materia prima.");
+    }
+  }
+
+  function selectIngredientCategory(category: IngredientCategory) {
+    setSelectedIngredientCategoryId(category.id);
+    setIngredientCategoryName(category.name);
+    setError("");
+    setMessage("");
+  }
+
+  async function submitIngredientCategory(event: React.FormEvent) {
+    event.preventDefault();
+    setError("");
+    setMessage("");
+    const name = ingredientCategoryName.trim();
+    if (!name) {
+      setError("Ingresa el nombre de la categoria.");
+      return;
+    }
+    try {
+      const saved = selectedIngredientCategoryId
+        ? await updateIngredientCategoryApi(selectedIngredientCategoryId, { name })
+        : await createIngredientCategoryApi({ name });
+      if (!saved) {
+        setError("No se pudo guardar la categoria.");
+        return;
+      }
+      await reloadData(undefined);
+      setSelectedIngredientCategoryId(saved.id);
+      setIngredientCategoryName(saved.name);
+      setMessage("Categoria de materia prima guardada.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "No se pudo guardar la categoria.");
+    }
+  }
+
+  async function removeSelectedIngredientCategory() {
+    if (!selectedIngredientCategoryId) return;
+    setError("");
+    setMessage("");
+    try {
+      const removed = await deleteIngredientCategoryApi(selectedIngredientCategoryId);
+      if (!removed) {
+        setError("No se pudo eliminar la categoria.");
+        return;
+      }
+      await reloadData(undefined);
+      setSelectedIngredientCategoryId("");
+      setIngredientCategoryName("");
+      setMessage("Categoria de materia prima eliminada.");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "No se pudo eliminar la categoria.");
     }
   }
 
@@ -600,6 +773,137 @@ export default function StockEntryScreen() {
           <SessionStatusBar />
         </header>
 
+        <div className={styles.tabs} role="tablist" aria-label="Carga de mercancia">
+          <button type="button" role="tab" aria-selected={activeTab === "raw"} className={`${styles.tabBtn} ${activeTab === "raw" ? styles.tabBtnActive : ""}`.trim()} onClick={() => setActiveTab("raw")}>
+            Materia prima
+          </button>
+          <button type="button" role="tab" aria-selected={activeTab === "rawCategories"} className={`${styles.tabBtn} ${activeTab === "rawCategories" ? styles.tabBtnActive : ""}`.trim()} onClick={() => setActiveTab("rawCategories")}>
+            Categorias materia prima
+          </button>
+          <button type="button" role="tab" aria-selected={activeTab === "products"} className={`${styles.tabBtn} ${activeTab === "products" ? styles.tabBtnActive : ""}`.trim()} onClick={() => setActiveTab("products")}>
+            Productos kiosko
+          </button>
+        </div>
+
+        {activeTab === "raw" ? (
+          <div className={styles.layout}>
+            <section className={styles.formCard}>
+              <form className={styles.form} onSubmit={submitIngredientStock}>
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Ingreso de materia prima</h2>
+                  <div className={styles.fieldMatrix}>
+                    <label className={compactFieldClass}>
+                      <span>Materia prima</span>
+                      <select className={`${styles.input} ${styles.selectInput}`} value={selectedIngredientId} onChange={(event) => setSelectedIngredientId(event.target.value)}>
+                        <option value="">Seleccionar</option>
+                        {ingredients.map((ingredient) => (
+                          <option key={ingredient.id} value={ingredient.id}>{ingredient.name}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className={compactFieldClass}>
+                      <span>Categoria</span>
+                      <select className={`${styles.input} ${styles.selectInput}`} value={ingredientCategoryId} onChange={(event) => setIngredientCategoryId(event.target.value)} disabled={!selectedIngredient}>
+                        {ingredientCategories.map((category) => (
+                          <option key={category.id} value={category.id}>{category.name}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <div className={compactFieldClass}>
+                      <span>Stock actual</span>
+                      <div className={styles.valueBox}>{selectedIngredient ? formatIngredientQuantity(selectedIngredient.stockQuantity, selectedIngredient.stockMode) : "-"}</div>
+                    </div>
+                    <div className={compactFieldClass}>
+                      <span>Modo</span>
+                      <div className={styles.valueBox}>{selectedIngredient ? getIngredientStockModeLabel(selectedIngredient.stockMode) : "-"}</div>
+                    </div>
+                    <label className={compactFieldClass}>
+                      <span>Cantidad</span>
+                      <input className={styles.input} type="number" min="0" step={ingredientMetric === "unit" ? "1" : "0.01"} value={ingredientQuantity} onChange={(event) => setIngredientQuantity(event.target.value)} placeholder={ingredientMetric === "kilos" ? "Ej: 2.5" : "0"} />
+                    </label>
+                    <label className={compactFieldClass}>
+                      <span>Metrica</span>
+                      <select className={`${styles.input} ${styles.selectInput}`} value={ingredientMetric} onChange={(event) => setIngredientMetric(event.target.value as "unit" | "grams" | "kilos")} disabled={!selectedIngredient}>
+                        {selectedIngredient?.stockMode === "weight" ? (
+                          <>
+                            <option value="grams">Gramos</option>
+                            <option value="kilos">Kilos</option>
+                          </>
+                        ) : (
+                          <option value="unit">Unidad</option>
+                        )}
+                      </select>
+                    </label>
+                    <label className={compactFieldClass}>
+                      <span>Vencimiento *</span>
+                      <input className={styles.input} type="date" value={ingredientExpirationDate} onChange={(event) => setIngredientExpirationDate(event.target.value)} required />
+                    </label>
+                  </div>
+                </section>
+                {error ? <div className={styles.errorBox}>{error}</div> : null}
+                {message ? <div className={styles.successBox}>{message}</div> : null}
+                <div className={styles.formActions}>
+                  <button type="submit" className={styles.primaryBtn}>Confirmar ingreso</button>
+                </div>
+              </form>
+            </section>
+
+            <section className={styles.formCard}>
+              <div className={styles.form}>
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Materia prima cargada</h2>
+                  <input className={styles.input} value={ingredientSearch} onChange={(event) => setIngredientSearch(event.target.value)} placeholder="Buscar materia prima" />
+                  <div className={styles.rawList}>
+                    {filteredIngredients.map((ingredient) => (
+                      <button type="button" key={ingredient.id} className={`${styles.rawItem} ${selectedIngredientId === ingredient.id ? styles.rawItemActive : ""}`} onClick={() => setSelectedIngredientId(ingredient.id)}>
+                        <strong>{ingredient.name}</strong>
+                        <span>{ingredientCategories.find((category) => category.id === ingredient.categoryId)?.name || "Sin categoria"}</span>
+                        <small>{formatIngredientQuantity(ingredient.stockQuantity, ingredient.stockMode)}</small>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </section>
+          </div>
+        ) : activeTab === "rawCategories" ? (
+          <div className={styles.layout}>
+            <section className={styles.formCard}>
+              <form className={styles.form} onSubmit={submitIngredientCategory}>
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>{selectedIngredientCategoryId ? "Editar categoria" : "Crear categoria"}</h2>
+                  <label className={compactFieldClass}>
+                    <span>Nombre</span>
+                    <input className={styles.input} value={ingredientCategoryName} onChange={(event) => setIngredientCategoryName(event.target.value)} placeholder="Ej: Vegetales, Carnes, Empaques" />
+                  </label>
+                </section>
+                {error ? <div className={styles.errorBox}>{error}</div> : null}
+                {message ? <div className={styles.successBox}>{message}</div> : null}
+                <div className={styles.formActions}>
+                  <button type="button" className={styles.secondaryBtn} onClick={() => { setSelectedIngredientCategoryId(""); setIngredientCategoryName(""); }}>Nueva</button>
+                  <button type="button" className={styles.secondaryBtn} onClick={() => void removeSelectedIngredientCategory()} disabled={!selectedIngredientCategoryId}>Eliminar</button>
+                  <button type="submit" className={styles.primaryBtn}>Guardar categoria</button>
+                </div>
+              </form>
+            </section>
+            <section className={styles.formCard}>
+              <div className={styles.form}>
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Categorias y materia prima asociada</h2>
+                  <div className={styles.rawList}>
+                    {groupedIngredientCategories.map((group) => (
+                      <button type="button" key={group.category.id} className={`${styles.rawItem} ${selectedIngredientCategoryId === group.category.id ? styles.rawItemActive : ""}`} onClick={() => selectIngredientCategory(group.category)}>
+                        <strong>{group.category.name}</strong>
+                        <span>{group.items.length} productos asociados</span>
+                        <small>{group.items.map((item) => item.name).join(", ") || "Sin productos"}</small>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              </div>
+            </section>
+          </div>
+        ) : (
         <div className={styles.layout}>
           <div className={styles.formColumn}>
             <div className={styles.modeSwitch}>
@@ -926,11 +1230,20 @@ export default function StockEntryScreen() {
                     <input
                       className={styles.input}
                       type="number"
-                      min={1}
+                      min={stockMetric === "unit" ? 1 : 0}
+                      step={stockMetric === "unit" ? 1 : 0.01}
                       value={quantity}
                       onChange={(event) => setQuantity(event.target.value)}
                       placeholder="0"
                     />
+                  </label>
+                  <label className={compactFieldClass}>
+                    <span>Metrica</span>
+                    <select className={`${styles.input} ${styles.selectInput}`} value={stockMetric} onChange={(event) => setStockMetric(event.target.value as "unit" | "grams" | "kilos")}>
+                      <option value="unit">Unidad</option>
+                      <option value="grams">Gramos</option>
+                      <option value="kilos">Kilos</option>
+                    </select>
                   </label>
                   <label className={compactFieldWideClass}>
                     <span>Descripcion</span>
@@ -990,6 +1303,7 @@ export default function StockEntryScreen() {
             />
           </section>
         </div>
+        )}
       </div>
     </div>
   );

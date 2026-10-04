@@ -664,7 +664,17 @@
   margin-top: 12px;
 }
 
+.associatedProductsBox {
+  margin-top: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
 .assignmentColumn {
+  margin-top: 12px;
   display: grid;
   gap: 8px;
 }
@@ -682,6 +692,43 @@
   color: #0f172a;
   min-height: 30px;
   padding: 0 8px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.assignmentSelectChip {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #0f172a;
+  min-height: 32px;
+  padding: 0 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.assignmentSelectChip input {
+  margin: 0;
+  accent-color: #0f172a;
+}
+
+.assignmentSelectChipActive {
+  border-color: #ea580c;
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.assignmentEditBtn {
+  min-height: 32px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #334155;
+  padding: 0 9px;
   font: inherit;
   font-size: 12px;
   font-weight: 900;

@@ -138,9 +138,14 @@ function normalizeIngredientRecord(input: unknown): Ingredient | null {
   return {
     id,
     name,
+    productId: String(draft.productId || "").trim() || undefined,
+    metric: draft.metric === "weight" ? "weight" : "unit",
+    categoryId: String(draft.categoryId || "").trim() || undefined,
     expiresInDays,
     stockMode: normalizeStockMode(draft.stockMode),
     stockQuantity,
+    minStockQuantity: Math.max(0, Number(draft.minStockQuantity) || 0) || undefined,
+    portionSizeGrams: Math.max(0, Number(draft.portionSizeGrams) || 0) || undefined,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
     lastEntryAt: String(draft.lastEntryAt || "").trim() || undefined,
@@ -170,9 +175,14 @@ function normalizeDraft(draft: IngredientDraft) {
   const name = draft.name.trim();
   const expiresInDays = Math.max(0, Math.trunc(Number(draft.expiresInDays) || 0));
   const stockMode = normalizeStockMode(draft.stockMode);
+  const categoryId = String(draft.categoryId || "").trim() || undefined;
+  const productId = String(draft.productId || "").trim() || undefined;
+  const metric: Ingredient["metric"] = draft.metric === "weight" ? "weight" : "unit";
   const stockQuantity = Math.max(0, Number(draft.stockQuantity) || 0);
   const entryQuantity = Math.max(0, Number(draft.entryQuantity) || 0);
-  return { name, expiresInDays, stockMode, stockQuantity, entryQuantity };
+  const minStockQuantity = Math.max(0, Number(draft.minStockQuantity) || 0) || undefined;
+  const portionSizeGrams = Math.max(0, Number(draft.portionSizeGrams) || 0) || undefined;
+  return { name, productId, metric, categoryId, expiresInDays, stockMode, stockQuantity, entryQuantity, minStockQuantity, portionSizeGrams };
 }
 
 export function loadIngredients(): Ingredient[] {
@@ -206,9 +216,14 @@ export function createIngredient(draft: IngredientDraft): Ingredient {
   const ingredient: Ingredient = {
     id: buildEntityId("ing"),
     name: normalized.name,
+    productId: normalized.productId,
+    metric: normalized.metric,
+    categoryId: normalized.categoryId,
     expiresInDays: normalized.expiresInDays,
     stockMode: normalized.stockMode,
     stockQuantity: normalized.stockQuantity + normalized.entryQuantity,
+    minStockQuantity: normalized.minStockQuantity,
+    portionSizeGrams: normalized.portionSizeGrams,
     createdAt: now.toISOString(),
     lastEntryAt: normalized.entryQuantity > 0 ? now.toISOString() : undefined,
     nextExpirationDate: normalized.entryQuantity > 0 ? buildExpirationDate(normalized.expiresInDays, now) : undefined,
@@ -226,14 +241,19 @@ export function updateIngredient(id: string, draft: IngredientDraft): Ingredient
 
   const now = new Date();
   let updated: Ingredient | null = null;
-  const next = loadIngredients().map((item) => {
+  const next: Ingredient[] = loadIngredients().map((item) => {
     if (item.id !== id) return item;
     updated = {
       ...item,
       name: normalized.name,
+      productId: normalized.productId,
+      metric: normalized.metric,
+      categoryId: normalized.categoryId,
       expiresInDays: normalized.expiresInDays,
       stockMode: normalized.stockMode,
       stockQuantity: normalized.stockQuantity + normalized.entryQuantity,
+      minStockQuantity: normalized.minStockQuantity,
+      portionSizeGrams: normalized.portionSizeGrams,
       updatedAt: now.toISOString(),
       lastEntryAt: normalized.entryQuantity > 0 ? now.toISOString() : item.lastEntryAt,
       nextExpirationDate: normalized.entryQuantity > 0 ? buildExpirationDate(normalized.expiresInDays, now) : item.nextExpirationDate,

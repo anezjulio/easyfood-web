@@ -221,9 +221,10 @@ export default function OperationScreen() {
               <BigBtn title="Creacion de Menu" subtitle="Recetas para vender" onClick={() => nav("/menu-products")} variant="menu" />
               <BigBtn title="Ingredientes y productos" subtitle="Definicion y caducidad" onClick={() => nav("/ingredients")} />
               {isAdmin ? (
-                <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} disabled />
+                <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
               ) : null}
-              <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} disabled />
+              <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} />
+              <BigBtn title="Inventario" subtitle="Carga y control de ingredientes e insumos" onClick={() => nav("/inventory")} />
               <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} disabled />
               {isAdmin ? (
                 <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} disabled />
@@ -249,6 +250,7 @@ export default function OperationScreen() {
                 onClick={() => nav("/licenses")}
               />
               <BigBtn title="Data" subtitle="Limpieza de base de datos" onClick={() => nav("/data")} />
+              <BigBtn title="Sistema" subtitle="Configuraciones especiales" onClick={() => nav("/system")} />
               <BigBtn
                 title="Aprobar Solicitudes"
                 subtitle="Flujo de aprobacion"

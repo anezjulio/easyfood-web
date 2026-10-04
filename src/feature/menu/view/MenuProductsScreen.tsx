@@ -45,16 +45,24 @@ function compareRecipeItemByGroup(a: MenuRecipeItem, b: MenuRecipeItem) {
   return a.stockMode.localeCompare(b.stockMode) || a.ingredientName.localeCompare(b.ingredientName);
 }
 
+function getIngredientRecipeStep(ingredient: Ingredient): number {
+  return ingredient.stockMode === "weight" ? Math.max(0, Math.trunc(Number(ingredient.portionSizeGrams) || 0)) : 1;
+}
+
 function compareMenuProductByCategory(a: MenuProduct, b: MenuProduct) {
   return (a.category || "").localeCompare(b.category || "") || a.name.localeCompare(b.name);
+}
+
+function menuProductHasCategory(product: MenuProduct, categoryId: string) {
+  return product.category === categoryId || !!product.categoryIds?.includes(categoryId);
 }
 
 function groupMenuProductsByCategory(products: MenuProduct[], categories: MenuCategory[]) {
   const rows = categories.map((category) => ({
     category,
-    products: products.filter((item) => item.category === category.id).sort(compareMenuProductByCategory),
+    products: products.filter((item) => menuProductHasCategory(item, category.id)).sort(compareMenuProductByCategory),
   }));
-  const uncategorized = products.filter((item) => !item.category || !categories.some((category) => category.id === item.category));
+  const uncategorized = products.filter((item) => !categories.some((category) => menuProductHasCategory(item, category.id)));
   return [
     ...(uncategorized.length
       ? [{ category: { id: "", name: "Sin categoria", createdAt: "" }, products: uncategorized.sort(compareMenuProductByCategory) }]
@@ -96,7 +104,7 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
   const [error, setError] = useState("");
   const selectedCombo = combos.find((item) => item.id === selectedId) || null;
   const parsedPrice = Math.max(0, Math.trunc(toNumber(price)));
-  const categoryProducts = availableProducts.filter((item) => item.category === itemCategory).sort(compareMenuProductByCategory);
+  const categoryProducts = availableProducts.filter((item) => menuProductHasCategory(item, itemCategory)).sort(compareMenuProductByCategory);
   const groupedProducts = groupMenuProductsByCategory(availableProducts, assignableCategories);
 
   function clearForm() {
@@ -292,7 +300,7 @@ function ComboWorkspace({ categories, menuProducts, onSaved }: ComboWorkspacePro
               </div>
             )}
             {comboItems.length === 0 ? <p className={styles.empty}>Todavia no agregaste productos al combo.</p> : <div className={styles.selectedChipList}>{[...comboItems].sort(compareComboItemByCategory).map((item) => {
-              const itemProducts = item.type === "category" ? availableProducts.filter((product) => product.category === item.category).sort(compareMenuProductByCategory) : [];
+              const itemProducts = item.type === "category" ? availableProducts.filter((product) => item.category ? menuProductHasCategory(product, item.category) : false).sort(compareMenuProductByCategory) : [];
               return <div key={item.type === "category" ? `category:${item.category}` : item.menuProductId} className={styles.selectedChip}><span>{item.quantity}x {item.type === "category" ? `${item.categoryName} a eleccion` : item.menuProductName}</span><button type="button" onClick={() => changeComboItemQuantity(item, -1)}>-</button><button type="button" onClick={() => changeComboItemQuantity(item, 1)}>+</button><button type="button" onClick={() => setComboItems((current) => current.filter((entry) => entry !== item))}>X</button>{item.type === "category" ? <div className={styles.inlineChecks}>{itemProducts.map((product) => <label key={product.id} className={styles.inlineCheck}><input type="checkbox" checked={(item.allowedMenuProductIds || []).includes(product.id)} onChange={() => toggleComboItemAllowedProduct(item, product.id)} /><span>{product.name}</span></label>)}</div> : null}</div>;
             })}</div>}
           </section>
@@ -317,21 +325,22 @@ type CategoryWorkspaceProps = {
 };
 
 function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorkspaceProps) {
-  const assignableProducts = menuProducts.sort(compareMenuProductByCategory);
-  const [selectedId, setSelectedId] = useState(categories[0]?.id || "");
+  const assignableProducts = [...menuProducts].sort(compareMenuProductByCategory);
+  const [selectedId, setSelectedId] = useState("");
   const [expandedProductId, setExpandedProductId] = useState("");
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const selectedCategory = categories.find((item) => item.id === selectedId) || null;
-  const assignedProducts = assignableProducts.filter((item) => item.category === selectedId);
-  const unassignedProducts = assignableProducts.filter((item) => item.category !== selectedId);
+  const assignedProducts = assignableProducts.filter((item) => menuProductHasCategory(item, selectedId));
   const groupedAssignedProducts = groupMenuProductsByCategory(assignedProducts, categories).filter((group) => group.category.id !== "");
-  const groupedAvailableProducts = groupMenuProductsByCategory(unassignedProducts, categories);
+  const groupedAvailableProducts = groupMenuProductsByCategory(assignableProducts, categories);
 
   function clearForm() {
     setSelectedId("");
     setExpandedProductId("");
+    setSelectedProductIds([]);
     setName("");
     setMessage("");
     setError("");
@@ -340,13 +349,19 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
   function selectCategory(category: MenuCategory) {
     setSelectedId(category.id);
     setExpandedProductId("");
+    setSelectedProductIds([]);
     setName(category.name);
     setMessage("");
     setError("");
   }
 
-  async function saveCategory(event: React.FormEvent) {
-    event.preventDefault();
+  function toggleSelectedProduct(productId: string) {
+    setSelectedProductIds((current) =>
+      current.includes(productId) ? current.filter((id) => id !== productId) : [...current, productId],
+    );
+  }
+
+  async function saveCategoryChanges() {
     const trimmedName = name.trim();
     if (!trimmedName) return setError("Ingresa el nombre de la categoria.");
     try {
@@ -354,14 +369,30 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
         ? await updateMenuCategoryApi(selectedCategory.id, { name: trimmedName })
         : await createMenuCategoryApi({ name: trimmedName });
       if (!saved) return setError("No se pudo guardar la categoria.");
+      await Promise.all(
+        selectedProductIds
+          .map((productId) => assignableProducts.find((item) => item.id === productId))
+          .filter((item): item is MenuProduct => !!item)
+          .map((item) => updateMenuProductApi(item.id, { ...item, category: saved.id })),
+      );
       await onSaved();
       setSelectedId(saved.id);
+      setSelectedProductIds([]);
       setName(saved.name);
-      setMessage(selectedCategory ? "Categoria actualizada." : "Categoria creada.");
+      setMessage(
+        selectedProductIds.length > 0
+          ? `${selectedProductIds.length} productos movidos a ${saved.name}.`
+          : selectedCategory ? "Categoria actualizada." : "Categoria creada.",
+      );
       setError("");
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo guardar la categoria.");
     }
+  }
+
+  async function saveCategory(event: React.FormEvent) {
+    event.preventDefault();
+    await saveCategoryChanges();
   }
 
   async function removeSelectedCategory() {
@@ -395,8 +426,12 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
       <div className={styles.assignmentChips}>
         {items.map((item) => (
           <div key={item.id} className={styles.assignmentChipWrap}>
-            <button type="button" className={styles.assignmentChip} onClick={() => setExpandedProductId((current) => (current === item.id ? "" : item.id))}>
-              {item.name}
+            <label className={`${styles.assignmentSelectChip} ${selectedProductIds.includes(item.id) ? styles.assignmentSelectChipActive : ""}`.trim()}>
+              <input type="checkbox" checked={selectedProductIds.includes(item.id)} onChange={() => toggleSelectedProduct(item.id)} />
+              <span>{item.name}</span>
+            </label>
+            <button type="button" className={styles.assignmentEditBtn} onClick={() => setExpandedProductId((current) => (current === item.id ? "" : item.id))}>
+              Cambiar
             </button>
             {expandedProductId === item.id ? (
               <div className={styles.assignmentInlineEditor}>
@@ -436,28 +471,33 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
             <button type="submit" className={styles.primaryBtn}>{selectedCategory ? "Guardar categoria" : "Crear categoria"}</button>
           </div>
         </form>
-        <div className={styles.categoryChipList}>
-          {categories.map((category) => (
-            <button type="button" key={category.id} className={`${styles.pickChip} ${selectedId === category.id ? styles.pickChipActive : ""}`.trim()} onClick={() => selectCategory(category)}>
-              {category.name} <strong>{menuProducts.filter((item) => item.category === category.id).length}</strong>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.listCard}>
-        <h2 className={styles.cardTitle}>Productos</h2>
-        <div className={styles.assignmentColumn}>
-          <h3 className={styles.sectionTitle}>Asignados</h3>
+        <div className={styles.associatedProductsBox}>
+          <h3 className={styles.sectionTitle}>Productos asociados</h3>
           {groupedAssignedProducts.length === 0 ? <p className={styles.empty}>No hay productos ni combos en esta categoria.</p> : groupedAssignedProducts.map((group) => (
             <section key={group.category.id} className={styles.pickGroup}>
               <h4>{group.category.name}</h4>
               {renderProductChips(group.products, "assigned")}
             </section>
           ))}
+        </div>
+        <div className={styles.categoryChipList}>
+          {categories.map((category) => (
+            <button type="button" key={category.id} className={`${styles.pickChip} ${selectedId === category.id ? styles.pickChipActive : ""}`.trim()} onClick={() => selectCategory(category)}>
+              {category.name} <strong>{menuProducts.filter((item) => menuProductHasCategory(item, category.id)).length}</strong>
+            </button>
+          ))}
+        </div>
+      </section>
 
-          <h3 className={styles.sectionTitle}>Disponibles</h3>
-          {groupedAvailableProducts.length === 0 ? <p className={styles.empty}>Todos estan asignados a esta categoria.</p> : groupedAvailableProducts.map((group) => (
+      <section className={styles.listCard}>
+        <div className={styles.cardHeader}>
+          <h2 className={styles.cardTitle}>Productos por categoria</h2>
+          <button type="button" className={styles.secondaryBtn} disabled={!name.trim() || selectedProductIds.length === 0} onClick={() => void saveCategoryChanges()}>
+            Aceptar seleccion ({selectedProductIds.length})
+          </button>
+        </div>
+        <div className={styles.assignmentColumn}>
+          {groupedAvailableProducts.length === 0 ? <p className={styles.empty}>No hay productos creados.</p> : groupedAvailableProducts.map((group) => (
             <section key={group.category.id || "none"} className={styles.pickGroup}>
               <h4>{group.category.name}</h4>
               {renderProductChips(group.products, "available")}
@@ -539,7 +579,7 @@ export default function MenuProductsScreen() {
     return menuProducts
       .filter((item) => {
         if (item.kind === "combo") return false;
-        if (categoryFilter !== "all" && item.category !== categoryFilter) return false;
+        if (categoryFilter !== "all" && !menuProductHasCategory(item, categoryFilter)) return false;
         if (!query) return true;
         return normalizeForSearch(`${item.name} ${item.category || ""} ${item.description || ""} ${item.recipeItems.map((recipe) => recipe.ingredientName).join(" ")}`).includes(query);
       })
@@ -550,7 +590,7 @@ export default function MenuProductsScreen() {
     () =>
       categories.reduce(
         (acc, item) => {
-          acc[item.id] = menuProducts.filter((product) => product.kind !== "combo" && product.category === item.id).length;
+          acc[item.id] = menuProducts.filter((product) => product.kind !== "combo" && menuProductHasCategory(product, item.id)).length;
           return acc;
         },
         {} as Record<ProductCategory, number>,
@@ -601,12 +641,12 @@ export default function MenuProductsScreen() {
     setError("");
   }
 
-  function addRecipeItem(ingredient: Ingredient, amount = 1) {
+  function addRecipeItem(ingredient: Ingredient, amount = getIngredientRecipeStep(ingredient)) {
     setError("");
     setMessage("");
     const quantity = amount;
     if (!Number.isFinite(quantity) || quantity <= 0) {
-      setError("Ingresa una cantidad valida para la receta.");
+      setError(ingredient.stockMode === "weight" ? "Configura los gramos de porcion del ingrediente." : "Ingresa una cantidad valida para la receta.");
       return;
     }
 
@@ -625,15 +665,19 @@ export default function MenuProductsScreen() {
   }
 
   function incrementRecipeItemQuantity(item: MenuRecipeItem) {
+    const ingredient = ingredients.find((entry) => entry.id === item.ingredientId);
+    const step = ingredient ? getIngredientRecipeStep(ingredient) : 1;
     setRecipeItems((current) =>
-      current.map((entry) => (entry.ingredientId === item.ingredientId ? { ...entry, quantity: entry.quantity + 1 } : entry)),
+      current.map((entry) => (entry.ingredientId === item.ingredientId ? { ...entry, quantity: entry.quantity + step } : entry)),
     );
   }
 
   function decrementRecipeItemQuantity(item: MenuRecipeItem) {
+    const ingredient = ingredients.find((entry) => entry.id === item.ingredientId);
+    const step = ingredient ? getIngredientRecipeStep(ingredient) : 1;
     setRecipeItems((current) =>
       current
-        .map((entry) => (entry.ingredientId === item.ingredientId ? { ...entry, quantity: Math.max(0, entry.quantity - 1) } : entry))
+        .map((entry) => (entry.ingredientId === item.ingredientId ? { ...entry, quantity: Math.max(0, entry.quantity - step) } : entry))
         .filter((entry) => entry.quantity > 0),
     );
   }

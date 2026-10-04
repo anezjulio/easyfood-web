@@ -4,7 +4,7 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import ProductTable from "../component/ProductTable";
 import { useProductCrudViewModel } from "../viewmodel/useProductCrudViewModel";
 import { resolveImageUrl } from "../../../shared/image/image.service";
-import { PRODUCT_CATEGORIES } from "../model/product.types";
+import type { ProductStockMode, ProductType } from "../model/product.types";
 import styles from "./ProductCrudScreen.module.css";
 
 export default function ProductCrudScreen() {
@@ -13,7 +13,17 @@ export default function ProductCrudScreen() {
   const leftActionLabel = "Nuevo";
   const submitLabel = vm.isEditing ? "Modificar" : "Confirmar";
   const productFormId = "product-crud-form";
-  const toLabel = (value: (typeof PRODUCT_CATEGORIES)[number]) => value.charAt(0).toUpperCase() + value.slice(1);
+  const typeOptions: Array<{ value: ProductType; label: string }> = [
+    { value: "ingrediente", label: "Ingrediente" },
+    { value: "empaque", label: "Empaque" },
+    { value: "bebida", label: "Bebida" },
+    { value: "receta", label: "Receta" },
+    { value: "combo", label: "Combo" },
+  ];
+  const stockModeOptions: Array<{ value: ProductStockMode; label: string }> = [
+    { value: "unit", label: "Unidad" },
+    { value: "weight", label: "Peso" },
+  ];
   function preventEnterFromSubmittingBarcode(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -142,23 +152,68 @@ export default function ProductCrudScreen() {
                   <label className={styles.field}>
                     <span>Tipo de producto</span>
                     <select
-                      value={vm.category}
-                      onChange={(e) => vm.setCategory(e.target.value as (typeof PRODUCT_CATEGORIES)[number])}
+                      value={vm.productType}
+                      onChange={(e) => vm.setProductType(e.target.value as ProductType)}
                       className={`${styles.input} ${styles.selectInput}`}
                     >
-                      {PRODUCT_CATEGORIES.map((option) => (
-                        <option key={option} value={option}>
-                          {toLabel(option)}
-                        </option>
+                      {typeOptions.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
                       ))}
                     </select>
                   </label>
 
                   <label className={styles.field}>
+                    <span>Manejo de stock</span>
+                    <select
+                      value={vm.stockMode}
+                      onChange={(e) => vm.setStockMode(e.target.value as ProductStockMode)}
+                      disabled={vm.productType !== "ingrediente"}
+                      className={`${styles.input} ${styles.selectInput}`}
+                    >
+                      {stockModeOptions.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className={styles.field}>
+                    <span>Descripcion</span>
+                    <textarea
+                      value={vm.description}
+                      onChange={(e) => vm.setDescription(e.target.value)}
+                      className={styles.textarea}
+                      rows={3}
+                      placeholder="Detalle visible del producto"
+                    />
+                  </label>
+
+                  <div className={styles.field}>
+                    <span>Categorias</span>
+                    <div className={styles.checkGrid}>
+                      {vm.categories.map((option) => (
+                        <label key={option.id} className={styles.toggleLabel}>
+                          <input
+                            type="checkbox"
+                            checked={vm.categoryIds.includes(option.id)}
+                            onChange={() => vm.toggleCategoryId(option.id)}
+                          />
+                          {option.name}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {vm.productType === "receta" ? (
+                    <div className={styles.recipeNotice}>
+                      Gestiona ingredientes y porciones desde Ingredientes, y la receta vendible desde Creacion de Menu.
+                    </div>
+                  ) : null}
+
+                  <label className={styles.field}>
                     <span>Precio de coste</span>
                     <input
                       type="number"
-                      min={1}
+                      min={vm.productType === "ingrediente" || vm.productType === "empaque" ? 0 : 1}
                       value={vm.costPrice}
                       onChange={(e) => vm.setCostPrice(e.target.value)}
                       className={styles.input}

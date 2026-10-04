@@ -208,6 +208,27 @@
   padding: 0 14px;
 }
 
+.textarea {
+  width: 100%;
+  min-height: 84px;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 16px;
+  background: white;
+  padding: 10px 14px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.checkGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
 .inputWithAction {
   display: flex;
   gap: 8px;
@@ -261,6 +282,15 @@
   line-height: 1.2;
   border: none;
   background: transparent;
+}
+
+.recipeNotice {
+  grid-column: 1 / -1;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1e3a8a;
+  padding: 10px 12px;
+  font-weight: 800;
 }
 
 .selectInput {

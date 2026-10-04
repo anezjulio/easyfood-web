@@ -373,6 +373,59 @@
   font-weight: 900;
 }
 
+.ingredientReservePanel {
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+}
+
+.ingredientReserveHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #0f172a;
+  font-weight: 900;
+}
+
+.ingredientReserveHead strong {
+  color: #15803d;
+}
+
+.ingredientReserveList {
+  display: grid;
+  gap: 6px;
+}
+
+.ingredientReserveItem {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, auto) 42px;
+  gap: 8px;
+  align-items: center;
+  border-left: 4px solid #16a34a;
+  background: #f0fdf4;
+  color: #0f172a;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.ingredientReserveItem small {
+  color: #334155;
+  font-weight: 800;
+}
+
+.ingredientReserveItem strong {
+  justify-self: end;
+  font-size: 16px;
+}
+
+.ingredientReserveCritical {
+  border-left-color: #dc2626;
+  background: #fef2f2;
+}
+
 .cellQty,
 .cellSubtotal {
   font-weight: 800;

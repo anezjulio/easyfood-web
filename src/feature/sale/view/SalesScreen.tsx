@@ -38,6 +38,11 @@ import {
 } from "../../cash/service/cash.api";
 import { openCashWithAmount, syncCashState as syncCashStateService } from "../../cash/service/cash.operation";
 import { DATA_STORE_CHANGED_EVENT } from "../../data/service/data.api";
+import type { Ingredient } from "../../ingredient/model/ingredient.types";
+import { formatIngredientQuantity } from "../../ingredient/model/ingredient.types";
+import { fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
+import { buildDefaultSystemSettings, type SystemSettings } from "../../system/model/system.types";
+import { fetchSystemSettingsApi } from "../../system/service/system.api";
 import styles from "./SalesScreen.module.css";
 
 type CartItem = {
@@ -69,22 +74,8 @@ function formatCategoryLabel(category: string, categories: MenuCategory[] = []) 
   return categories.find((item) => item.id === category)?.name || category.charAt(0).toUpperCase() + category.slice(1);
 }
 
-function mapMenuProductToSellableProduct(menuProduct: MenuProduct): SellableProduct {
-  return {
-    id: buildMenuSaleProductId(menuProduct.id),
-    name: menuProduct.name,
-    price: menuProduct.price,
-    costPrice: 0,
-    createdAt: menuProduct.createdAt,
-    imageUrl: menuProduct.imageUrl,
-    description: menuProduct.description,
-    category: menuProduct.category || "hamburguesa",
-    brand: "Menu",
-    existencia: 9999,
-    saleSource: "menu",
-    menuProductId: menuProduct.id,
-    menuProduct,
-  };
+function productHasCategory(product: Pick<Product, "category" | "categoryIds">, categoryId: string) {
+  return product.category === categoryId || !!product.categoryIds?.includes(categoryId);
 }
 
 function resolveComboItems(product: SellableProduct, selections: NonNullable<CartItem["comboSelections"]>, products: SellableProduct[]) {
@@ -115,7 +106,7 @@ function resolveComboItems(product: SellableProduct, selections: NonNullable<Car
 function getComboCategoryOptions(comboItem: NonNullable<MenuProduct["comboItems"]>[number], products: SellableProduct[]) {
   const allowedIds = new Set(comboItem.allowedMenuProductIds || []);
   return products.filter((product) => {
-    if (product.saleSource !== "menu" || product.menuProduct?.kind === "combo" || product.category !== comboItem.category) return false;
+    if (product.saleSource !== "menu" || product.menuProduct?.kind === "combo" || !comboItem.category || !productHasCategory(product, comboItem.category)) return false;
     return allowedIds.size === 0 || allowedIds.has(product.menuProductId || "");
   });
 }
@@ -130,6 +121,28 @@ function mapSelectionsByCategory(selections: CartItem["comboSelections"]) {
 
 function hasVariableComboItems(product: SellableProduct | null | undefined) {
   return (product?.menuProduct?.comboItems || []).some((item) => item.type === "category" && item.category);
+}
+
+function addRecipeConsumption(consumption: Map<string, number>, product: MenuProduct, multiplier: number) {
+  for (const recipeItem of product.recipeItems) {
+    consumption.set(recipeItem.ingredientId, (consumption.get(recipeItem.ingredientId) || 0) + recipeItem.quantity * multiplier);
+  }
+}
+
+function resolveUnitConsumption(product: SellableProduct, selections: Record<string, string>, products: SellableProduct[]) {
+  const consumption = new Map<string, number>();
+  const menuProduct = product.menuProduct;
+  if (!menuProduct) return consumption;
+  if (menuProduct.kind !== "combo") {
+    addRecipeConsumption(consumption, menuProduct, 1);
+    return consumption;
+  }
+  for (const comboItem of menuProduct.comboItems || []) {
+    const selectedProductId = comboItem.type === "category" ? selections[comboItem.category || ""] : buildMenuSaleProductId(comboItem.menuProductId || "");
+    const component = products.find((item) => item.id === selectedProductId && item.menuProduct?.kind !== "combo");
+    if (component?.menuProduct) addRecipeConsumption(consumption, component.menuProduct, Math.max(1, Math.trunc(Number(comboItem.quantity || 1))));
+  }
+  return consumption;
 }
 
 function generateOrderCode() {
@@ -176,7 +189,9 @@ export default function SalesScreen() {
   const cartCardRef = useRef<HTMLElement | null>(null);
   const listCardRef = useRef<HTMLElement | null>(null);
   const [products, setProducts] = useState<SellableProduct[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
+  const [systemSettings, setSystemSettings] = useState<SystemSettings>(buildDefaultSystemSettings());
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [quantityToAdd, setQuantityToAdd] = useState("1");
@@ -219,15 +234,22 @@ export default function SalesScreen() {
   async function reloadProducts() {
     setLoading(true);
     try {
-      const [productList, menuProductList, categoryList] = await Promise.all([
+      const [productList, menuProductList, categoryList, ingredientList, nextSystemSettings] = await Promise.all([
         fetchProducts(),
         fetchMenuProductsApi(),
         fetchMenuCategoriesApi(),
+        fetchIngredientsApi(),
+        fetchSystemSettingsApi(),
       ]);
-      const menuSellables = menuProductList.map((item) => mapMenuProductToSellableProduct(item));
-      const menuNames = new Set(menuSellables.map((item) => normalizeForSearch(item.name)));
-      const nonDuplicatedProducts = productList.filter((item) => !menuNames.has(normalizeForSearch(item.name)));
-      setProducts([...menuSellables, ...nonDuplicatedProducts]);
+      const menuById = new Map(menuProductList.map((item) => [item.id, item]));
+      setProducts(productList.map((product) => {
+        const menuProduct = menuById.get(product.id);
+        return menuProduct
+          ? { ...product, id: buildMenuSaleProductId(menuProduct.id), saleSource: "menu", menuProductId: menuProduct.id, menuProduct }
+          : product;
+      }));
+      setIngredients(ingredientList);
+      setSystemSettings(nextSystemSettings);
       setMenuCategories(categoryList);
     } finally {
       setLoading(false);
@@ -347,8 +369,15 @@ export default function SalesScreen() {
   );
   const selectedImageUrl = resolveImageUrl(selectedProduct?.imageUrl?.trim() || "");
 
+  const cartIngredientConsumption = useMemo(() => buildCartIngredientConsumption(), [cart, products]);
   const selectedProductStock = resolveProductStock(selectedProduct);
   const selectedProductStockLabel = selectedProduct ? `Disponibles: ${formatStockLimit(selectedProductStock)}` : "";
+  const selectedIngredientPreview = selectedProduct ? Array.from(resolveUnitConsumption(selectedProduct, comboSelections, products)).map(([ingredientId, quantity]) => {
+    const ingredient = ingredients.find((item) => item.id === ingredientId);
+    const reserved = cartIngredientConsumption.get(ingredientId) || 0;
+    const available = Math.max(0, Number(ingredient?.stockQuantity || 0) - reserved);
+    return ingredient ? { ingredient, quantity, available, sellable: quantity > 0 ? Math.floor(available / quantity) : 0 } : null;
+  }).filter((item): item is NonNullable<typeof item> => !!item) : [];
   const hasPendingPayment = pendingOrder?.status === "por pagar";
 
   useEffect(() => {
@@ -455,7 +484,7 @@ export default function SalesScreen() {
     const q = normalizeForSearch(nameFilter);
     const c = normalizeForSearch(categoryFilter);
     const p = priceFilter.replace(/\D/g, "");
-    let list = products;
+    let list = products.filter((item) => item.type === "receta" || item.type === "combo" || item.type === "bebida");
 
     if (q) list = list.filter((item) => normalizeForSearch(item.name).includes(q));
     if (barcodeFilter.trim()) {
@@ -463,7 +492,7 @@ export default function SalesScreen() {
       list = list.filter((item) => (item.barcode || "").includes(barcodeQuery));
     }
     if (c) {
-      list = list.filter((item) => normalizeForSearch(item.category || "").includes(c));
+      list = list.filter((item) => normalizeForSearch(`${item.category || ""} ${(item.categoryIds || []).join(" ")}`).includes(c));
     }
     if (p) list = list.filter((item) => matchesPriceFilter(item.price, p));
     if (createdAtFilter) {
@@ -486,9 +515,9 @@ export default function SalesScreen() {
       menuCategories
         .map((category) => ({
           ...category,
-          count: products.filter((item) => item.category === category.id).length,
+          count: products.filter((item) => productHasCategory(item, category.id) && (item.type === "receta" || item.type === "combo" || item.type === "bebida")).length,
         }))
-        .filter((item) => item.count > 0),
+        .filter((item) => item.id !== "ingrediente" && item.count > 0),
     [menuCategories, products],
   );
 
@@ -573,10 +602,47 @@ export default function SalesScreen() {
     if (key === "createdAt") setCreatedAtFilter(value);
   }
 
-  function resolveProductStock(product: SellableProduct | null | undefined, selections = comboSelections): number {
-    void selections;
+  function addCartItemConsumption(consumption: Map<string, number>, item: CartItem, quantity: number) {
+    const product = products.find((node) => node.id === item.productId);
+    if (!product) return;
+    if (product.menuProduct?.kind === "combo" && item.comboUnits?.length) {
+      for (const unit of item.comboUnits.slice(0, quantity)) {
+        for (const [ingredientId, required] of resolveUnitConsumption(product, mapSelectionsByCategory(unit.comboSelections), products)) {
+          consumption.set(ingredientId, (consumption.get(ingredientId) || 0) + required);
+        }
+      }
+      return;
+    }
+    for (const [ingredientId, required] of resolveUnitConsumption(product, mapSelectionsByCategory(item.comboSelections), products)) {
+      consumption.set(ingredientId, (consumption.get(ingredientId) || 0) + required * quantity);
+    }
+  }
+
+  function buildCartIngredientConsumption(ignoreCartItemId?: string) {
+    const consumption = new Map<string, number>();
+    for (const item of cart) {
+      if (item.id === ignoreCartItemId) continue;
+      addCartItemConsumption(consumption, item, item.quantity);
+    }
+    return consumption;
+  }
+
+  function resolveProductStock(product: SellableProduct | null | undefined, selections = comboSelections, ignoreCartItemId?: string): number {
     if (!product) return 0;
-    return Number.POSITIVE_INFINITY;
+    if (product.saleSource !== "menu") {
+      if (systemSettings.allowOutOfStockSales) return Number.POSITIVE_INFINITY;
+      return Math.max(0, Math.trunc(Number(product.existencia || 0)));
+    }
+    const unitConsumption = resolveUnitConsumption(product, selections, products);
+    if (unitConsumption.size === 0) return 0;
+    const reservedIngredients = buildCartIngredientConsumption(ignoreCartItemId);
+    const limits = Array.from(unitConsumption).map(([ingredientId, quantityPerUnit]) => {
+      const ingredient = ingredients.find((item) => item.id === ingredientId);
+      if (!ingredient || quantityPerUnit <= 0) return 0;
+      const available = Math.max(0, Number(ingredient.stockQuantity || 0) - (reservedIngredients.get(ingredientId) || 0));
+      return Math.floor(available / quantityPerUnit);
+    });
+    return Math.max(0, Math.min(...limits));
   }
 
   function formatStockLimit(value: number): string {
@@ -645,7 +711,7 @@ export default function SalesScreen() {
       }
 
       const combinedQuantity = existing.quantity + nextQuantity;
-      if (combinedQuantity > productStock) {
+      if (nextQuantity > productStock) {
         setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${product.name}.`);
         return current;
       }
@@ -695,7 +761,7 @@ export default function SalesScreen() {
     if (!Number.isFinite(parsed) || parsed < 1) return;
 
     const cartItem = cart.find((item) => item.id === cartItemId);
-    const productStock = resolveProductStock(products.find((item) => item.id === cartItem?.productId), mapSelectionsByCategory(cartItem?.comboSelections));
+    const productStock = resolveProductStock(products.find((item) => item.id === cartItem?.productId), mapSelectionsByCategory(cartItem?.comboSelections), cartItemId);
 
     const maxAllowed = Math.max(1, productStock);
     const clamped = Math.min(parsed, maxAllowed);
@@ -775,7 +841,7 @@ export default function SalesScreen() {
     const product = products.find((item) => item.id === currentItem?.productId);
     if (!product || !currentItem) return;
 
-    const productStock = resolveProductStock(product, mapSelectionsByCategory(currentItem.comboSelections));
+    const productStock = resolveProductStock(product, mapSelectionsByCategory(currentItem.comboSelections), cartItemId);
     const nextQuantity = currentItem.quantity + 1;
     if (nextQuantity > productStock) {
       setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${product.name}.`);
@@ -868,8 +934,8 @@ export default function SalesScreen() {
       setPendingOrder(created);
       setPaymentMethod("efectivo");
       setIsModalOpen(true);
-    } catch {
-      setError("No se pudo generar la compra.");
+    } catch (error) {
+      setError(error instanceof Error && error.message ? error.message : "No se pudo generar la compra.");
     }
   }
 
@@ -959,9 +1025,9 @@ export default function SalesScreen() {
       setWarning("");
       setMessage("");
       nav("/sales/summary", { state: summaryState });
-    } catch {
+    } catch (error) {
       setWarning("");
-      setError("No se pudo confirmar el pago. La orden puede haber sido cancelada por tiempo.");
+      setError(error instanceof Error && error.message ? error.message : "No se pudo confirmar el pago. La orden puede haber sido cancelada por tiempo.");
     } finally {
       setIsApprovingPayment(false);
     }
@@ -1083,6 +1149,26 @@ export default function SalesScreen() {
               </div>
             </div>
 
+            {selectedIngredientPreview.length ? (
+              <div className={styles.ingredientReservePanel}>
+                <div className={styles.ingredientReserveHead}>
+                  <span>Ingredientes</span>
+                  <strong>{formatStockLimit(selectedProductStock)} para preparar</strong>
+                </div>
+                <div className={styles.ingredientReserveList}>
+                  {selectedIngredientPreview.map((item) => (
+                    <div key={item.ingredient.id} className={`${styles.ingredientReserveItem} ${item.available <= 0 ? styles.ingredientReserveCritical : ""}`.trim()}>
+                      <span>{item.ingredient.name}</span>
+                      <small>
+                        usa {formatIngredientQuantity(item.quantity, item.ingredient.stockMode)} / queda {formatIngredientQuantity(item.available, item.ingredient.stockMode)}
+                      </small>
+                      <strong>{item.sellable}</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
             <div className={styles.cartList}>
               <div className={styles.cartHead}>
                 <div>Producto</div>
@@ -1184,7 +1270,7 @@ export default function SalesScreen() {
                           <input
                             type="number"
                             min={1}
-                            max={Number.isFinite(resolveProductStock(products.find((p) => p.id === item.productId), mapSelectionsByCategory(item.comboSelections))) ? resolveProductStock(products.find((p) => p.id === item.productId), mapSelectionsByCategory(item.comboSelections)) : undefined}
+                            max={Number.isFinite(resolveProductStock(products.find((p) => p.id === item.productId), mapSelectionsByCategory(item.comboSelections), item.id)) ? resolveProductStock(products.find((p) => p.id === item.productId), mapSelectionsByCategory(item.comboSelections), item.id) : undefined}
                             value={item.quantity}
                             onChange={(e) => updateCartItemQuantity(item.id, e.target.value)}
                             className={styles.cartQtyInput}

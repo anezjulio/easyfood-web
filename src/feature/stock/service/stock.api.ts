@@ -2,13 +2,14 @@ import { readJsonOrThrow } from "../../../shared/http/http";
 
 export type StockEntryDraft = {
   productId: string;
-  manufactureDate?: string;
   expirationDate?: string;
+  movementDate?: string;
   quantity: number;
+  metric?: "unit" | "grams" | "kilos";
+  movementType?: "in" | "out";
   description?: string;
   supplyOrderId?: string;
   costPrice?: number;
-  salePrice?: number;
 };
 
 export type StockEntry = StockEntryDraft & {

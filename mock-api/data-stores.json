@@ -1,9 +1,9 @@
 {
-  "activeStoreId": "practifood",
+  "activeStoreId": "default",
   "stores": [
     {
       "id": "default",
-      "name": "Base principal",
+      "name": "default",
       "dbPath": "C:\\project\\easyfood-web\\mock-api\\db.json",
       "imagesDir": "C:\\project\\easyfood-web\\images",
       "receiptsDir": "C:\\project\\easyfood-web\\mock-api\\receipts",

@@ -27,6 +27,7 @@ export type MenuProduct = {
   description?: string;
   imageUrl?: string;
   category?: ProductCategory;
+  categoryIds?: ProductCategory[];
   recipeItems: MenuRecipeItem[];
   kind?: MenuProductKind;
   comboItems?: MenuComboItem[];
@@ -40,6 +41,7 @@ export type MenuProductDraft = {
   description?: string;
   imageUrl?: string;
   category?: ProductCategory;
+  categoryIds?: ProductCategory[];
   recipeItems: MenuRecipeItem[];
   kind?: MenuProductKind;
   comboItems?: MenuComboItem[];
