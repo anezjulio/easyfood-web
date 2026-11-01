@@ -1,0 +1,15 @@
+services:
+  easyfood-web:
+    image: easyfood-web:latest
+    restart: unless-stopped
+    environment:
+      PORT: "8080"
+      DATA_ROOT: /data
+      ORDER_PENDING_TIMEOUT_MINUTES: "15"
+    ports:
+      - "${EASYFOOD_PORT:-3000}:8080"
+    volumes:
+      - easyfood-data:/data
+
+volumes:
+  easyfood-data:

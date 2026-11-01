@@ -69,7 +69,8 @@ export function getCategoryLabel(category?: ProductCategory) {
   return CATEGORY_LABELS[category] || category;
 }
 
-export function getProductStock(product: Product | null | undefined) {
+export function getProductStock(product: Product | null | undefined, allowOutOfStockSales = false) {
+  if (allowOutOfStockSales) return Number.POSITIVE_INFINITY;
   return Math.max(0, Math.trunc(Number(product?.existencia || 0)));
 }
 

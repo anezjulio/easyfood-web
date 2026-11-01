@@ -6614,7 +6614,11 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
 
   function consumeMenuProduct(menuProductId: string, multiplier: number, selections: OrderItem["comboSelections"]): string | null {
     const menuProduct = db.menuProducts.find((item) => item.id === menuProductId);
-    if (!menuProduct) return `Menu product not found: ${menuProductId}`;
+    if (!menuProduct) {
+      const product = db.products.find((item) => item.id === menuProductId);
+      if (!product) return `Menu product not found: ${menuProductId}`;
+      return consumeProduct(product.id, multiplier);
+    }
 
     if (menuProduct.kind === "combo") {
       for (const comboItem of menuProduct.comboItems || []) {
@@ -6644,7 +6648,11 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
     if (orderItem.productId.startsWith("menu:")) {
       const menuProductId = orderItem.productId.slice("menu:".length);
       const menuProduct = db.menuProducts.find((item) => item.id === menuProductId);
-      if (!menuProduct) return { entries: [], ingredientEntries: [], error: `Menu product not found: ${orderItem.productName}` };
+      if (!menuProduct) {
+        const error = consumeProduct(menuProductId, orderItem.quantity);
+        if (error) return { entries: [], ingredientEntries: [], error };
+        continue;
+      }
       if (menuProduct.kind === "combo") {
         const unitSelections = orderItem.comboUnits?.length
           ? orderItem.comboUnits.map((unit) => unit.comboSelections || [])

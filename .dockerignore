@@ -12,7 +12,7 @@ dist-ssr
 .env.development
 .env.development.local
 
-!.env.production
+.env.*
 
 logs
 *.log
@@ -29,3 +29,5 @@ iniciar.bat
 server.cjs
 
 dist-server
+test-results
+playwright-report

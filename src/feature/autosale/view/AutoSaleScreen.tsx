@@ -29,6 +29,8 @@ import {
 import { createStockEntryApi } from "../../stock/service/stock.api";
 import { resolveAppUserRole } from "../../user/model/user.types";
 import { fetchUsersApi } from "../../user/service/user.api";
+import { buildDefaultSystemSettings, type SystemSettings } from "../../system/model/system.types";
+import { fetchSystemSettingsApi } from "../../system/service/system.api";
 import AutoSaleSummarySection from "./AutoSaleSummarySection";
 import CloseTerminalModal from "./CloseTerminalModal";
 import {
@@ -65,6 +67,7 @@ export default function AutoSaleScreen() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("efectivo");
   const [paymentMethodSettings, setPaymentMethodSettings] = useState<PaymentMethodSettings>(buildDefaultPaymentMethodSettings());
   const [taxSettings, setTaxSettings] = useState<TaxSettings>(buildDefaultTaxSettings());
+  const [systemSettings, setSystemSettings] = useState<SystemSettings>(buildDefaultSystemSettings());
   const [pendingPaymentRemainingMs, setPendingPaymentRemainingMs] = useState(0);
   const [isPreparingPayment, setIsPreparingPayment] = useState(false);
   const [isApprovingPayment, setIsApprovingPayment] = useState(false);
@@ -100,17 +103,20 @@ export default function AutoSaleScreen() {
     let cancelled = false;
     (async () => {
       try {
-        const [nextPaymentMethodSettings, nextTaxSettings] = await Promise.all([
+        const [nextPaymentMethodSettings, nextTaxSettings, nextSystemSettings] = await Promise.all([
           fetchPaymentMethodSettingsApi(),
           fetchTaxSettingsApi(),
+          fetchSystemSettingsApi(),
         ]);
         if (cancelled) return;
         setPaymentMethodSettings(nextPaymentMethodSettings);
         setTaxSettings(nextTaxSettings);
+        setSystemSettings(nextSystemSettings);
       } catch {
         if (cancelled) return;
         setPaymentMethodSettings(buildDefaultPaymentMethodSettings());
         setTaxSettings(buildDefaultTaxSettings());
+        setSystemSettings(buildDefaultSystemSettings());
       }
     })();
 
@@ -151,8 +157,8 @@ export default function AutoSaleScreen() {
       : products;
 
     return [...filtered].sort((a, b) => {
-      const aStock = getProductStock(a);
-      const bStock = getProductStock(b);
+      const aStock = getProductStock(a, systemSettings.allowOutOfStockSales);
+      const bStock = getProductStock(b, systemSettings.allowOutOfStockSales);
       const aHasStock = aStock > 0;
       const bHasStock = bStock > 0;
 
@@ -162,7 +168,7 @@ export default function AutoSaleScreen() {
 
       return a.name.localeCompare(b.name);
     });
-  }, [availableCategories, products, selectedCategory]);
+  }, [availableCategories, products, selectedCategory, systemSettings.allowOutOfStockSales]);
 
   const cartBaseTotal = useMemo(() => cart.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0), [cart]);
   const cartUnits = useMemo(() => cart.reduce((acc, item) => acc + item.quantity, 0), [cart]);
@@ -241,7 +247,7 @@ export default function AutoSaleScreen() {
         return `${item.productName} ya no esta disponible en la terminal.`;
       }
 
-      const stock = getProductStock(product);
+      const stock = getProductStock(product, systemSettings.allowOutOfStockSales);
       if (item.quantity > stock) {
         return `No puedes superar la existencia (${stock}) para ${item.productName}.`;
       }
@@ -251,7 +257,7 @@ export default function AutoSaleScreen() {
 
   function addProductToCart(product: Product) {
     clearNotices();
-    const stock = getProductStock(product);
+    const stock = getProductStock(product, systemSettings.allowOutOfStockSales);
 
     if (stock < 1) {
       setError(`No hay stock disponible para ${product.name}.`);
@@ -288,7 +294,7 @@ export default function AutoSaleScreen() {
       return;
     }
 
-    const stock = getProductStock(product);
+    const stock = getProductStock(product, systemSettings.allowOutOfStockSales);
     if (nextQuantity > stock) {
       setError(`No puedes superar la existencia (${stock}) para ${product.name}.`);
       return;
@@ -708,7 +714,7 @@ export default function AutoSaleScreen() {
                   {!loading && visibleProducts.length > 0 ? (
                     <div className={styles.productGrid}>
                       {visibleProducts.map((product) => {
-                        const stock = getProductStock(product);
+                        const stock = getProductStock(product, systemSettings.allowOutOfStockSales);
                         const imageUrl = resolveImageUrl(product.imageUrl);
                         const quantityInCart = cartQuantityMap.get(product.id) || 0;
                         return (
@@ -787,7 +793,7 @@ export default function AutoSaleScreen() {
                 {cart.map((item) => {
                   const product = productMap.get(item.productId);
                   const imageUrl = resolveImageUrl(item.imageUrl || product?.imageUrl);
-                  const stock = getProductStock(product);
+                  const stock = getProductStock(product, systemSettings.allowOutOfStockSales);
                   return (
                     <article key={item.productId} className={styles.reviewCard}>
                       <div className={styles.reviewMedia}>

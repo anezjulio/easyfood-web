@@ -1,6 +1,6 @@
 # EasyFood Web
 
-EasyFood Web es el frontend React + TypeScript de una operacion comercial con ventas, caja, productos, stock, mercaderia, gastos, notificaciones y administracion. El repo incluye la UI y tambien un mock backend montado dentro de `vite.config.ts`, con persistencia en archivos, subida de imagenes, generacion de recibos HTML, libro financiero derivado y soporte de multiples bases.
+EasyFood Web es el frontend React + TypeScript de una operacion comercial con ventas, caja, productos, stock, mercaderia, gastos, notificaciones y administracion. El repo incluye la UI y tambien una fake API compartida por Vite y el servidor Node de produccion, con persistencia en archivos, subida de imagenes, generacion de recibos HTML, libro financiero derivado y soporte de multiples bases.
 
 ## Stack
 
@@ -9,7 +9,7 @@ EasyFood Web es el frontend React + TypeScript de una operacion comercial con ve
 - Vite 7
 - React Router 7
 - CSS Modules
-- Mock REST backend embebido en Vite
+- Fake API REST en `server/api.ts`
 
 ## Modulos principales
 
@@ -34,15 +34,15 @@ npm run dev
 
 La app levanta por defecto en `http://localhost:5173`.
 
-## Docker (frontend de produccion)
+## Docker local y NAS (frontend y fake API)
 
-El contenedor construye el bundle con `npm ci` y `npm run build`, y lo sirve con Nginx. No ejecuta el servidor de desarrollo de Vite.
+La imagen construye el frontend y el servidor Node de produccion. Ambos se sirven desde el mismo puerto, incluyendo la fake API, imagenes, subidas y recibos. No necesita Nginx, Railway ni un contenedor `fake-api` separado; `nginx.conf` no se utiliza en esta imagen.
 
 ```bash
 docker compose up -d --build
 ```
 
-La interfaz queda disponible en `http://localhost:3000` y, desde otro equipo de la red local, en `http://IP_DEL_HOST:3000`.
+La interfaz queda disponible en `http://localhost:8080` y, desde otro equipo de la red local, en `http://IP_DEL_HOST:8080`.
 
 Comandos habituales:
 
@@ -58,16 +58,38 @@ docker compose down
 docker compose up -d --build
 
 # Comprobar la respuesta HTTP localmente
-curl http://localhost:3000
+curl http://localhost:8080
 ```
 
-Nginx aplica el fallback SPA, por lo que una ruta de React Router como `/dashboard` o `/sales` no devuelve 404 al actualizar la pagina.
+El servidor aplica el fallback SPA para las rutas de React Router. `/health` responde `OK`; `/products` y `/users` deben responder JSON, sin 404.
+
+El volumen `easyfood-data` se monta en `/data` y conserva bases, imagenes y recibos al recrear el contenedor. La primera vez, la fake API copia los datos iniciales incluidos en la imagen; una reconstruccion no sobrescribe los datos persistidos. No uses `docker compose down -v` si quieres conservarlos. Haz copias de seguridad del volumen antes de actualizar.
+
+Para cambiar el puerto del host, define `EASYFOOD_PORT=8080` en `.env`. Las URL de API e imagenes se construyen relativas al mismo servidor; no debes usar `localhost` ni el nombre Docker `fake-api` como URL del navegador. Las variables `VITE_*` se fijan al construir la imagen; cambiar el entorno del contenedor no recompila el frontend.
+
+### Llevar la imagen al NAS sin compilar alli
+
+```bash
+# En el equipo local, despues de construir
+docker save -o easyfood-web.tar easyfood-web:latest
+
+# Copiar easyfood-web.tar y docker-compose.nas.yml al NAS; ejecutar alli
+docker load -i easyfood-web.tar
+docker compose -f docker-compose.nas.yml up -d
+docker compose -f docker-compose.nas.yml ps
+curl http://localhost:3000/health
+curl http://localhost:3000/products
+```
+
+Abre `http://IP_DEL_NAS:3000`. La imagen exportada debe corresponder a la arquitectura del NAS. Para un NAS ARM64, construye primero con `docker buildx build --platform linux/arm64 --load -t easyfood-web:latest .`; para x86-64 utiliza `linux/amd64`. Tambien puedes copiar el proyecto al NAS y ejecutar `docker compose up -d --build` para construir en su arquitectura.
+
+La exportacion de la imagen incluye los datos iniciales del proyecto, pero no el volumen de un contenedor ya usado. Para migrar datos posteriores, respalda y restaura todo el contenido de `/data` en el volumen del NAS con la aplicacion detenida. Un directorio del NAS montado manualmente en `/data` debe permitir escritura al usuario `node` (UID/GID 1000).
 
 ### Variables de build
 
 `docker-compose.yml` recibe las variables `VITE_*` desde el entorno o desde el archivo `.env` del proyecto. Se incorporan al JavaScript durante el build, asi que nunca deben contener secretos. Para cambiar una variable, actualiza `.env` o expórtala antes de reconstruir la imagen.
 
-El frontend actual depende de los endpoints REST que el mock backend publica dentro de `vite.config.ts` durante desarrollo. Nginx no ejecuta ese backend ni persiste sus datos. Para que los flujos que consumen `/users`, `/orders`, `/products` y demas endpoints funcionen en Docker, una etapa posterior debe desplegar ese backend como servicio independiente y configurar las URLs/proxy correspondientes.
+Compose permite configurar `VITE_USE_FAKE_API` y `VITE_ORDER_PENDING_TIMEOUT_MINUTES`. La imagen fija las URL de API e imagenes al mismo origen para funcionar con la IP local o la del NAS.
 
 ## Login demo
 
@@ -87,7 +109,7 @@ El frontend actual depende de los endpoints REST que el mock backend publica den
 | `VITE_ORDER_PENDING_TIMEOUT_MINUTES` | `15` | Tiempo maximo para aprobar o rechazar un pago pendiente en ventas. |
 | `DATA_ROOT` | vacio | Si se define, mueve `mock-api`, `images` y `receipts` a una raiz persistente externa al repo. |
 | `VITE_RECEIPTS_DIR` / `RECEIPTS_DIR` | `mock-api/receipts` | Carpeta base para los recibos HTML generados. |
-| `PORT` | `5173` en dev / `4173` en preview | Puerto de Vite. |
+| `PORT` | `8080` en produccion | Puerto del servidor Node; Docker publica `3000` por defecto en el host. |
 
 ## Persistencia y multiples bases
 
@@ -106,7 +128,7 @@ El frontend actual depende de los endpoints REST que el mock backend publica den
 
 ## Backend mock incluido
 
-El backend real de desarrollo vive en `vite.config.ts` y no en un servicio aparte. Desde ahi se exponen, entre otros:
+La fake API vive en `server/api.ts`. Vite la monta en desarrollo y `server/index.ts` la monta en produccion dentro de la misma imagen. Expone, entre otros:
 
 - CRUD de productos, precios, margenes, usuarios y licencias
 - Ventas, facturas, recibos y stock

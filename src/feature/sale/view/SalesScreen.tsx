@@ -629,8 +629,8 @@ export default function SalesScreen() {
 
   function resolveProductStock(product: SellableProduct | null | undefined, selections = comboSelections, ignoreCartItemId?: string): number {
     if (!product) return 0;
+    if (systemSettings.allowOutOfStockSales) return Number.POSITIVE_INFINITY;
     if (product.saleSource !== "menu") {
-      if (systemSettings.allowOutOfStockSales) return Number.POSITIVE_INFINITY;
       return Math.max(0, Math.trunc(Number(product.existencia || 0)));
     }
     const unitConsumption = resolveUnitConsumption(product, selections, products);
@@ -711,7 +711,7 @@ export default function SalesScreen() {
       }
 
       const combinedQuantity = existing.quantity + nextQuantity;
-      if (nextQuantity > productStock) {
+      if (combinedQuantity > productStock) {
         setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${product.name}.`);
         return current;
       }
