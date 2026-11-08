@@ -1,5 +1,7 @@
 # Arquitectura MVVM y organizacion real del frontend
 
+Actualizado: 2026-11-07. Referencia: codigo del repositorio; las propuestas futuras se indican expresamente.
+
 Este proyecto usa una variante pragmatica de MVVM por `feature`. La idea general se mantiene, pero no todas las pantallas tienen un `viewmodel/` dedicado. En la practica hoy conviven dos patrones:
 
 - features con `viewmodel/` cuando la logica de pantalla es reutilizable o merece separacion explicita
@@ -97,10 +99,11 @@ Piezas reutilizables dentro de una feature. Ejemplos reales:
 - `product/component/ProductRow.tsx`
 - `request/component/MerchandiseRequestEditor.tsx`
 - `request/component/RequestItemsTable.tsx`
+- `stock/component/StockNavigation.tsx`: enlaces a ingredientes, productos, inventario y carga.
 
 ## Reglas de capa que si se sostienen hoy
 
-1. Las vistas no hacen `fetch` crudo; pasan por `service/`.
+1. Preferir servicios para HTTP. Hay excepciones actuales: `IngredientStockScreen` lee `/ingredients` directamente; la regla no se cumple de forma absoluta.
 2. Los contratos de datos viven en `model/`.
 3. Las utilidades compartidas van en `shared/`.
 4. La navegacion y la sesion viven en `app/`, no en cada feature.
@@ -115,6 +118,8 @@ Piezas reutilizables dentro de una feature. Ejemplos reales:
 - `format/numeric.ts`: mascaras y parseos numericos
 - `search/search.ts`: normalizacion para filtros de texto
 - `product/product-filter.ts`: filtros reutilizables de producto
+- `recipe/ingredient-rules.ts`: obligatoriedad compartida entre cliente y servidor
+- `category/category-order.ts`: orden editable y valores por defecto, compartidos con el servidor
 
 ## Backend embebido y arquitectura de desarrollo
 
@@ -129,16 +134,19 @@ El frontend no corre contra un backend separado en desarrollo. El mock backend r
 
 Esto impacta la arquitectura del repo porque el contrato entre UI y backend queda versionado en el mismo proyecto.
 
-## Particularidad del dominio de productos
+## Catalogo, inventario y persistencia
 
-Solo el dominio de productos/precios/margenes tiene fallback a `localStorage` cuando `VITE_USE_FAKE_API=false`.
+El menu actual se construye desde `products`, `recipes`, `combos`, `categories` e `ingredients`. `menu.api.ts` adapta esos contratos para la pantalla; `menuProducts` y `menuCategories` se conservan como estructuras heredadas. El backend normaliza datos antiguos y prioriza el producto del dominio al resolver consumo.
 
-En ese modo:
+`SalesScreen` mantiene estado local del carrito, configuracion y pago. La UI calcula disponibilidad y el servidor vuelve a resolver el consumo al pagar: gramos directos, componentes elegidos y exclusiones opcionales. La regla de obligatoriedad esta compartida; la resolucion completa del consumo sigue duplicada entre UI y servidor.
 
-- productos, precios y margenes salen del mock backend
-- el resto del sistema sigue usando endpoints HTTP relativos
+El saldo de ingrediente reside en `ingredients.stockQuantity`; `products.existencia` se calcula desde `stocks`. Las recetas del dominio actual actualizan saldo de ingredientes y movimientos; algunos caminos heredados solo actualizan el saldo. No existe una unica tabla contable de inventario.
 
-Por eso, si se va a migrar a backend real, conviene unificar ese dominio y eliminar el fallback local.
+`server/data-blocks.ts` separa Catalogo, Operaciones y Stock, conserva IDs y valida relaciones. `DataBlocksPanel` prepara una combinacion, muestra vista previa y aplica bloques completos. La escritura JSON final de este flujo usa archivo temporal y rename; no convierte al resto de las operaciones en transacciones SQL.
+
+Los fallbacks locales se encuentran en productos/precios/margenes e ingredientes; las recetas y categorias comerciales actuales siguen usando HTTP. No hay modo offline integral. Las pantallas de configuracion comercial (Finanzas) y el libro derivado (Transacciones) tienen funciones distintas.
+
+Los campos, propietarios y tablas futuras se describen en [Diccionario de datos](data-dictionary.md).
 
 ## Lectura recomendada de la arquitectura actual
 

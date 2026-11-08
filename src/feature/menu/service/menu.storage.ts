@@ -1,3 +1,4 @@
+import { normalizeRecipeRequirements } from "../../../shared/recipe/ingredient-rules";
 import { loadIngredients } from "../../ingredient/service/ingredient.storage";
 import type { ProductCategory } from "../../product/model/product.types";
 import type { MenuComboItem, MenuProduct, MenuProductDraft, MenuProductKind, MenuRecipeItem } from "../model/menu.types";
@@ -123,7 +124,7 @@ function buildEntityId(prefix: string, inputDate = new Date()): string {
 function normalizeRecipeItems(input: unknown): MenuRecipeItem[] {
   if (!Array.isArray(input)) return [];
   const ingredients = loadIngredients();
-  return input
+  return normalizeRecipeRequirements(input
     .map((item) => {
       const draft = (item || {}) as Partial<MenuRecipeItem>;
       const ingredientId = String(draft.ingredientId || "").trim();
@@ -131,13 +132,14 @@ function normalizeRecipeItems(input: unknown): MenuRecipeItem[] {
       const quantity = Number(draft.quantity);
       if (!ingredient || !Number.isFinite(quantity) || quantity <= 0) return null;
       return {
+        required: draft.required !== false,
         ingredientId: ingredient.id,
         ingredientName: ingredient.name,
         quantity,
         stockMode: ingredient.stockMode,
       };
     })
-    .filter((item): item is MenuRecipeItem => !!item);
+    .filter((item): item is NonNullable<typeof item> => !!item));
 }
 
 function normalizeComboItems(input: unknown): MenuComboItem[] {

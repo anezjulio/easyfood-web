@@ -1,5 +1,7 @@
 # Flujos funcionales y casos de uso por modulo
 
+Actualizado: 2026-11-07. Verificado contra el codigo actual del repositorio.
+
 ## Objetivo
 
 Este documento resume lo que hoy cubre la aplicacion desde el punto de vista funcional. La referencia es el comportamiento actual del frontend y del mock backend en `server/api.ts`.
@@ -80,7 +82,9 @@ Flujos cubiertos:
 
 - alta y edicion de productos vendibles con receta
 - alta y edicion de combos con productos fijos o categoria a eleccion
-- creacion, renombrado y baja de categorias comerciales de menu
+- creacion, renombrado, orden numerico y baja de categorias comerciales de menu
+- edicion directa de gramos/unidades por receta y obligatoriedad por ingrediente
+- un unico ingrediente es obligatorio; en recetas multiples solo los opcionales pueden quitarse en la venta
 - visualizacion de productos y combos por categoria seleccionada
 - reasignacion de productos/combos a otra categoria o asignacion directa desde disponibles
 
@@ -162,51 +166,38 @@ Casos de uso:
 - corregir password o email
 - desactivar personal que ya no opera
 
-## Stock
+## Ingredientes, inventario y carga de stock
 
-Ruta: `/stock`
+Rutas: `/ingredients`, `/inventory`, `/stock/ingredients` y `/stock`.
 
-Flujos cubiertos:
-
-- ingreso de stock sobre producto existente
-- alta de producto nuevo e ingreso en el mismo flujo
-- asociacion opcional a pedido proveedor ya recibido
-- carga de fecha de vencimiento
-- ajuste de costo y precio al ingresar mercaderia
-
-Casos de uso:
-
-- reponer stock de un producto existente
-- crear un producto nuevo en la primera recepcion
-- ingresar stock resultante de una orden recibida
-- dejar actualizado precio/costo al momento del ingreso
-
-Reglas visibles:
-
-- para ingreso positivo se exige fecha de vencimiento
-- el producto puede disparar o resolver alerta de stock bajo
+- Ingredientes define nombre, modalidad (unidad, peso o paquete), categoria de materia prima, conservacion y gramos por porcion.
+- Cargar stock de ingredientes muestra enlaces Ver ingredientes, Ver productos y Ver inventario; esas pantallas tienen enlace Cargar stock.
+- La barra combina busqueda, Categoria de ingrediente, Por unidad, Por peso y Guardar ingresos. Pulsar nuevamente el filtro activo vuelve a todos. Por unidad incluye paquetes.
+- Categorias de ingredientes son Carnes, Lacteos, Panificados u otras que se configuren; no son categorias del menu. Sin categoria significa categoryId ausente o desconocido.
+- La tabla contiene ingrediente, costo total de compra, vencimiento, cantidad recibida, stock actual y porciones. No hay resumen superior ni columna editable de unidad.
+- El peso se carga en kg; el servidor convierte a gramos. Unidades y paquetes se ingresan como enteros. La receta descuenta gramos directos.
+- Costo es el total pagado por la cantidad de esa fila en ARS, no un precio por kg. Se admite cero y hasta dos decimales.
+- Guardar valida el lote completo y agrega movimientos y saldo de ingredientes. Procesa tambien filas con cantidad que hayan quedado ocultas por filtros.
+- Porciones muestra floor(stockQuantity / portionSizeGrams) para peso; sin gramos configurados muestra Sin configurar; para unidades no aplica. No reemplaza el calculo de disponibilidad de una receta completa.
+- El costo del ingreso aparece como egreso stock-purchase en Transacciones, cuenta Gastos. No altera automaticamente efectivo ni precio de venta.
+- El flujo anterior de Inventario conserva carga separada de movimiento y saldo; el flujo por lote es el apropiado para la carga nueva.
+- `/stock?tab=products` conserva el formulario general de productos kiosko/mercancia y su vinculo con pedidos proveedor.
 
 ## Ventas
 
-Ruta: `/sales`
+Ruta: `/sales`. Requiere caja abierta.
 
-Flujos cubiertos:
+1. Buscar y filtrar tarjetas agrupadas por categoria, a la derecha; el pedido se presenta a la izquierda en escritorio.
+2. Las categorias se ordenan por order. Configuracion inicial: Combos, Hamburguesas, Panchos, Bebidas, Extras y las demas al fondo. En empate se usa el nombre.
+3. Solo en las tarjetas se oculta el prefijo Hamburguesa, mediante una regla de codigo. Panchos, nombre interno, orden y comprobante conservan sus nombres completos. Los precios se alinean a la derecha y se destacan.
+4. Seleccionar muestra ingredientes fijos y casillas de ingredientes opcionales. No aparece la etiqueta Obligatorio. En combos, primero se muestran productos de varios ingredientes; despues los simples y las elecciones pendientes.
+5. + suma y - resta la cantidad indicada para la misma configuracion de producto, opciones y exclusiones. Cero elimina esa linea. Doble clic tambien agrega; exige resolver opciones pendientes y respeta stock.
+6. Agregar, doble clic y guardar cambios mantienen seleccion, cantidad e ingredientes/opciones. Editar modifica la linea existente; Quitar elimina la linea completa y se destaca en rojo. Los botones del pedido se alinean a la derecha.
+7. Ir a cobrar crea una orden por pagar. El carrito aun no descuenta materiales ni constituye una reserva compartida entre cajas.
+8. Confirmar cobro marca pagada y aplica el consumo en el servidor. Factura y asociacion a jornada se solicitan por separado. Exclusiones se conservan en el resumen y el recibo.
+9. Volver al pedido desde el cobro cancela esa orden pendiente y conserva el carrito editable. Las pendientes vencen automaticamente segun configuracion.
 
-- lectura por codigo de barras o busqueda manual
-- armado de carrito con multiples items
-- edicion de cantidades
-- calculo total segun metodo de pago y configuracion fiscal
-- creacion de orden pendiente
-- aprobacion o rechazo de pago dentro de una ventana temporal
-- facturacion
-- descuento automatico de stock
-- vinculacion de la venta a la jornada abierta
-
-Casos de uso:
-
-- operador cobra en efectivo, debito, credito o Mercado Pago
-- el sistema rechaza venta si no hay caja abierta
-- un pago pendiente vence automaticamente si no se resuelve a tiempo
+La cantidad de ingredientes compartidos se acumula para controlar disponibilidad. Si allowOutOfStockSales esta activo, se omite el bloqueo por existencias; no se omiten las validaciones de composicion ni de ingredientes obligatorios.
 
 ## Autoventa
 
@@ -310,7 +301,8 @@ Flujos cubiertos:
 Casos de uso:
 
 - revisar ingresos de ventas
-- revisar egresos por gastos o pedidos proveedor
+- revisar egresos por gastos, pedidos proveedor o compras de stock con purchaseTotal
+- filtrar la cuenta Gastos para compras directas de ingredientes; el filtro inicial de Transacciones es Caja local
 - seguir aperturas y cierres de caja en el libro derivado
 
 ## Pedidos a proveedor
@@ -467,21 +459,17 @@ Casos de uso:
 
 ## Data
 
-Ruta: `/data`
+Ruta: `/data`, solo admin.
 
-Flujos cubiertos:
+- Pestana DDBB (inicial): listar, crear, importar respaldos completos, descargar archivo de base, activar y limpiar. Crear/importar por esta via activa la nueva base.
+- Pestana Bloques de datos: exportar Productos/Catalogo, Operaciones o Stock desde una base elegida.
+- Elegir una base existente o archivo anterior para cada bloque; combinar hasta un origen por bloque.
+- Revisar cantidades y referencias antes de confirmar. Los IDs deben ser compatibles; no se renombran para unir catalogos distintos.
+- Crear una base combinada o reemplazar bloques de una existente. Los bloques no seleccionados se conservan; no se suman existencias. La base activa no cambia.
+- Se genera respaldo previo al reemplazo. Los respaldos nuevos de bloques incluyen imagenes o recibos segun corresponda; un archivo .js antiguo no puede recuperar medios que no contiene.
+- Catalogo sin stock permite reutilizar productos, categorias, recetas, reglas required, combos, precios y orden de categorias con existencias cero.
 
-- listado de bases configuradas
-- creacion de nueva base
-- cambio de base activa
-- limpieza de la base activa
-- visualizacion de paths de DB, imagenes y recibos
-
-Casos de uso:
-
-- admin crea una base nueva para otra sucursal o entorno
-- admin cambia el store activo
-- admin limpia el store operativo actual conservando configuraciones y usuarios
+Distribucion exacta: [Diccionario de datos](data-dictionary.md).
 
 ## Ayuda
 
@@ -506,8 +494,8 @@ Casos de uso:
 2. Carga de productos al carrito
 3. Orden pendiente
 4. Pago aprobado
-5. Factura
-6. Movimiento de stock
+5. Consumo de materiales al confirmar el pago
+6. Factura solicitada por una segunda operacion
 7. Orden agregada a jornada
 8. Registro financiero derivado
 9. Notificacion de venta
@@ -544,4 +532,4 @@ Casos de uso:
 
 ## Alcance actual
 
-El sistema cubre ya una operacion bastante completa de tienda: alta de productos, stock, ventas, caja, pedidos, recepcion, gastos, feedback, licencias, notificaciones y administracion de bases. Lo que falta es principalmente endurecer arquitectura y separar backend real, no definir los flujos funcionales base.
+El flujo actual incluye catalogo, recetas, inventario, ventas y costos de compra. Siguen pendientes las transacciones concurrentes de pago/stock, la devolucion de materiales, el consumo por lotes/vencimiento y la unificacion completa de caminos heredados. Autoventa comparte endpoints, pero su disponibilidad visual usa existencia del producto y no replica todo el editor de recetas de Ventas.

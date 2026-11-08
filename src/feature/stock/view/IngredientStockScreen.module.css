@@ -1,0 +1,16 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filters input {
+  box-sizing: border-box;
+  min-height: 42px;
+}
+
+.typeFilters { display: flex; flex-wrap: wrap; gap: 8px; }
+.typeFilters button[aria-pressed="true"] { background: #0f172a; border-color: #0f172a; color: white; }
+.quantityField { display: flex; align-items: center; gap: 8px; }
+.quantityField input { min-width: 90px; }
+.quantityField span { color: #475569; font-size: 13px; font-weight: 700; }

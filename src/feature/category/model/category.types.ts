@@ -1,4 +1,5 @@
 export type Category = {
+  order?: number;
   id: string;
   name: string;
   productIds: string[];
@@ -7,6 +8,7 @@ export type Category = {
 };
 
 export type CategoryDraft = {
+  order?: number;
   name: string;
   productIds: string[];
 };

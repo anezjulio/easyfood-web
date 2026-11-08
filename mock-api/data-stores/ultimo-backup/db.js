@@ -4,7 +4,7 @@
       "id": "menu250920261620163070",
       "name": "Pepsi Lata",
       "price": 2000,
-      "costPrice": 0,
+      "costPrice": 2000,
       "createdAt": "2026-09-25T16:20:16.736Z",
       "category": "bebida",
       "categoryIds": [
@@ -19,7 +19,7 @@
       "id": "menu250920261619557283",
       "name": "7 UP Lata",
       "price": 2000,
-      "costPrice": 0,
+      "costPrice": 2000,
       "createdAt": "2026-09-25T16:19:55.249Z",
       "category": "bebida",
       "categoryIds": [
@@ -34,7 +34,7 @@
       "id": "menu250920261617196500",
       "name": "Promo Hamburguesa",
       "price": 6000,
-      "costPrice": 0,
+      "costPrice": 6000,
       "createdAt": "2026-09-25T16:17:19.275Z",
       "category": "bebida",
       "categoryIds": [
@@ -49,7 +49,7 @@
       "id": "menu250920261428180026",
       "name": "Hamburguesa Promo",
       "price": 6000,
-      "costPrice": 0,
+      "costPrice": 6000,
       "createdAt": "2026-09-25T14:28:18.489Z",
       "category": "hamburguesa",
       "categoryIds": [
@@ -64,7 +64,7 @@
       "id": "menu150920261803218043",
       "name": "Budin Entero",
       "price": 13000,
-      "costPrice": 0,
+      "costPrice": 13000,
       "createdAt": "2026-09-15T18:03:21.601Z",
       "category": "extras",
       "categoryIds": [
@@ -79,9 +79,8 @@
       "id": "menu100920261711348812",
       "name": "Porcion de torta",
       "price": 1000,
-      "costPrice": 0,
+      "costPrice": 1000,
       "createdAt": "2026-09-10T17:11:34.804Z",
-      "updatedAt": "2026-09-12T00:52:09.801Z",
       "category": "extras",
       "categoryIds": [
         "extras"
@@ -95,9 +94,8 @@
       "id": "menu090920261743296363",
       "name": "Tequeños Promo x12",
       "price": 10000,
-      "costPrice": 0,
+      "costPrice": 10000,
       "createdAt": "2026-09-09T17:43:29.555Z",
-      "updatedAt": "2026-09-09T22:03:29.250Z",
       "category": "combos",
       "categoryIds": [
         "combos"
@@ -111,7 +109,7 @@
       "id": "menu090920261513169389",
       "name": "Hamburguesa Explosiva",
       "price": 14000,
-      "costPrice": 0,
+      "costPrice": 14000,
       "createdAt": "2026-09-09T15:13:16.167Z",
       "description": "Doble carne lechuga tomate cebolla huevo frito papas pay jamon queso bacon y salsas",
       "category": "hamburguesa",
@@ -127,9 +125,8 @@
       "id": "menu080920262233236954",
       "name": "Perro Caliente Especial",
       "price": 6000,
-      "costPrice": 0,
+      "costPrice": 6000,
       "createdAt": "2026-09-08T22:33:23.200Z",
-      "updatedAt": "2026-09-08T23:09:37.855Z",
       "description": "Perro Caliente Especial (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
       "category": "pancho",
       "categoryIds": [
@@ -144,9 +141,8 @@
       "id": "menu080920262121530765",
       "name": "Tequeños x6",
       "price": 7000,
-      "costPrice": 0,
+      "costPrice": 7000,
       "createdAt": "2026-09-08T21:21:53.613Z",
-      "updatedAt": "2026-09-08T21:44:17.303Z",
       "description": "12 Tequeños venezolanos",
       "category": "combos",
       "categoryIds": [
@@ -161,9 +157,8 @@
       "id": "menu080920262121103490",
       "name": "Tequeños x12",
       "price": 13000,
-      "costPrice": 0,
+      "costPrice": 13000,
       "createdAt": "2026-09-08T21:21:10.551Z",
-      "updatedAt": "2026-09-08T21:44:09.409Z",
       "description": "12 Tequeños venezolanos",
       "category": "combos",
       "categoryIds": [
@@ -178,9 +173,8 @@
       "id": "menu080920262038282615",
       "name": "Pancho Simple Promo",
       "price": 1500,
-      "costPrice": 0,
+      "costPrice": 1500,
       "createdAt": "2026-09-08T20:38:28.437Z",
-      "updatedAt": "2026-09-18T17:13:08.849Z",
       "description": "Pancho Simple (Pan de pancho, Salchicha, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
       "category": "pancho",
       "categoryIds": [
@@ -195,9 +189,8 @@
       "id": "menu080920262032031181",
       "name": "Perro Caliente Tradicional",
       "price": 4000,
-      "costPrice": 0,
+      "costPrice": 4000,
       "createdAt": "2026-09-08T20:32:03.060Z",
-      "updatedAt": "2026-09-08T23:08:46.179Z",
       "description": "Perro Caliente Tradicional (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
       "category": "pancho",
       "categoryIds": [
@@ -212,7 +205,7 @@
       "id": "menu080920262020581434",
       "name": "Pancho de la Casa",
       "price": 3000,
-      "costPrice": 0,
+      "costPrice": 3000,
       "createdAt": "2026-09-08T20:20:58.480Z",
       "description": "Pancho de la casa (Pan de pancho, Salchicha, Queso, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
       "category": "pancho",
@@ -228,7 +221,7 @@
       "id": "menu080920261954472297",
       "name": "Hamburguesa Pollo Bacon + Papas",
       "price": 12000,
-      "costPrice": 0,
+      "costPrice": 12000,
       "createdAt": "2026-09-08T19:54:47.881Z",
       "description": "Hamburguesa Pollo Bacon + Papas",
       "category": "hamburguesa",
@@ -244,7 +237,7 @@
       "id": "menu080920261954184932",
       "name": "Hamburguesa Pollo Doble + Papas",
       "price": 15000,
-      "costPrice": 0,
+      "costPrice": 15000,
       "createdAt": "2026-09-08T19:54:18.942Z",
       "description": "Hamburguesa Pollo Doble + Papas",
       "category": "hamburguesa",
@@ -260,7 +253,7 @@
       "id": "menu080920261953420897",
       "name": "Hamburguesa Pollo Simple + Papas",
       "price": 8500,
-      "costPrice": 0,
+      "costPrice": 8500,
       "createdAt": "2026-09-08T19:53:42.792Z",
       "description": "Hamburguesa Pollo Simple + Papas",
       "category": "hamburguesa",
@@ -276,7 +269,7 @@
       "id": "menu080920261952442755",
       "name": "Hamburguesa Mixta (carne y pollo) + Papas",
       "price": 15000,
-      "costPrice": 0,
+      "costPrice": 15000,
       "createdAt": "2026-09-08T19:52:44.247Z",
       "description": "Hamburguesa Mixta (carne y pollo) + Papas",
       "category": "hamburguesa",
@@ -292,7 +285,7 @@
       "id": "menu080920261951184585",
       "name": "Hamburguesa Carne Triple Bacon + Papas",
       "price": 20000,
-      "costPrice": 0,
+      "costPrice": 20000,
       "createdAt": "2026-09-08T19:51:18.239Z",
       "description": "Hamburguesa Carne Triple con Cheddar + papas",
       "category": "hamburguesa",
@@ -308,7 +301,7 @@
       "id": "menu080920261950493382",
       "name": "Hamburguesa Carne Doble Bacon + Papas",
       "price": 17000,
-      "costPrice": 0,
+      "costPrice": 17000,
       "createdAt": "2026-09-08T19:50:49.491Z",
       "description": "Hamburguesa Carne Doble con Cheddar + papas",
       "category": "hamburguesa",
@@ -324,9 +317,8 @@
       "id": "menu080920261931172153",
       "name": "Hamburguesa Carne Bacon + Papas",
       "price": 13000,
-      "costPrice": 0,
+      "costPrice": 13000,
       "createdAt": "2026-09-08T19:31:17.204Z",
-      "updatedAt": "2026-09-08T19:55:31.632Z",
       "description": "Hamburguesa Carne Bacon + Papas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -341,9 +333,8 @@
       "id": "menu080920261926110899",
       "name": "Hamburguesa Carne Doble con Cheddar + Papas",
       "price": 14000,
-      "costPrice": 0,
+      "costPrice": 14000,
       "createdAt": "2026-09-08T19:26:11.051Z",
-      "updatedAt": "2026-09-08T19:31:26.115Z",
       "description": "Hamburguesa Carne Doble con Cheddar + papas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -358,7 +349,7 @@
       "id": "menu080920261925118847",
       "name": "Hamburguesa Carne Simple + Papas",
       "price": 9000,
-      "costPrice": 0,
+      "costPrice": 9000,
       "createdAt": "2026-09-08T19:25:11.309Z",
       "description": "Hamburguesa Carne Simple + Papas",
       "category": "hamburguesa",
@@ -374,9 +365,8 @@
       "id": "menu080920261919394277",
       "name": "Hamburguesa Carne Triple Bacon",
       "price": 17500,
-      "costPrice": 0,
+      "costPrice": 17500,
       "createdAt": "2026-09-08T19:19:39.748Z",
-      "updatedAt": "2026-09-08T20:00:28.590Z",
       "description": "Tres hamburguesas de carne, panceta,  cheddar, lechuga, tomate, y cebolla, pepinillo, salsas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -391,9 +381,8 @@
       "id": "menu080920261913323090",
       "name": "Hamburguesa Carne Doble Bacon",
       "price": 14500,
-      "costPrice": 0,
+      "costPrice": 14500,
       "createdAt": "2026-09-08T19:13:32.529Z",
-      "updatedAt": "2026-09-08T19:57:31.744Z",
       "description": "Dos hamburguesas de carne, panceta,  cheddar, lechuga, tomate, y cebolla, pepinillo, salsas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -408,9 +397,8 @@
       "id": "menu080920261907232794",
       "name": "Hamburguesa Carne Bacon",
       "price": 10500,
-      "costPrice": 0,
+      "costPrice": 10500,
       "createdAt": "2026-09-08T19:07:23.574Z",
-      "updatedAt": "2026-09-08T19:57:10.712Z",
       "description": "Hamburguesa de carne, panceta, cheddar, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -425,9 +413,8 @@
       "id": "menu080920261851286352",
       "name": "Hamburguesa Pollo Doble",
       "price": 12500,
-      "costPrice": 0,
+      "costPrice": 12500,
       "createdAt": "2026-09-08T18:51:28.286Z",
-      "updatedAt": "2026-09-08T20:01:06.556Z",
       "description": "Dos hamburguesas de pollo, lechuga, doble panceta, doble cheddar,  tomate, y cebolla, pepinillo, salsas y papas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -442,9 +429,8 @@
       "id": "menu080920261851062448",
       "name": "Hamburguesa Carne Doble con Cheddar",
       "price": 11500,
-      "costPrice": 0,
+      "costPrice": 11500,
       "createdAt": "2026-09-08T18:51:06.884Z",
-      "updatedAt": "2026-09-08T19:57:46.174Z",
       "description": "Dos hamburguesas de carne, lechuga, doble cheddar,  tomate, y cebolla, pepinillo, salsas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -459,9 +445,8 @@
       "id": "menu080920261849311003",
       "name": "Hamburguesa Pollo Simple",
       "price": 6000,
-      "costPrice": 0,
+      "costPrice": 6000,
       "createdAt": "2026-09-08T18:49:31.811Z",
-      "updatedAt": "2026-09-08T20:01:23.643Z",
       "description": "Hamburguesa de pollo, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -476,9 +461,8 @@
       "id": "menu080920261848447277",
       "name": "Hamburguesa Carne Simple",
       "price": 6500,
-      "costPrice": 0,
+      "costPrice": 6500,
       "createdAt": "2026-09-08T18:48:44.719Z",
-      "updatedAt": "2026-09-08T19:58:17.889Z",
       "description": "Hamburguesa de carne, lechuga, tomate, y cebolla, pepinillo, salsas y papas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -493,9 +477,8 @@
       "id": "menu080920261848213749",
       "name": "Hamburguesa Mixta (carne y pollo)",
       "price": 12500,
-      "costPrice": 0,
+      "costPrice": 12500,
       "createdAt": "2026-09-08T18:48:21.119Z",
-      "updatedAt": "2026-09-08T20:00:41.353Z",
       "description": "Hamburguesas de carne, hamburguesas de pollo, lechuga, doble cheddar,  tomate, y cebolla, pepinillo, salsas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -510,9 +493,8 @@
       "id": "menu080920261842174993",
       "name": "Raciòn de Papas",
       "price": 2500,
-      "costPrice": 0,
+      "costPrice": 2500,
       "createdAt": "2026-09-08T18:42:17.452Z",
-      "updatedAt": "2026-09-12T00:53:56.115Z",
       "description": "Raciòn de papas fritas 250gr",
       "category": "extras",
       "categoryIds": [
@@ -527,9 +509,8 @@
       "id": "menu080920261826458529",
       "name": "Hamburguesa Pollo Bacon",
       "price": 9500,
-      "costPrice": 0,
+      "costPrice": 9500,
       "createdAt": "2026-09-08T18:26:45.572Z",
-      "updatedAt": "2026-09-08T20:00:55.672Z",
       "description": "hamburguesas de pollo, lechuga, panceta, cheddar,  tomate, y cebolla, pepinillo, salsas y papas",
       "category": "hamburguesa",
       "categoryIds": [
@@ -544,7 +525,7 @@
       "id": "menu080920261752062063",
       "name": "7 UP Zero (600ml)",
       "price": 2500,
-      "costPrice": 0,
+      "costPrice": 2500,
       "createdAt": "2026-09-08T17:52:06.055Z",
       "description": "7 UP Zero 600 ml",
       "category": "bebida",
@@ -560,7 +541,7 @@
       "id": "menu080920261751275871",
       "name": "7 UP (600ml)",
       "price": 2500,
-      "costPrice": 0,
+      "costPrice": 2500,
       "createdAt": "2026-09-08T17:51:27.763Z",
       "description": "7 UP 600 ml original",
       "category": "bebida",
@@ -576,9 +557,8 @@
       "id": "menu080920261725073896",
       "name": "Coca cola Zero (600ml)",
       "price": 2500,
-      "costPrice": 0,
+      "costPrice": 2500,
       "createdAt": "2026-09-08T17:25:07.011Z",
-      "updatedAt": "2026-09-08T17:25:25.563Z",
       "description": "Coca cola 600 ml Zero",
       "category": "bebida",
       "categoryIds": [
@@ -593,7 +573,7 @@
       "id": "menu080920261724360851",
       "name": "Coca cola (600ml)",
       "price": 2500,
-      "costPrice": 0,
+      "costPrice": 2500,
       "createdAt": "2026-09-08T17:24:36.011Z",
       "description": "Coca cola 500 ml original",
       "category": "bebida",
@@ -609,9 +589,8 @@
       "id": "menu070920262002191608",
       "name": "Pan de Miga (Jamon y Queso)",
       "price": 2000,
-      "costPrice": 0,
+      "costPrice": 2000,
       "createdAt": "2026-09-07T20:02:19.757Z",
-      "updatedAt": "2026-09-21T12:52:39.895Z",
       "description": "Pan de Miga de Jamon y Queso",
       "category": "pan-de-miga",
       "categoryIds": [
@@ -626,9 +605,8 @@
       "id": "menu070920261533094009",
       "name": "Huevos x6",
       "price": 5000,
-      "costPrice": 0,
+      "costPrice": 5000,
       "createdAt": "2026-09-07T15:33:09.386Z",
-      "updatedAt": "2026-09-12T00:52:37.781Z",
       "description": "6 Huevos Cocidos de Almuerzo",
       "category": "extras",
       "categoryIds": [
@@ -643,9 +621,8 @@
       "id": "menu070920261532128669",
       "name": "Huevos x12",
       "price": 9000,
-      "costPrice": 0,
+      "costPrice": 9000,
       "createdAt": "2026-09-07T15:32:12.099Z",
-      "updatedAt": "2026-09-12T00:52:27.003Z",
       "description": "12 Huevos para Almuerzo",
       "category": "extras",
       "categoryIds": [
@@ -660,9 +637,8 @@
       "id": "menu070920261531146383",
       "name": "Papa Entera",
       "price": 1500,
-      "costPrice": 0,
+      "costPrice": 1500,
       "createdAt": "2026-09-07T15:31:14.093Z",
-      "updatedAt": "2026-09-12T00:51:59.741Z",
       "description": "Papas de Almuerzo",
       "category": "extras",
       "categoryIds": [
@@ -677,9 +653,8 @@
       "id": "menu070920261520266564",
       "name": "Suprema (250g)",
       "price": 9000,
-      "costPrice": 0,
+      "costPrice": 9000,
       "createdAt": "2026-09-07T15:20:26.302Z",
-      "updatedAt": "2026-09-12T00:52:41.404Z",
       "description": "250g de pollo para almuerzo",
       "category": "extras",
       "categoryIds": [
@@ -694,9 +669,8 @@
       "id": "menu030920261933382276",
       "name": "Pancho Simple",
       "price": 2000,
-      "costPrice": 0,
+      "costPrice": 2000,
       "createdAt": "2026-09-03T19:33:38.891Z",
-      "updatedAt": "2026-09-17T16:15:16.086Z",
       "description": "Pancho Simple (Pan de pancho, Salchicha, Salsa de Tomate, Mayonesa, Mostaza, Papas Pay)",
       "category": "pancho",
       "categoryIds": [
@@ -711,7 +685,7 @@
       "id": "menu030920261911111950",
       "name": "Agua (500ml)",
       "price": 1500,
-      "costPrice": 0,
+      "costPrice": 1500,
       "createdAt": "2026-09-03T19:11:11.728Z",
       "description": "Agua (500ml)",
       "category": "bebida",
@@ -727,7 +701,7 @@
       "id": "menu030920261910319508",
       "name": "Placer Pomelo (500ml)",
       "price": 1500,
-      "costPrice": 0,
+      "costPrice": 1500,
       "createdAt": "2026-09-03T19:10:31.965Z",
       "description": "Placer Pomelo (500ml)",
       "category": "bebida",
@@ -743,7 +717,7 @@
       "id": "menu030920261909491467",
       "name": "Placer Pera (500ml)",
       "price": 1500,
-      "costPrice": 0,
+      "costPrice": 1500,
       "createdAt": "2026-09-03T19:09:49.312Z",
       "description": "Placer Pera (500ml)",
       "category": "bebida",
@@ -759,7 +733,7 @@
       "id": "menu030920261909215905",
       "name": "Placer Manzana (500ml)",
       "price": 1500,
-      "costPrice": 0,
+      "costPrice": 1500,
       "createdAt": "2026-09-03T19:09:21.366Z",
       "description": "Placer Manzana (500ml)",
       "category": "bebida",
@@ -775,7 +749,7 @@
       "id": "menu030920261908344116",
       "name": "Placer Naranja (500ml)",
       "price": 1500,
-      "costPrice": 0,
+      "costPrice": 1500,
       "createdAt": "2026-09-03T19:08:34.915Z",
       "description": "Placer Naranja (500ml)",
       "category": "bebida",
@@ -805,8 +779,11 @@
       "metric": "unit",
       "expiresInDays": 990,
       "stockMode": "unit",
-      "stockQuantity": 0,
-      "createdAt": "2026-09-25T16:19:16.910Z"
+      "stockQuantity": 19,
+      "createdAt": "2026-09-25T16:19:16.910Z",
+      "updatedAt": "2026-11-07T21:20:44.106Z",
+      "lastEntryAt": "2026-11-07T05:31:47.223Z",
+      "nextExpirationDate": "2026-11-30"
     },
     {
       "id": "ing250920261619160718",
@@ -832,8 +809,11 @@
       "metric": "unit",
       "expiresInDays": 30,
       "stockMode": "unit",
-      "stockQuantity": 0,
-      "createdAt": "2026-09-15T18:02:19.793Z"
+      "stockQuantity": 22,
+      "createdAt": "2026-09-15T18:02:19.793Z",
+      "updatedAt": "2026-11-07T05:31:47.223Z",
+      "lastEntryAt": "2026-11-07T05:31:47.223Z",
+      "nextExpirationDate": "2026-11-25"
     },
     {
       "id": "ing100920261711087643",
@@ -878,8 +858,11 @@
       "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
-      "stockQuantity": 0,
-      "createdAt": "2026-09-08T17:36:30.634Z"
+      "stockQuantity": 20,
+      "createdAt": "2026-09-08T17:36:30.634Z",
+      "updatedAt": "2026-11-07T05:31:47.223Z",
+      "lastEntryAt": "2026-11-07T05:31:47.223Z",
+      "nextExpirationDate": "2026-11-30"
     },
     {
       "id": "ing080920261736136082",
@@ -887,8 +870,11 @@
       "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
-      "stockQuantity": 0,
-      "createdAt": "2026-09-08T17:36:13.815Z"
+      "stockQuantity": 9,
+      "createdAt": "2026-09-08T17:36:13.815Z",
+      "updatedAt": "2026-11-07T21:20:44.106Z",
+      "lastEntryAt": "2026-11-07T05:31:47.223Z",
+      "nextExpirationDate": "2026-11-30"
     },
     {
       "id": "ing080920261628130193",
@@ -928,7 +914,7 @@
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-08T16:12:37.713Z",
-      "updatedAt": "2026-09-08T18:17:53.958Z"
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing080920261610039156",
@@ -946,7 +932,8 @@
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-08T16:09:44.889Z"
+      "createdAt": "2026-09-08T16:09:44.889Z",
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing070920262001387189",
@@ -970,12 +957,13 @@
     {
       "id": "ing030920261925467516",
       "name": "Pollo",
-      "metric": "unit",
+      "metric": "weight",
       "expiresInDays": 24,
-      "stockMode": "unit",
+      "stockMode": "weight",
       "stockQuantity": 0,
+      "portionSizeGrams": 250,
       "createdAt": "2026-09-03T19:25:46.407Z",
-      "updatedAt": "2026-09-08T18:18:52.588Z"
+      "updatedAt": "2026-11-07T22:53:12.304Z"
     },
     {
       "id": "ing030920261925116593",
@@ -1039,7 +1027,7 @@
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:59:21.768Z",
-      "updatedAt": "2026-09-08T18:17:42.533Z"
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing030920261858536397",
@@ -1049,7 +1037,7 @@
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:58:53.070Z",
-      "updatedAt": "2026-09-08T18:17:47.373Z"
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing030920261858365479",
@@ -1059,7 +1047,7 @@
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:58:36.885Z",
-      "updatedAt": "2026-09-08T18:17:36.612Z"
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing030920261856321089",
@@ -1067,9 +1055,11 @@
       "metric": "unit",
       "expiresInDays": 90,
       "stockMode": "unit",
-      "stockQuantity": 0,
+      "stockQuantity": 20,
       "createdAt": "2026-09-03T18:56:32.908Z",
-      "updatedAt": "2026-09-08T18:16:36.326Z"
+      "updatedAt": "2026-11-07T05:31:47.223Z",
+      "lastEntryAt": "2026-11-07T05:31:47.223Z",
+      "nextExpirationDate": "2026-11-17"
     },
     {
       "id": "ing030920261856176159",
@@ -1089,7 +1079,7 @@
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:56:02.180Z",
-      "updatedAt": "2026-09-08T18:18:14.119Z"
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing030920261854315753",
@@ -1099,7 +1089,7 @@
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:54:31.400Z",
-      "updatedAt": "2026-09-08T18:17:30.353Z"
+      "updatedAt": "2026-11-07T21:20:44.106Z"
     },
     {
       "id": "ing030920261853310833",
@@ -1114,22 +1104,27 @@
     {
       "id": "ing030920261853119601",
       "name": "Jamon Crudo",
-      "metric": "unit",
+      "metric": "weight",
+      "categoryId": "varios",
       "expiresInDays": 60,
-      "stockMode": "unit",
-      "stockQuantity": 0,
+      "stockMode": "weight",
+      "stockQuantity": 2500,
+      "portionSizeGrams": 20,
       "createdAt": "2026-09-03T18:53:11.978Z",
-      "updatedAt": "2026-09-08T18:16:42.821Z"
+      "updatedAt": "2026-11-07T23:54:48.936Z",
+      "lastEntryAt": "2026-11-07T23:54:48.936Z",
+      "nextExpirationDate": "2026-11-30"
     },
     {
       "id": "ing030920261852446718",
       "name": "Jamon de Barra",
-      "metric": "unit",
+      "metric": "weight",
       "expiresInDays": 60,
       "stockMode": "weight",
       "stockQuantity": 0,
+      "portionSizeGrams": 20,
       "createdAt": "2026-09-03T18:52:44.175Z",
-      "updatedAt": "2026-09-08T18:16:53.881Z"
+      "updatedAt": "2026-11-07T22:53:24.202Z"
     },
     {
       "id": "ing030920261851342941",
@@ -1138,7 +1133,8 @@
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T18:51:34.611Z"
+      "createdAt": "2026-09-03T18:51:34.611Z",
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing030920261851237364",
@@ -1174,7 +1170,8 @@
       "expiresInDays": 14,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T18:49:09.544Z"
+      "createdAt": "2026-09-03T18:49:09.544Z",
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing030920261848438389",
@@ -1193,7 +1190,8 @@
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T18:47:27.886Z"
+      "createdAt": "2026-09-03T18:47:27.886Z",
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing030920261847200343",
@@ -1221,7 +1219,7 @@
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:46:39.412Z",
-      "updatedAt": "2026-09-03T18:47:07.467Z"
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     },
     {
       "id": "ing030920261846327892",
@@ -1231,7 +1229,7 @@
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:46:32.785Z",
-      "updatedAt": "2026-09-03T18:47:04.451Z"
+      "updatedAt": "2026-11-07T21:54:58.742Z"
     }
   ],
   "ingredientCategories": [
@@ -1283,7 +1281,8 @@
       "ingredients": [
         {
           "ingredientId": "ing250920261619323736",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-25T16:20:16.736Z"
@@ -1294,7 +1293,8 @@
       "ingredients": [
         {
           "ingredientId": "ing250920261619166142",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-25T16:19:55.249Z"
@@ -1305,7 +1305,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-25T14:28:18.489Z"
@@ -1316,7 +1317,8 @@
       "ingredients": [
         {
           "ingredientId": "ing150920261802198688",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-15T18:03:21.601Z"
@@ -1327,7 +1329,8 @@
       "ingredients": [
         {
           "ingredientId": "ing100920261711087643",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-10T17:11:34.804Z",
@@ -1339,7 +1342,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261854315753",
-          "quantity": 12
+          "quantity": 12,
+          "required": true
         }
       ],
       "createdAt": "2026-09-09T17:43:29.555Z",
@@ -1351,39 +1355,48 @@
       "ingredients": [
         {
           "ingredientId": "ing080920262309160008",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920262021486528",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         },
         {
           "ingredientId": "ing030920261925116593",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-09T15:13:16.167Z"
@@ -1394,39 +1407,48 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846516671",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847200343",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920262021486528",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920262309160008",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T22:33:23.200Z",
@@ -1438,11 +1460,13 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261854315753",
-          "quantity": 12
+          "quantity": 12,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T21:21:53.613Z",
@@ -1454,11 +1478,13 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261854315753",
-          "quantity": 12
+          "quantity": 12,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T21:21:10.551Z",
@@ -1470,15 +1496,18 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T20:38:28.437Z",
@@ -1490,35 +1519,43 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846516671",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920262021486528",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847200343",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T20:32:03.060Z",
@@ -1530,27 +1567,33 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T20:20:58.480Z"
@@ -1561,51 +1604,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 3
+          "quantity": 3,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T19:19:39.748Z",
@@ -1617,43 +1672,53 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261921101195",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T19:13:32.529Z",
@@ -1665,51 +1730,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T19:07:23.574Z",
@@ -1721,51 +1798,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261610039156",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T18:51:28.286Z",
@@ -1777,47 +1866,58 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T18:51:06.884Z",
@@ -1829,43 +1929,53 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261610039156",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T18:49:31.811Z",
@@ -1877,43 +1987,53 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T18:48:44.719Z",
@@ -1925,51 +2045,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T18:48:21.119Z",
@@ -1981,7 +2113,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261851342941",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T18:42:17.452Z",
@@ -1993,51 +2126,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261610039156",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T18:26:45.572Z",
@@ -2049,7 +2194,8 @@
       "ingredients": [
         {
           "ingredientId": "ing080920261736309330",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T17:52:06.055Z"
@@ -2060,7 +2206,8 @@
       "ingredients": [
         {
           "ingredientId": "ing080920261736136082",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T17:51:27.763Z"
@@ -2071,7 +2218,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261851237364",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T17:25:07.011Z",
@@ -2083,7 +2231,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261851117643",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T17:24:36.011Z"
@@ -2094,7 +2243,8 @@
       "ingredients": [
         {
           "ingredientId": "ing070920262001387189",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-07T20:02:19.757Z",
@@ -2106,7 +2256,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261925116593",
-          "quantity": 6
+          "quantity": 6,
+          "required": true
         }
       ],
       "createdAt": "2026-09-07T15:33:09.386Z",
@@ -2118,7 +2269,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261925116593",
-          "quantity": 12
+          "quantity": 12,
+          "required": true
         }
       ],
       "createdAt": "2026-09-07T15:32:12.099Z",
@@ -2130,7 +2282,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261851342941",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-07T15:31:14.093Z",
@@ -2142,7 +2295,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261925467516",
-          "quantity": 250
+          "quantity": 250,
+          "required": true
         }
       ],
       "createdAt": "2026-09-07T15:20:26.302Z",
@@ -2154,27 +2308,33 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-03T19:33:38.891Z",
@@ -2186,7 +2346,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261902544029",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-03T19:11:11.728Z"
@@ -2197,7 +2358,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261902243547",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-03T19:10:31.965Z"
@@ -2208,7 +2370,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261901557453",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-03T19:09:49.312Z"
@@ -2219,7 +2382,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261902118349",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-03T19:09:21.366Z"
@@ -2230,7 +2394,8 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261904052605",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-03T19:08:34.915Z"
@@ -2404,6 +2569,7 @@
     {
       "id": "bebida",
       "name": "Bebidas",
+      "order": 40,
       "productIds": [
         "menu250920261620163070",
         "menu250920261619557283",
@@ -2424,6 +2590,7 @@
     {
       "id": "combos",
       "name": "Combos",
+      "order": 10,
       "productIds": [
         "menu090920261743296363",
         "menu080920262121530765",
@@ -2434,6 +2601,7 @@
     {
       "id": "extras",
       "name": "Extras",
+      "order": 50,
       "productIds": [
         "menu150920261803218043",
         "menu100920261711348812",
@@ -2448,6 +2616,7 @@
     {
       "id": "hamburguesa",
       "name": "Hamburguesa",
+      "order": 20,
       "productIds": [
         "menu250920261428180026",
         "menu090920261513169389",
@@ -2475,6 +2644,7 @@
     {
       "id": "pan-de-miga",
       "name": "Pan de Miga",
+      "order": 1000,
       "productIds": [
         "menu070920262002191608"
       ],
@@ -2483,6 +2653,7 @@
     {
       "id": "pancho",
       "name": "Pancho",
+      "order": 30,
       "productIds": [
         "menu080920262233236954",
         "menu080920262038282615",
@@ -2495,67 +2666,79 @@
     {
       "id": "papas",
       "name": "Papas",
+      "order": 1000,
       "productIds": [],
       "createdAt": "2026-02-01T10:00:00.000Z"
     },
     {
       "id": "pollo",
       "name": "Pollo",
+      "order": 1000,
       "productIds": [],
       "createdAt": "2026-02-01T10:00:00.000Z"
     },
     {
       "id": "vegano",
       "name": "Vegano",
+      "order": 1000,
       "productIds": [],
       "createdAt": "2026-02-01T10:00:00.000Z"
     }
   ],
   "menuCategories": [
     {
-      "id": "bebida",
-      "name": "Bebidas",
-      "createdAt": "2026-02-01T10:00:00.000Z",
-      "updatedAt": "2026-09-11T11:34:39.520Z"
-    },
-    {
       "id": "combos",
       "name": "Combos",
+      "order": 10,
       "createdAt": "2026-02-01T10:00:00.000Z"
-    },
-    {
-      "id": "extras",
-      "name": "Extras",
-      "createdAt": "2026-09-12T00:45:39.891Z"
     },
     {
       "id": "hamburguesa",
       "name": "Hamburguesa",
+      "order": 20,
       "createdAt": "2026-02-01T10:00:00.000Z"
-    },
-    {
-      "id": "pan-de-miga",
-      "name": "Pan de Miga",
-      "createdAt": "2026-09-15T18:06:43.154Z"
     },
     {
       "id": "pancho",
       "name": "Pancho",
+      "order": 30,
       "createdAt": "2026-02-01T10:00:00.000Z"
+    },
+    {
+      "id": "bebida",
+      "name": "Bebidas",
+      "order": 40,
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "updatedAt": "2026-09-11T11:34:39.520Z"
+    },
+    {
+      "id": "extras",
+      "name": "Extras",
+      "order": 50,
+      "createdAt": "2026-09-12T00:45:39.891Z"
+    },
+    {
+      "id": "pan-de-miga",
+      "name": "Pan de Miga",
+      "order": 1000,
+      "createdAt": "2026-09-15T18:06:43.154Z"
     },
     {
       "id": "papas",
       "name": "Papas",
+      "order": 1000,
       "createdAt": "2026-02-01T10:00:00.000Z"
     },
     {
       "id": "pollo",
       "name": "Pollo",
+      "order": 1000,
       "createdAt": "2026-02-01T10:00:00.000Z"
     },
     {
       "id": "vegano",
       "name": "Vegano",
+      "order": 1000,
       "createdAt": "2026-02-01T10:00:00.000Z"
     }
   ],
@@ -2643,8 +2826,359 @@
   ],
   "deleteRequests": [],
   "requests": [],
-  "stocks": [],
+  "stocks": [
+    {
+      "id": "se071120262054486239",
+      "productId": "ing030920261853119601",
+      "expirationDate": "2026-11-30",
+      "movementDate": "2026-11-07T23:54:48.936Z",
+      "quantity": 2.5,
+      "metric": "kilos",
+      "movementType": "in",
+      "description": "Ingreso de ingrediente: Jamon Crudo",
+      "purchaseTotal": 15000,
+      "createdAt": "2026-11-07T23:54:48.936Z"
+    },
+    {
+      "id": "se071120261854583571",
+      "productId": "ing030920261851342941",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854588955",
+      "productId": "ing030920261846327892",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854589596",
+      "productId": "ing080920261612371371",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -2,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854581442",
+      "productId": "ing030920261859217177",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854585741",
+      "productId": "ing030920261858365479",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854581561",
+      "productId": "ing030920261858536397",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -1,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854587399",
+      "productId": "ing030920261856026387",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854580478",
+      "productId": "ing030920261847273007",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854584966",
+      "productId": "ing030920261846398391",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854583865",
+      "productId": "ing080920261609447483",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.743Z"
+    },
+    {
+      "id": "se071120261854585266",
+      "productId": "ing030920261849092695",
+      "movementDate": "2026-11-07T21:54:58.742Z",
+      "quantity": -3,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:54:58.742Z"
+    },
+    {
+      "id": "se071120261820449709",
+      "productId": "ing250920261619166142",
+      "movementDate": "2026-11-07T21:20:44.106Z",
+      "quantity": -1,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:20:44.107Z"
+    },
+    {
+      "id": "se071120261820445238",
+      "productId": "ing080920261736136082",
+      "movementDate": "2026-11-07T21:20:44.106Z",
+      "quantity": -1,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:20:44.107Z"
+    },
+    {
+      "id": "se071120261820443811",
+      "productId": "ing080920261612371371",
+      "movementDate": "2026-11-07T21:20:44.106Z",
+      "quantity": -2,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:20:44.107Z"
+    },
+    {
+      "id": "se071120261820447827",
+      "productId": "ing030920261854315753",
+      "movementDate": "2026-11-07T21:20:44.106Z",
+      "quantity": -24,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-07T21:20:44.107Z"
+    },
+    {
+      "id": "se071120260231478052",
+      "productId": "ing030920261856321089",
+      "expirationDate": "2026-11-17",
+      "movementDate": "2026-11-07T05:31:47.223Z",
+      "quantity": 20,
+      "metric": "unit",
+      "movementType": "in",
+      "description": "Ingreso de ingrediente: Berengena",
+      "createdAt": "2026-11-07T05:31:47.223Z"
+    },
+    {
+      "id": "se071120260231473280",
+      "productId": "ing080920261736136082",
+      "expirationDate": "2026-11-30",
+      "movementDate": "2026-11-07T05:31:47.223Z",
+      "quantity": 10,
+      "metric": "unit",
+      "movementType": "in",
+      "description": "Ingreso de ingrediente: 7 UP 600ml",
+      "createdAt": "2026-11-07T05:31:47.223Z"
+    },
+    {
+      "id": "se071120260231474494",
+      "productId": "ing080920261736309330",
+      "expirationDate": "2026-11-30",
+      "movementDate": "2026-11-07T05:31:47.223Z",
+      "quantity": 20,
+      "metric": "unit",
+      "movementType": "in",
+      "description": "Ingreso de ingrediente: 7 UP Zero 600ml",
+      "createdAt": "2026-11-07T05:31:47.223Z"
+    },
+    {
+      "id": "se071120260231473309",
+      "productId": "ing150920261802198688",
+      "expirationDate": "2026-11-25",
+      "movementDate": "2026-11-07T05:31:47.223Z",
+      "quantity": 22,
+      "metric": "unit",
+      "movementType": "in",
+      "description": "Ingreso de ingrediente: Budin Entero",
+      "createdAt": "2026-11-07T05:31:47.223Z"
+    },
+    {
+      "id": "se071120260231473425",
+      "productId": "ing250920261619166142",
+      "expirationDate": "2026-11-30",
+      "movementDate": "2026-11-07T05:31:47.222Z",
+      "quantity": 20,
+      "metric": "unit",
+      "movementType": "in",
+      "description": "Ingreso de ingrediente: 7up Lata",
+      "createdAt": "2026-11-07T05:31:47.222Z"
+    }
+  ],
   "orders": [
+    {
+      "id": "or071120261854545455",
+      "items": [
+        {
+          "productId": "menu:menu080920261925118847",
+          "productName": "Hamburguesa Carne Simple + Papas",
+          "unitPrice": 9000,
+          "quantity": 1,
+          "comboItems": [
+            {
+              "menuProductId": "menu080920261848447277",
+              "menuProductName": "Hamburguesa Carne Simple",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu080920261842174993",
+              "menuProductName": "Raciòn de Papas",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [],
+          "excludedIngredients": []
+        },
+        {
+          "productId": "menu:menu080920261925118847",
+          "productName": "Hamburguesa Carne Simple + Papas",
+          "unitPrice": 9000,
+          "quantity": 1,
+          "comboItems": [
+            {
+              "menuProductId": "menu080920261848447277",
+              "menuProductName": "Hamburguesa Carne Simple",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu080920261842174993",
+              "menuProductName": "Raciòn de Papas",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [],
+          "excludedIngredients": [
+            {
+              "productId": "menu080920261848447277",
+              "ingredientId": "ing080920261612371371",
+              "ingredientName": "Salsa de la casa"
+            },
+            {
+              "productId": "menu080920261848447277",
+              "ingredientId": "ing030920261858536397",
+              "ingredientName": "Salsa de Mayonesa"
+            }
+          ]
+        },
+        {
+          "productId": "menu:menu080920261925118847",
+          "productName": "Hamburguesa Carne Simple + Papas",
+          "unitPrice": 9000,
+          "quantity": 1,
+          "comboItems": [
+            {
+              "menuProductId": "menu080920261848447277",
+              "menuProductName": "Hamburguesa Carne Simple",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu080920261842174993",
+              "menuProductName": "Raciòn de Papas",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [],
+          "excludedIngredients": [
+            {
+              "productId": "menu080920261848447277",
+              "ingredientId": "ing030920261858536397",
+              "ingredientName": "Salsa de Mayonesa"
+            }
+          ]
+        }
+      ],
+      "createdAt": "2026-11-07T21:54:54.211Z",
+      "status": "pagada",
+      "total": 27000,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
+    {
+      "id": "or071120261820318063",
+      "items": [
+        {
+          "productId": "menu:menu080920262121103490",
+          "productName": "Tequeños x12",
+          "unitPrice": 13000,
+          "quantity": 1,
+          "comboItems": [],
+          "comboSelections": [],
+          "excludedIngredients": []
+        },
+        {
+          "productId": "menu:menu080920262121530765",
+          "productName": "Tequeños x6",
+          "unitPrice": 7000,
+          "quantity": 1,
+          "comboItems": [],
+          "comboSelections": [],
+          "excludedIngredients": []
+        },
+        {
+          "productId": "menu:menu080920261751275871",
+          "productName": "7 UP (600ml)",
+          "unitPrice": 2500,
+          "quantity": 1,
+          "comboItems": [],
+          "comboSelections": [],
+          "excludedIngredients": []
+        },
+        {
+          "productId": "menu:menu250920261619557283",
+          "productName": "7 UP Lata",
+          "unitPrice": 2000,
+          "quantity": 1,
+          "comboItems": [],
+          "comboSelections": [],
+          "excludedIngredients": []
+        }
+      ],
+      "createdAt": "2026-11-07T21:20:31.905Z",
+      "status": "pagada",
+      "total": 24500,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
     {
       "id": "or021020262000312854",
       "items": [
@@ -6246,6 +6780,22 @@
   ],
   "invoices": [
     {
+      "id": "fc071120261854581304",
+      "orderId": "or071120261854545455",
+      "createdAt": "2026-11-07T21:54:58.761Z",
+      "total": 27000,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
+      "id": "fc071120261820448873",
+      "orderId": "or071120261820318063",
+      "createdAt": "2026-11-07T21:20:44.126Z",
+      "total": 24500,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
       "id": "fc021020262000383392",
       "orderId": "or021020262000312854",
       "createdAt": "2026-10-02T20:00:38.527Z",
@@ -7690,7 +8240,9 @@
         "or021020261928413097",
         "or021020261932101914",
         "or021020261951409280",
-        "or021020262000312854"
+        "or021020262000312854",
+        "or071120261820318063",
+        "or071120261854545455"
       ],
       "status": "open",
       "openingDeclaredAmount": 11000,
@@ -8860,9 +9412,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 2320100,
+      "currentBalance": 2371600,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-10-04T11:47:49.291Z"
+      "updatedAt": "2026-11-07T23:54:48.938Z"
     },
     {
       "id": "account-gains",
@@ -8870,9 +9422,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 2428900,
+      "currentBalance": 2480400,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-10-04T11:47:49.291Z"
+      "updatedAt": "2026-11-07T23:54:48.938Z"
     },
     {
       "id": "account-expenses",
@@ -8880,9 +9432,9 @@
       "name": "Gastos",
       "kind": "expense",
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
-      "currentBalance": 0,
+      "currentBalance": -15000,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-10-04T11:47:49.291Z"
+      "updatedAt": "2026-11-07T23:54:48.938Z"
     },
     {
       "id": "account-food-categories",
@@ -8892,10 +9444,106 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-10-04T11:47:49.291Z"
+      "updatedAt": "2026-11-07T23:54:48.938Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-stock-purchase-se071120262054486239",
+      "createdAt": "2026-11-07T23:54:48.936Z",
+      "type": "stock-purchase",
+      "title": "Compra de stock: Jamon Crudo",
+      "description": "Ingreso de ingrediente: Jamon Crudo",
+      "amount": 15000,
+      "direction": "out",
+      "entryKind": "debit",
+      "accountId": "account-expenses",
+      "referenceModule": "stock",
+      "referenceId": "se071120262054486239",
+      "countsInBalance": true,
+      "accountCode": "expenses",
+      "accountName": "Gastos"
+    },
+    {
+      "id": "txn-sale-cash-or071120261854545455",
+      "createdAt": "2026-11-07T21:54:54.211Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or071120261854545455",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 27000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or071120261854545455",
+      "orderId": "or071120261854545455",
+      "workdayId": "wd021020261216211964",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or071120261854545455",
+      "createdAt": "2026-11-07T21:54:54.211Z",
+      "type": "sale-income",
+      "title": "Venta pagada or071120261854545455",
+      "description": "Venta registrada por admin por 27000.",
+      "amount": 27000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or071120261854545455",
+      "orderId": "or071120261854545455",
+      "workdayId": "wd021020261216211964",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
+    {
+      "id": "txn-sale-cash-or071120261820318063",
+      "createdAt": "2026-11-07T21:20:31.905Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or071120261820318063",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 24500,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or071120261820318063",
+      "orderId": "or071120261820318063",
+      "workdayId": "wd021020261216211964",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or071120261820318063",
+      "createdAt": "2026-11-07T21:20:31.905Z",
+      "type": "sale-income",
+      "title": "Venta pagada or071120261820318063",
+      "description": "Venta registrada por admin por 24500.",
+      "amount": 24500,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or071120261820318063",
+      "orderId": "or071120261820318063",
+      "workdayId": "wd021020261216211964",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
     {
       "id": "txn-sale-income-or021020262000312854",
       "createdAt": "2026-10-02T20:00:31.731Z",
@@ -15617,6 +16265,389 @@
   ],
   "licenses": [],
   "notifications": [
+    {
+      "id": "nt071120262054483348",
+      "type": "product-expiring",
+      "title": "Producto por vencer: ing030920261853119601",
+      "description": "Lote con vencimiento 2026-11-30 para ing030920261853119601.",
+      "createdAt": "2026-11-07T23:54:48.936Z",
+      "dueAt": "2026-11-09T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "entityType": "stock",
+      "entityId": "se071120262054486239",
+      "status": "active"
+    },
+    {
+      "id": "nt071120262054488702",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261853119601",
+      "description": "Se registro un ingreso de 2.5 unidades para ing030920261853119601.",
+      "createdAt": "2026-11-07T23:54:48.936Z",
+      "dueAt": "2026-11-14T23:54:48.936Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120262054486239",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854584049",
+      "type": "sale-created",
+      "title": "Venta registrada: or071120261854545455",
+      "description": "Venta por 27000 (admin).",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-08T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or071120261854545455",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854583725",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261851342941",
+      "description": "Se registro un ingreso de -3 unidades para ing030920261851342941.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854583571",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854585633",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261846327892",
+      "description": "Se registro un ingreso de -3 unidades para ing030920261846327892.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854588955",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854582279",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261612371371",
+      "description": "Se registro un ingreso de -2 unidades para ing080920261612371371.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854589596",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854589139",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261859217177",
+      "description": "Se registro un ingreso de -3 unidades para ing030920261859217177.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854581442",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854584049",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261858365479",
+      "description": "Se registro un ingreso de -3 unidades para ing030920261858365479.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854585741",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854581732",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261858536397",
+      "description": "Se registro un ingreso de -1 unidades para ing030920261858536397.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854581561",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854584515",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261856026387",
+      "description": "Se registro un ingreso de -3 unidades para ing030920261856026387.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854587399",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854582676",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261847273007",
+      "description": "Se registro un ingreso de -3 unidades para ing030920261847273007.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854580478",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854589554",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261846398391",
+      "description": "Se registro un ingreso de -3 unidades para ing030920261846398391.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854584966",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854589072",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261609447483",
+      "description": "Se registro un ingreso de -3 unidades para ing080920261609447483.",
+      "createdAt": "2026-11-07T21:54:58.743Z",
+      "dueAt": "2026-11-14T21:54:58.743Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854583865",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261854580609",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261849092695",
+      "description": "Se registro un ingreso de -3 unidades para ing030920261849092695.",
+      "createdAt": "2026-11-07T21:54:58.742Z",
+      "dueAt": "2026-11-14T21:54:58.742Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261854585266",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261820444443",
+      "type": "sale-created",
+      "title": "Venta registrada: or071120261820318063",
+      "description": "Venta por 24500 (admin).",
+      "createdAt": "2026-11-07T21:20:44.107Z",
+      "dueAt": "2026-11-08T21:20:44.107Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or071120261820318063",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261820445528",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing250920261619166142",
+      "description": "Se registro un ingreso de -1 unidades para ing250920261619166142.",
+      "createdAt": "2026-11-07T21:20:44.107Z",
+      "dueAt": "2026-11-14T21:20:44.107Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261820449709",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261820449361",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261736136082",
+      "description": "Se registro un ingreso de -1 unidades para ing080920261736136082.",
+      "createdAt": "2026-11-07T21:20:44.107Z",
+      "dueAt": "2026-11-14T21:20:44.107Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261820445238",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261820442426",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261612371371",
+      "description": "Se registro un ingreso de -2 unidades para ing080920261612371371.",
+      "createdAt": "2026-11-07T21:20:44.107Z",
+      "dueAt": "2026-11-14T21:20:44.107Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261820443811",
+      "status": "active"
+    },
+    {
+      "id": "nt071120261820445419",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261854315753",
+      "description": "Se registro un ingreso de -24 unidades para ing030920261854315753.",
+      "createdAt": "2026-11-07T21:20:44.107Z",
+      "dueAt": "2026-11-14T21:20:44.107Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120261820447827",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231471316",
+      "type": "product-expiring",
+      "title": "Producto por vencer: ing030920261856321089",
+      "description": "Lote con vencimiento 2026-11-17 para ing030920261856321089.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-10-27T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "entityType": "stock",
+      "entityId": "se071120260231478052",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231478402",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261856321089",
+      "description": "Se registro un ingreso de 20 unidades para ing030920261856321089.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-11-14T05:31:47.223Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120260231478052",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231479898",
+      "type": "product-expiring",
+      "title": "Producto por vencer: ing080920261736136082",
+      "description": "Lote con vencimiento 2026-11-30 para ing080920261736136082.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-11-09T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "entityType": "stock",
+      "entityId": "se071120260231473280",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231474554",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261736136082",
+      "description": "Se registro un ingreso de 10 unidades para ing080920261736136082.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-11-14T05:31:47.223Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120260231473280",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231474284",
+      "type": "product-expiring",
+      "title": "Producto por vencer: ing080920261736309330",
+      "description": "Lote con vencimiento 2026-11-30 para ing080920261736309330.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-11-09T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "entityType": "stock",
+      "entityId": "se071120260231474494",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231474492",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261736309330",
+      "description": "Se registro un ingreso de 20 unidades para ing080920261736309330.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-11-14T05:31:47.223Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120260231474494",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231471005",
+      "type": "product-expiring",
+      "title": "Producto por vencer: ing150920261802198688",
+      "description": "Lote con vencimiento 2026-11-25 para ing150920261802198688.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-11-04T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "entityType": "stock",
+      "entityId": "se071120260231473309",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231473928",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing150920261802198688",
+      "description": "Se registro un ingreso de 22 unidades para ing150920261802198688.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-11-14T05:31:47.223Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120260231473309",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231479855",
+      "type": "product-expiring",
+      "title": "Producto por vencer: ing250920261619166142",
+      "description": "Lote con vencimiento 2026-11-30 para ing250920261619166142.",
+      "createdAt": "2026-11-07T05:31:47.223Z",
+      "dueAt": "2026-11-09T00:00:00.000Z",
+      "isFixed": false,
+      "requiresAction": true,
+      "actionLabel": "Gestionar vencimiento",
+      "entityType": "stock",
+      "entityId": "se071120260231473425",
+      "status": "active"
+    },
+    {
+      "id": "nt071120260231475615",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing250920261619166142",
+      "description": "Se registro un ingreso de 20 unidades para ing250920261619166142.",
+      "createdAt": "2026-11-07T05:31:47.222Z",
+      "dueAt": "2026-11-14T05:31:47.222Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se071120260231473425",
+      "status": "active"
+    },
     {
       "id": "nt021020262000382211",
       "type": "sale-created",

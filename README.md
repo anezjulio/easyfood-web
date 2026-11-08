@@ -1,5 +1,7 @@
 # EasyFood Web
 
+Actualizado: 2026-11-07. Referencia: codigo del repositorio; las propuestas futuras se indican expresamente.
+
 EasyFood Web es el frontend React + TypeScript de una operacion comercial con ventas, caja, productos, stock, mercaderia, gastos, notificaciones y administracion. El repo incluye la UI y tambien una fake API compartida por Vite y el servidor Node de produccion, con persistencia en archivos, subida de imagenes, generacion de recibos HTML, libro financiero derivado y soporte de multiples bases.
 
 ## Stack
@@ -102,29 +104,49 @@ Compose permite configurar `VITE_USE_FAKE_API` y `VITE_ORDER_PENDING_TIMEOUT_MIN
 
 | Variable | Default | Uso |
 | --- | --- | --- |
-| `VITE_USE_FAKE_API` | `true` | Cuando esta en `true`, el dominio de productos/precios/margenes usa HTTP contra el mock backend. Cuando esta en `false`, solo ese dominio cae a `localStorage`; el resto de modulos sigue usando endpoints HTTP relativos. |
+| `VITE_USE_FAKE_API` | `true` | Activa HTTP para productos/precios/margenes e ingredientes. En `false` esos servicios tienen fallback local; recetas, categorias y otros modulos siguen necesitando HTTP. No es un modo offline completo. |
 | `VITE_FAKE_API_URL` | vacio | Permite apuntar productos e imagenes a otra base URL si no se usa la ruta relativa del mismo servidor Vite. |
 | `VITE_IMAGE_BASE_URL` | vacio | Base URL explicita para servir imagenes. |
 | `VITE_IMAGE_UPLOAD_URL` | vacio | URL explicita para subir imagenes. |
 | `VITE_ORDER_PENDING_TIMEOUT_MINUTES` | `15` | Tiempo maximo para aprobar o rechazar un pago pendiente en ventas. |
 | `DATA_ROOT` | vacio | Si se define, mueve `mock-api`, `images` y `receipts` a una raiz persistente externa al repo. |
 | `VITE_RECEIPTS_DIR` / `RECEIPTS_DIR` | `mock-api/receipts` | Carpeta base para los recibos HTML generados. |
-| `PORT` | `8080` en produccion | Puerto del servidor Node; Docker publica `3000` por defecto en el host. |
+| `PORT` | `8080` en produccion | Puerto del servidor Node. Compose local publica `8080`; el Compose del NAS publica `3000`. |
 
 ## Persistencia y multiples bases
 
-- La base activa se define en `mock-api/data-stores.json`.
-- La base principal usa los paths del repo: `mock-api/db.json`, `images/` y `mock-api/receipts/`.
-- Las bases adicionales viven en:
-  - `mock-api/data-stores/<id>/db.js`
-  - `images/<id>/`
-  - `mock-api/receipts/stores/<id>/`
-- La pantalla `Data` permite:
-  - crear una nueva base
-  - cambiar la base activa
-  - limpiar la base activa
-- Al crear una base nueva se copian usuarios y configuraciones de la base activa, pero sin datos operativos.
-- Al limpiar una base activa se vacian colecciones operativas como productos, stock, ventas, pedidos, gastos, feedback, licencias, notificaciones y libro financiero derivado. Se conservan usuarios, asignaciones de apertura y configuraciones globales.
+La base activa se registra en `mock-api/data-stores.json`. El archivo `db.js` de una base adicional contiene JSON, no codigo ejecutable. `DATA_ROOT` permite alojar los datos fuera del checkout; modificar los archivos del repositorio no actualiza un volumen Docker existente.
+
+- Principal: `mock-api/db.json`, `images/`, `mock-api/receipts/`.
+- Adicionales: `mock-api/data-stores/<id>/db.js`, `images/<id>/`, `mock-api/receipts/stores/<id>/`.
+- Data / **DDBB**: crear, importar un respaldo completo, activar, descargar y limpiar bases. Crear o importar desde esta pestana activa la nueva base.
+- Data / **Bloques de datos**: exportar Catalogo (rotulado Productos), Operaciones o Stock; combinar bloques de bases existentes y archivos completos o parciales; revisar y aplicar a una base nueva o existente.
+- Aplicar bloques reemplaza cada bloque seleccionado y conserva los demas; no suma registros ni existencias. Conserva identificadores y rechaza referencias incompatibles. No cambia la base activa.
+- Se guarda un respaldo previo al reemplazar bloques de una base existente. Los respaldos parciales nuevos pueden incluir imagenes y recibos; el backup completo antiguo de DDBB solo descarga el JSON de la base.
+- El catalogo exportado excluye saldos, minimos y vencimientos de ingredientes. Esos valores viajan en Stock como `ingredientBalances`; no es una coleccion permanente de la DB.
+- Crear una base vacia desde DDBB limpia tambien productos, ingredientes, recetas y combos: no significa conservar el catalogo. El reset mantiene usuarios, categorias, asignaciones de apertura y ajustes; no elimina automaticamente archivos de medios.
+
+Detalle de entidades y reparto exacto de bloques: [Diccionario de datos](docs/data-dictionary.md).
+
+## Ventas, recetas y carga de stock
+
+- Ventas muestra el pedido a la izquierda y tarjetas agrupadas por categoria a la derecha. Seis columnas en escritorio, cuatro en anchos intermedios y dos en movil.
+- Orden inicial de categorias: Combos, Hamburguesas, Panchos, Bebidas, Extras y restantes. `categories.order` es editable; los valores menores aparecen primero.
+- El recorte de la palabra inicial Hamburguesa es visual y esta hardcodeado en Ventas. Panchos conserva el nombre completo. No se renombra el catalogo ni el detalle de la orden.
+- Doble clic y + agregan la cantidad indicada sin perder seleccion, ingredientes ni opciones; - resta la configuracion seleccionada. Editar permite cambiar cantidad y opciones; guardar conserva la seleccion.
+- Cada ingrediente de receta tiene `required`: sin configuracion se considera obligatorio; una receta de un solo ingrediente siempre es obligatoria. Solo los opcionales muestran casilla en Ventas. El servidor rechaza exclusiones obligatorias.
+- Recetas por peso expresan gramos directos. `portionSizeGrams` sirve para mostrar porciones y como paso sugerido del editor, nunca como multiplicador del consumo.
+- `/stock/ingredients`: filtros por nombre, categoria de ingrediente, unidad y peso. La categoria corresponde a materia prima, no a categorias comerciales; registros sin `categoryId` valido aparecen Sin categoria.
+- La tabla muestra ingrediente, costo total de compra en ARS, vencimiento, cantidad, stock actual y porciones. No muestra selector de unidad: peso se ingresa en kg y se convierte a g; unidades/paquetes usan enteros. Un filtro activo se desactiva al pulsarlo otra vez.
+- Porciones = parte entera de stock en gramos / gramos por porcion; sin configuracion aparece Sin configurar. Las unidades muestran un guion.
+- El lote completo de ingresos se valida antes de aplicar cambios. Filtrar filas no elimina ingresos ya preparados: Guardar procesa todas las filas con cantidad.
+- `stocks.purchaseTotal` es el costo total del ingreso, distinto de `costPrice`. Genera un egreso `stock-purchase` en la cuenta Gastos; no descuenta efectivo de caja. Los ingresos ligados a pedidos proveedor no duplican ese egreso.
+- La orden pendiente no descuenta stock; el descuento ocurre al pagar. Volver desde el cobro cancela la orden pendiente y conserva el carrito para editar.
+- `systemSettings.allowOutOfStockSales` regula el bloqueo por falta de stock. Se siguen validando recetas, opciones y obligatoriedad incluso si se permiten ventas sin existencias.
+
+## Validacion
+
+`npm run build` verifica TypeScript y genera cliente y servidor. `npm run test:e2e` ejecuta Playwright contra produccion y desarrollo, con raices de datos temporales independientes. Cubre sesion, API, respaldos por bloques, carga atomica, costos, kg/g, consumo, opciones y configuracion de categorias. `npm run lint` es un control separado; no equivale al build.
 
 ## Backend mock incluido
 
@@ -171,6 +193,7 @@ docs/
 
 ## Documentacion del repo
 
+- [Diccionario de datos y propuesta de tablas](docs/data-dictionary.md)
 - `docs/architecture-mvvm.md`
 - `docs/backend-integration.md`
 - `docs/backend-services-db-operations.md`

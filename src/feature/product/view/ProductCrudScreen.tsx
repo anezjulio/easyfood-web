@@ -1,4 +1,5 @@
 import type React from "react";
+import StockNavigation from "../../stock/component/StockNavigation";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import ProductTable from "../component/ProductTable";
@@ -58,6 +59,7 @@ export default function ProductCrudScreen() {
           </div>
           <SessionStatusBar />
         </header>
+        <StockNavigation />
 
         <div className={styles.layout}>
           <div className={styles.formColumn}>

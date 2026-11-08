@@ -335,7 +335,7 @@
 
 .recipeConfirmItem {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto 30px 30px 30px;
+  grid-template-columns: minmax(0, 1fr) auto 108px 30px 30px 30px;
   align-items: center;
   gap: 6px;
   min-height: 34px;
@@ -345,6 +345,16 @@
 
 .recipeConfirmItem:first-child {
   border-top: 0;
+}
+
+.requirementSelect { min-width: 0; width: 100%; min-height: 30px; border: 1px solid #cbd5e1; background: white; font: inherit; font-size: 12px; }
+.recipeQuantity { display: flex; align-items: center; gap: 4px; }
+.recipeQuantity input { width: 70px; min-height: 30px; box-sizing: border-box; border: 1px solid #cbd5e1; padding: 4px; }
+.hint { color: #64748b; font-size: 12px; line-height: 1.5; }
+
+@media (max-width: 620px) {
+  .recipeConfirmItem { grid-template-columns: minmax(0, 1fr) auto 30px 30px 30px; }
+  .requirementSelect { grid-row: 2; grid-column: 1 / -1; width: 130px; }
 }
 
 .recipeConfirmItem span {

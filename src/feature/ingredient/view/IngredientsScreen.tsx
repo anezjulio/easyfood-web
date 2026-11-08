@@ -1,4 +1,5 @@
 import type React from "react";
+import StockNavigation from "../../stock/component/StockNavigation";
 import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
@@ -235,6 +236,7 @@ export default function IngredientsScreen() {
           </div>
           <SessionStatusBar />
         </header>
+        <StockNavigation />
 
         <section className={styles.summary}>
           <p><strong>Ingredientes:</strong> {ingredients.length}</p>

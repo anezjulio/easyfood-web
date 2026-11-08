@@ -1,3 +1,4 @@
+import { isRecipeIngredientRequired } from "../../../shared/recipe/ingredient-rules";
 import type { Combo } from "../../combo/model/combo.types";
 import { createComboApi, deleteComboApi, fetchCombosApi, updateComboApi } from "../../combo/service/combo.api";
 import type { Product } from "../../product/model/product.types";
@@ -41,6 +42,7 @@ function productToMenuProduct(product: Product, recipes: Recipe[], combos: Combo
     recipeItems: (recipe?.ingredients || []).map((item) => {
       const ingredient = ingredients.find((node) => node.id === item.ingredientId);
       return {
+        required: isRecipeIngredientRequired(item, recipe?.ingredients.length || 0),
         ingredientId: item.ingredientId,
         ingredientName: ingredient?.name || item.ingredientId,
         quantity: item.quantity,
@@ -93,7 +95,7 @@ export async function createMenuProductApi(draft: MenuProductDraft): Promise<Men
   } else {
     const recipe = await createRecipeApi({
       productId: product.id,
-      ingredients: draft.recipeItems.map((item) => ({ ingredientId: item.ingredientId, quantity: item.quantity })),
+      ingredients: draft.recipeItems.map((item) => ({ ingredientId: item.ingredientId, quantity: item.quantity, required: isRecipeIngredientRequired(item, draft.recipeItems.length) })),
     });
     await updateProductApi(product.id, { ...product, recipeId: recipe.id, type, stockType: type });
   }
@@ -107,16 +109,21 @@ export async function updateMenuProductApi(id: string, draft: MenuProductDraft):
   const current = products.find((item) => item.id === id);
   if (!current) return null;
   const type = draft.kind === "combo" ? "combo" : "receta";
+  const categoryIds = draft.categoryIds || (draft.category ? [draft.category] : []);
+  const hasProductChanges = current.name !== draft.name || current.price !== draft.price ||
+    (current.description || "") !== (draft.description || "") || current.category !== draft.category ||
+    JSON.stringify(current.categoryIds || (current.category ? [current.category] : [])) !== JSON.stringify(categoryIds) ||
+    current.type !== type || (draft.imageUrl !== undefined && current.imageUrl !== draft.imageUrl);
 
-  await updateProductApi(id, {
+  if (hasProductChanges) await updateProductApi(id, {
     ...current,
     name: draft.name,
     description: draft.description,
-    imageUrl: draft.imageUrl,
+    imageUrl: draft.imageUrl ?? current.imageUrl,
     price: draft.price,
     costPrice: current.costPrice || 0,
     category: draft.category,
-    categoryIds: draft.categoryIds || (draft.category ? [draft.category] : []),
+    categoryIds,
     type,
     stockMode: "unit",
     stockType: type,
@@ -143,7 +150,7 @@ export async function updateMenuProductApi(id: string, draft: MenuProductDraft):
     const recipe = recipes.find((item) => item.id === current.recipeId || item.productId === id);
     const recipeDraft = {
       productId: id,
-      ingredients: draft.recipeItems.map((item) => ({ ingredientId: item.ingredientId, quantity: item.quantity })),
+      ingredients: draft.recipeItems.map((item) => ({ ingredientId: item.ingredientId, quantity: item.quantity, required: isRecipeIngredientRequired(item, draft.recipeItems.length) })),
     };
     recipe ? await updateRecipeApi(recipe.id, recipeDraft) : await createRecipeApi(recipeDraft);
   }

@@ -2,7 +2,7 @@ const moneyArsFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
   currency: "ARS",
   minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
+  maximumFractionDigits: 2,
 });
 
 const dateArFormatter = new Intl.DateTimeFormat("es-AR", {

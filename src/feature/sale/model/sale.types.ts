@@ -29,6 +29,7 @@ export type TaxSettings = {
 export type OrderStatus = "por pagar" | "pagada" | "cancelada";
 
 export type OrderItem = {
+  excludedIngredients?: Array<{ productId: string; ingredientId: string; ingredientName: string }>;
   productId: string;
   productName: string;
   unitPrice: number;

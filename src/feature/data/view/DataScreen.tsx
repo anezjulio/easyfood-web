@@ -12,6 +12,7 @@ import {
   switchDataStoreApi,
 } from "../service/data.api";
 import styles from "./DataScreen.module.css";
+import DataBlocksPanel from "./DataBlocksPanel";
 
 type PendingAction =
   | { type: "create" }
@@ -22,6 +23,7 @@ type PendingAction =
 
 export default function DataScreen() {
   const auth = useAuth();
+  const [tab, setTab] = useState<"database" | "blocks">("database");
   const isAdmin = auth.user?.role === "admin";
   const [adminPassword, setAdminPassword] = useState("");
   const [newStoreName, setNewStoreName] = useState("");
@@ -291,6 +293,11 @@ export default function DataScreen() {
           <p className={styles.guardBox}>No tienes permisos para administrar data.</p>
         ) : (
           <>
+            <div className={styles.tabs} role="tablist" aria-label="Gestion de datos">
+              <button role="tab" aria-selected={tab === "database"} className={tab === "database" ? styles.primaryButton : styles.secondaryButton} onClick={() => setTab("database")}>DDBB</button>
+              <button role="tab" aria-selected={tab === "blocks"} className={tab === "blocks" ? styles.primaryButton : styles.secondaryButton} onClick={() => setTab("blocks")}>Bloques de datos</button>
+            </div>
+            {tab === "blocks" ? <DataBlocksPanel stores={stores} activeStoreId={activeStoreId} username={auth.user?.username || ""} onSaved={loadStores} /> : <>
             <section className={styles.panel}>
               <h2 className={styles.title}>Crear nueva base</h2>
               <p className={styles.hint}>
@@ -401,6 +408,7 @@ export default function DataScreen() {
                 {busyAction === "reset" ? "Limpiando..." : "Limpiar base activa"}
               </button>
             </section>
+            </>}
           </>
         )}
 

@@ -1,0 +1,571 @@
+{
+  "backupDir": "C:\\project\\easyfood-web\\mock-api\\backups\\recipe-requirements-2026-11-07T20-49-51-231Z",
+  "stores": [
+    {
+      "id": "default",
+      "recipesChanged": 17,
+      "ingredientsChanged": 146,
+      "changes": [
+        {
+          "product": "Hamburguesa Explosiva",
+          "changed": 9,
+          "mandatory": [
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Perro Caliente Especial",
+          "changed": 9,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 7
+        },
+        {
+          "product": "Tequeños x6",
+          "changed": 2,
+          "mandatory": [],
+          "optional": 2
+        },
+        {
+          "product": "Tequeños x12",
+          "changed": 2,
+          "mandatory": [],
+          "optional": 2
+        },
+        {
+          "product": "Pancho Simple Promo Apertura",
+          "changed": 3,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 1
+        },
+        {
+          "product": "Perro Caliente Tradicional",
+          "changed": 8,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 6
+        },
+        {
+          "product": "Pancho de la Casa",
+          "changed": 6,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 4
+        },
+        {
+          "product": "Hamburguesa Carne Triple Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Carne Doble Bacon",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Carne Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Pollo Doble",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Carne Doble con Cheddar",
+          "changed": 11,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 9
+        },
+        {
+          "product": "Hamburguesa Pollo Simple",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Carne Simple",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Mixta (carne y pollo)",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Pollo Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Pancho Simple",
+          "changed": 6,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 4
+        }
+      ]
+    },
+    {
+      "id": "nueva-db-1",
+      "recipesChanged": 12,
+      "ingredientsChanged": 65,
+      "changes": [
+        {
+          "product": "Limonada sin azucar casera",
+          "changed": 3,
+          "mandatory": [],
+          "optional": 3
+        },
+        {
+          "product": "Hamburguesa doble",
+          "changed": 9,
+          "mandatory": [
+            "Pan hamburguesas",
+            "Medallon de carne"
+          ],
+          "optional": 7
+        },
+        {
+          "product": "Hamburguesa triple",
+          "changed": 9,
+          "mandatory": [
+            "Pan hamburguesas",
+            "Medallon de carne"
+          ],
+          "optional": 7
+        },
+        {
+          "product": "Hamburguesa bacon cheddar",
+          "changed": 7,
+          "mandatory": [
+            "Pan hamburguesas",
+            "Medallon de carne"
+          ],
+          "optional": 5
+        },
+        {
+          "product": "Pancho completo",
+          "changed": 5,
+          "mandatory": [
+            "Pan panchos",
+            "Salchicha"
+          ],
+          "optional": 3
+        },
+        {
+          "product": "Limonada casera",
+          "changed": 4,
+          "mandatory": [],
+          "optional": 4
+        },
+        {
+          "product": "Sandwich pollo crispy",
+          "changed": 5,
+          "mandatory": [
+            "Pan hamburguesas",
+            "Pollo crispy"
+          ],
+          "optional": 3
+        },
+        {
+          "product": "Nuggets con papas",
+          "changed": 4,
+          "mandatory": [
+            "Nuggets de pollo"
+          ],
+          "optional": 3
+        },
+        {
+          "product": "Hamburguesa vegana",
+          "changed": 7,
+          "mandatory": [
+            "Pan hamburguesas",
+            "Medallon vegano"
+          ],
+          "optional": 5
+        },
+        {
+          "product": "Wrap vegano fresco",
+          "changed": 7,
+          "mandatory": [
+            "Tortilla wrap"
+          ],
+          "optional": 6
+        },
+        {
+          "product": "Papas con cheddar",
+          "changed": 2,
+          "mandatory": [],
+          "optional": 2
+        },
+        {
+          "product": "Papas con cheddar y bacon",
+          "changed": 3,
+          "mandatory": [],
+          "optional": 3
+        }
+      ]
+    },
+    {
+      "id": "practifood",
+      "recipesChanged": 0,
+      "ingredientsChanged": 0,
+      "changes": []
+    },
+    {
+      "id": "practifood-backup-20260909221249",
+      "recipesChanged": 17,
+      "ingredientsChanged": 146,
+      "changes": [
+        {
+          "product": "Hamburguesa Explosiva",
+          "changed": 9,
+          "mandatory": [
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Perro Caliente Especial",
+          "changed": 9,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 7
+        },
+        {
+          "product": "Tequeños x6",
+          "changed": 2,
+          "mandatory": [],
+          "optional": 2
+        },
+        {
+          "product": "Tequeños x12",
+          "changed": 2,
+          "mandatory": [],
+          "optional": 2
+        },
+        {
+          "product": "Pancho Simple Promo Apertura",
+          "changed": 3,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 1
+        },
+        {
+          "product": "Perro Caliente Tradicional",
+          "changed": 8,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 6
+        },
+        {
+          "product": "Pancho de la Casa",
+          "changed": 6,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 4
+        },
+        {
+          "product": "Hamburguesa Carne Triple Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Carne Doble Bacon",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Carne Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Pollo Doble",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Carne Doble con Cheddar",
+          "changed": 11,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 9
+        },
+        {
+          "product": "Hamburguesa Pollo Simple",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Carne Simple",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Mixta (carne y pollo)",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Pollo Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Pancho Simple",
+          "changed": 6,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 4
+        }
+      ]
+    },
+    {
+      "id": "ultimo-backup",
+      "recipesChanged": 17,
+      "ingredientsChanged": 146,
+      "changes": [
+        {
+          "product": "Hamburguesa Explosiva",
+          "changed": 9,
+          "mandatory": [
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Perro Caliente Especial",
+          "changed": 9,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 7
+        },
+        {
+          "product": "Tequeños x6",
+          "changed": 2,
+          "mandatory": [],
+          "optional": 2
+        },
+        {
+          "product": "Tequeños x12",
+          "changed": 2,
+          "mandatory": [],
+          "optional": 2
+        },
+        {
+          "product": "Pancho Simple Promo",
+          "changed": 3,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 1
+        },
+        {
+          "product": "Perro Caliente Tradicional",
+          "changed": 8,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 6
+        },
+        {
+          "product": "Pancho de la Casa",
+          "changed": 6,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 4
+        },
+        {
+          "product": "Hamburguesa Carne Triple Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Carne Doble Bacon",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Carne Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Pollo Doble",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Carne Doble con Cheddar",
+          "changed": 11,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 9
+        },
+        {
+          "product": "Hamburguesa Pollo Simple",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Carne Simple",
+          "changed": 10,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 8
+        },
+        {
+          "product": "Hamburguesa Mixta (carne y pollo)",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de carne"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Hamburguesa Pollo Bacon",
+          "changed": 12,
+          "mandatory": [
+            "Pan de Hamburguesa",
+            "Hamburguesa de pollo"
+          ],
+          "optional": 10
+        },
+        {
+          "product": "Pancho Simple",
+          "changed": 6,
+          "mandatory": [
+            "Pan de Pancho",
+            "Salchicha Ahumada"
+          ],
+          "optional": 4
+        }
+      ]
+    }
+  ]
+}

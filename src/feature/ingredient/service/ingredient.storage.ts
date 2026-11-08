@@ -139,7 +139,7 @@ function normalizeIngredientRecord(input: unknown): Ingredient | null {
     id,
     name,
     productId: String(draft.productId || "").trim() || undefined,
-    metric: draft.metric === "weight" ? "weight" : "unit",
+    metric: normalizeStockMode(draft.stockMode) === "weight" ? "weight" : "unit",
     categoryId: String(draft.categoryId || "").trim() || undefined,
     expiresInDays,
     stockMode: normalizeStockMode(draft.stockMode),
@@ -177,7 +177,7 @@ function normalizeDraft(draft: IngredientDraft) {
   const stockMode = normalizeStockMode(draft.stockMode);
   const categoryId = String(draft.categoryId || "").trim() || undefined;
   const productId = String(draft.productId || "").trim() || undefined;
-  const metric: Ingredient["metric"] = draft.metric === "weight" ? "weight" : "unit";
+  const metric: Ingredient["metric"] = normalizeStockMode(draft.stockMode) === "weight" ? "weight" : "unit";
   const stockQuantity = Math.max(0, Number(draft.stockQuantity) || 0);
   const entryQuantity = Math.max(0, Number(draft.entryQuantity) || 0);
   const minStockQuantity = Math.max(0, Number(draft.minStockQuantity) || 0) || undefined;

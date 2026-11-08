@@ -1,3 +1,4 @@
+import StockNavigation from "../../stock/component/StockNavigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
@@ -175,6 +176,7 @@ export default function InventoryScreen() {
           </div>
           <SessionStatusBar />
         </header>
+        <StockNavigation />
 
         <div className={styles.tabs} role="tablist" aria-label="Inventario">
           <button type="button" role="tab" aria-selected={activeTab === "entry"} className={`${styles.tabBtn} ${activeTab === "entry" ? styles.tabBtnActive : ""}`.trim()} onClick={() => setActiveTab("entry")}>

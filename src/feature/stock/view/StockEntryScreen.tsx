@@ -1,3 +1,4 @@
+import StockNavigation from "../component/StockNavigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import ProductTable from "../../product/component/ProductTable";
@@ -58,7 +59,7 @@ export default function StockEntryScreen() {
   const merchandiseFormId = "stock-entry-form";
 
   const [mode, setMode] = useState<EntryMode>("existing");
-  const [activeTab, setActiveTab] = useState<StockTab>("raw");
+  const [activeTab, setActiveTab] = useState<StockTab>(initialProductId || searchParams.get("tab") === "products" ? "products" : "raw");
   const [products, setProducts] = useState<Product[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [ingredientCategories, setIngredientCategories] = useState<IngredientCategory[]>([]);
@@ -772,6 +773,7 @@ export default function StockEntryScreen() {
           </div>
           <SessionStatusBar />
         </header>
+        <StockNavigation />
 
         <div className={styles.tabs} role="tablist" aria-label="Carga de mercancia">
           <button type="button" role="tab" aria-selected={activeTab === "raw"} className={`${styles.tabBtn} ${activeTab === "raw" ? styles.tabBtnActive : ""}`.trim()} onClick={() => setActiveTab("raw")}>

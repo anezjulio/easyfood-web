@@ -1,17 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { compareCategoryOrder } from "../../../shared/category/category-order";
+import { isRecipeIngredientRequired } from "../../../shared/recipe/ingredient-rules";
 import { useNavigate } from "react-router-dom";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import HeaderOperationNotice from "../../../app/component/HeaderOperationNotice";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { useAuth } from "../../../app/provider/useAuth";
-import ProductTable from "../../product/component/ProductTable";
-import type { Product, ProductSortKey } from "../../product/model/product.types";
+import type { Product } from "../../product/model/product.types";
 import { fetchProducts } from "../../product/service/product.api";
 import type { MenuProduct } from "../../menu/model/menu.types";
 import type { MenuCategory } from "../../menu/model/menu-category.types";
 import { MENU_CATEGORIES_CHANGED_EVENT, fetchMenuCategoriesApi } from "../../menu/service/menu-category.api";
 import { fetchMenuProductsApi } from "../../menu/service/menu.api";
-import { formatDateAR, formatMoneyARS } from "../../../shared/format/locale";
+import { formatMoneyARS } from "../../../shared/format/locale";
 import { matchesPriceFilter } from "../../../shared/product/product-filter";
 import { normalizeForSearch } from "../../../shared/search/search";
 import type { Order, PaymentMethod, PaymentMethodSettings, TaxSettings } from "../model/sale.types";
@@ -39,7 +40,6 @@ import {
 import { openCashWithAmount, syncCashState as syncCashStateService } from "../../cash/service/cash.operation";
 import { DATA_STORE_CHANGED_EVENT } from "../../data/service/data.api";
 import type { Ingredient } from "../../ingredient/model/ingredient.types";
-import { formatIngredientQuantity } from "../../ingredient/model/ingredient.types";
 import { fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
 import { buildDefaultSystemSettings, type SystemSettings } from "../../system/model/system.types";
 import { fetchSystemSettingsApi } from "../../system/service/system.api";
@@ -51,6 +51,7 @@ type CartItem = {
   productName: string;
   unitPrice: number;
   quantity: number;
+  excludedIngredients?: Array<{ productId: string; ingredientId: string; ingredientName: string }>;
   comboItems?: Array<{ menuProductId: string; menuProductName: string; quantity: number }>;
   comboSelections?: Array<{ category: string; menuProductId: string; menuProductName: string }>;
   comboUnits?: Array<{
@@ -66,12 +67,25 @@ type SellableProduct = Product & {
   menuProduct?: MenuProduct;
 };
 
+function cartConfigurationKey(item: Pick<CartItem, "productId" | "comboSelections" | "excludedIngredients">) {
+  return JSON.stringify([
+    item.productId,
+    (item.comboSelections || []).map((entry) => `${entry.category}:${entry.menuProductId}`).sort(),
+    (item.excludedIngredients || []).map((entry) => `${entry.productId}:${entry.ingredientId}`).sort(),
+  ]);
+}
+
 function buildMenuSaleProductId(menuProductId: string): string {
   return `menu:${menuProductId}`;
 }
 
 function formatCategoryLabel(category: string, categories: MenuCategory[] = []) {
   return categories.find((item) => item.id === category)?.name || category.charAt(0).toUpperCase() + category.slice(1);
+}
+
+function formatCatalogProductName(name: string, category: string) {
+  if (!normalizeForSearch(category).includes("hamburgues")) return name;
+  return name.replace(/^hamburguesas?\b[\s:–—-]*(?:de\s+)?/i, "").trim() || name;
 }
 
 function productHasCategory(product: Pick<Product, "category" | "categoryIds">, categoryId: string) {
@@ -106,41 +120,36 @@ function resolveComboItems(product: SellableProduct, selections: NonNullable<Car
 function getComboCategoryOptions(comboItem: NonNullable<MenuProduct["comboItems"]>[number], products: SellableProduct[]) {
   const allowedIds = new Set(comboItem.allowedMenuProductIds || []);
   return products.filter((product) => {
-    if (product.saleSource !== "menu" || product.menuProduct?.kind === "combo" || !comboItem.category || !productHasCategory(product, comboItem.category)) return false;
-    return allowedIds.size === 0 || allowedIds.has(product.menuProductId || "");
+    if (product.menuProduct?.kind === "combo") return false;
+    return allowedIds.size ? allowedIds.has(product.menuProductId || product.id) : !!comboItem.category && productHasCategory(product, comboItem.category);
   });
-}
-
-function getFixedComboItems(product: SellableProduct | null | undefined) {
-  return (product?.menuProduct?.comboItems || []).filter((item) => item.type === "product" && item.menuProductId);
 }
 
 function mapSelectionsByCategory(selections: CartItem["comboSelections"]) {
   return Object.fromEntries((selections || []).map((item) => [item.category, buildMenuSaleProductId(item.menuProductId)]));
 }
 
-function hasVariableComboItems(product: SellableProduct | null | undefined) {
-  return (product?.menuProduct?.comboItems || []).some((item) => item.type === "category" && item.category);
+function recipeComponents(product: SellableProduct, selections: Record<string, string>, products: SellableProduct[]) {
+  if (product.menuProduct?.kind !== "combo") return [product];
+  return (product.menuProduct.comboItems || []).flatMap((item) => {
+    const id = item.type === "category" ? selections[item.category || ""] : buildMenuSaleProductId(item.menuProductId || "");
+    const component = products.find((candidate) => candidate.id === id);
+    return component ? [component] : [];
+  }).sort((a, b) => Number((b.menuProduct?.recipeItems.length || 0) > 1) - Number((a.menuProduct?.recipeItems.length || 0) > 1));
 }
 
-function addRecipeConsumption(consumption: Map<string, number>, product: MenuProduct, multiplier: number) {
-  for (const recipeItem of product.recipeItems) {
-    consumption.set(recipeItem.ingredientId, (consumption.get(recipeItem.ingredientId) || 0) + recipeItem.quantity * multiplier);
-  }
-}
-
-function resolveUnitConsumption(product: SellableProduct, selections: Record<string, string>, products: SellableProduct[]) {
+function resolveUnitConsumption(product: SellableProduct, selections: Record<string, string>, products: SellableProduct[], excluded: CartItem["excludedIngredients"] = []) {
   const consumption = new Map<string, number>();
-  const menuProduct = product.menuProduct;
-  if (!menuProduct) return consumption;
-  if (menuProduct.kind !== "combo") {
-    addRecipeConsumption(consumption, menuProduct, 1);
-    return consumption;
-  }
-  for (const comboItem of menuProduct.comboItems || []) {
-    const selectedProductId = comboItem.type === "category" ? selections[comboItem.category || ""] : buildMenuSaleProductId(comboItem.menuProductId || "");
-    const component = products.find((item) => item.id === selectedProductId && item.menuProduct?.kind !== "combo");
-    if (component?.menuProduct) addRecipeConsumption(consumption, component.menuProduct, Math.max(1, Math.trunc(Number(comboItem.quantity || 1))));
+  const components = product.menuProduct?.kind === "combo"
+    ? (product.menuProduct.comboItems || []).map((item) => ({
+      product: products.find((candidate) => candidate.id === (item.type === "category" ? selections[item.category || ""] : buildMenuSaleProductId(item.menuProductId || ""))), quantity: item.quantity,
+    })) : [{ product, quantity: 1 }];
+  for (const component of components) {
+    if (component.product && !component.product.menuProduct) consumption.set("product:" + component.product.id, (consumption.get("product:" + component.product.id) || 0) + component.quantity);
+    for (const item of component.product?.menuProduct?.recipeItems || []) {
+      if (!isRecipeIngredientRequired(item, component.product!.menuProduct!.recipeItems.length) && excluded.some((entry) => entry.productId === component.product!.menuProductId && entry.ingredientId === item.ingredientId)) continue;
+      consumption.set(item.ingredientId, (consumption.get(item.ingredientId) || 0) + item.quantity * component.quantity);
+    }
   }
   return consumption;
 }
@@ -187,7 +196,6 @@ export default function SalesScreen() {
   const nav = useNavigate();
   const auth = useAuth();
   const cartCardRef = useRef<HTMLElement | null>(null);
-  const listCardRef = useRef<HTMLElement | null>(null);
   const [products, setProducts] = useState<SellableProduct[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
@@ -195,6 +203,8 @@ export default function SalesScreen() {
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [quantityToAdd, setQuantityToAdd] = useState("1");
+  const [editingCartId, setEditingCartId] = useState<string | null>(null);
+  const [excludedIngredients, setExcludedIngredients] = useState<NonNullable<CartItem["excludedIngredients"]>>([]);
   const [comboSelections, setComboSelections] = useState<Record<string, string>>({});
   const [cart, setCart] = useState<CartItem[]>([]);
   const [draftOrderCode, setDraftOrderCode] = useState(() => generateOrderCode());
@@ -203,13 +213,8 @@ export default function SalesScreen() {
   const [error, setError] = useState("");
 
   const [nameFilter, setNameFilter] = useState("");
-  const [barcodeFilter, setBarcodeFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [priceFilter, setPriceFilter] = useState("");
-  const [createdAtFilter, setCreatedAtFilter] = useState("");
-  const [sortKey, setSortKey] = useState<ProductSortKey>("createdAt");
-  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
-  const [hasUserSorted, setHasUserSorted] = useState(false);
 
   const [pendingOrder, setPendingOrder] = useState<Order | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -223,9 +228,6 @@ export default function SalesScreen() {
   const [openingAmountInput, setOpeningAmountInput] = useState("");
   const [isOpeningCashFromModal, setIsOpeningCashFromModal] = useState(false);
   const [cashModalError, setCashModalError] = useState("");
-  const [paymentModalTop, setPaymentModalTop] = useState<number | null>(null);
-  const [paymentModalLeft, setPaymentModalLeft] = useState<number | null>(null);
-  const [paymentModalWidth, setPaymentModalWidth] = useState<number | null>(null);
   const [pendingPaymentRemainingMs, setPendingPaymentRemainingMs] = useState(0);
   const currentUsername = auth.user?.username ?? "";
   const isAdmin = auth.user?.role === "admin";
@@ -246,7 +248,7 @@ export default function SalesScreen() {
         const menuProduct = menuById.get(product.id);
         return menuProduct
           ? { ...product, id: buildMenuSaleProductId(menuProduct.id), saleSource: "menu", menuProductId: menuProduct.id, menuProduct }
-          : product;
+          : { ...product, id: buildMenuSaleProductId(product.id), menuProductId: product.id };
       }));
       setIngredients(ingredientList);
       setSystemSettings(nextSystemSettings);
@@ -266,7 +268,7 @@ export default function SalesScreen() {
       setPendingOrder(null);
       setSelectedProductId(null);
       setQuantityToAdd("1");
-      setComboSelections({});
+      setComboSelections({}); setEditingCartId(null); setExcludedIngredients([]);
       void reloadProducts();
     };
     window.addEventListener(DATA_STORE_CHANGED_EVENT, handler);
@@ -369,15 +371,8 @@ export default function SalesScreen() {
   );
   const selectedImageUrl = resolveImageUrl(selectedProduct?.imageUrl?.trim() || "");
 
-  const cartIngredientConsumption = useMemo(() => buildCartIngredientConsumption(), [cart, products]);
   const selectedProductStock = resolveProductStock(selectedProduct);
   const selectedProductStockLabel = selectedProduct ? `Disponibles: ${formatStockLimit(selectedProductStock)}` : "";
-  const selectedIngredientPreview = selectedProduct ? Array.from(resolveUnitConsumption(selectedProduct, comboSelections, products)).map(([ingredientId, quantity]) => {
-    const ingredient = ingredients.find((item) => item.id === ingredientId);
-    const reserved = cartIngredientConsumption.get(ingredientId) || 0;
-    const available = Math.max(0, Number(ingredient?.stockQuantity || 0) - reserved);
-    return ingredient ? { ingredient, quantity, available, sellable: quantity > 0 ? Math.floor(available / quantity) : 0 } : null;
-  }).filter((item): item is NonNullable<typeof item> => !!item) : [];
   const hasPendingPayment = pendingOrder?.status === "por pagar";
 
   useEffect(() => {
@@ -436,83 +431,40 @@ export default function SalesScreen() {
     };
   }, [pendingOrder]);
 
-  useEffect(() => {
-    setQuantityToAdd("1");
-    const selections: Record<string, string> = {};
-    for (const item of selectedProduct?.menuProduct?.comboItems || []) {
-      if (item.type !== "category" || !item.category) continue;
-      selections[item.category] = "";
-    }
-    setComboSelections(selections);
-  }, [products, selectedProduct, selectedProductId]);
-
-  useEffect(() => {
-    if (!isModalOpen) return;
-    const syncModalPlacement = () => {
-      const formRect = cartCardRef.current?.getBoundingClientRect();
-      const listRect = listCardRef.current?.getBoundingClientRect();
-      if (!formRect || !listRect) {
-        setPaymentModalTop(null);
-        setPaymentModalLeft(null);
-        setPaymentModalWidth(null);
-        return;
-      }
-      if (window.innerWidth <= 620) {
-        setPaymentModalTop(null);
-        setPaymentModalLeft(null);
-        setPaymentModalWidth(null);
-        return;
-      }
-      const formTop = Math.max(8, Math.round(formRect.top));
-      const targetWidth = Math.max(320, Math.min(Math.round(listRect.width || 0), 760));
-      setPaymentModalTop(formTop);
-      setPaymentModalLeft(Math.round(listRect.left));
-      setPaymentModalWidth(targetWidth);
-    };
-    syncModalPlacement();
-    window.addEventListener("resize", syncModalPlacement);
-    return () => {
-      window.removeEventListener("resize", syncModalPlacement);
-    };
-  }, [isModalOpen, cart.length, pendingOrder?.id, selectedProductId]);
-
-  useEffect(() => {
-    if (isModalOpen) return;
-  }, [isModalOpen]);
-
   const filteredProducts = useMemo(() => {
     const q = normalizeForSearch(nameFilter);
-    const c = normalizeForSearch(categoryFilter);
     const p = priceFilter.replace(/\D/g, "");
     let list = products.filter((item) => item.type === "receta" || item.type === "combo" || item.type === "bebida");
 
     if (q) list = list.filter((item) => normalizeForSearch(item.name).includes(q));
-    if (barcodeFilter.trim()) {
-      const barcodeQuery = barcodeFilter.trim();
-      list = list.filter((item) => (item.barcode || "").includes(barcodeQuery));
-    }
-    if (c) {
-      list = list.filter((item) => normalizeForSearch(`${item.category || ""} ${(item.categoryIds || []).join(" ")}`).includes(c));
-    }
+    if (categoryFilter) list = list.filter((item) => productHasCategory(item, categoryFilter));
     if (p) list = list.filter((item) => matchesPriceFilter(item.price, p));
-    if (createdAtFilter) {
-      list = list.filter((item) => (item.ultimoIngreso || item.createdAt).slice(0, 10) === createdAtFilter);
-    }
+    return [...list].sort((a, b) => a.name.localeCompare(b.name));
+  }, [products, nameFilter, categoryFilter, priceFilter]);
 
-    const dir = sortDir === "asc" ? 1 : -1;
-    return [...list].sort((a, b) => {
-      if (sortKey === "name") return a.name.localeCompare(b.name) * dir;
-      if (sortKey === "brand") return (a.brand || "").localeCompare(b.brand || "") * dir;
-      if (sortKey === "category") return (a.category || "").localeCompare(b.category || "") * dir;
-      if (sortKey === "price") return (a.price - b.price) * dir;
-      if (sortKey === "existencia") return (Number(a.existencia || 0) - Number(b.existencia || 0)) * dir;
-      return (new Date(a.ultimoIngreso || a.createdAt).getTime() - new Date(b.ultimoIngreso || b.createdAt).getTime()) * dir;
+  const productGroups = useMemo(() => {
+    const groups = new Map<string, { id: string; name: string; products: SellableProduct[] }>();
+    for (const product of filteredProducts) {
+      const categoryId = categoryFilter || product.category || product.categoryIds?.[0] || "";
+      const group = groups.get(categoryId) || {
+        id: categoryId,
+        name: categoryId ? formatCategoryLabel(categoryId, menuCategories) : "Sin categoria",
+        products: [],
+      };
+      group.products.push(product);
+      groups.set(categoryId, group);
+    }
+    const categoryOrder = new Map([...menuCategories].sort(compareCategoryOrder).map((category, index) => [category.id, index]));
+    return [...groups.values()].sort((a, b) => {
+      if (!a.id) return 1;
+      if (!b.id) return -1;
+      return (categoryOrder.get(a.id) ?? Infinity) - (categoryOrder.get(b.id) ?? Infinity) || a.name.localeCompare(b.name);
     });
-  }, [products, nameFilter, barcodeFilter, categoryFilter, priceFilter, createdAtFilter, sortKey, sortDir]);
+  }, [filteredProducts, categoryFilter, menuCategories]);
 
   const categoryOptions = useMemo(
     () =>
-      menuCategories
+      [...menuCategories].sort(compareCategoryOrder)
         .map((category) => ({
           ...category,
           count: products.filter((item) => productHasCategory(item, category.id) && (item.type === "receta" || item.type === "combo" || item.type === "bebida")).length,
@@ -578,310 +530,97 @@ export default function SalesScreen() {
   }, [pendingPaymentRemainingMs]);
   const isPaymentCountdownWarning = pendingPaymentRemainingMs > 0 && pendingPaymentRemainingMs <= 60_000;
 
-  function handleSortChange(nextKey: ProductSortKey) {
-    setHasUserSorted(true);
-    if (sortKey === nextKey) {
-      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-      return;
-    }
-    setSortKey(nextKey);
-    setSortDir("asc");
+  function chooseProduct(id: string) {
+    if (hasPendingPayment) return;
+    if (selectedProductId === id && !editingCartId) return;
+    setSelectedProductId(id); setEditingCartId(null); setExcludedIngredients([]);
+    setQuantityToAdd("1"); setComboSelections({}); setError("");
+    if (window.innerWidth <= 920) requestAnimationFrame(() => cartCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
 
-  function handleClearSort() {
-    setSortKey("createdAt");
-    setSortDir("desc");
-    setHasUserSorted(false);
-  }
-
-  function handleFilterChange(key: "name" | "barcode" | "category" | "price" | "existencia" | "createdAt", value: string) {
-    if (key === "name") setNameFilter(value);
-    if (key === "barcode") setBarcodeFilter(value);
-    if (key === "category") setCategoryFilter(value);
-    if (key === "price") setPriceFilter(value);
-    if (key === "createdAt") setCreatedAtFilter(value);
-  }
-
-  function addCartItemConsumption(consumption: Map<string, number>, item: CartItem, quantity: number) {
-    const product = products.find((node) => node.id === item.productId);
-    if (!product) return;
-    if (product.menuProduct?.kind === "combo" && item.comboUnits?.length) {
-      for (const unit of item.comboUnits.slice(0, quantity)) {
-        for (const [ingredientId, required] of resolveUnitConsumption(product, mapSelectionsByCategory(unit.comboSelections), products)) {
-          consumption.set(ingredientId, (consumption.get(ingredientId) || 0) + required);
-        }
-      }
-      return;
-    }
-    for (const [ingredientId, required] of resolveUnitConsumption(product, mapSelectionsByCategory(item.comboSelections), products)) {
-      consumption.set(ingredientId, (consumption.get(ingredientId) || 0) + required * quantity);
-    }
+  function editCartItem(item: CartItem) {
+    if (hasPendingPayment) return;
+    setSelectedProductId(item.productId); setEditingCartId(item.id);
+    setQuantityToAdd(String(item.quantity)); setComboSelections(mapSelectionsByCategory(item.comboSelections));
+    setExcludedIngredients(item.excludedIngredients || []); setError("");
+    cartCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function buildCartIngredientConsumption(ignoreCartItemId?: string) {
     const consumption = new Map<string, number>();
     for (const item of cart) {
       if (item.id === ignoreCartItemId) continue;
-      addCartItemConsumption(consumption, item, item.quantity);
+      const product = products.find((entry) => entry.id === item.productId);
+      if (!product) continue;
+      for (const [id, quantity] of resolveUnitConsumption(product, mapSelectionsByCategory(item.comboSelections), products, item.excludedIngredients)) {
+        consumption.set(id, (consumption.get(id) || 0) + quantity * item.quantity);
+      }
     }
     return consumption;
   }
 
-  function resolveProductStock(product: SellableProduct | null | undefined, selections = comboSelections, ignoreCartItemId?: string): number {
+  function resolveProductStock(product: SellableProduct | null | undefined, ignoreCartId = editingCartId): number {
     if (!product) return 0;
-    if (systemSettings.allowOutOfStockSales) return Number.POSITIVE_INFINITY;
-    if (product.saleSource !== "menu") {
-      return Math.max(0, Math.trunc(Number(product.existencia || 0)));
-    }
-    const unitConsumption = resolveUnitConsumption(product, selections, products);
-    if (unitConsumption.size === 0) return 0;
-    const reservedIngredients = buildCartIngredientConsumption(ignoreCartItemId);
-    const limits = Array.from(unitConsumption).map(([ingredientId, quantityPerUnit]) => {
-      const ingredient = ingredients.find((item) => item.id === ingredientId);
-      if (!ingredient || quantityPerUnit <= 0) return 0;
-      const available = Math.max(0, Number(ingredient.stockQuantity || 0) - (reservedIngredients.get(ingredientId) || 0));
-      return Math.floor(available / quantityPerUnit);
+    if (systemSettings.allowOutOfStockSales) return Infinity;
+    const consumption = resolveUnitConsumption(product, comboSelections, products, excludedIngredients);
+    if (!consumption.size) return Infinity;
+    const reserved = buildCartIngredientConsumption(ignoreCartId || undefined);
+    return Math.max(0, Math.min(...Array.from(consumption, ([id, quantity]) => Math.floor(Math.max(0, Number(id.startsWith("product:") ? products.find((item) => item.id === id.slice(8))?.existencia || 0 : ingredients.find((item) => item.id === id)?.stockQuantity || 0) - (reserved.get(id) || 0)) / quantity))));
+  }
+
+  function formatStockLimit(value: number) { return Number.isFinite(value) ? String(value) : "sin limite"; }
+
+  function findSelectedCartItem() {
+    if (!selectedProduct) return undefined;
+    const key = cartConfigurationKey({
+      productId: selectedProduct.id,
+      excludedIngredients,
+      comboSelections: Object.entries(comboSelections).filter(([, id]) => !!id).map(([category, id]) => ({ category, menuProductId: id.replace(/^menu:/, ""), menuProductName: "" })),
     });
-    return Math.max(0, Math.min(...limits));
+    return cart.find((item) => cartConfigurationKey(item) === key);
   }
 
-  function formatStockLimit(value: number): string {
-    return Number.isFinite(value) ? String(value) : "ilimitado";
-  }
-
-  function addProductToCart(product: SellableProduct, rawQuantity: number) {
-    setError("");
-    setWarning("");
-    setMessage("");
-
-    if (hasPendingPayment) {
-      setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
-      return;
-    }
-
-    const nextQuantity = Math.trunc(Number(rawQuantity));
-    if (!Number.isFinite(nextQuantity) || nextQuantity < 1) {
-      setError("La cantidad debe ser un numero mayor o igual a 1.");
-      return;
-    }
-
-    const productStock = resolveProductStock(product);
-    if (nextQuantity > productStock) {
-      setError(`No puedes agregar mas de ${formatStockLimit(productStock)} unidades.`);
-      return;
-    }
-
-    const categoryItems = (product.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category);
-    const resolvedSelections = categoryItems.map((item) => {
-      const selected = getComboCategoryOptions(item, products).find((candidate) => candidate.id === comboSelections[item.category!]);
-      return selected ? { category: item.category!, menuProductId: selected.menuProductId || selected.id.replace(/^menu:/, ""), menuProductName: selected.name } : null;
-    });
-    if (resolvedSelections.some((selection) => !selection)) {
-      setError("Selecciona una opcion para cada categoria del combo.");
-      return;
-    }
-    const selectionList = resolvedSelections.filter((selection): selection is NonNullable<typeof selection> => !!selection);
-    const componentList = resolveComboItems(product, selectionList, products);
-    const cartItemId = `${product.id}:${selectionList.map((selection) => selection.menuProductId).join(",") || "fixed"}`;
-    const comboUnits = hasVariableComboItems(product)
-      ? Array.from({ length: nextQuantity }, (_, index) => ({
-          label: `Combo ${index + 1}`,
-          comboItems: componentList,
-          comboSelections: selectionList,
-        }))
-      : undefined;
-
-    setSelectedProductId(product.id);
-    setCart((current) => {
-      const existing = current.find((item) => item.id === cartItemId);
-      if (!existing) {
-        return [
-          ...current,
-          {
-            id: cartItemId,
-            productId: product.id,
-            productName: product.name,
-            unitPrice: product.price,
-            quantity: nextQuantity,
-            comboItems: componentList.length ? componentList : undefined,
-            comboSelections: selectionList.length ? selectionList : undefined,
-            comboUnits,
-          },
-        ];
-      }
-
-      const combinedQuantity = existing.quantity + nextQuantity;
-      if (combinedQuantity > productStock) {
-        setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${product.name}.`);
-        return current;
-      }
-
-      return current.map((item) => {
-        if (item.id !== cartItemId) return item;
-        return {
-          ...item,
-          quantity: combinedQuantity,
-          comboUnits: item.comboUnits
-            ? [
-                ...item.comboUnits,
-                ...Array.from({ length: nextQuantity }, (_, index) => ({
-                  label: `Combo ${item.comboUnits!.length + index + 1}`,
-                  comboItems: componentList,
-                  comboSelections: selectionList,
-                })),
-              ]
-            : undefined,
-        };
-      });
-    });
-  }
-
-  function addSelectedProductToCart() {
-    if (!selectedProduct) {
-      setError("Selecciona un producto.");
-      return;
-    }
-    addProductToCart(selectedProduct, Number(quantityToAdd));
-  }
-
-  function handleProductRowDoubleClick(product: Product) {
-    addProductToCart(product, 1);
-  }
-
-  function removeFromCart(cartItemId: string) {
-    if (hasPendingPayment) {
-      setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
-      return;
-    }
-    setCart((current) => current.filter((item) => item.id !== cartItemId));
-  }
-
-  function updateCartItemQuantity(cartItemId: string, nextValue: string) {
-    const parsed = Math.trunc(Number(nextValue));
-    if (!Number.isFinite(parsed) || parsed < 1) return;
-
-    const cartItem = cart.find((item) => item.id === cartItemId);
-    const productStock = resolveProductStock(products.find((item) => item.id === cartItem?.productId), mapSelectionsByCategory(cartItem?.comboSelections), cartItemId);
-
-    const maxAllowed = Math.max(1, productStock);
-    const clamped = Math.min(parsed, maxAllowed);
-
-    if (parsed > productStock) {
-      const productName = products.find((item) => item.id === cartItem?.productId)?.name || "el producto";
-      setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${productName}.`);
-    } else {
-      setError("");
-    }
-
-    setCart((current) =>
-      current.map((item) => {
-        if (item.id !== cartItemId) return item;
-        const product = products.find((node) => node.id === item.productId);
-        const baseUnit = item.comboUnits?.[item.comboUnits.length - 1];
-        return {
-          ...item,
-          quantity: clamped,
-          comboUnits: item.comboUnits && product
-            ? Array.from({ length: clamped }, (_, index) => {
-                const currentUnit = item.comboUnits?.[index] || baseUnit;
-                return {
-                  label: `Combo ${index + 1}`,
-                  comboItems: currentUnit?.comboItems || item.comboItems || [],
-                  comboSelections: currentUnit?.comboSelections || item.comboSelections,
-                };
-              })
-            : item.comboUnits,
-        };
-      }),
-    );
-  }
-
-  function updateCartComboSelection(cartItemId: string, comboItemCategory: string, productId: string, comboUnitIndex?: number) {
+  function subtractSelectedProductFromCart() {
     if (hasPendingPayment) return;
-    const cartItem = cart.find((item) => item.id === cartItemId);
-    const product = products.find((item) => item.id === cartItem?.productId);
-    const comboItem = product?.menuProduct?.comboItems?.find((item) => item.type === "category" && item.category === comboItemCategory);
-    const selected = comboItem ? getComboCategoryOptions(comboItem, products).find((item) => item.id === productId) : null;
-    if (!cartItem || !product || !comboItem || !selected?.menuProductId) return;
-    const selectedMenuProductId = selected.menuProductId;
-    const comboSelections = [
-      ...(cartItem.comboSelections || []).filter((item) => item.category !== comboItemCategory),
-      { category: comboItemCategory, menuProductId: selectedMenuProductId, menuProductName: selected.name },
-    ];
-    const comboItems = resolveComboItems(product, comboSelections, products);
-    if (typeof comboUnitIndex === "number") {
-      setCart((current) =>
-        current.map((item) => {
-          if (item.id !== cartItemId) return item;
-          const comboUnits = item.comboUnits?.map((unit, index) => {
-            if (index !== comboUnitIndex) return unit;
-            const unitSelections = [
-              ...(unit.comboSelections || []).filter((selection) => selection.category !== comboItemCategory),
-              { category: comboItemCategory, menuProductId: selectedMenuProductId, menuProductName: selected.name },
-            ];
-            return { ...unit, comboSelections: unitSelections, comboItems: resolveComboItems(product, unitSelections, products) };
-          });
-          return { ...item, comboUnits };
-        }),
-      );
-      return;
-    }
-    setCart((current) =>
-      current.map((item) => (item.id === cartItemId ? { ...item, comboSelections, comboItems: comboItems.length ? comboItems : undefined } : item)),
-    );
+    const item = findSelectedCartItem();
+    const quantity = Number(quantityToAdd);
+    if (!item) return;
+    if (!Number.isInteger(quantity) || quantity < 1) { setError("Ingresa una cantidad entera mayor a cero."); return; }
+    setCart((previous) => previous.flatMap((entry) => entry.id !== item.id ? [entry] : entry.quantity > quantity ? [{ ...entry, quantity: entry.quantity - quantity }] : []));
+    setError("");
   }
 
-  function incrementCartItemQuantity(cartItemId: string) {
-    if (hasPendingPayment) {
-      setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
-      return;
-    }
-
-    const currentItem = cart.find((item) => item.id === cartItemId);
-    const product = products.find((item) => item.id === currentItem?.productId);
-    if (!product || !currentItem) return;
-
-    const productStock = resolveProductStock(product, mapSelectionsByCategory(currentItem.comboSelections), cartItemId);
-    const nextQuantity = currentItem.quantity + 1;
-    if (nextQuantity > productStock) {
-      setError(`No puedes superar la existencia (${formatStockLimit(productStock)}) para ${product.name}.`);
-      return;
-    }
-
+  function addSelectedProductToCart(mergeExisting = true) {
+    if (!selectedProduct || hasPendingPayment) return;
     setError("");
-    setCart((current) =>
-      current.map((item) => {
-        if (item.id !== cartItemId) return item;
-        const lastUnit = item.comboUnits?.[item.comboUnits.length - 1];
-        return {
-          ...item,
-          quantity: item.quantity + 1,
-          comboUnits: item.comboUnits && lastUnit
-            ? [...item.comboUnits, { ...lastUnit, label: `Combo ${item.comboUnits.length + 1}` }]
-            : item.comboUnits,
-        };
-      }),
-    );
+    const quantity = Number(quantityToAdd);
+    if (!Number.isInteger(quantity) || quantity < 1) { setError("Ingresa una cantidad entera mayor a cero."); return; }
+    const groups = (selectedProduct.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category);
+    const selections = groups.map((group) => {
+      const option = getComboCategoryOptions(group, products).find((item) => item.id === comboSelections[group.category!]);
+      return option ? { category: group.category!, menuProductId: option.menuProductId!, menuProductName: option.name } : null;
+    });
+    if (selections.some((item) => !item)) { setError("Elige una opcion en cada grupo."); return; }
+    const selectionList = selections.filter((item): item is NonNullable<typeof item> => !!item);
+    const components = recipeComponents(selectedProduct, comboSelections, products);
+    const excluded = excludedIngredients.filter((item) => components.some((component) => component.menuProductId === item.productId && component.menuProduct?.recipeItems.some((recipeItem) => recipeItem.ingredientId === item.ingredientId && !isRecipeIngredientRequired(recipeItem, component.menuProduct!.recipeItems.length))));
+    const existing = mergeExisting ? findSelectedCartItem() : undefined;
+    const targetId = mergeExisting ? existing?.id : editingCartId;
+    const nextQuantity = quantity + (existing?.quantity || 0);
+    if (nextQuantity > resolveProductStock(selectedProduct, targetId || null)) { setError("No hay stock suficiente para esta cantidad."); return; }
+    const item: CartItem = {
+      id: targetId || crypto.randomUUID(), productId: selectedProduct.id, productName: selectedProduct.name,
+      unitPrice: selectedProduct.price, quantity: nextQuantity, comboSelections: selectionList,
+      comboItems: resolveComboItems(selectedProduct, selectionList, products), excludedIngredients: excluded,
+    };
+    setCart((previous) => targetId ? previous.map((entry) => entry.id === targetId ? item : entry) : [...previous, item]);
+    setEditingCartId(null);
   }
 
-  function decrementCartItemQuantity(cartItemId: string) {
-    if (hasPendingPayment) {
-      setError("Hay una compra pendiente de pago. Reintenta o termina esa compra.");
-      return;
-    }
-
-    const currentItem = cart.find((item) => item.id === cartItemId);
-    if (!currentItem) return;
-
-    setError("");
-    if (currentItem.quantity <= 1) {
-      setCart((current) => current.filter((item) => item.id !== cartItemId));
-      return;
-    }
-
-    setCart((current) =>
-      current.map((item) => (item.id === cartItemId ? { ...item, quantity: item.quantity - 1, comboUnits: item.comboUnits?.slice(0, -1) } : item)),
-    );
+  function removeFromCart(id: string) {
+    if (hasPendingPayment) return;
+    setCart((previous) => previous.filter((item) => item.id !== id));
+    if (editingCartId === id) { setEditingCartId(null); setSelectedProductId(null); setExcludedIngredients([]); }
   }
 
   async function openPaymentModal() {
@@ -927,6 +666,7 @@ export default function SalesScreen() {
           comboItems: item.comboItems,
           comboSelections: item.comboSelections,
           comboUnits: item.comboUnits,
+          excludedIngredients: item.excludedIngredients,
         })),
         operator: auth.user?.username || "operator",
       });
@@ -939,11 +679,17 @@ export default function SalesScreen() {
     }
   }
 
-  function rejectPayment() {
-    setIsModalOpen(false);
-    setError("");
-    setWarning("Pago rechazado. Puedes volver a intentarlo antes de que venza el tiempo.");
-    setMessage("");
+  async function rejectPayment() {
+    if (!pendingOrder || isApprovingPayment) return;
+    setIsApprovingPayment(true);
+    try {
+      await updateOrderStatusApi(pendingOrder.id, { status: "cancelada" });
+      setPendingOrder(null);
+      setIsModalOpen(false);
+      setError(""); setWarning(""); setMessage("");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "No se pudo volver al pedido.");
+    } finally { setIsApprovingPayment(false); }
   }
 
   async function openCashFromModal() {
@@ -1033,7 +779,7 @@ export default function SalesScreen() {
     }
   }
 
-  const generateLabel = "Pagar";
+  const generateLabel = hasPendingPayment ? "Continuar cobro" : "Ir a cobrar";
   const orderCodeLabel = pendingOrder?.id || draftOrderCode;
   const shouldDisableSalesContent = !isCashStateResolved || !isCashOpenForSession;
   const shouldShowClosedCashModal = Boolean(currentUsername) && isCashStateResolved && !isCashOpenForSession;
@@ -1050,7 +796,7 @@ export default function SalesScreen() {
           <div className={styles.headerLead}>
             <Breadcrumbs items={[{ label: "Menu", to: "/operation" }, { label: "Ventas" }]} asTitle />
             <p className={styles.subtitle}>
-              Arma la compra y simula la aprobacion o rechazo del pago (vence en {PENDING_PAYMENT_TIMEOUT_MINUTES} min por defecto).
+              Elige productos, personaliza el pedido y continua al cobro.
             </p>
           </div>
           <HeaderOperationNotice
@@ -1062,271 +808,14 @@ export default function SalesScreen() {
           />
           <SessionStatusBar showSalesShortcut={false} />
         </header>
-
+        <p className={styles.orderReference}>Pedido {orderCodeLabel}</p>
         <div className={styles.layout}>
-          <section ref={cartCardRef} className={styles.cartCard}>
-            <h2 className={styles.cardTitle}>Orden {orderCodeLabel}</h2>
-
-            <div className={styles.selectedBox}>
-              <div className={styles.selectedProductRow}>
-                {selectedImageUrl ? (
-                  <img className={styles.selectedProductImg} src={selectedImageUrl} alt={selectedProduct?.name || "Producto"} />
-                ) : (
-                  <div className={styles.selectedProductFallback}>
-                    {(selectedProduct?.name || "P").slice(0, 1).toUpperCase()}
-                  </div>
-                )}
-
-                <div className={styles.selectedProductInfo}>
-                  <div>
-                    <div className={styles.selectedLabel}>Producto seleccionado</div>
-                    <p className={styles.selectedName}>{selectedProduct?.name || "Sin seleccionar"}</p>
-                    <p className={styles.selectedStock}>
-                      {selectedProductStockLabel}
-                    </p>
-                  </div>
-
-                  <div className={styles.quantityActionRow}>
-                    <div className={styles.selectedAddRow}>
-                      <label className={styles.quantityRow}>
-                        <span>Cantidad</span>
-                        <input
-                          type="number"
-                          min={1}
-                          max={Number.isFinite(selectedProductStock) ? selectedProductStock : undefined}
-                          value={quantityToAdd}
-                          onChange={(event) => setQuantityToAdd(event.target.value)}
-                          className={`${styles.input} ${styles.quantityInput}`}
-                          disabled={!selectedProduct || hasPendingPayment}
-                        />
-                      </label>
-
-                      <button
-                        type="button"
-                        className={`${styles.secondaryBtn} ${styles.addProductBtn}`}
-                        onClick={addSelectedProductToCart}
-                        disabled={!selectedProduct || hasPendingPayment}
-                      >
-                        Agregar producto
-                      </button>
-                    </div>
-                    {getFixedComboItems(selectedProduct).length ? (
-                      <div className={styles.comboIncludedGroup}>
-                        <span>Incluye</span>
-                        <div className={styles.comboIncludedList}>
-                          {getFixedComboItems(selectedProduct).map((item) => (
-                            <span key={item.menuProductId}>
-                              + {item.quantity > 1 ? `${item.quantity} x ` : ""}{item.menuProductName}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-                    {(selectedProduct?.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category).map((item) => {
-                      const options = getComboCategoryOptions(item, products);
-                      return (
-                      <div key={item.category} className={styles.comboChoiceGroup}>
-                        <span>{item.categoryName || formatCategoryLabel(item.category!, menuCategories)} a eleccion</span>
-                        <div className={styles.comboChoiceList}>
-                          {options.map((product) => (
-                            <label key={product.id} className={styles.comboChoiceOption}>
-                              <input
-                                type="radio"
-                                name={`selected-${selectedProduct?.id}-${item.category}`}
-                                value={product.id}
-                                checked={comboSelections[item.category!] === product.id}
-                                onChange={() => setComboSelections((current) => ({ ...current, [item.category!]: product.id }))}
-                                disabled={hasPendingPayment}
-                              />
-                              <span>{product.name}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-                    )})}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {selectedIngredientPreview.length ? (
-              <div className={styles.ingredientReservePanel}>
-                <div className={styles.ingredientReserveHead}>
-                  <span>Ingredientes</span>
-                  <strong>{formatStockLimit(selectedProductStock)} para preparar</strong>
-                </div>
-                <div className={styles.ingredientReserveList}>
-                  {selectedIngredientPreview.map((item) => (
-                    <div key={item.ingredient.id} className={`${styles.ingredientReserveItem} ${item.available <= 0 ? styles.ingredientReserveCritical : ""}`.trim()}>
-                      <span>{item.ingredient.name}</span>
-                      <small>
-                        usa {formatIngredientQuantity(item.quantity, item.ingredient.stockMode)} / queda {formatIngredientQuantity(item.available, item.ingredient.stockMode)}
-                      </small>
-                      <strong>{item.sellable}</strong>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            <div className={styles.cartList}>
-              <div className={styles.cartHead}>
-                <div>Producto</div>
-                <div>Cant.</div>
-                <div>Precio</div>
-                <div>Subtotal</div>
-                <div />
-              </div>
-
-              {cart.length === 0 ? (
-                <p className={styles.empty}>Aun no agregaste productos.</p>
-              ) : (
-                cart.map((item, index) => {
-                  const isOddRow = index % 2 === 0;
-                  const isSelectedRow = item.productId === selectedProductId;
-                  return (
-                    <div
-                      className={`${styles.cartRow} ${isOddRow ? styles.cartRowOdd : ""} ${isSelectedRow ? styles.cartRowSelected : ""}`}
-                      key={item.id}
-                    >
-                      <div className={styles.cellProduct}>
-                        <span>{item.productName}</span>
-                        {getFixedComboItems(products.find((product) => product.id === item.productId)).length ? (
-                          <div className={styles.comboIncludedGroup}>
-                            <span>Incluye</span>
-                            <div className={styles.comboIncludedList}>
-                              {getFixedComboItems(products.find((product) => product.id === item.productId)).map((comboItem) => (
-                                <span key={comboItem.menuProductId}>
-                                  + {comboItem.quantity > 1 ? `${comboItem.quantity} x ` : ""}{comboItem.menuProductName}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        ) : null}
-                        {item.comboUnits?.length ? (
-                          <div className={styles.comboUnits}>
-                            {item.comboUnits.map((unit, unitIndex) => {
-                              const product = products.find((node) => node.id === item.productId);
-                              return (
-                                <div key={`${item.id}-unit-${unitIndex}`} className={styles.comboUnit}>
-                                  <strong>{unit.label}</strong>
-                                  <div className={styles.comboItems}>
-                                    {unit.comboItems.map((comboItem) => (
-                                      <span key={comboItem.menuProductId}>
-                                        + {comboItem.quantity > 1 ? `${comboItem.quantity} x ` : ""}{comboItem.menuProductName}
-                                      </span>
-                                    ))}
-                                  </div>
-                                  {(product?.menuProduct?.comboItems || [])
-                                    .filter((comboItem) => comboItem.type === "category" && comboItem.category)
-                                    .map((comboItem) => {
-                                      const options = getComboCategoryOptions(comboItem, products);
-                                      return (
-                                        <div key={`${unit.label}-${comboItem.category}`} className={styles.comboCartChoiceGroup}>
-                                          <span>{comboItem.categoryName || formatCategoryLabel(comboItem.category!, menuCategories)}</span>
-                                          <div className={styles.comboChoiceList}>
-                                            {options.map((option) => (
-                                              <label key={option.id} className={styles.comboChoiceOption}>
-                                                <input
-                                                  type="radio"
-                                                  name={`cart-${item.id}-${unitIndex}-${comboItem.category}`}
-                                                  value={option.menuProductId}
-                                                  checked={unit.comboSelections?.find((selection) => selection.category === comboItem.category)?.menuProductId === option.menuProductId}
-                                                  onChange={() => updateCartComboSelection(item.id, comboItem.category!, option.id, unitIndex)}
-                                                  disabled={hasPendingPayment}
-                                                />
-                                                <span>{option.name}</span>
-                                              </label>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        ) : item.comboItems?.length ? (
-                          <div className={styles.comboItems}>
-                            {item.comboItems.map((comboItem) => (
-                              <span key={comboItem.menuProductId}>
-                                + {comboItem.quantity > 1 ? `${comboItem.quantity} x ` : ""}{comboItem.menuProductName}
-                              </span>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
-                      <div className={styles.cellQty}>
-                        <div className={styles.cartQtyStepper}>
-                          <button
-                            type="button"
-                            className={styles.cartQtyStepBtn}
-                            onClick={() => decrementCartItemQuantity(item.id)}
-                            disabled={hasPendingPayment}
-                            aria-label={`Quitar una unidad de ${item.productName}`}
-                          >
-                            -
-                          </button>
-                          <input
-                            type="number"
-                            min={1}
-                            max={Number.isFinite(resolveProductStock(products.find((p) => p.id === item.productId), mapSelectionsByCategory(item.comboSelections), item.id)) ? resolveProductStock(products.find((p) => p.id === item.productId), mapSelectionsByCategory(item.comboSelections), item.id) : undefined}
-                            value={item.quantity}
-                            onChange={(e) => updateCartItemQuantity(item.id, e.target.value)}
-                            className={styles.cartQtyInput}
-                            disabled={hasPendingPayment}
-                            aria-label={`Cantidad para ${item.productName}`}
-                          />
-                          <button
-                            type="button"
-                            className={styles.cartQtyStepBtn}
-                            onClick={() => incrementCartItemQuantity(item.id)}
-                            disabled={hasPendingPayment}
-                            aria-label={`Agregar una unidad de ${item.productName}`}
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-                      <div className={styles.cellPrice}>
-                        <span>{formatMoneyARS(item.unitPrice)}</span>
-                      </div>
-                      <div className={styles.cellSubtotal}>{formatMoneyARS(item.unitPrice * item.quantity)}</div>
-                      <button
-                        type="button"
-                        className={styles.cartRemoveBtn}
-                        onClick={() => removeFromCart(item.id)}
-                        disabled={hasPendingPayment}
-                        aria-label={`Quitar ${item.productName}`}
-                      >
-                        X
-                      </button>
-                    </div>
-                  );
-                })
-              )}
-            </div>
-
-            <div className={styles.totals}>
-              <p className={styles.totalLabel}>Total base</p>
-              <p className={styles.totalValue}>{formatMoneyARS(cartBaseTotal)}</p>
-            </div>
-
-            <button
-              type="button"
-              className={styles.primaryBtn}
-              onClick={openPaymentModal}
-              disabled={cart.length === 0 || isApprovingPayment || !isCashOpenForSession}
-            >
-              {generateLabel}
-            </button>
-          </section>
-
-          <section ref={listCardRef} className={styles.listCard}>
+          <section className={styles.listCard}>
+            <h2 className={styles.cardTitle}>Productos</h2>
             <div className={styles.salesFilters}>
               <label className={styles.salesFilterField}>
-                <span>Nombre</span>
-                <input value={nameFilter} onChange={(event) => setNameFilter(event.target.value)} placeholder="Filtrar por nombre" />
+                <span>Buscar producto</span>
+                <input value={nameFilter} onChange={(event) => setNameFilter(event.target.value)} placeholder="Nombre del producto" />
               </label>
               <label className={styles.salesFilterField}>
                 <span>Precio</span>
@@ -1355,37 +844,71 @@ export default function SalesScreen() {
                 </button>
               ))}
             </div>
-            <ProductTable
-              products={filteredProducts}
-              loading={loading}
-              formatMoney={formatMoneyARS}
-              formatDate={formatDateAR}
-              selectedProductId={selectedProductId}
-              onSelectProduct={setSelectedProductId}
-              onProductDoubleClick={handleProductRowDoubleClick}
-              sortKey={sortKey}
-              sortDir={sortDir}
-              showSortFeedback={hasUserSorted}
-              onSortChange={handleSortChange}
-              onSortClear={handleClearSort}
-              filters={{
-                name: nameFilter,
-                barcode: barcodeFilter,
-                category: categoryFilter,
-                price: priceFilter,
-                createdAt: createdAtFilter,
-              }}
-              onFilterChange={handleFilterChange}
-              showCategory
-              showBrand={false}
-              showBarcode={false}
-              showImageThumbnail
-              salesCompactLayout
-              showHeaderFilters={false}
-              showDateColumn={false}
-              topMargin={0}
-            />
+            <div className={styles.groupedCatalog} aria-label="Catalogo de productos">
+              {loading && <p>Cargando productos...</p>}
+              {!loading && !filteredProducts.length && <p>No hay productos para estos filtros.</p>}
+              {productGroups.map((group) => <section key={group.id} className={styles.productCategory} aria-label={group.name}>
+                <h3 className={styles.productCategoryTitle}>{group.name}<span>{group.products.length}</span></h3>
+                <div className={styles.productGrid}>
+                  {group.products.map((product) => <button key={product.id} className={styles.productCard} title={product.name} disabled={hasPendingPayment} onClick={() => chooseProduct(product.id)} onDoubleClick={() => addSelectedProductToCart()} aria-pressed={selectedProductId === product.id}>
+                    {product.imageUrl && <img src={resolveImageUrl(product.imageUrl)} alt="" loading="lazy" />}<span>{formatCatalogProductName(product.name, `${group.id} ${group.name}`)}</span><strong>{formatMoneyARS(product.price)}</strong>
+                  </button>)}
+                </div>
+              </section>)}
+            </div>
           </section>
+          <section ref={cartCardRef} className={styles.cartCard} aria-label="Pedido y personalizacion">
+            <h2 className={styles.cardTitle}>{editingCartId ? "Editar producto" : "Personalizar producto"}</h2>
+            {selectedProduct ? <>
+              <div className={styles.selectedBox}><div className={styles.selectedProductRow}>
+                {selectedImageUrl ? <img className={styles.selectedProductImg} src={selectedImageUrl} alt={selectedProduct.name} /> : <div className={styles.selectedProductFallback}>{selectedProduct.name.slice(0, 1)}</div>}
+                <div className={styles.selectedProductInfo}><h3 className={styles.selectedName}>{selectedProduct.name}</h3><strong>{formatMoneyARS(selectedProduct.price)}</strong>
+                  {selectedProduct.description && <p className={styles.subtitle}>{selectedProduct.description}</p>}
+                  {!systemSettings.allowOutOfStockSales && <small>{selectedProductStockLabel}</small>}
+                </div>
+              </div></div>
+              {recipeComponents(selectedProduct, comboSelections, products).filter((component) => component.menuProduct?.recipeItems.length).map((component, index) => <fieldset key={component.id + index} className={styles.customizationGroup}>
+                <legend>{selectedProduct.menuProduct?.kind === "combo" ? component.name : "Ingredientes"}</legend>
+                <div className={styles.optionGrid}>{[...component.menuProduct!.recipeItems].sort((a, b) => Number(isRecipeIngredientRequired(b, component.menuProduct!.recipeItems.length)) - Number(isRecipeIngredientRequired(a, component.menuProduct!.recipeItems.length))).map((ingredient) => isRecipeIngredientRequired(ingredient, component.menuProduct!.recipeItems.length) ? <div key={ingredient.ingredientId} className={styles.requiredIngredient}>
+                  <span>{ingredient.ingredientName}</span>
+                </div> : <label key={ingredient.ingredientId} className={styles.optionCard}>
+                  <input type="checkbox" checked={!excludedIngredients.some((item) => item.productId === component.menuProductId && item.ingredientId === ingredient.ingredientId)} disabled={hasPendingPayment} onChange={(event) => {
+                    const entry = { productId: component.menuProductId!, ingredientId: ingredient.ingredientId, ingredientName: ingredient.ingredientName };
+                    setExcludedIngredients((previous) => event.target.checked ? previous.filter((item) => item.productId !== entry.productId || item.ingredientId !== entry.ingredientId) : [...previous, entry]);
+                  }} />{ingredient.ingredientName}
+                </label>)}</div>
+              </fieldset>)}
+              {(selectedProduct.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category).map((group) => <fieldset key={group.category} className={styles.customizationGroup}>
+                <legend>{group.categoryName || formatCategoryLabel(group.category!, menuCategories)}</legend>
+                <div className={styles.optionGrid}>{getComboCategoryOptions(group, products).map((option) => <label className={styles.optionCard} key={option.id}>
+                  <input type="radio" name={"option-" + group.category} checked={comboSelections[group.category!] === option.id} disabled={hasPendingPayment} onChange={() => { setComboSelections((previous) => ({ ...previous, [group.category!]: option.id })); setExcludedIngredients((previous) => previous.filter((entry) => recipeComponents(selectedProduct, { ...comboSelections, [group.category!]: option.id }, products).some((component) => component.menuProductId === entry.productId))); }} />{option.name}
+                </label>)}</div>
+              </fieldset>)}
+              <div className={styles.editorActions}>
+                <label className={styles.quantityRow}><span>Cantidad</span><input className={styles.input} type="number" min={1} step={1} value={quantityToAdd} onChange={(event) => setQuantityToAdd(event.target.value)} disabled={hasPendingPayment} /></label>
+                {editingCartId ? <button className={styles.primaryBtn} onClick={() => addSelectedProductToCart(false)} disabled={hasPendingPayment}>Guardar cambios</button> : <>
+                  <button type="button" className={`${styles.primaryBtn} ${styles.quantityActionButton}`} onClick={() => addSelectedProductToCart(true)} disabled={hasPendingPayment} aria-label="Sumar al pedido">+</button>
+                  <button type="button" className={`${styles.dangerBtn} ${styles.quantityActionButton}`} onClick={subtractSelectedProductFromCart} disabled={hasPendingPayment || !findSelectedCartItem()} aria-label="Restar del pedido">-</button>
+                </>}
+                {editingCartId && <button className={styles.secondaryBtn} disabled={hasPendingPayment} onClick={() => { setEditingCartId(null); setSelectedProductId(null); setExcludedIngredients([]); }}>Cancelar edicion</button>}
+              </div>
+            </> : <p className={styles.empty}>Selecciona un producto del catalogo para ver sus opciones.</p>}
+            <div className={styles.orderHeading}><h2 className={styles.cardTitle}>Tu pedido</h2><span>{cart.reduce((sum, item) => sum + item.quantity, 0)} productos</span></div>
+            <div className={styles.orderItems}>
+              {!cart.length && <p className={styles.empty}>El pedido esta vacio.</p>}
+              {cart.map((item) => <article key={item.id} className={styles.orderItem}>
+                <div className={styles.orderItemHeading}><strong>{item.quantity} × {item.productName}</strong><strong>{formatMoneyARS(item.unitPrice * item.quantity)}</strong></div>
+                {!!item.comboItems?.length && <p className={styles.customizationHint}>{item.comboItems.map((component) => (component.quantity > 1 ? component.quantity + " × " : "") + (products.find((product) => product.menuProductId === component.menuProductId)?.name || component.menuProductName)).join(" · ")}</p>}
+                {!!item.excludedIngredients?.length && <p className={styles.removedIngredients}>{item.excludedIngredients.map((ingredient) => "Sin " + ingredient.ingredientName + (item.comboItems?.length ? " (" + (products.find((product) => product.menuProductId === ingredient.productId)?.name || "") + ")" : "")).join(" · ")}</p>}
+                <div className={styles.orderItemActions}><button className={styles.secondaryBtn} disabled={hasPendingPayment} onClick={() => editCartItem(item)}>Editar</button><button className={styles.removeItemButton} disabled={hasPendingPayment} onClick={() => removeFromCart(item.id)} aria-label={"Quitar " + item.productName}>Quitar</button></div>
+              </article>)}
+            </div>
+            <div className={styles.totals}><p className={styles.totalLabel}>Total</p><p className={styles.totalValue}>{formatMoneyARS(cartBaseTotal)}</p></div>
+            <button className={styles.primaryBtn} onClick={openPaymentModal} disabled={!cart.length || !!editingCartId || isApprovingPayment || !isCashOpenForSession}>{generateLabel}</button>
+            {editingCartId && <small>Guarda o cancela la edicion antes de cobrar.</small>}
+          </section>
+
+
         </div>
       </div>
 
@@ -1394,7 +917,7 @@ export default function SalesScreen() {
           className={`${styles.modalOverlay} ${styles.paymentOverlay}`}
           role="presentation"
           onClick={() => {
-            if (!isApprovingPayment) setIsModalOpen(false);
+            if (!isApprovingPayment) void rejectPayment();
           }}
         >
           <section
@@ -1403,18 +926,7 @@ export default function SalesScreen() {
             aria-modal="true"
             aria-label="Pago de compra"
             onClick={(event) => event.stopPropagation()}
-            style={{
-              ...(paymentModalTop !== null && paymentModalLeft !== null && paymentModalWidth !== null
-                ? {
-                    position: "fixed",
-                    top: `${paymentModalTop}px`,
-                    left: `${paymentModalLeft}px`,
-                    width: `${paymentModalWidth}px`,
-                    maxWidth: `${paymentModalWidth}px`,
-                    marginTop: 0,
-                  }
-                : null),
-            }}
+
           >
             <div className={styles.modalHeader}>
               <div className={styles.modalTitleWrap}>
@@ -1428,11 +940,11 @@ export default function SalesScreen() {
               <button
                 type="button"
                 className={styles.modalCloseBtn}
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => void rejectPayment()}
                 disabled={isApprovingPayment}
                 aria-label="Cerrar modal de pago"
               >
-                Cerrar
+                Volver
               </button>
             </div>
             <div className={styles.methodGrid}>
@@ -1489,7 +1001,7 @@ export default function SalesScreen() {
                 onClick={rejectPayment}
                 disabled={isApprovingPayment}
               >
-                Rechazar pago
+                Volver al pedido
               </button>
               <button
                 type="button"
@@ -1497,7 +1009,7 @@ export default function SalesScreen() {
                 onClick={approvePayment}
                 disabled={isApprovingPayment}
               >
-                {isApprovingPayment ? "Procesando..." : "Aprobar pago"}
+                {isApprovingPayment ? "Procesando..." : "Confirmar cobro"}
               </button>
             </div>
 

@@ -1,5 +1,7 @@
 # Roadmap de notificaciones por canal
 
+Actualizado: 2026-11-07. Verificado contra el codigo actual del repositorio.
+
 ## Punto de partida real del proyecto
 
 EasyFood ya tiene un canal in-app funcionando. No se parte de cero.
@@ -194,3 +196,11 @@ Separar configuracion funcional de configuracion tecnica:
 ## Conclusion practica
 
 La base funcional de notificaciones ya existe y esta bastante avanzada. Lo que falta no es "hacer notificaciones", sino sumar una capa de despacho multicanal server-side encima del modelo actual, sin romper el flujo in-app que ya usa la operacion diaria.
+
+## Alcance comprobado al 2026-11-07
+
+Este archivo es una propuesta: no existen aun notification_delivery, adaptadores de canal, dispatcher ni pantallas de canales. La fuente actual de avisos sigue siendo notifications y sus configuraciones.
+
+Las compras directas con purchaseTotal ya tienen registro financiero stock-purchase; eso no implica envio externo ni un nuevo tipo de aviso. Los minimos visuales de ingredientes y la alerta product-low-stock son mecanismos diferentes. Antes de enviar alertas de ingredientes, hay que definir su evento, el umbral y el vinculo inverso a recetas y combos afectados.
+
+Al implementar entregas multibase, asociar cada entrega a su store y notificacion; los respaldos parciales actuales no contienen una cola de envios. No reemitir mensajes historicos al restaurar una base. La propuesta relacional y la distincion entre datos actuales y futuros estan en [Diccionario de datos](data-dictionary.md).

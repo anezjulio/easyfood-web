@@ -2,6 +2,7 @@ import type { IngredientStockMode } from "../../ingredient/model/ingredient.type
 import type { ProductCategory } from "../../product/model/product.types";
 
 export type MenuRecipeItem = {
+  required?: boolean;
   ingredientId: string;
   ingredientName: string;
   quantity: number;

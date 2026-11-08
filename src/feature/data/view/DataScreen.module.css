@@ -5,6 +5,9 @@
   color: #0f172a;
 }
 
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.summaryGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+
 .content {
   width: 100%;
   max-width: 1080px;

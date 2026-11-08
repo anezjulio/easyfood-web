@@ -1,5 +1,7 @@
 # Servicios backend para operaciones con DB
 
+Actualizado: 2026-11-07. Verificado contra el codigo actual del repositorio.
+
 ## Objetivo
 
 Este documento lista los servicios que hoy necesita el frontend para leer y escribir datos persistidos. La referencia real es:
@@ -43,6 +45,11 @@ Colecciones persistidas hoy en la base activa:
 
 - `products`
 - `productPrices`
+- `ingredients`
+- `ingredientCategories`
+- `recipes`
+- `combos`
+- `categories`
 - `menuCategories`
 - `menuProducts`
 - `users`
@@ -65,10 +72,11 @@ Colecciones persistidas hoy en la base activa:
 - `priceMarginSettings`
 - `paymentMethodSettings`
 - `taxSettings`
+- `systemSettings`
 
 ## Datos derivados y artefactos especiales
 
-- `financialAccounts` y `financialTransactions` se recalculan desde la data operativa mediante sincronizacion interna. No son un libro editado manualmente desde UI.
+- `financialAccounts` y `financialTransactions` se recalculan desde ventas, gastos, recepciones, jornadas y costos de stock mediante sincronizacion interna. No son un libro editado manualmente desde UI.
 - `POST /receipts` escribe un archivo HTML en la carpeta de recibos de la base activa y devuelve `filePath` mas `html`.
 - `POST /uploads/images` escribe el archivo en la carpeta de imagenes de la base activa y devuelve `path` y `url`.
 
@@ -96,29 +104,30 @@ Reglas importantes:
 
 - `GET /products` devuelve stock enriquecido (`existencia`, `ultimoIngreso`).
 - El backend valida unicidad de barcode en create/update.
-- Si `VITE_USE_FAKE_API=false`, solo este dominio cae a `localStorage`.
+- Productos e ingredientes tienen fallback local con `VITE_USE_FAKE_API=false`; recetas y categorias comerciales siguen necesitando HTTP.
 
-### 2. Menu y categorias
+### 2. Menu, ingredientes y categorias
 
-Servicio frontend: `src/feature/menu/service/menu.api.ts`, `src/feature/menu/service/menu-category.api.ts`
+El servicio `menu.api.ts` adapta el catalogo actual; no consulta `/menu-products` para el CRUD nuevo.
 
-| Operacion | Endpoint | Lee DB | Escribe DB |
-| --- | --- | --- | --- |
-| Listar productos de menu y combos | `GET /menu-products` | `menuProducts` | - |
-| Crear producto de menu o combo | `POST /menu-products` | `ingredients`, `menuProducts` | `menuProducts` |
-| Editar producto de menu o combo | `PUT /menu-products/:id` | `ingredients`, `menuProducts` | `menuProducts` |
-| Eliminar producto de menu o combo | `DELETE /menu-products/:id` | `menuProducts` | `menuProducts` |
-| Listar categorias de menu | `GET /menu-categories` | `menuCategories`, `menuProducts` | - |
-| Crear categoria de menu | `POST /menu-categories` | `menuCategories` | `menuCategories` |
-| Renombrar categoria de menu | `PUT /menu-categories/:id` | `menuCategories` | `menuCategories` |
-| Eliminar categoria de menu | `DELETE /menu-categories/:id` | `menuCategories`, `menuProducts` | `menuCategories` |
+| Operacion | Endpoint | Colecciones |
+| --- | --- | --- |
+| Catalogo comercial | `GET/POST /products`, `PUT/DELETE /products/:id` | products, precios/notificaciones segun operacion |
+| Recetas | `GET/POST /recipes`, `PUT/DELETE /recipes/:id` | recipes, products, ingredients |
+| Combos | `GET/POST /combos`, `PUT/DELETE /combos/:id` | combos, products |
+| Categorias comerciales | `GET/POST /categories`, `PUT/DELETE /categories/:id` | categories, asignaciones de products |
+| Ingredientes | `GET/POST /ingredients`, `PUT/DELETE /ingredients/:id` | ingredients; el flujo heredado tambien sincroniza menuProducts |
+| Categorias de materia prima | `GET/POST /ingredient-categories`, `PUT/DELETE /ingredient-categories/:id` | ingredientCategories, ingredients |
+| Compatibilidad de menu | `GET/POST /menu-products`, `PUT/DELETE /menu-products/:id` | menuProducts |
+| Compatibilidad de categorias | `GET/POST /menu-categories`, `PUT/DELETE /menu-categories/:id` | menuCategories |
 
-Reglas importantes:
+Reglas:
 
-- `MenuProduct.kind` define si el item es `menu` o `combo`; `category` es solo asignacion comercial.
-- `GET /menu-categories` debe completar categorias faltantes desde defaults y categorias ya usadas en `menuProducts`.
-- `DELETE /menu-categories/:id` falla si la categoria esta asignada a productos/combos o usada por elecciones de combo.
-- La asignacion y desvinculacion de productos/combos se realiza editando `category` con `PUT /menu-products/:id`.
+- Cada receta identifica un producto e ingredientes con quantity en unidad base y required. Sin marca se trata como obligatorio; un unico ingrediente no puede ser opcional.
+- Gramos de receta no se multiplican por portionSizeGrams. Este campo configura porciones orientativas y el paso de los botones del editor.
+- categories.order se conserva en create/update/normalizacion y se aplica en ventas. ingredientCategories es una entidad separada.
+- Las altas/ediciones del menu coordinan varias peticiones HTTP. Cambiar solo la receta evita reescribir metadatos comerciales y precios.
+- Las estructuras heredadas se normalizan al leer; migrarlas a SQL exige consolidarlas con el catalogo actual.
 
 ### 3. Usuarios
 
@@ -176,13 +185,17 @@ Servicio frontend: `src/feature/stock/service/stock.api.ts`
 | Operacion | Endpoint | Lee DB | Escribe DB |
 | --- | --- | --- | --- |
 | Listar ingresos de stock | `GET /stocks` | `stocks` | - |
-| Crear ingreso de stock | `POST /stocks` | `products`, `supplyOrders`, `stockThresholdSettings` | `stocks`, `products`, `notifications` |
+| Crear movimiento general | `POST /stocks` | `products`, `supplyOrders`, `stockThresholdSettings` | `stocks`, `products`, `notifications`, finanzas derivadas |
+| Ingresar lote de ingredientes | `POST /ingredient-stock-entries` | `ingredients` y configuracion | `stocks`, `ingredients`, `notifications`, finanzas derivadas |
 
 Reglas importantes:
 
 - si `quantity > 0`, el mock exige `expirationDate`
 - si llega `supplyOrderId`, el pedido debe existir y estar `received`
-- el backend puede disparar notificaciones de stock bajo o resolverlas cuando el minimo deja de estar incumplido
+- Cada fila del lote admite ingredientId, quantity, metric (unit/grams/kilos), expirationDate y purchaseTotal. El backend admite respaldos/clientes anteriores sin costo; la UI nueva exige un total, incluso 0 para ingresos gratuitos.
+- Se valida todo el lote antes de crear movimientos; kg se convierte a g y se actualiza stockQuantity.
+- purchaseTotal es el total de esa fila, con hasta dos decimales. No es costo por kg ni costo por porcion. Un ingreso positivo sin supplyOrderId genera stock-purchase en Gastos; no crea salida de caja.
+- El backend puede disparar notificaciones por stock de productos o resolverlas al alcanzar su minimo. El minimo visual de ingredientes es otro mecanismo.
 
 ### 7. Gastos
 
@@ -208,7 +221,7 @@ Servicio frontend: `src/feature/sale/service/sale.api.ts`
 | --- | --- | --- | --- |
 | Crear orden | `POST /orders` | - | `orders` |
 | Listar ordenes | `GET /orders` | `orders` | `orders` si expiran pendientes automaticamente |
-| Actualizar estado de orden | `PUT /orders/:id/status` | `orders` | `orders`, `notifications`, `financialAccounts`, `financialTransactions` derivadas |
+| Actualizar estado de orden | `PUT /orders/:id/status` | `orders`, `products`, `recipes`, `combos`, `ingredients`, `stocks`, `systemSettings` | `orders`, `ingredients`, `stocks`, `notifications`, finanzas derivadas |
 | Crear factura | `POST /invoices` | `orders` | `invoices` |
 | Crear recibo HTML | `POST /receipts` | `orders`, `invoices` opcional | archivo HTML en recibos |
 | Ver config metodos pago | `GET /payment-method-settings` | `paymentMethodSettings` | - |
@@ -220,7 +233,10 @@ Reglas importantes:
 
 - `POST /receipts` solo opera sobre ordenes pagadas
 - la venta pagada genera notificacion `sale-created`
-- las transacciones financieras se recalculan segun forma de pago y categorias especiales
+- La orden nace por pagar sin descontar materiales. Al pagar se valida y agrega el consumo de todos sus items, opciones y exclusiones.
+- Una exclusion obligatoria se rechaza aun con allowOutOfStockSales=true. No se modifica la receta maestra.
+- Solo ordenes pendientes pueden pagarse o cancelarse. No existe una devolucion automatica de materiales de ventas pagadas.
+- Las transacciones financieras se recalculan desde los eventos persistidos; no se editan manualmente.
 
 ### 9. Caja y jornadas
 
@@ -299,7 +315,7 @@ Servicio frontend: `src/feature/transaction/service/transaction.api.ts`
 Notas:
 
 - el modulo es de solo lectura
-- los tipos actuales incluyen `sale-income`, `sale-cash`, `sale-tobacco`, `expense-payment`, `expense-cash`, `supply-payment`, `supply-cash`, `supply-return`, `cash-opening`, `cash-close`
+- los tipos declarados incluyen `stock-purchase`, `sale-income`, `sale-cash`, `sale-tobacco`, `expense-payment`, `expense-cash`, `supply-payment`, `supply-cash`, `supply-return`, `cash-opening`, `cash-close`
 
 ### 14. Administracion de bases
 
@@ -311,12 +327,23 @@ Servicio frontend: `src/feature/data/service/data.api.ts`
 | Crear base | `POST /admin/data/stores` | base activa y metadata | nuevo `db.js`, directorios de imagenes/recibos, `data-stores.json` |
 | Cambiar base activa | `PUT /admin/data/stores/active` | `data-stores.json` | `data-stores.json` |
 | Limpiar base activa | `POST /admin/data/reset` | base activa | base activa limpia + libro derivado recalculado |
+| Importar base completa | `POST /admin/data/stores/import` | contenido importado y usuarios de validacion | nuevo archivo, directorios y registro de bases; activa el destino |
+| Descargar archivo de base | `POST /admin/data/stores/backup` | base elegida | descarga; no modifica datos |
+| Exportar/revisar/aplicar bloques | `POST /admin/data/blocks` | bases o archivos de origen y destino | export/preview no modifican la DB; apply crea/reemplaza bloques y guarda respaldo previo |
 
 Reglas importantes:
 
-- el frontend manda `adminPasswordHash`, no password plano
-- crear base copia usuarios y configuraciones, pero limpia lo operativo
-- reset mantiene usuarios, asignaciones de apertura y configuraciones
+- El frontend envia requestedBy y adminPasswordHash; el servidor valida contra el admin de la base activa. La autenticacion sigue siendo de demo.
+- Crear/importar base completa activa la nueva base. Reset conserva usuarios, categorias, asignaciones de apertura y ajustes, pero vacia tambien catalogo e inventario.
+- `POST /admin/data/stores/import`: importa un JSON completo o un objeto exportado como module.exports/export default.
+- `POST /admin/data/stores/backup`: descarga el archivo de datos; no empaqueta medios externos.
+- `POST /admin/data/blocks`: acciones export, preview y apply. Exige credenciales para todas esas acciones.
+- La vista previa devuelve cantidades por coleccion y comprueba relaciones principales. Apply vuelve a validarlas. No es una validacion completa de esquema ni una garantia de compatibilidad semantica de unidades.
+- Un origen por bloque, desde storeId o content; destino existente por targetStoreId, o base nueva por name. Se reemplazan bloques seleccionados sin mezclar ni sumar registros.
+- La nueva base creada por bloques conserva usuarios y ajustes generales de la activa y permanece inactiva. Catalogo sin Stock comienza con saldos cero.
+- Antes de modificar un destino se guarda before-blocks-<timestamp>.json con los tres bloques y medios. El JSON final se escribe mediante archivo temporal y rename; la copia de medios no es una transaccion global.
+
+El reparto exacto de datos, las relaciones y las tablas sugeridas figuran en [Diccionario de datos](data-dictionary.md).
 
 ## Operaciones implementadas en mock y poco o nada usadas por UI
 
@@ -333,3 +360,7 @@ Si el objetivo es backend real 1:1 con el mock actual, conviene implementarlas i
 3. Replicar efectos colaterales de notificaciones y libro financiero.
 4. Respetar transiciones de estado y validaciones de negocio.
 5. Mantener soporte para multiples bases si esa capacidad sigue siendo requerida.
+
+## Configuracion de stock
+
+`GET/PUT /system-settings` lee/escribe `systemSettings.allowOutOfStockSales`. En false se validan existencias al pagar; en true se permite consumo sin saldo suficiente, pero las reglas de composicion siguen vigentes. Los saldos de ingredientes se limitan a cero, mientras los movimientos pueden arrojar saldo negativo.

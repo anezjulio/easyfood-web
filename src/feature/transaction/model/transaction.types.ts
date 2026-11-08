@@ -15,9 +15,10 @@ export type FinancialAccount = {
 
 export type FinancialDirection = "in" | "out";
 export type FinancialEntryKind = "debit" | "credit";
-export type FinancialReferenceModule = "sale" | "expense" | "cash" | "supply" | "system";
+export type FinancialReferenceModule = "sale" | "expense" | "cash" | "supply" | "stock" | "system";
 
 export type FinancialTransactionType =
+  | "stock-purchase"
   | "sale-income"
   | "sale-cash"
   | "sale-tobacco"

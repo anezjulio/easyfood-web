@@ -8,6 +8,7 @@ import PriceScreen from "../../feature/product/view/PriceScreen";
 import FinanceScreen from "../../feature/finance/view/FinanceScreen";
 import UsersScreen from "../../feature/user/view/UsersScreen";
 import StockEntryScreen from "../../feature/stock/view/StockEntryScreen";
+import IngredientStockScreen from "../../feature/stock/view/IngredientStockScreen";
 import InventoryScreen from "../../feature/inventory/view/InventoryScreen";
 import SalesScreen from "../../feature/sale/view/SalesScreen";
 import SalesSummaryScreen from "../../feature/sale/view/SalesSummaryScreen";
@@ -47,6 +48,7 @@ export default function AppRoutes() {
           <Route path="/menu-products/manage" element={<MenuProductsScreen />} />
           <Route path="/crear-menu" element={<MenuProductsScreen />} />
           <Route path="/stock" element={<StockEntryScreen />} />
+          <Route path="/stock/ingredients" element={<IngredientStockScreen />} />
           <Route path="/inventory" element={<InventoryScreen />} />
           <Route path="/cash" element={<CashScreen />} />
           <Route path="/sales" element={<SalesScreen />} />

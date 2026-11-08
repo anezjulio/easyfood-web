@@ -1,4 +1,6 @@
+import { getCategoryOrder } from "../../../shared/category/category-order";
 import type React from "react";
+import { isRecipeIngredientRequired } from "../../../shared/recipe/ingredient-rules";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
@@ -46,7 +48,7 @@ function compareRecipeItemByGroup(a: MenuRecipeItem, b: MenuRecipeItem) {
 }
 
 function getIngredientRecipeStep(ingredient: Ingredient): number {
-  return ingredient.stockMode === "weight" ? Math.max(0, Math.trunc(Number(ingredient.portionSizeGrams) || 0)) : 1;
+  return ingredient.stockMode === "weight" ? Math.max(1, Number(ingredient.portionSizeGrams) || 1) : 1;
 }
 
 function compareMenuProductByCategory(a: MenuProduct, b: MenuProduct) {
@@ -330,6 +332,7 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
   const [expandedProductId, setExpandedProductId] = useState("");
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [name, setName] = useState("");
+  const [order, setOrder] = useState("1000");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const selectedCategory = categories.find((item) => item.id === selectedId) || null;
@@ -342,6 +345,7 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
     setExpandedProductId("");
     setSelectedProductIds([]);
     setName("");
+    setOrder("1000");
     setMessage("");
     setError("");
   }
@@ -351,6 +355,7 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
     setExpandedProductId("");
     setSelectedProductIds([]);
     setName(category.name);
+    setOrder(String(getCategoryOrder(category)));
     setMessage("");
     setError("");
   }
@@ -364,10 +369,12 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
   async function saveCategoryChanges() {
     const trimmedName = name.trim();
     if (!trimmedName) return setError("Ingresa el nombre de la categoria.");
+    const parsedOrder = Number(order);
+    if (!order.trim() || !Number.isInteger(parsedOrder) || parsedOrder < 0) return setError("Ingresa un orden entero mayor o igual a cero.");
     try {
       const saved = selectedCategory
-        ? await updateMenuCategoryApi(selectedCategory.id, { name: trimmedName })
-        : await createMenuCategoryApi({ name: trimmedName });
+        ? await updateMenuCategoryApi(selectedCategory.id, { name: trimmedName, order: parsedOrder })
+        : await createMenuCategoryApi({ name: trimmedName, order: parsedOrder });
       if (!saved) return setError("No se pudo guardar la categoria.");
       await Promise.all(
         selectedProductIds
@@ -379,6 +386,7 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
       setSelectedId(saved.id);
       setSelectedProductIds([]);
       setName(saved.name);
+      setOrder(String(getCategoryOrder(saved)));
       setMessage(
         selectedProductIds.length > 0
           ? `${selectedProductIds.length} productos movidos a ${saved.name}.`
@@ -464,6 +472,11 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
             <span>Nombre</span>
             <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Promos" />
           </label>
+          <label className={styles.field}>
+            <span>Orden de categoria</span>
+            <input className={styles.input} type="number" min={0} step={1} value={order} onChange={(event) => setOrder(event.target.value)} />
+          </label>
+          <p className={styles.hint}>Los numeros menores aparecen primero en ventas.</p>
           {assignedProducts.length > 0 ? <p className={styles.meta}>Desvincula los productos antes de eliminar.</p> : null}
           {error ? <div className={styles.errorBox}>{error}</div> : null}
           {message ? <div className={styles.successBox}>{message}</div> : null}
@@ -655,6 +668,7 @@ export default function MenuProductsScreen() {
       ingredientName: ingredient.name,
       quantity,
       stockMode: ingredient.stockMode,
+      required: true,
     };
 
     setRecipeItems((current) => {
@@ -828,10 +842,23 @@ export default function MenuProductsScreen() {
                   <p className={styles.empty}>Todavia no agregaste ingredientes.</p>
                 ) : (
                   <div className={styles.recipeConfirmList} aria-label="Ingredientes seleccionados">
-                    {[...recipeItems].sort(compareRecipeItemByGroup).map((item) => (
+                    {[...recipeItems].sort((a, b) => Number(isRecipeIngredientRequired(b, recipeItems.length)) - Number(isRecipeIngredientRequired(a, recipeItems.length)) || compareRecipeItemByGroup(a, b)).map((item) => (
                       <div key={item.ingredientId} className={styles.recipeConfirmItem}>
                         <span>{item.ingredientName}</span>
-                        <strong>{formatIngredientQuantity(item.quantity, item.stockMode)}</strong>
+                        <label className={styles.recipeQuantity}>
+                          <input type="number" aria-label={`Cantidad de ${item.ingredientName} en receta`} min={item.stockMode === "weight" ? "0.001" : "1"} step={item.stockMode === "weight" ? "any" : "1"} value={item.quantity} onChange={(event) => {
+                            const quantity = Number(event.target.value);
+                            if (Number.isFinite(quantity) && quantity > 0 && (item.stockMode === "weight" || Number.isInteger(quantity))) setRecipeItems((current) => current.map((entry) => entry.ingredientId === item.ingredientId ? { ...entry, quantity } : entry));
+                          }} />
+                          <small>{item.stockMode === "weight" ? "g" : item.stockMode === "package" ? "paq." : "u."}</small>
+                        </label>
+                        <select className={styles.requirementSelect} aria-label={`Tipo de ingrediente: ${item.ingredientName}`} value={isRecipeIngredientRequired(item, recipeItems.length) ? "required" : "optional"} disabled={recipeItems.length === 1} onChange={(event) => {
+                          const required = event.target.value === "required";
+                          setRecipeItems((current) => current.map((entry) => entry.ingredientId === item.ingredientId ? { ...entry, required } : entry));
+                        }}>
+                          <option value="required">Obligatorio</option>
+                          <option value="optional">Opcional</option>
+                        </select>
                         <button type="button" onClick={() => decrementRecipeItemQuantity(item)}>-</button>
                         <button type="button" onClick={() => incrementRecipeItemQuantity(item)}>+</button>
                         <button type="button" onClick={() => removeRecipeItem(item.ingredientId)}>X</button>
@@ -839,6 +866,7 @@ export default function MenuProductsScreen() {
                     ))}
                   </div>
                 )}
+                <p className={styles.hint}>Un unico ingrediente siempre es obligatorio. Marca como opcionales los ingredientes que el cliente puede quitar.</p>
               </section>
 
               <div className={styles.previewGrid}>

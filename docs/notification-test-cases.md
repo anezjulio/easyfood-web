@@ -1,5 +1,7 @@
 # Casos de prueba de notificaciones
 
+Actualizado: 2026-11-07. Verificado contra el codigo actual del repositorio.
+
 ## Modelo actual
 
 - Estados validos: `active`, `disabled`, `received`
@@ -9,7 +11,7 @@
 
 Casos de autocierre ya presentes:
 
-- `product-low-stock` pasa a `received` si el stock vuelve a quedar sobre el minimo configurado
+- `product-low-stock` pasa a `received` si el stock vuelve a quedar en el minimo configurado o por encima
 - `supply-pending-receive` pasa a `received` al recepcionar el pedido proveedor
 - la notificacion de accion ligada a una solicitud operativa se marca `received` al resolver la solicitud
 
@@ -188,7 +190,7 @@ Casos de autocierre ya presentes:
 ### Recuperacion de stock
 
 1. Tener una notificacion activa de stock bajo
-2. Cargar stock hasta superar el minimo
+2. Cargar stock hasta alcanzar o superar el minimo
 3. Esperado: la notificacion pasa automaticamente a `received`
 
 ## Casos especificos de pedidos proveedor
@@ -240,3 +242,14 @@ Casos de autocierre ya presentes:
 - `manual-fixed`
 - `manual-action`
 - `manual-due`
+
+## Casos actuales de ingredientes, compras y respaldos
+
+- Cargar ingredientes por `/ingredient-stock-entries`: se registran movimientos con vencimiento y se usa el generador existente stock-created/product-expiring. Cuando el identificador corresponde solo a un ingrediente, product-low-stock no se crea porque su sincronizador busca un registro de products.
+- purchaseTotal genera una transaccion financiera stock-purchase, no un tipo nuevo de notificacion. Un costo negativo invalida el lote sin crear movimientos ni avisos parciales.
+- minStockQuantity del ingrediente se usa para resaltar Inventario; no existe aun un aviso automatico que liste recetas afectadas por ese ingrediente.
+- Un ingrediente opcional quitado no se consume: validar que no dispare por ese descuento un aviso de producto bajo. Los obligatorios no pueden excluirse mediante API.
+- Los respaldos por bloques distribuyen notificaciones por entidad/tipo: producto en Catalogo, stock/ingrediente en Stock y restantes en Operaciones. Reemplazar un bloque reemplaza tambien sus avisos.
+- Generar ejemplos modifica la base activa; usar una base de pruebas. La suite Playwright usa DATA_ROOT temporales y no necesita estos ejemplos para comprobar carga y ventas.
+
+Relacion con entidades y futuras tablas: [Diccionario de datos](data-dictionary.md).

@@ -9,6 +9,7 @@ import { createSaleReceiptApi } from "../service/sale.api";
 import styles from "./SalesSummaryScreen.module.css";
 
 type SaleSummaryItem = {
+  excludedIngredients?: Array<{ productId: string; ingredientId: string; ingredientName: string }>;
   productId: string;
   productName: string;
   unitPrice: number;
@@ -150,6 +151,7 @@ export default function SalesSummaryScreen() {
               <div key={`${item.productId}-${index}`} className={styles.tableRow}>
                 <div className={styles.productCell}>
                   <span>{item.productName}</span>
+                  {!!item.excludedIngredients?.length && <div className={styles.comboItems}>{item.excludedIngredients.map((ingredient) => <span key={`${ingredient.productId}-${ingredient.ingredientId}`}>Sin {ingredient.ingredientName}</span>)}</div>}
                   {item.comboUnits?.length ? (
                     <div className={styles.comboItems}>
                       {item.comboUnits.map((unit, unitIndex) => (

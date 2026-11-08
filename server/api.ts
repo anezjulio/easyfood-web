@@ -1,5 +1,8 @@
 import { existsSync } from "node:fs";
-import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
+import { compareCategoryOrder, getCategoryOrder } from "../src/shared/category/category-order";
+import { isRecipeIngredientRequired, normalizeRecipeRequirements } from "../src/shared/recipe/ingredient-rules";
+import { cp, mkdir, readFile, writeFile, readdir, rename } from "node:fs/promises";
+import { BLOCK_KEYS, extractBlock, readBlockBackup, composeBlocks, type DataBlock, type Database } from "./data-blocks";
 import { dirname, extname, isAbsolute, resolve } from "node:path";
 import type { IncomingMessage } from "node:http";
 import type { Server } from "connect";
@@ -73,6 +76,7 @@ type IngredientCategory = {
 };
 
 type MenuRecipeItem = {
+  required?: boolean;
   ingredientId: string;
   ingredientName: string;
   quantity: number;
@@ -92,6 +96,7 @@ type MenuComboItem = {
 type MenuProductKind = "menu" | "combo";
 
 type MenuCategory = {
+  order?: number;
   id: string;
   name: string;
   createdAt: string;
@@ -159,6 +164,7 @@ type OperationRequest = {
 };
 
 type StockEntry = {
+  purchaseTotal?: number;
   id: string;
   productId: string;
   expirationDate?: string;
@@ -173,6 +179,7 @@ type StockEntry = {
 };
 
 type RecipeIngredient = {
+  required?: boolean;
   ingredientId: string;
   quantity: number;
 };
@@ -207,6 +214,7 @@ type Combo = {
 };
 
 type Category = {
+  order?: number;
   id: string;
   name: string;
   productIds: string[];
@@ -240,6 +248,7 @@ type SystemSettings = {
 type OrderStatus = "por pagar" | "pagada" | "cancelada";
 
 type OrderItem = {
+  excludedIngredients?: Array<{ productId: string; ingredientId: string; ingredientName: string }>;
   productId: string;
   productName: string;
   unitPrice: number;
@@ -270,6 +279,7 @@ type Invoice = {
 };
 
 type ReceiptItem = {
+  excludedIngredients?: OrderItem["excludedIngredients"];
   productId: string;
   productName: string;
   unitPrice: number;
@@ -431,8 +441,9 @@ type FinancialAccount = {
 
 type FinancialDirection = "in" | "out";
 type FinancialEntryKind = "debit" | "credit";
-type FinancialReferenceModule = "sale" | "expense" | "cash" | "supply" | "system";
+type FinancialReferenceModule = "sale" | "expense" | "cash" | "supply" | "stock" | "system";
 type FinancialTransactionType =
+  | "stock-purchase"
   | "sale-income"
   | "sale-cash"
   | "sale-tobacco"
@@ -1307,6 +1318,84 @@ export function installApi(middlewares: Server) {
           const url = new URL(req.url || "/", "http://localhost");
           const pathname = url.pathname;
 
+          if (pathname === "/admin/data/blocks" && method === "POST") {
+            const activeDb = await readDb();
+            const body = await readJsonBody(req, 100_000_000) as {
+              requestedBy: string; adminPasswordHash: string; action: string; storeId?: string;
+              targetStoreId?: string; name?: string; blocks?: DataBlock[];
+              sources?: Array<{ block: DataBlock; storeId?: string; content?: string }>;
+            };
+            const credential = validateAdminCredentials(activeDb, body.requestedBy, body.adminPasswordHash);
+            if (!credential.ok) return sendJson(res, credential.status, { message: credential.message });
+            const state = await readDataStoresState();
+            try {
+              if (body.action === "export") {
+                const store = state.stores.find((item) => item.id === body.storeId);
+                if (!store) throw new Error("Selecciona una base de origen.");
+                if (!body.blocks?.length || body.blocks.some((block) => !Object.hasOwn(BLOCK_KEYS, block))) throw new Error("Selecciona bloques validos.");
+                const db = await readDb(store);
+                const blocks: Partial<Record<DataBlock, Database>> = {};
+                for (const block of body.blocks) {
+                  blocks[block] = extractBlock(db, block);
+                  if (block === "catalog") blocks[block]!.media = await readBlockMedia(store.imagesDir);
+                  if (block === "operations") blocks[block]!.receipts = await readBlockMedia(store.receiptsDir);
+                }
+                return sendTextDownload(res, `easyfood-${store.id}-${body.blocks.join("-")}.json`, JSON.stringify({ format: "easyfood-blocks", version: 1, source: store.name, createdAt: new Date().toISOString(), blocks }, null, 2));
+              }
+              if (!["preview", "apply"].includes(body.action)) throw new Error("Accion invalida.");
+              if (!body.sources?.length) throw new Error("Selecciona al menos un bloque de origen.");
+              const target = body.targetStoreId ? state.stores.find((item) => item.id === body.targetStoreId) : undefined;
+              if (body.targetStoreId && !target) throw new Error("Base destino inexistente.");
+              const id = target?.id || normalizeDataStoreId(body.name || "");
+              if (!target && (!id || id === DEFAULT_DATA_STORE_ID || state.stores.some((item) => item.id === id))) throw new Error("Usa un nombre nuevo y valido para la base.");
+              const blocks: Partial<Record<DataBlock, Database>> = {};
+              for (const source of body.sources) {
+                if (!Object.hasOwn(BLOCK_KEYS, source.block) || blocks[source.block]) throw new Error("Bloque invalido o repetido.");
+                if (source.content) blocks[source.block] = readBlockBackup(parseImportedMockDb(source.content), source.block);
+                else {
+                  const store = state.stores.find((item) => item.id === source.storeId);
+                  if (!store) throw new Error("Base de origen inexistente.");
+                  blocks[source.block] = extractBlock(await readDb(store), source.block);
+                  if (source.block === "catalog") blocks[source.block]!.media = await readBlockMedia(store.imagesDir);
+                  if (source.block === "operations") blocks[source.block]!.receipts = await readBlockMedia(store.receiptsDir);
+                }
+              }
+              const base = target ? await readDb(target) : buildClearedOperationalDb(activeDb);
+              if (!target) {
+                base.categories = []; base.menuCategories = []; base.ingredientCategories = []; base.cashOpeningAssignments = [];
+                base.priceMarginSettings = resolvePriceMarginSettings(undefined);
+                base.stockThresholdSettings = resolveStockThresholdSettings(undefined);
+              }
+              const composed = composeBlocks(base, blocks) as MockDb;
+              for (const block of Object.values(blocks)) {
+                validateBlockMedia(block?.media); validateBlockMedia(block?.receipts);
+              }
+              const summary = Object.fromEntries(Object.entries(composed).filter(([, value]) => Array.isArray(value)).map(([key, value]) => [key, (value as unknown[]).length]));
+              if (body.action === "preview") return sendJson(res, 200, { summary, message: "Referencias verificadas. Los bloques seleccionados reemplazan sus equivalentes; los demas se conservan." });
+              const destination: DataStoreRecord = target || { id, name: body.name!.trim(), ...buildDataStorePaths(id), createdAt: new Date().toISOString() };
+              let recoveryPath: string | undefined;
+              if (target) {
+                recoveryPath = resolve(dirname(target.dbPath), `before-blocks-${Date.now()}.json`);
+                await writeFile(recoveryPath, JSON.stringify({ format: "easyfood-blocks", version: 1, blocks: {
+                  catalog: { ...extractBlock(base, "catalog"), media: await readBlockMedia(target.imagesDir) },
+                  operations: { ...extractBlock(base, "operations"), receipts: await readBlockMedia(target.receiptsDir) },
+                  stock: extractBlock(base, "stock"),
+                } }, null, 2), "utf8");
+              }
+              await mkdir(dirname(destination.dbPath), { recursive: true });
+              await writeBlockMedia(destination.imagesDir, blocks.catalog?.media);
+              await writeBlockMedia(destination.receiptsDir, blocks.operations?.receipts);
+              syncFinancialData(composed);
+              const stagedDbPath = `${destination.dbPath}.blocks-${Date.now()}.tmp`;
+              await writeFile(stagedDbPath, JSON.stringify(composed, null, 2) + "\n", "utf8");
+              await rename(stagedDbPath, destination.dbPath);
+              if (!target) { state.stores.push(destination); await writeDataStoresState(state); }
+              return sendJson(res, 200, { summary, recoveryPath, message: `Base ${destination.name} guardada. La base activa se mantiene.`, store: mapDataStoreForApi(destination) });
+            } catch (error) {
+              return sendJson(res, 400, { message: error instanceof Error ? error.message : "No se pudo procesar el respaldo." });
+            }
+          }
+
           if (pathname === "/admin/data/stores" && method === "GET") {
             const state = await readDataStoresState();
             return sendJson(res, 200, {
@@ -1921,7 +2010,7 @@ export function installApi(middlewares: Server) {
           if (pathname === "/categories" && method === "GET") {
             if (isBrowserNavigation(req)) return next();
             const db = await readDb();
-            return sendJson(res, 200, db.categories);
+            return sendJson(res, 200, [...db.categories].sort(compareCategoryOrder));
           }
 
           if (pathname === "/categories" && method === "POST") {
@@ -1929,7 +2018,7 @@ export function installApi(middlewares: Server) {
             const draft = sanitizeCategoryDraft(await readJsonBody(req), db.products);
             if (!draft.id || !draft.name) return sendJson(res, 400, { message: "Invalid category draft" });
             if (db.categories.some((item) => item.id === draft.id)) return sendJson(res, 409, { message: "Category already exists" });
-            const category: Category = { id: draft.id, name: draft.name, productIds: draft.productIds, createdAt: new Date().toISOString() };
+            const category: Category = { id: draft.id, name: draft.name, order: draft.order ?? getCategoryOrder(draft), productIds: draft.productIds, createdAt: new Date().toISOString() };
             db.categories.unshift(category);
             syncProductCategoryIds(db);
             await writeDb(db);
@@ -1942,7 +2031,7 @@ export function installApi(middlewares: Server) {
             const draft = sanitizeCategoryDraft(await readJsonBody(req), db.products);
             const index = db.categories.findIndex((item) => item.id === categoryId);
             if (index < 0) return sendJson(res, 404, { message: "Category not found" });
-            db.categories[index] = { ...db.categories[index], name: draft.name || db.categories[index].name, productIds: draft.productIds, updatedAt: new Date().toISOString() };
+            db.categories[index] = { ...db.categories[index], name: draft.name || db.categories[index].name, order: draft.order ?? getCategoryOrder(db.categories[index]), productIds: draft.productIds, updatedAt: new Date().toISOString() };
             syncProductCategoryIds(db);
             await writeDb(db);
             return sendJson(res, 200, db.categories[index]);
@@ -2043,7 +2132,7 @@ export function installApi(middlewares: Server) {
           if (pathname === "/menu-categories" && method === "GET") {
             if (isBrowserNavigation(req)) return next();
             const db = await readDb();
-            return sendJson(res, 200, db.menuCategories);
+            return sendJson(res, 200, [...db.menuCategories].sort(compareCategoryOrder));
           }
 
           if (pathname === "/menu-categories" && method === "POST") {
@@ -2058,6 +2147,7 @@ export function installApi(middlewares: Server) {
             const category: MenuCategory = {
               id: draft.id,
               name: draft.name,
+              order: draft.order ?? getCategoryOrder(draft),
               createdAt: new Date().toISOString(),
             };
             db.menuCategories.unshift(category);
@@ -2079,6 +2169,7 @@ export function installApi(middlewares: Server) {
             db.menuCategories[index] = {
               ...db.menuCategories[index],
               name: draft.name,
+              order: draft.order ?? getCategoryOrder(db.menuCategories[index]),
               updatedAt: new Date().toISOString(),
             };
             await writeDb(db);
@@ -2388,6 +2479,65 @@ export function installApi(middlewares: Server) {
 
             await writeDb(db);
             return sendJson(res, 200, db.requests[index]);
+          }
+
+          if (pathname === "/ingredient-stock-entries" && method === "POST") {
+            const db = await readDb();
+            const body = await readJsonBody(req);
+            const entries = (body as { entries?: unknown } | null)?.entries;
+            if (!Array.isArray(entries) || !entries.length) {
+              return sendJson(res, 400, { message: "Agrega al menos un ingrediente." });
+            }
+            try {
+              const seen = new Set<string>();
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const validated = entries.map((entry) => {
+                if (!entry || typeof entry !== "object") throw new Error("Ingreso invalido.");
+                const ingredient = db.ingredients.find((item) => item.id === entry.ingredientId);
+                const quantity = Number(entry.quantity);
+                const purchaseTotal = entry.purchaseTotal === undefined ? undefined : Number(entry.purchaseTotal);
+                if (purchaseTotal !== undefined && (!Number.isFinite(purchaseTotal) || purchaseTotal < 0 || !Number.isSafeInteger(Math.round(purchaseTotal * 100)) || Math.abs(purchaseTotal - Math.round(purchaseTotal * 100) / 100) > 0.0000001)) {
+                  throw new Error("Costo de compra invalido. Usa un importe positivo o cero, con hasta dos decimales.");
+                }
+                const expirationDate = String(entry.expirationDate || "");
+                const expiration = new Date(`${expirationDate}T00:00:00`);
+                if (!ingredient || seen.has(ingredient.id)) throw new Error("Ingrediente invalido o repetido.");
+                seen.add(ingredient.id);
+                if (!Number.isFinite(quantity) || quantity <= 0) throw new Error(`Cantidad invalida: ${ingredient.name}.`);
+                if (ingredient.stockMode === "weight" ? !["grams", "kilos"].includes(entry.metric) : entry.metric !== "unit" || !Number.isInteger(quantity)) {
+                  throw new Error(`Unidad invalida: ${ingredient.name}.`);
+                }
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(expirationDate) || !Number.isFinite(expiration.getTime()) || expiration < today) {
+                  throw new Error(`Vencimiento invalido: ${ingredient.name}.`);
+                }
+                const delta = entry.metric === "kilos" ? quantity * 1000 : quantity;
+                if (!Number.isFinite(delta) || !Number.isFinite(ingredient.stockQuantity + delta)) throw new Error("Cantidad fuera de rango.");
+                return { ingredient, quantity, purchaseTotal, metric: entry.metric as "unit" | "grams" | "kilos", expirationDate, delta };
+              });
+              for (const entry of validated) {
+                createStockEntryRecord(db, {
+                  productId: entry.ingredient.productId || entry.ingredient.id,
+                  quantity: entry.quantity,
+                  metric: entry.metric,
+                  expirationDate: entry.expirationDate,
+                  movementType: "in",
+                  description: `Ingreso de ingrediente: ${entry.ingredient.name}`,
+                  purchaseTotal: entry.purchaseTotal,
+                });
+                const ingredient = entry.ingredient;
+                const previousStock = ingredient.stockQuantity;
+                ingredient.stockQuantity += entry.delta;
+                ingredient.updatedAt = ingredient.lastEntryAt = new Date().toISOString();
+                if (previousStock <= 0 || !ingredient.nextExpirationDate || entry.expirationDate < ingredient.nextExpirationDate) {
+                  ingredient.nextExpirationDate = entry.expirationDate;
+                }
+              }
+              await writeDb(db);
+              return sendJson(res, 201, db.ingredients);
+            } catch (error) {
+              return sendJson(res, 400, { message: error instanceof Error ? error.message : "No se pudo cargar el stock." });
+            }
           }
 
           if (pathname === "/stocks" && method === "GET") {
@@ -4038,6 +4188,7 @@ function createStockEntryRecord(
     description?: string;
     supplyOrderId?: string;
     costPrice?: number;
+    purchaseTotal?: number;
   },
   options?: { createdAt?: string },
 ): StockEntry {
@@ -4052,6 +4203,9 @@ function createStockEntryRecord(
   const metric = normalizeStockMetric(body.metric, product?.stockMode);
   const movementType = body.movementType || (body.quantity < 0 ? "out" : "in");
   const signedQuantity = normalizeStockQuantity(body.quantity, metric, movementType);
+  if (body.purchaseTotal !== undefined && (!Number.isFinite(body.purchaseTotal) || body.purchaseTotal < 0 || !Number.isSafeInteger(Math.round(body.purchaseTotal * 100)) || Math.abs(body.purchaseTotal - Math.round(body.purchaseTotal * 100) / 100) > 0.0000001)) {
+    throw new Error("Costo de compra invalido.");
+  }
   if (signedQuantity > 0 && !body.expirationDate) {
     throw new Error("Invalid stock entry: expirationDate required");
   }
@@ -4076,6 +4230,7 @@ function createStockEntryRecord(
     description: body.description,
     supplyOrderId: body.supplyOrderId,
     costPrice: normalizedCostPrice,
+    purchaseTotal: body.purchaseTotal,
     createdAt: options?.createdAt || new Date().toISOString(),
   };
 
@@ -4289,7 +4444,7 @@ function getFinancialAccountDefinition(accountId: string) {
 
 function sanitizeMoneyAmount(value: number | undefined) {
   if (!Number.isFinite(value)) return 0;
-  return Math.max(0, Math.trunc(Number(value || 0)));
+  return Math.max(0, Math.round(Number(value || 0) * 100) / 100);
 }
 
 function buildFinancialTransactionRecord(
@@ -4307,6 +4462,19 @@ function buildFinancialTransactionRecord(
 function buildFinancialTransactions(db: MockDb): FinancialTransaction[] {
   const orderToWorkday = new Map<string, string>();
   const transactions: FinancialTransaction[] = [];
+
+  for (const stock of db.stocks) {
+    if (stock.supplyOrderId || stock.movementType === "out" || stock.quantity <= 0 || !Number.isFinite(stock.purchaseTotal) || Number(stock.purchaseTotal) <= 0) continue;
+    const ingredient = db.ingredients.find((item) => (item.productId || item.id) === stock.productId);
+    const product = db.products.find((item) => item.id === stock.productId);
+    transactions.push(buildFinancialTransactionRecord({
+      id: `txn-stock-purchase-${stock.id}`, createdAt: stock.movementDate || stock.createdAt,
+      type: "stock-purchase", title: `Compra de stock: ${ingredient?.name || product?.name || stock.productId}`,
+      description: stock.description || "Ingreso de stock con costo de compra.", amount: stock.purchaseTotal!,
+      direction: "out", entryKind: "debit", accountId: "account-expenses",
+      referenceModule: "stock", referenceId: stock.id, countsInBalance: true,
+    }));
+  }
 
   for (const workday of db.workdays) {
     for (const orderId of workday.orderIds) {
@@ -4556,7 +4724,7 @@ function syncFinancialData(db: MockDb) {
 
   db.financialAccounts = FINANCIAL_ACCOUNT_DEFINITIONS.map((definition) => ({
     ...definition,
-    currentBalance: Math.trunc(balances.get(definition.id) || 0),
+    currentBalance: Math.round((balances.get(definition.id) || 0) * 100) / 100,
     createdAt: previousAccounts.get(definition.id)?.createdAt || now,
     updatedAt: now,
   }));
@@ -4596,6 +4764,7 @@ function normalizeMenuCategoryRecord(input: unknown): MenuCategory | null {
   return {
     id,
     name,
+    order: getCategoryOrder({ ...draft, name }),
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
   };
@@ -4616,7 +4785,7 @@ function normalizeMenuCategories(input: unknown, menuProducts: MenuProduct[]): M
       byId.set(id, { id, name: formatCategoryNameFromId(id), createdAt: item.createdAt || new Date().toISOString() });
     }
   }
-  return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name));
+  return [...byId.values()].sort(compareCategoryOrder);
 }
 
 function normalizeProductRecord(input: unknown): Product | null {
@@ -4669,18 +4838,18 @@ function normalizeRecipeRecord(input: unknown, products: Product[]): Recipe | nu
   const rawItems = Array.isArray(draft.ingredients) ? draft.ingredients : Array.isArray(draft.recipeItems) ? draft.recipeItems : [];
   const ingredients = rawItems
     .map((item) => {
-      const node = (item || {}) as { ingredientId?: unknown; quantity?: unknown };
+      const node = (item || {}) as { ingredientId?: unknown; quantity?: unknown; required?: unknown };
       const ingredientId = String(node.ingredientId || "").trim();
       const quantity = Math.max(0, Number(node.quantity) || 0);
       if (!ingredientId || quantity <= 0) return null;
-      return { ingredientId, quantity };
+      return { ingredientId, quantity, required: node.required !== false };
     })
-    .filter((item): item is RecipeIngredient => !!item);
+    .filter((item): item is NonNullable<typeof item> => !!item);
   if (ingredients.length === 0) return null;
   return {
     id,
     productId,
-    ingredients,
+    ingredients: normalizeRecipeRequirements(ingredients),
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
   };
@@ -4739,6 +4908,7 @@ function normalizeCategoryRecord(input: unknown, products: Product[]): Category 
   return {
     id,
     name,
+    order: getCategoryOrder({ ...draft, name }),
     productIds,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
@@ -4786,7 +4956,7 @@ function buildDomainFromLegacyMenuProducts(
     recipes.push({
       id: `rec-${menuProduct.id}`,
       productId: menuProduct.id,
-      ingredients: menuProduct.recipeItems.map((item) => ({ ingredientId: item.ingredientId, quantity: item.quantity })),
+      ingredients: menuProduct.recipeItems.map((item) => ({ ingredientId: item.ingredientId, quantity: item.quantity, required: item.required })),
       createdAt: menuProduct.createdAt,
       updatedAt: menuProduct.updatedAt,
     });
@@ -4826,6 +4996,7 @@ function buildDomainFromLegacyMenuProducts(
     categories.push({
       id: category.id,
       name: category.name,
+      order: getCategoryOrder(category),
       productIds: products.filter((product) => product.category === category.id || product.categoryIds?.includes(category.id)).map((product) => product.id),
       createdAt: category.createdAt,
       updatedAt: category.updatedAt,
@@ -4850,7 +5021,7 @@ function normalizeIngredientRecord(input: unknown): Ingredient | null {
     id,
     name,
     productId: String(draft.productId || "").trim() || undefined,
-    metric: draft.metric === "weight" ? "weight" : "unit",
+    metric: normalizeIngredientStockMode(draft.stockMode) === "weight" ? "weight" : "unit",
     categoryId: String(draft.categoryId || "").trim() || undefined,
     expiresInDays: Math.max(0, Math.trunc(Number(draft.expiresInDays) || 0)),
     stockMode: normalizeIngredientStockMode(draft.stockMode),
@@ -4892,7 +5063,7 @@ function sanitizeIngredientCategoryDraft(input: unknown): { id: string; name: st
 
 function normalizeMenuRecipeItems(input: unknown, ingredients: Ingredient[]): MenuRecipeItem[] {
   if (!Array.isArray(input)) return [];
-  return input
+  return normalizeRecipeRequirements(input
     .map((item) => {
       const draft = (item || {}) as Partial<MenuRecipeItem>;
       const ingredientId = String(draft.ingredientId || "").trim();
@@ -4900,13 +5071,14 @@ function normalizeMenuRecipeItems(input: unknown, ingredients: Ingredient[]): Me
       const quantity = Number(draft.quantity);
       if (!ingredient || !Number.isFinite(quantity) || quantity <= 0) return null;
       return {
+        required: draft.required !== false,
         ingredientId: ingredient.id,
         ingredientName: ingredient.name,
         quantity,
         stockMode: ingredient.stockMode,
       };
     })
-    .filter((item): item is MenuRecipeItem => !!item);
+    .filter((item): item is NonNullable<typeof item> => !!item));
 }
 
 function normalizeMenuComboItems(input: unknown, menuProducts?: MenuProduct[]): MenuComboItem[] {
@@ -6247,6 +6419,7 @@ function buildSaleReceiptHtml(receipt: Receipt): string {
         "<article class=\"item\">",
         `  <p class="item-name">${escapeHtml(item.productName)}</p>`,
         comboLines,
+        ...(item.excludedIngredients || []).map((ingredient) => `  <p class="combo-item">Sin ${escapeHtml(ingredient.ingredientName)}</p>`),
         `  <p class="item-meta">${quantity} x ${escapeHtml(formatReceiptMoney(item.unitPrice))}<span class="dots"></span>${escapeHtml(formatReceiptMoney(subtotal))}</p>`,
         "</article>",
       ].join("\n");
@@ -6433,7 +6606,7 @@ function sanitizeIngredientDraft(input: unknown) {
   return {
     name: String(obj.name || "").trim(),
     productId: String(obj.productId || "").trim() || undefined,
-    metric: obj.metric === "weight" ? "weight" as const : "unit" as const,
+    metric: normalizeIngredientStockMode(obj.stockMode) === "weight" ? "weight" as const : "unit" as const,
     categoryId: String(obj.categoryId || "").trim() || undefined,
     expiresInDays: Math.max(0, Math.trunc(Number(obj.expiresInDays) || 0)),
     stockMode: normalizeIngredientStockMode(obj.stockMode),
@@ -6467,20 +6640,20 @@ function sanitizeMenuProductDraft(input: unknown, ingredients: Ingredient[], men
   };
 }
 
-function sanitizeMenuCategoryDraft(input: unknown): { id: string; name: string } {
-  const obj = (input || {}) as { name?: unknown };
+function sanitizeMenuCategoryDraft(input: unknown): { id: string; name: string; order?: number } {
+  const obj = (input || {}) as { name?: unknown; order?: unknown };
   const name = String(obj.name || "").trim();
-  return { id: normalizeCategoryId(name), name };
+  return { id: normalizeCategoryId(name), name, order: obj.order === undefined ? undefined : getCategoryOrder({ name, order: Number(obj.order) }) };
 }
 
-function sanitizeCategoryDraft(input: unknown, products: Product[]): { id: string; name: string; productIds: string[] } {
-  const obj = (input || {}) as { id?: unknown; name?: unknown; productIds?: unknown };
+function sanitizeCategoryDraft(input: unknown, products: Product[]): { id: string; name: string; order?: number; productIds: string[] } {
+  const obj = (input || {}) as { id?: unknown; name?: unknown; productIds?: unknown; order?: unknown };
   const name = String(obj.name || "").trim();
   const id = normalizeCategoryId(obj.id || name);
   const productIds = Array.isArray(obj.productIds)
     ? obj.productIds.map((item) => String(item || "").trim()).filter((item) => products.some((product) => product.id === item))
     : [];
-  return { id, name, productIds };
+  return { id, name, productIds, order: obj.order === undefined ? undefined : getCategoryOrder({ name, order: Number(obj.order) }) };
 }
 
 function sanitizeRecipeDraft(input: unknown, products: Product[], ingredients: Ingredient[]): { productId: string; ingredients: RecipeIngredient[] } {
@@ -6489,16 +6662,16 @@ function sanitizeRecipeDraft(input: unknown, products: Product[], ingredients: I
   const ingredientsList = Array.isArray(obj.ingredients)
     ? obj.ingredients
         .map((item) => {
-          const node = (item || {}) as { ingredientId?: unknown; quantity?: unknown };
+          const node = (item || {}) as { ingredientId?: unknown; quantity?: unknown; required?: unknown };
           const ingredientId = String(node.ingredientId || "").trim();
           const quantity = Math.max(0, Number(node.quantity) || 0);
           if (!ingredientId || !ingredients.some((ingredient) => ingredient.id === ingredientId) || quantity <= 0) return null;
-          return { ingredientId, quantity };
+          return { ingredientId, quantity, required: node.required !== false };
         })
-        .filter((item): item is RecipeIngredient => !!item)
+        .filter((item): item is NonNullable<typeof item> => !!item)
     : [];
   if (!products.some((product) => product.id === productId && product.type === "receta")) return { productId: "", ingredients: [] };
-  return { productId, ingredients: ingredientsList };
+  return { productId, ingredients: normalizeRecipeRequirements(ingredientsList) };
 }
 
 function sanitizeComboDraft(input: unknown, products: Product[]): { productId: string; items: ComboFixedItem[]; optionGroups: ComboOptionGroup[] } {
@@ -6554,6 +6727,8 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
 } {
   const quantities = new Map<string, { quantity: number; metric: NonNullable<StockEntry["metric"]> }>();
   const ingredientQuantities = new Map<string, number>();
+  let excludedIngredients: NonNullable<OrderItem["excludedIngredients"]> = [];
+  const isExcluded = (productId: string, ingredientId: string) => excludedIngredients.some((item) => item.productId === productId && item.ingredientId === ingredientId);
 
   function addProductStock(productId: string, quantity: number, metric: NonNullable<StockEntry["metric"]>) {
     if (!productId || quantity <= 0) return;
@@ -6575,8 +6750,8 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
     return rawProductId.startsWith("menu:") ? rawProductId.slice("menu:".length) : rawProductId;
   }
 
-  function consumeProduct(productId: string, multiplier: number): string | null {
-    if (productId.startsWith("menu:")) return consumeMenuProduct(productId.slice("menu:".length), multiplier, []);
+  function consumeProduct(productId: string, multiplier: number, selections: OrderItem["comboSelections"] = []): string | null {
+    if (productId.startsWith("menu:")) return consumeMenuProduct(productId.slice("menu:".length), multiplier, selections);
 
     const product = db.products.find((item) => item.id === resolveProductId(productId));
     if (!product) return `Product not found: ${productId}`;
@@ -6585,15 +6760,18 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
       const recipe = db.recipes.find((item) => item.id === product.recipeId || item.productId === product.id);
       if (!recipe) return `Recipe not found: ${product.name}`;
       for (const recipeItem of recipe.ingredients) {
+        if (isExcluded(product.id, recipeItem.ingredientId)) {
+          if (isRecipeIngredientRequired(recipeItem, recipe.ingredients.length)) return "No se puede quitar un ingrediente obligatorio.";
+          continue;
+        }
         const ingredient = db.ingredients.find((item) => item.id === recipeItem.ingredientId);
         if (!ingredient) return `Ingredient not found: ${recipeItem.ingredientId}`;
         const sourceProductId = ingredient.productId || ingredient.id;
         const sourceProduct = db.products.find((item) => item.id === sourceProductId);
-        const metric = ingredient.metric === "weight" || sourceProduct?.stockMode === "weight" ? "grams" : "unit";
-        const quantity = metric === "grams"
-          ? Math.max(0, Number(ingredient.portionSizeGrams) || 0) * recipeItem.quantity * multiplier
-          : recipeItem.quantity * multiplier;
+        const metric = ingredient.stockMode === "weight" || sourceProduct?.stockMode === "weight" ? "grams" : "unit";
+        const quantity = recipeItem.quantity * multiplier;
         addProductStock(sourceProductId, quantity, metric);
+        addIngredientStock(ingredient.id, quantity);
       }
       return null;
     }
@@ -6605,6 +6783,12 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
         const error = consumeProduct(item.productId, item.quantity * multiplier);
         if (error) return error;
       }
+      for (const group of combo.optionGroups) {
+        const selectedProductId = selections?.find((item) => item.category === group.id || item.category === group.name)?.menuProductId;
+        if (!selectedProductId || !group.productIds.includes(resolveProductId(selectedProductId))) return `Combo option not selected: ${group.name}`;
+        const error = consumeProduct(selectedProductId, group.quantity * multiplier);
+        if (error) return error;
+      }
       return null;
     }
 
@@ -6613,11 +6797,13 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
   }
 
   function consumeMenuProduct(menuProductId: string, multiplier: number, selections: OrderItem["comboSelections"]): string | null {
+    const domainProduct = db.products.find((item) => item.id === menuProductId);
+    if (domainProduct) return consumeProduct(domainProduct.id, multiplier, selections);
     const menuProduct = db.menuProducts.find((item) => item.id === menuProductId);
     if (!menuProduct) {
       const product = db.products.find((item) => item.id === menuProductId);
       if (!product) return `Menu product not found: ${menuProductId}`;
-      return consumeProduct(product.id, multiplier);
+      return consumeProduct(product.id, multiplier, selections);
     }
 
     if (menuProduct.kind === "combo") {
@@ -6637,6 +6823,10 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
     }
 
     for (const recipeItem of menuProduct.recipeItems) {
+      if (isExcluded(menuProduct.id, recipeItem.ingredientId)) {
+        if (isRecipeIngredientRequired(recipeItem, menuProduct.recipeItems.length)) return "No se puede quitar un ingrediente obligatorio.";
+        continue;
+      }
       const ingredient = db.ingredients.find((item) => item.id === recipeItem.ingredientId);
       if (!ingredient) return `Ingredient not found: ${recipeItem.ingredientName || recipeItem.ingredientId}`;
       addIngredientStock(ingredient.id, recipeItem.quantity * multiplier);
@@ -6645,12 +6835,28 @@ function resolveOrderProductStockConsumption(db: MockDb, orderItems: OrderItem[]
   }
 
   for (const orderItem of orderItems) {
+    excludedIngredients = orderItem.excludedIngredients || [];
+    for (const excluded of excludedIngredients) {
+      const product = db.products.find((item) => item.id === excluded.productId);
+      const recipe = product && db.recipes.find((item) => item.id === product.recipeId || item.productId === product.id);
+      const menuProduct = db.menuProducts.find((item) => item.id === excluded.productId);
+      if (!recipe?.ingredients.some((item) => item.ingredientId === excluded.ingredientId) && !menuProduct?.recipeItems.some((item) => item.ingredientId === excluded.ingredientId)) {
+        return { entries: [], ingredientEntries: [], error: "El ingrediente quitado no pertenece a la receta." };
+      }
+    }
     if (orderItem.productId.startsWith("menu:")) {
       const menuProductId = orderItem.productId.slice("menu:".length);
       const menuProduct = db.menuProducts.find((item) => item.id === menuProductId);
       if (!menuProduct) {
-        const error = consumeProduct(menuProductId, orderItem.quantity);
-        if (error) return { entries: [], ingredientEntries: [], error };
+        if (orderItem.comboUnits?.length) {
+          for (const unit of orderItem.comboUnits) {
+            const error = consumeProduct(menuProductId, 1, unit.comboSelections || []);
+            if (error) return { entries: [], ingredientEntries: [], error };
+          }
+        } else {
+          const error = consumeProduct(menuProductId, orderItem.quantity, orderItem.comboSelections || []);
+          if (error) return { entries: [], ingredientEntries: [], error };
+        }
         continue;
       }
       if (menuProduct.kind === "combo") {
@@ -6739,8 +6945,9 @@ function applyIngredientStockConsumption(db: MockDb, entries: Array<{ ingredient
 function findProductStockIssue(db: MockDb, entries: Array<Parameters<typeof createStockEntryRecord>[1]>): string | null {
   for (const entry of entries) {
     const product = db.products.find((item) => item.id === entry.productId);
-    if (!product) return `Product not found: ${entry.productId}`;
-    const available = getCurrentStockByProductId(db, entry.productId);
+    const ingredient = !product ? db.ingredients.find((item) => item.id === entry.productId) : undefined;
+    if (!product && !ingredient) return `Product not found: ${entry.productId}`;
+    const available = ingredient ? Number(ingredient.stockQuantity || 0) : getCurrentStockByProductId(db, entry.productId);
     const required = Math.abs(getStockQuantityInBaseUnit({
       id: "draft",
       productId: entry.productId,
@@ -6749,7 +6956,7 @@ function findProductStockIssue(db: MockDb, entries: Array<Parameters<typeof crea
       movementType: entry.movementType,
       createdAt: new Date().toISOString(),
     }));
-    if (available < required) return `Stock insuficiente para ${product.name}. Disponible ${available}, requerido ${required}.`;
+    if (available < required) return `Stock insuficiente para ${product?.name || ingredient?.name}. Disponible ${available}, requerido ${required}.`;
   }
   return null;
 }
@@ -6824,9 +7031,11 @@ function sanitizeStockEntryDraft(input: unknown) {
     supplyOrderId?: unknown;
     costPrice?: unknown;
     salePrice?: unknown;
+    purchaseTotal?: unknown;
   };
 
   return {
+    purchaseTotal: obj.purchaseTotal === undefined ? undefined : Number(obj.purchaseTotal),
     productId: String(obj.productId || "").trim(),
     manufactureDate: String(obj.manufactureDate || "").trim() || undefined,
     expirationDate: String(obj.expirationDate || "").trim() || undefined,
@@ -7023,6 +7232,29 @@ function sanitizeAdminDataStoreSwitchDraft(input: unknown): {
     adminPasswordHash: String(obj.adminPasswordHash || "").trim().toLowerCase(),
     storeId: String(obj.storeId || "").trim(),
   };
+}
+
+async function readBlockMedia(directory: string): Promise<Record<string, string>> {
+  if (!existsSync(directory)) return {};
+  const files = await readdir(directory, { withFileTypes: true });
+  const entries = await Promise.all(files.filter((file) => file.isFile()).map(async (file) =>
+    [file.name, (await readFile(resolve(directory, file.name))).toString("base64")]));
+  return Object.fromEntries(entries);
+}
+
+function validateBlockMedia(media: unknown): asserts media is Record<string, string> | undefined {
+  if (media === undefined) return;
+  if (!media || typeof media !== "object" || Array.isArray(media)) throw new Error("Archivos de respaldo invalidos.");
+  for (const [name, content] of Object.entries(media)) {
+    if (!/^[\w.-]+$/.test(name) || name === "." || name === ".." || typeof content !== "string" || !/^[A-Za-z0-9+/]*={0,2}$/.test(content)) throw new Error("Archivo de respaldo invalido.");
+  }
+}
+
+async function writeBlockMedia(directory: string, media?: Record<string, string>) {
+  if (!media) return;
+  validateBlockMedia(media);
+  await mkdir(directory, { recursive: true });
+  for (const [name, content] of Object.entries(media)) await writeFile(resolve(directory, name), Buffer.from(content, "base64"));
 }
 
 function parseImportedMockDb(content: string): Partial<MockDb> {
@@ -7349,6 +7581,7 @@ function sanitizeOrderDraft(input: unknown): { items: OrderItem[]; operator: str
 
 function sanitizeOrderItem(input: unknown): OrderItem | null {
   const obj = (input || {}) as {
+    excludedIngredients?: unknown;
     productId?: unknown;
     productName?: unknown;
     unitPrice?: unknown;
@@ -7422,7 +7655,13 @@ function sanitizeOrderItem(input: unknown): OrderItem | null {
         .filter(Boolean) as OrderItem["comboUnits"]
     : undefined;
 
-  return { productId, productName, unitPrice, quantity, comboItems, comboSelections, comboUnits };
+  const excludedIngredients = Array.isArray(obj.excludedIngredients)
+    ? obj.excludedIngredients.map((entry) => {
+      const item = (entry || {}) as { productId?: unknown; ingredientId?: unknown; ingredientName?: unknown };
+      return { productId: String(item.productId || "").replace(/^menu:/, "").trim(), ingredientId: String(item.ingredientId || "").trim(), ingredientName: String(item.ingredientName || "").trim() };
+    }) : undefined;
+  if (excludedIngredients?.some((item) => !item.productId || !item.ingredientId || !item.ingredientName)) return null;
+  return { productId, productName, unitPrice, quantity, comboItems, comboSelections, comboUnits, excludedIngredients };
 }
 
 function sanitizeOrderStatusDraft(input: unknown): { status?: OrderStatus; paymentMethod?: PaymentMethod; total?: number } {
@@ -7502,6 +7741,7 @@ function sanitizeReceiptDraft(input: unknown): {
         .map((item) => sanitizeOrderItem(item))
         .filter((item): item is OrderItem => !!item)
         .map((item) => ({
+          excludedIngredients: item.excludedIngredients,
           productId: item.productId,
           productName: item.productName,
           unitPrice: item.unitPrice,
@@ -7816,12 +8056,12 @@ function sanitizeSupplyOrderReceiptItemsDraft(
   return result;
 }
 
-function readJsonBody(req: IncomingMessage): Promise<unknown> {
+function readJsonBody(req: IncomingMessage, maxLength = 1_000_000): Promise<unknown> {
   return new Promise((resolveBody, rejectBody) => {
     let data = "";
     req.on("data", (chunk: Buffer) => {
       data += chunk.toString("utf8");
-      if (data.length > 1_000_000) {
+      if (data.length > maxLength) {
         rejectBody(new Error("Payload too large"));
       }
     });

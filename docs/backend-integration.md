@@ -1,11 +1,13 @@
 # Integracion backend: pantallas, servicios y endpoints
 
+Actualizado: 2026-11-07. Referencia: codigo del repositorio; las propuestas futuras se indican expresamente.
+
 ## Contexto actual
 
 - La UI consume endpoints REST con `fetch`.
 - El backend mock esta implementado en `server/api.ts` y se monta en Vite/dev, preview y produccion local.
 - El patron comun en frontend es `service/*.api.ts` + `readJsonOrThrow`.
-- Solo productos/precios/margenes pueden caer a `localStorage` cuando `VITE_USE_FAKE_API=false`.
+- Productos/precios/margenes e ingredientes incluyen fallback local con `VITE_USE_FAKE_API=false`; recetas y categorias actuales requieren HTTP.
 - El resto de los modulos siempre usa rutas HTTP relativas.
 
 ## Rutas y consumo actual por modulo
@@ -73,19 +75,11 @@
 
 ### Menu y categorias
 
-- `/menu-products`
-  - Servicios: `menu.api.ts`, `menu-category.api.ts`, `ingredient.api.ts`
-  - Endpoints:
-    - `GET /menu-products`
-    - `POST /menu-products`
-    - `PUT /menu-products/:id`
-    - `DELETE /menu-products/:id`
-    - `GET /menu-categories`
-    - `POST /menu-categories`
-    - `PUT /menu-categories/:id`
-    - `DELETE /menu-categories/:id`
-    - `GET /ingredients`
-  - Notas: administra productos de menu, combos y categorias comerciales. `kind` separa producto/combo; `category` sigue siendo filtro/asignacion comercial.
+- `/menu-products` (tambien `/crear-menu` y `/menu-products/manage`): `menu.api.ts` lee `GET /products`, `GET /recipes`, `GET /combos`, `GET /ingredients`; la gestion de categorias usa `GET/POST /categories` y `PUT/DELETE /categories/:id`.
+- Crear/editar un menu escribe primero metadatos en `/products` si cambiaron, y su composicion en `/recipes` o `/combos`. No es una unica transaccion HTTP. Cambiar solamente obligatoriedad o cantidades no actualiza el precio.
+- `recipes.ingredients[]`: `ingredientId`, `quantity` y `required`. Para peso, quantity siempre son gramos. La receta de un unico ingrediente obliga `required=true`.
+- `categories.order` determina la ubicacion en Ventas; menor valor aparece primero. `ingredientCategories` pertenece a materia prima y no ordena las categorias comerciales.
+- Los endpoints `/menu-products` y `/menu-categories` todavia existen por compatibilidad; ya no son la fuente que usa `menu.api.ts` para el CRUD actual.
 
 ### Usuarios, stock y ventas
 
@@ -112,7 +106,7 @@
   - Notas: permite cargar stock sobre producto existente o crear producto nuevo e ingreso en el mismo flujo.
 
 - `/sales`
-  - Servicios: `product.api.ts`, `sale.api.ts`, `stock.api.ts`, `cash.api.ts`
+  - Servicios: `product.api.ts`, `menu.api.ts`, `ingredient.api.ts`, `system.api.ts`, `sale.api.ts`, `cash.api.ts`
   - Endpoints:
     - `GET /products`
     - `GET /payment-method-settings`
@@ -122,15 +116,20 @@
     - `GET /orders`
     - `PUT /orders/:id/status`
     - `POST /invoices`
-    - `POST /stocks`
     - `POST /workdays/current/add-order`
-  - Notas: requiere caja abierta. Al pagar, crea orden pagada, factura, salidas de stock y agrega la orden a la jornada actual.
+  - Tambien lee `/recipes`, `/combos`, `/categories`, `/ingredients` y `/system-settings` para construir menu, opciones y disponibilidad.
+  - Notas: requiere caja abierta. El servidor aplica el consumo al marcar pagada; el cliente solicita factura y asociacion a jornada por separado. `OrderItem.excludedIngredients` guarda producto, ingrediente y nombre. Solo se permite excluir ingredientes opcionales.
 
 - `/sales/summary`
   - Servicios: `sale.api.ts`
   - Endpoints:
     - `POST /receipts`
   - Notas: genera HTML imprimible y guarda el recibo en el filesystem de la base activa.
+
+- `/stock/ingredients`: `GET /ingredients`, `GET /ingredient-categories`, `POST /ingredient-stock-entries`. Cada entrada lleva `ingredientId`, `quantity`, `metric`, `expirationDate` y `purchaseTotal`. La UI manda kilos para peso y unit para unidades/paquetes. Valida el lote antes de modificar stock.
+- `/ingredients`: CRUD `/ingredients` y `/ingredient-categories`. Define modalidad, categoria de materia prima, gramos por porcion y datos de conservacion.
+- `/inventory`: consulta ingredientes/minimos y conserva un flujo anterior de ingreso con dos peticiones (`POST /stocks` y `PUT /ingredients/:id`). Preferir el ingreso atomico por lote.
+- `/system`: `GET/PUT /system-settings`, administra `allowOutOfStockSales`.
 
 ### Caja, jornadas, balance y libro financiero
 
@@ -266,7 +265,10 @@
     - `POST /admin/data/stores`
     - `PUT /admin/data/stores/active`
     - `POST /admin/data/reset`
-  - Notas: exige password admin y opera sobre multiples bases. Solo admin.
+    - `POST /admin/data/stores/import`
+    - `POST /admin/data/stores/backup`
+    - `POST /admin/data/blocks`
+  - Notas: solo admin; las escrituras verifican credenciales contra la base activa. DDBB gestiona bases completas y Bloques de datos permite exportar, revisar y reemplazar Catalogo/Operaciones/Stock sin activar otra base.
 
 ## Catalogo de endpoints por dominio
 
@@ -293,8 +295,13 @@
 - `GET /delete-requests`
 - `PUT /delete-requests/:id/status`
 
-### Menu y categorias
+### Menu, ingredientes y categorias
 
+- `GET/POST /ingredients`, `PUT/DELETE /ingredients/:id`
+- `GET/POST /ingredient-categories`, `PUT/DELETE /ingredient-categories/:id`
+- `GET/POST /recipes`, `PUT/DELETE /recipes/:id`
+- `GET/POST /combos`, `PUT/DELETE /combos/:id`
+- `GET/POST /categories`, `PUT/DELETE /categories/:id`
 - `GET /menu-products`
 - `POST /menu-products`
 - `PUT /menu-products/:id`
@@ -318,6 +325,8 @@
 - `PUT /tax-settings`
 
 ### Stock y mercaderia
+
+- `POST /ingredient-stock-entries`
 
 - `GET /stocks`
 - `POST /stocks`
@@ -377,6 +386,10 @@
 - `POST /admin/data/stores`
 - `PUT /admin/data/stores/active`
 - `POST /admin/data/reset`
+- `POST /admin/data/stores/import`
+- `POST /admin/data/stores/backup`
+- `POST /admin/data/blocks`
+- `GET/PUT /system-settings`
 
 ### Imagenes
 
@@ -390,3 +403,7 @@
 3. `POST /receipts` ya forma parte del flujo de ventas.
 4. El modulo `Data` depende de credenciales admin hasheadas desde frontend.
 5. Si se reemplaza el mock por backend real, conviene respetar los mismos paths y payloads para evitar una migracion innecesaria en la UI.
+
+## Contratos ampliados
+
+Los payloads de bloques, costos y propuesta relacional estan en [Diccionario de datos](data-dictionary.md). `purchaseTotal` genera `stock-purchase` una vez por movimiento positivo sin pedido proveedor. No representa una salida automatica de caja. Los importes derivados conservan hasta dos decimales.

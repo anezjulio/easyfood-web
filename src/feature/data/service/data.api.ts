@@ -2,6 +2,29 @@ import { md5 } from "../../../shared/crypto/md5";
 import { readJsonOrThrow } from "../../../shared/http/http";
 
 export const DATA_STORE_CHANGED_EVENT = "easyfood-data-store-changed";
+export type DataBlock = "catalog" | "operations" | "stock";
+export type BlockSource = { block: DataBlock; storeId?: string; content?: string };
+export type ComposeDraft = { requestedBy: string; adminPassword: string; targetStoreId?: string; name?: string; sources: BlockSource[] };
+
+export async function composeDataBlocksApi(draft: ComposeDraft, action: "preview" | "apply") {
+  const { adminPassword, ...payload } = draft;
+  const response = await fetch("/admin/data/blocks", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...payload, ...toAdminPayload(draft.requestedBy, adminPassword), action }),
+  });
+  const result = await readJsonOrThrow<{ summary: Record<string, number>; message: string; recoveryPath?: string }>(response);
+  if (action === "apply") notifyDataStoreChanged(draft.targetStoreId);
+  return result;
+}
+
+export async function exportDataBlocksApi(draft: { requestedBy: string; adminPassword: string; storeId: string; blocks: DataBlock[] }) {
+  const response = await fetch("/admin/data/blocks", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...toAdminPayload(draft.requestedBy, draft.adminPassword), action: "export", storeId: draft.storeId, blocks: draft.blocks }),
+  });
+  if (!response.ok) await readJsonOrThrow<never>(response);
+  return { blob: await response.blob(), filename: response.headers.get("X-Backup-Filename") || "easyfood-bloques.json" };
+}
 
 type ResetDatabaseDraft = {
   requestedBy: string;

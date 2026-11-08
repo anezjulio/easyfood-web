@@ -1,4 +1,5 @@
 import type { MenuCategory, MenuCategoryDraft } from "../model/menu-category.types";
+import { compareCategoryOrder } from "../../../shared/category/category-order";
 import { createCategoryApi, deleteCategoryApi, fetchCategoriesApi, updateCategoryApi } from "../../category/service/category.api";
 
 export const MENU_CATEGORIES_CHANGED_EVENT = "easyfood-menu-categories-changed";
@@ -9,18 +10,18 @@ function notifyMenuCategoriesChanged(categoryId?: string) {
 }
 
 export async function fetchMenuCategoriesApi(): Promise<MenuCategory[]> {
-  return await fetchCategoriesApi();
+  return (await fetchCategoriesApi()).sort(compareCategoryOrder);
 }
 
 export async function createMenuCategoryApi(draft: MenuCategoryDraft): Promise<MenuCategory> {
-  const result = await createCategoryApi({ name: draft.name, productIds: [] });
+  const result = await createCategoryApi({ name: draft.name, order: draft.order, productIds: [] });
   notifyMenuCategoriesChanged(result.id);
   return result;
 }
 
 export async function updateMenuCategoryApi(id: string, draft: MenuCategoryDraft): Promise<MenuCategory | null> {
   const current = (await fetchCategoriesApi()).find((item) => item.id === id);
-  const result = await updateCategoryApi(id, { name: draft.name, productIds: current?.productIds || [] });
+  const result = await updateCategoryApi(id, { name: draft.name, order: draft.order ?? current?.order, productIds: current?.productIds || [] });
   if (!result) return null;
   notifyMenuCategoriesChanged(result.id);
   return result;

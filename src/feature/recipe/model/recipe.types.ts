@@ -1,4 +1,5 @@
 export type RecipeIngredient = {
+  required?: boolean;
   ingredientId: string;
   quantity: number;
 };

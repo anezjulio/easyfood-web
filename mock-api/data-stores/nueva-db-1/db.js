@@ -338,19 +338,22 @@
           "ingredientId": "ing-limon",
           "ingredientName": "Limon",
           "quantity": 2,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": false
         },
         {
           "ingredientId": "ing-agua-filtrada",
           "ingredientName": "Agua filtrada",
           "quantity": 450,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-hielo",
           "ingredientName": "Hielo",
           "quantity": 120,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -367,55 +370,64 @@
           "ingredientId": "ing-pan-hamburguesa",
           "ingredientName": "Pan hamburguesas",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-cheddar-feta",
           "ingredientName": "Cheddar feta",
           "quantity": 2,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": false
         },
         {
           "ingredientId": "ing-lechuga",
           "ingredientName": "Lechuga",
           "quantity": 25,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-tomate",
           "ingredientName": "Tomate",
           "quantity": 35,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-cebolla",
           "ingredientName": "Cebolla",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-pepinillos",
           "ingredientName": "Pepinillos",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-mayonesa",
           "ingredientName": "Mayonesa",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-ketchup",
           "ingredientName": "Ketchup",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-medallon-carne",
           "ingredientName": "Medallon de carne",
           "quantity": 2,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         }
       ],
       "kind": "menu",
@@ -569,55 +581,64 @@
           "ingredientId": "ing-pan-hamburguesa",
           "ingredientName": "Pan hamburguesas",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-cheddar-feta",
           "ingredientName": "Cheddar feta",
           "quantity": 3,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": false
         },
         {
           "ingredientId": "ing-lechuga",
           "ingredientName": "Lechuga",
           "quantity": 25,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-tomate",
           "ingredientName": "Tomate",
           "quantity": 35,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-cebolla",
           "ingredientName": "Cebolla",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-pepinillos",
           "ingredientName": "Pepinillos",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-mayonesa",
           "ingredientName": "Mayonesa",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-ketchup",
           "ingredientName": "Ketchup",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-medallon-carne",
           "ingredientName": "Medallon de carne",
           "quantity": 3,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         }
       ],
       "kind": "menu",
@@ -636,43 +657,50 @@
           "ingredientId": "ing-pan-hamburguesa",
           "ingredientName": "Pan hamburguesas",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-medallon-carne",
           "ingredientName": "Medallon de carne",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-cheddar-feta",
           "ingredientName": "Cheddar feta",
           "quantity": 2,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": false
         },
         {
           "ingredientId": "ing-tocino",
           "ingredientName": "Tocino",
           "quantity": 35,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-cebolla",
           "ingredientName": "Cebolla",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-mayonesa",
           "ingredientName": "Mayonesa",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-ketchup",
           "ingredientName": "Ketchup",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -690,31 +718,36 @@
           "ingredientId": "ing-pan-pancho",
           "ingredientName": "Pan panchos",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-salchicha",
           "ingredientName": "Salchicha",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-papas-pay",
           "ingredientName": "Papas pay",
           "quantity": 25,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-mayonesa",
           "ingredientName": "Mayonesa",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-ketchup",
           "ingredientName": "Ketchup",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -731,25 +764,29 @@
           "ingredientId": "ing-limon",
           "ingredientName": "Limon",
           "quantity": 2,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": false
         },
         {
           "ingredientId": "ing-agua-filtrada",
           "ingredientName": "Agua filtrada",
           "quantity": 450,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-azucar",
           "ingredientName": "Azucar",
           "quantity": 35,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-hielo",
           "ingredientName": "Hielo",
           "quantity": 120,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -850,31 +887,36 @@
           "ingredientId": "ing-pan-hamburguesa",
           "ingredientName": "Pan hamburguesas",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-pollo-crispy",
           "ingredientName": "Pollo crispy",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-lechuga",
           "ingredientName": "Lechuga",
           "quantity": 25,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-tomate",
           "ingredientName": "Tomate",
           "quantity": 35,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-mayonesa",
           "ingredientName": "Mayonesa",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -892,25 +934,29 @@
           "ingredientId": "ing-nuggets-pollo",
           "ingredientName": "Nuggets de pollo",
           "quantity": 8,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-papa-baston",
           "ingredientName": "Papa baston",
           "quantity": 250,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-ketchup",
           "ingredientName": "Ketchup",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-mayonesa",
           "ingredientName": "Mayonesa",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -928,43 +974,50 @@
           "ingredientId": "ing-pan-hamburguesa",
           "ingredientName": "Pan hamburguesas",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-medallon-vegano",
           "ingredientName": "Medallon vegano",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-lechuga",
           "ingredientName": "Lechuga",
           "quantity": 25,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-tomate",
           "ingredientName": "Tomate",
           "quantity": 35,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-cebolla",
           "ingredientName": "Cebolla",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-pepinillos",
           "ingredientName": "Pepinillos",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-palta",
           "ingredientName": "Palta",
           "quantity": 45,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -982,43 +1035,50 @@
           "ingredientId": "ing-tortilla-wrap",
           "ingredientName": "Tortilla wrap",
           "quantity": 1,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": true
         },
         {
           "ingredientId": "ing-lechuga",
           "ingredientName": "Lechuga",
           "quantity": 35,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-tomate",
           "ingredientName": "Tomate",
           "quantity": 45,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-zanahoria",
           "ingredientName": "Zanahoria",
           "quantity": 35,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-cebolla",
           "ingredientName": "Cebolla",
           "quantity": 20,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-pepinillos",
           "ingredientName": "Pepinillos",
           "quantity": 15,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-palta",
           "ingredientName": "Palta",
           "quantity": 45,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -1054,13 +1114,15 @@
           "ingredientId": "ing-papa-baston",
           "ingredientName": "Papa baston",
           "quantity": 300,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-cheddar-feta",
           "ingredientName": "Cheddar feta",
           "quantity": 2,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": false
         }
       ],
       "kind": "menu",
@@ -1078,19 +1140,22 @@
           "ingredientId": "ing-papa-baston",
           "ingredientName": "Papa baston",
           "quantity": 300,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         },
         {
           "ingredientId": "ing-cheddar-feta",
           "ingredientName": "Cheddar feta",
           "quantity": 2,
-          "stockMode": "unit"
+          "stockMode": "unit",
+          "required": false
         },
         {
           "ingredientId": "ing-tocino",
           "ingredientName": "Tocino",
           "quantity": 40,
-          "stockMode": "weight"
+          "stockMode": "weight",
+          "required": false
         }
       ],
       "kind": "menu",

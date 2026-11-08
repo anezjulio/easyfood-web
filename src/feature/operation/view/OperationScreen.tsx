@@ -220,11 +220,11 @@ export default function OperationScreen() {
             <div className={styles.grid}>
               <BigBtn title="Creacion de Menu" subtitle="Recetas para vender" onClick={() => nav("/menu-products")} variant="menu" />
               <BigBtn title="Ingredientes y productos" subtitle="Definicion y caducidad" onClick={() => nav("/ingredients")} />
+              <BigBtn title="Cargar stock" subtitle="Ingreso rapido de ingredientes y materia prima" onClick={() => nav("/stock/ingredients")} />
+              <BigBtn title="Inventario" subtitle="Carga y control de ingredientes e insumos" onClick={() => nav("/inventory")} />
               {isAdmin ? (
                 <BigBtn title="Productos" subtitle="Alta y edicion de productos" onClick={() => nav("/products/new")} />
               ) : null}
-              <BigBtn title="Cargar Mercancia" subtitle="Nuevo producto o carga de stock" onClick={() => nav("/stock")} />
-              <BigBtn title="Inventario" subtitle="Carga y control de ingredientes e insumos" onClick={() => nav("/inventory")} />
               <BigBtn title="Recibir Mercancia" subtitle="Recepcion de pedidos" onClick={() => nav("/supplies/receiving")} disabled />
               {isAdmin ? (
                 <BigBtn title="Pedido Mercancia" subtitle="Carga de pedidos esperados" onClick={() => nav("/supplies/orders")} disabled />

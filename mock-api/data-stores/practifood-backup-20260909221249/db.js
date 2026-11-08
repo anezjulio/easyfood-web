@@ -817,9 +817,9 @@
     {
       "id": "ing030920261925467516",
       "name": "Pollo",
-      "metric": "unit",
+      "metric": "weight",
       "expiresInDays": 24,
-      "stockMode": "unit",
+      "stockMode": "weight",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T19:25:46.407Z",
       "updatedAt": "2026-09-08T18:18:52.588Z"
@@ -1142,39 +1142,48 @@
       "ingredients": [
         {
           "ingredientId": "ing080920262309160008",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920262021486528",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         },
         {
           "ingredientId": "ing030920261925116593",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-09T15:13:16.167Z"
@@ -1185,39 +1194,48 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846516671",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847200343",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920262021486528",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920262309160008",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T22:33:23.200Z",
@@ -1229,11 +1247,13 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261854315753",
-          "quantity": 12
+          "quantity": 12,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T21:21:53.613Z",
@@ -1245,11 +1265,13 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261854315753",
-          "quantity": 12
+          "quantity": 12,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T21:21:10.551Z",
@@ -1261,15 +1283,18 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T20:38:28.437Z"
@@ -1280,35 +1305,43 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846516671",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920262021486528",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847200343",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T20:32:03.060Z",
@@ -1320,27 +1353,33 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T20:20:58.480Z"
@@ -1351,51 +1390,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 3
+          "quantity": 3,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T19:19:39.748Z",
@@ -1407,43 +1458,53 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261921101195",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T19:13:32.529Z",
@@ -1455,51 +1516,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T19:07:23.574Z",
@@ -1511,51 +1584,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261610039156",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T18:51:28.286Z",
@@ -1567,47 +1652,58 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T18:51:06.884Z",
@@ -1619,43 +1715,53 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261610039156",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         }
       ],
       "createdAt": "2026-09-08T18:49:31.811Z",
@@ -1667,43 +1773,53 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T18:48:44.719Z",
@@ -1715,51 +1831,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         },
         {
           "ingredientId": "ing080920261609447483",
-          "quantity": 2
+          "quantity": 2,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 2
+          "quantity": 2,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T18:48:21.119Z",
@@ -1782,51 +1910,63 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261849092695",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261846398391",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261847273007",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261856026387",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261612371371",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261846327892",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261610039156",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261853310833",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing080920261627457656",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-08T18:26:45.572Z",
@@ -1938,27 +2078,33 @@
       "ingredients": [
         {
           "ingredientId": "ing030920261930011004",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261849172876",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261848438389",
-          "quantity": 1
+          "quantity": 1,
+          "required": true
         },
         {
           "ingredientId": "ing030920261858536397",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261859217177",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         },
         {
           "ingredientId": "ing030920261858365479",
-          "quantity": 1
+          "quantity": 1,
+          "required": false
         }
       ],
       "createdAt": "2026-09-03T19:33:38.891Z",
@@ -2183,7 +2329,8 @@
         "menu030920261909215905",
         "menu030920261908344116"
       ],
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 40
     },
     {
       "id": "combos",
@@ -2193,7 +2340,8 @@
         "menu080920262121530765",
         "menu080920262121103490"
       ],
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 10
     },
     {
       "id": "hamburguesa",
@@ -2220,7 +2368,8 @@
         "menu080920261826458529",
         "menu070920262002191608"
       ],
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 20
     },
     {
       "id": "pancho",
@@ -2232,7 +2381,8 @@
         "menu080920262020581434",
         "menu030920261933382276"
       ],
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 30
     },
     {
       "id": "papas",
@@ -2241,7 +2391,8 @@
         "menu080920261842174993",
         "menu070920261531146383"
       ],
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 1000
     },
     {
       "id": "pollo",
@@ -2251,50 +2402,59 @@
         "menu070920261532128669",
         "menu070920261520266564"
       ],
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 1000
     },
     {
       "id": "vegano",
       "name": "Vegano",
       "productIds": [],
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 1000
     }
   ],
   "menuCategories": [
     {
       "id": "bebida",
       "name": "Bebida",
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 40
     },
     {
       "id": "combos",
       "name": "Combos",
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 10
     },
     {
       "id": "hamburguesa",
       "name": "Hamburguesa",
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 20
     },
     {
       "id": "pancho",
       "name": "Pancho",
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 30
     },
     {
       "id": "papas",
       "name": "Papas",
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 1000
     },
     {
       "id": "pollo",
       "name": "Pollo",
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 1000
     },
     {
       "id": "vegano",
       "name": "Vegano",
-      "createdAt": "2026-02-01T10:00:00.000Z"
+      "createdAt": "2026-02-01T10:00:00.000Z",
+      "order": 1000
     }
   ],
   "menuProducts": [],
