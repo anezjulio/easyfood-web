@@ -13,6 +13,7 @@ export type Ingredient = {
   stockQuantity: number;
   minStockQuantity?: number;
   portionSizeGrams?: number;
+  portionName?: string;
   createdAt: string;
   updatedAt?: string;
   lastEntryAt?: string;
@@ -30,6 +31,7 @@ export type IngredientDraft = {
   entryQuantity?: number;
   minStockQuantity?: number;
   portionSizeGrams?: number;
+  portionName?: string;
 };
 
 export type IngredientCategory = {

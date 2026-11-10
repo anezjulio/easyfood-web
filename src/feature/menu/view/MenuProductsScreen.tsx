@@ -7,9 +7,9 @@ import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { formatMoneyARS } from "../../../shared/format/locale";
 import { normalizeForSearch } from "../../../shared/search/search";
 import { DATA_STORE_CHANGED_EVENT } from "../../data/service/data.api";
-import { formatIngredientQuantity, type Ingredient } from "../../ingredient/model/ingredient.types";
+import { formatIngredientQuantity, type Ingredient, type IngredientCategory } from "../../ingredient/model/ingredient.types";
 import type { ProductCategory } from "../../product/model/product.types";
-import { fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
+import { fetchIngredientCategoriesApi, fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
 import type { MenuCategory } from "../model/menu-category.types";
 import type { MenuComboItem, MenuProduct, MenuRecipeItem } from "../model/menu.types";
 import { createMenuCategoryApi, deleteMenuCategoryApi, fetchMenuCategoriesApi, updateMenuCategoryApi } from "../service/menu-category.api";
@@ -19,20 +19,6 @@ import styles from "./MenuProductsScreen.module.css";
 function toNumber(value: string): number {
   const parsed = Number(value.replace(",", "."));
   return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function calculateAvailableServings(menuProduct: MenuProduct, ingredients: Ingredient[]): number | null {
-  if (menuProduct.recipeItems.length === 0) return null;
-  const stockById = new Map(ingredients.map((item) => [item.id, item.stockQuantity]));
-  let min = Number.POSITIVE_INFINITY;
-
-  for (const item of menuProduct.recipeItems) {
-    const available = stockById.get(item.ingredientId);
-    if (!Number.isFinite(available) || item.quantity <= 0) return 0;
-    min = Math.min(min, Math.floor(Number(available) / item.quantity));
-  }
-
-  return Number.isFinite(min) ? Math.max(0, min) : null;
 }
 
 function formatCategoryLabel(category: ProductCategory, categories: MenuCategory[] = []) {
@@ -524,6 +510,7 @@ function CategoryWorkspace({ categories, menuProducts, onSaved }: CategoryWorksp
 
 export default function MenuProductsScreen() {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [ingredientCategories, setIngredientCategories] = useState<IngredientCategory[]>([]);
   const [categories, setCategories] = useState<MenuCategory[]>([]);
   const [menuProducts, setMenuProducts] = useState<MenuProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -531,6 +518,7 @@ export default function MenuProductsScreen() {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<"all" | ProductCategory>("all");
   const [activeTab, setActiveTab] = useState<MenuWorkspaceTab>("products");
+  const [collapsedIngredientGroups, setCollapsedIngredientGroups] = useState<Record<string, boolean>>({});
 
   const [name, setName] = useState("");
   const [renameSelectedMenuProduct, setRenameSelectedMenuProduct] = useState(false);
@@ -545,12 +533,14 @@ export default function MenuProductsScreen() {
     setLoading(true);
     setError("");
     try {
-      const [ingredientList, menuList, categoryList] = await Promise.all([
+      const [ingredientList, menuList, categoryList, ingredientCategoryList] = await Promise.all([
         fetchIngredientsApi(),
         fetchMenuProductsApi(),
         fetchMenuCategoriesApi(),
+        fetchIngredientCategoriesApi(),
       ]);
       setIngredients(ingredientList);
+      setIngredientCategories(ingredientCategoryList);
       setMenuProducts(menuList);
       setCategories(categoryList);
       if (typeof nextSelectedId === "string") setSelectedId(nextSelectedId);
@@ -587,6 +577,21 @@ export default function MenuProductsScreen() {
     [menuProducts, selectedId],
   );
 
+  const ingredientGroups = useMemo(() => {
+    const groups = ingredientCategories.map((item) => ({
+      id: item.id,
+      name: item.name,
+      ingredients: ingredients.filter((ingredient) => ingredient.categoryId === item.id).sort(compareIngredientByGroup),
+    }));
+    groups.push({ id: "", name: "Sin categoria", ingredients: ingredients.filter((item) => !ingredientCategories.some((category) => category.id === item.categoryId)).sort(compareIngredientByGroup) });
+    const order = ["panificados", "carnes", "lacteos", "vegetales", "salsas", "sin categoria", "bebidas"];
+    const rank = (name: string) => {
+      const index = order.indexOf(normalizeForSearch(name));
+      return index < 0 ? 5.5 : index;
+    };
+    return groups.filter((group) => group.ingredients.length > 0).sort((a, b) => rank(a.name) - rank(b.name) || a.name.localeCompare(b.name, "es"));
+  }, [ingredientCategories, ingredients]);
+
   const filteredMenuProducts = useMemo(() => {
     const query = normalizeForSearch(search);
     return menuProducts
@@ -594,7 +599,7 @@ export default function MenuProductsScreen() {
         if (item.kind === "combo") return false;
         if (categoryFilter !== "all" && !menuProductHasCategory(item, categoryFilter)) return false;
         if (!query) return true;
-        return normalizeForSearch(`${item.name} ${item.category || ""} ${item.description || ""} ${item.recipeItems.map((recipe) => recipe.ingredientName).join(" ")}`).includes(query);
+        return normalizeForSearch(item.name).includes(query);
       })
       .sort(compareMenuProductByCategory);
   }, [categoryFilter, menuProducts, search]);
@@ -613,22 +618,6 @@ export default function MenuProductsScreen() {
 
   const isEditing = !!selectedMenuProduct;
   const parsedPrice = Math.max(0, Math.trunc(toNumber(price)));
-  const currentAvailability = useMemo(
-    () =>
-      calculateAvailableServings(
-        {
-          id: selectedId || "draft",
-          name,
-          price: parsedPrice,
-          category,
-          description,
-          recipeItems,
-          createdAt: new Date().toISOString(),
-        },
-        ingredients,
-      ),
-    [category, description, ingredients, name, parsedPrice, recipeItems, selectedId],
-  );
 
   function clearForm() {
     setSelectedId("");
@@ -678,26 +667,16 @@ export default function MenuProductsScreen() {
     });
   }
 
-  function incrementRecipeItemQuantity(item: MenuRecipeItem) {
-    const ingredient = ingredients.find((entry) => entry.id === item.ingredientId);
-    const step = ingredient ? getIngredientRecipeStep(ingredient) : 1;
-    setRecipeItems((current) =>
-      current.map((entry) => (entry.ingredientId === item.ingredientId ? { ...entry, quantity: entry.quantity + step } : entry)),
-    );
-  }
-
-  function decrementRecipeItemQuantity(item: MenuRecipeItem) {
-    const ingredient = ingredients.find((entry) => entry.id === item.ingredientId);
-    const step = ingredient ? getIngredientRecipeStep(ingredient) : 1;
-    setRecipeItems((current) =>
-      current
-        .map((entry) => (entry.ingredientId === item.ingredientId ? { ...entry, quantity: Math.max(0, entry.quantity - step) } : entry))
-        .filter((entry) => entry.quantity > 0),
-    );
-  }
-
   function getRecipeItemQuantity(ingredientIdToFind: string) {
     return recipeItems.find((item) => item.ingredientId === ingredientIdToFind)?.quantity || 0;
+  }
+
+  function subtractRecipeItem(ingredientId: string) {
+    const ingredient = ingredients.find((item) => item.id === ingredientId);
+    const step = ingredient ? getIngredientRecipeStep(ingredient) : 1;
+    setRecipeItems((current) => current
+      .map((item) => item.ingredientId === ingredientId ? { ...item, quantity: Math.max(0, item.quantity - step) } : item)
+      .filter((item) => item.quantity > 0));
   }
 
   function removeRecipeItem(ingredientIdToRemove: string) {
@@ -783,7 +762,7 @@ export default function MenuProductsScreen() {
         </div>
 
         {activeTab === "products" ? (
-        <div className={styles.layout}>
+        <div className={`${styles.layout} ${styles.productsLayout}`}>
           <section className={styles.formCard}>
             <div className={styles.cardHeader}>
               <h2 className={styles.cardTitle}>{isEditing ? "Editar producto de menu" : "Crear producto de menu"}</h2>
@@ -796,6 +775,7 @@ export default function MenuProductsScreen() {
             </div>
 
             <form className={styles.form} onSubmit={submitMenuProduct}>
+              <div className={styles.productFields}>
               <div className={styles.nameRow}>
                 <label className={styles.field}>
                   <span>Nombre</span>
@@ -822,91 +802,90 @@ export default function MenuProductsScreen() {
 
               <label className={styles.field}>
                 <span>Descripcion</span>
-                <textarea className={styles.textarea} rows={3} value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Detalle visible para cocina o caja" />
+                <textarea className={styles.textarea} rows={1} value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Detalle visible para cocina o caja" />
               </label>
+              </div>
 
               <section className={styles.recipeEditor}>
-                <h3 className={styles.sectionTitle}>Receta</h3>
-                <div className={styles.chipPickerGrid}>
-                  {[...ingredients].sort(compareIngredientByGroup).map((item) => {
+                <h3 className={styles.sectionTitle}>Ingredientes</h3>
+                <div className={styles.ingredientCategoryGrid}>
+                {ingredientGroups.map((group) => {
+                  const collapsed = collapsedIngredientGroups[group.id] ?? normalizeForSearch(group.name) === "bebidas";
+                  const listId = `menu-ingredients-${group.id || "uncategorized"}`;
+                  return (
+                  <section key={group.id} className={styles.ingredientGroup} aria-label={group.name}>
+                    <h4 className={styles.ingredientGroupTitle}>
+                      <button type="button" className={styles.ingredientGroupToggle} aria-expanded={!collapsed} aria-controls={listId} onClick={() => setCollapsedIngredientGroups((current) => ({ ...current, [group.id]: !collapsed }))}>
+                        <span>{group.name} ({group.ingredients.length})</span>
+                        <span aria-hidden="true">{collapsed ? "▸" : "▾"}</span>
+                      </button>
+                    </h4>
+                    <div id={listId} className={styles.ingredientGroupBody} hidden={collapsed}>
+                    <div className={`${styles.chipPickerGrid} ${styles.ingredientScrollList}`} tabIndex={group.ingredients.length > 7 ? 0 : undefined} aria-label={`Ingredientes de ${group.name}`}>
+                  {group.ingredients.map((item) => {
                     const selectedQuantity = getRecipeItemQuantity(item.id);
                     return (
-                      <button type="button" key={item.id} className={`${styles.pickChip} ${selectedQuantity > 0 ? styles.pickChipActive : ""}`.trim()} onClick={() => addRecipeItem(item)}>
-                        {item.name} <strong>{selectedQuantity}</strong>
-                      </button>
+                      <div key={item.id} className={`${styles.pickChip} ${selectedQuantity > 0 ? styles.pickChipActive : ""}`.trim()}>
+                        <button type="button" className={styles.ingredientAddButton} onClick={() => addRecipeItem(item)}>
+                          <span>{item.name}</span> <strong>{selectedQuantity}</strong>
+                        </button>
+                      </div>
                     );
                   })}
+                    </div>
+                    </div>
+                  </section>
+                  );
+                })}
                 </div>
+              </section>
 
+              <section className={styles.recipeEditor} aria-labelledby="selected-ingredients-title">
+                <h3 id="selected-ingredients-title" className={styles.sectionTitle}>Ingredientes seleccionados</h3>
                 {recipeItems.length === 0 ? (
                   <p className={styles.empty}>Todavia no agregaste ingredientes.</p>
                 ) : (
-                  <div className={styles.recipeConfirmList} aria-label="Ingredientes seleccionados">
-                    {[...recipeItems].sort((a, b) => Number(isRecipeIngredientRequired(b, recipeItems.length)) - Number(isRecipeIngredientRequired(a, recipeItems.length)) || compareRecipeItemByGroup(a, b)).map((item) => (
-                      <div key={item.ingredientId} className={styles.recipeConfirmItem}>
-                        <span>{item.ingredientName}</span>
-                        <label className={styles.recipeQuantity}>
-                          <input type="number" aria-label={`Cantidad de ${item.ingredientName} en receta`} min={item.stockMode === "weight" ? "0.001" : "1"} step={item.stockMode === "weight" ? "any" : "1"} value={item.quantity} onChange={(event) => {
-                            const quantity = Number(event.target.value);
-                            if (Number.isFinite(quantity) && quantity > 0 && (item.stockMode === "weight" || Number.isInteger(quantity))) setRecipeItems((current) => current.map((entry) => entry.ingredientId === item.ingredientId ? { ...entry, quantity } : entry));
-                          }} />
-                          <small>{item.stockMode === "weight" ? "g" : item.stockMode === "package" ? "paq." : "u."}</small>
-                        </label>
-                        <select className={styles.requirementSelect} aria-label={`Tipo de ingrediente: ${item.ingredientName}`} value={isRecipeIngredientRequired(item, recipeItems.length) ? "required" : "optional"} disabled={recipeItems.length === 1} onChange={(event) => {
-                          const required = event.target.value === "required";
-                          setRecipeItems((current) => current.map((entry) => entry.ingredientId === item.ingredientId ? { ...entry, required } : entry));
-                        }}>
-                          <option value="required">Obligatorio</option>
-                          <option value="optional">Opcional</option>
-                        </select>
-                        <button type="button" onClick={() => decrementRecipeItemQuantity(item)}>-</button>
-                        <button type="button" onClick={() => incrementRecipeItemQuantity(item)}>+</button>
-                        <button type="button" onClick={() => removeRecipeItem(item.ingredientId)}>X</button>
+                  <div className={styles.recipeConfirmList} role="list" aria-label="Ingredientes seleccionados">
+                    {recipeItems.map((item) => (
+                      <div key={item.ingredientId} className={styles.recipeConfirmItem} role="listitem">
+                        <div className={styles.recipeIngredientLabel}>
+                          <span>{item.ingredientName}</span>
+                          <span className={styles.recipeLeader} aria-hidden="true" />
+                        </div>
+                        <output className={styles.recipeQuantity} aria-label={`Cantidad de ${item.ingredientName} en receta`}>{formatIngredientQuantity(item.quantity, item.stockMode)}</output>
+                        <button type="button" className={styles.recipeSubtractButton} aria-label={`Restar ${item.ingredientName}`} onClick={() => subtractRecipeItem(item.ingredientId)}>−</button>
+                        <div className={styles.requirementButtons} role="group" aria-label={`Tipo de ingrediente: ${item.ingredientName}`}>
+                          {[true, false].map((required) => (
+                            <button key={String(required)} type="button" aria-pressed={isRecipeIngredientRequired(item, recipeItems.length) === required} disabled={recipeItems.length === 1} onClick={() => setRecipeItems((current) => current.map((entry) => entry.ingredientId === item.ingredientId ? { ...entry, required } : entry))}>
+                              {required ? "Obligatorio" : "Opcional"}
+                            </button>
+                          ))}
+                        </div>
+                        <button type="button" className={styles.recipeRemoveButton} aria-label={`Quitar ${item.ingredientName}`} onClick={() => removeRecipeItem(item.ingredientId)}>X</button>
                       </div>
                     ))}
                   </div>
                 )}
-                <p className={styles.hint}>Un unico ingrediente siempre es obligatorio. Marca como opcionales los ingredientes que el cliente puede quitar.</p>
               </section>
-
-              <div className={styles.previewGrid}>
-                <div><span>Precio</span><strong>{parsedPrice > 0 ? formatMoneyARS(parsedPrice) : "-"}</strong></div>
-                <div><span>Produccion con stock</span><strong>{currentAvailability === null ? "-" : `${currentAvailability} porciones`}</strong></div>
-              </div>
 
               {error ? <div className={styles.errorBox}>{error}</div> : null}
               {message ? <div className={styles.successBox}>{message}</div> : null}
-
-              <div className={styles.actions}>
+              <div className={styles.productFormActions}>
                 <button type="submit" className={styles.primaryBtn}>{isEditing ? "Guardar receta" : "Crear producto"}</button>
               </div>
             </form>
           </section>
 
           <section className={styles.listCard}>
-            <div className={styles.listHead}>
+            <div className={styles.menuListHeader}>
               <h2 className={styles.cardTitle}>Menu actual</h2>
-              <input className={styles.searchInput} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar producto o ingrediente" />
-            </div>
-
-            <div className={styles.categoryFilters} aria-label="Categorias del menu">
-              <button
-                type="button"
-                className={`${styles.categoryFilterBtn} ${categoryFilter === "all" ? styles.categoryFilterBtnActive : ""}`.trim()}
-                onClick={() => setCategoryFilter("all")}
-              >
-                Todas <span>{menuProducts.filter((item) => item.kind !== "combo").length}</span>
-              </button>
+              <select className={styles.input} aria-label="Categoria del menu actual" value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
+                <option value="all">Todas ({menuProducts.filter((item) => item.kind !== "combo").length})</option>
               {categories.map((option) => (
-                <button
-                  type="button"
-                  key={option.id}
-                  className={`${styles.categoryFilterBtn} ${categoryFilter === option.id ? styles.categoryFilterBtnActive : ""}`.trim()}
-                  onClick={() => setCategoryFilter(option.id)}
-                >
-                  {option.name} <span>{categoryCounts[option.id] || 0}</span>
-                </button>
+                <option key={option.id} value={option.id}>{option.name} ({categoryCounts[option.id] || 0})</option>
               ))}
+              </select>
+              <input className={styles.searchInput} aria-label="Buscar producto por nombre" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar producto" />
             </div>
 
             {loading ? (
@@ -915,31 +894,32 @@ export default function MenuProductsScreen() {
               <p className={styles.empty}>No hay productos de menu para mostrar.</p>
             ) : (
               <div className={styles.menuList}>
-                {filteredMenuProducts.map((item) => {
-                  const servings = calculateAvailableServings(item, ingredients);
+                {groupMenuProductsByCategory(filteredMenuProducts, categories).map((group) => (
+                  <section key={group.category.id} className={styles.menuCategoryGroup} aria-label={group.category.name}>
+                    <h3 className={styles.sectionTitle}>{group.category.name}</h3>
+                    <div className={styles.menuProductGrid}>
+                {group.products.map((item) => {
                   return (
                     <button
                       type="button"
                       key={item.id}
-                      className={`${styles.menuCard} ${selectedId === item.id ? styles.menuCardActive : ""}`.trim()}
+                      className={`${styles.menuCard} ${styles.compactMenuCard} ${selectedId === item.id ? styles.menuCardActive : ""}`.trim()}
                       onClick={() => selectMenuProduct(item)}
                     >
-                      <div className={styles.menuTop}>
+                      <div className={styles.compactMenuHeader}>
                         <strong>{item.name}</strong>
-                        <span>{formatMoneyARS(item.price)}</span>
+                        <strong className={styles.compactMenuPrice}>{formatMoneyARS(item.price)}</strong>
                       </div>
-                      <p className={styles.menuCompactMeta}>
-                        {formatCategoryLabel(item.category || "hamburguesa", categories)} - {item.recipeItems.length} ingredientes - {servings === null ? "-" : servings} porciones
-                      </p>
                       {item.description ? <p className={styles.description}>{item.description}</p> : null}
-                      <div className={styles.recipeChips}>
-                        {[...item.recipeItems].sort(compareRecipeItemByGroup).map((recipe) => (
-                          <span key={recipe.ingredientId}>{recipe.ingredientName}: {formatIngredientQuantity(recipe.quantity, recipe.stockMode)}</span>
-                        ))}
-                      </div>
+                      <p className={styles.ingredientSummary}>
+                        {[...item.recipeItems].sort(compareRecipeItemByGroup).map((recipe) => `${recipe.ingredientName} x ${recipe.stockMode === "unit" ? recipe.quantity : formatIngredientQuantity(recipe.quantity, recipe.stockMode)}`).join(", ")}
+                      </p>
                     </button>
                   );
                 })}
+                    </div>
+                  </section>
+                ))}
               </div>
             )}
           </section>

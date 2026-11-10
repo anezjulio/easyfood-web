@@ -1,3 +1,4 @@
+import ExpirationInput from "../../../shared/component/ExpirationInput";
 import StockNavigation from "../component/StockNavigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
@@ -837,8 +838,8 @@ export default function StockEntryScreen() {
                       </select>
                     </label>
                     <label className={compactFieldClass}>
-                      <span>Vencimiento *</span>
-                      <input className={styles.input} type="date" value={ingredientExpirationDate} onChange={(event) => setIngredientExpirationDate(event.target.value)} required />
+                      <span>Vencimiento (fecha/dias) *</span>
+                      <ExpirationInput className={styles.input}  value={ingredientExpirationDate} onChange={(value) => setIngredientExpirationDate(value)} required />
                     </label>
                   </div>
                 </section>
@@ -1218,12 +1219,11 @@ export default function StockEntryScreen() {
                     </select>
                   </label>
                   <label className={compactFieldClass}>
-                    <span>Vencimiento *</span>
-                    <input
+                    <span>Vencimiento (fecha/dias) *</span>
+                    <ExpirationInput
                       className={styles.input}
-                      type="date"
                       value={expirationDate}
-                      onChange={(event) => setExpirationDate(event.target.value)}
+                      onChange={(value) => setExpirationDate(value)}
                       required
                     />
                   </label>

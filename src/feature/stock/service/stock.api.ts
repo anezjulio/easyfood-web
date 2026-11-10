@@ -1,9 +1,10 @@
 import { readJsonOrThrow } from "../../../shared/http/http";
-import type { Ingredient } from "../../ingredient/model/ingredient.types";
+import type { Ingredient, IngredientDraft } from "../../ingredient/model/ingredient.types";
 
 export type IngredientStockEntry = {
   purchaseTotal?: number;
-  ingredientId: string;
+  ingredientId?: string;
+  newIngredient?: IngredientDraft;
   quantity: number;
   metric: "unit" | "grams" | "kilos";
   expirationDate: string;

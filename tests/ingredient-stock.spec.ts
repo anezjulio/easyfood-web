@@ -53,7 +53,7 @@ test("stock form records purchase cost, converts kilos and consumes recipe grams
     await page.goto("/stock/ingredients");
     await page.getByLabel("Buscar ingrediente", { exact: true }).fill(ingredient.name);
     await expect(page.getByRole("columnheader").nth(1)).toHaveText("Costo de compra (total ARS)");
-    await expect(page.getByRole("columnheader").nth(2)).toHaveText("Vencimiento");
+    await expect(page.getByRole("columnheader").nth(2)).toHaveText("Vencimiento (fecha/dias)");
     await expect(page.getByRole("columnheader").nth(3)).toHaveText("Cantidad recibida");
     await expect(page.getByRole("columnheader").nth(5)).toHaveText("Porciones");
     await expect(page.getByLabel(`Unidad de ${ingredient.name}`, { exact: true })).toHaveCount(0);
@@ -88,4 +88,53 @@ test("stock form records purchase cost, converts kilos and consumes recipe grams
     await request.delete(`/products/${product.id}`);
     await request.delete(`/ingredients/${ingredient.id}`);
   }
+});
+
+test("create ingredients with portions and initial stock in one batch", async ({ page, request }) => {
+  await page.route("**/users", (route) => route.fulfill({ json: [{ id: "admin", username: "admin", role: "admin", password: createHash("md5").update("test").digest("hex") }] }));
+  await page.goto("/login");
+  await page.getByLabel("Usuario", { exact: true }).fill("admin");
+  await page.locator('input[type="password"]').fill("test");
+  await page.getByRole("button", { name: "Entrar", exact: true }).click();
+  await expect(page).toHaveURL(/\/operation$/);
+  await page.goto("/stock/ingredients");
+  await page.getByRole("button", { name: "Agregar nuevo ingrediente" }).click();
+  const card = page.getByRole("group", { name: "Nuevo ingrediente 1", exact: true });
+  const name = `Nuevo peso ${Date.now()}`;
+  await card.getByLabel("Nombre", { exact: true }).fill(name);
+  await card.getByRole("combobox", { name: "Tipo", exact: true }).selectOption("weight");
+  await card.getByLabel("Nombre porcion", { exact: true }).fill("Medallon");
+  await card.getByLabel("Gramos por porcion", { exact: true }).fill("125");
+  await card.getByLabel("Costo de compra (total ARS)", { exact: true }).fill("1500");
+  const days = card.getByRole("spinbutton", { name: "Dias hasta vencimiento", exact: true });
+  await days.fill("10");
+  const date = card.locator('input[type="date"]');
+  const expected = await page.evaluate(() => { const d = new Date(); d.setDate(d.getDate() + 10); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; });
+  await expect(date).toHaveValue(expected);
+  await date.fill("2099-12-31");
+  await expect(days).not.toHaveValue("10");
+  await days.fill("0");
+  await expect(days).toHaveValue("0");
+  await days.fill("");
+  await expect(date).toHaveValue("");
+  await days.fill("10");
+  await card.getByLabel("Cantidad recibida (kg)", { exact: true }).fill("2");
+  await page.getByRole("button", { name: "Guardar ingresos (1)", exact: true }).click();
+  await expect(page.getByText("Stock ingresado correctamente para 1 ingrediente(s).", { exact: true })).toBeVisible();
+  const saved = (await (await request.get("/ingredients")).json()).find((item: { name: string }) => item.name === name);
+  try {
+    expect(saved).toMatchObject({ stockQuantity: 2000, portionName: "Medallon", portionSizeGrams: 125, expiresInDays: 10, nextExpirationDate: expected });
+    await page.reload();
+    await expect(page.getByRole("row").filter({ hasText: name }).getByRole("cell").last()).toHaveText("16");
+  } finally { if (saved) await request.delete(`/ingredients/${saved.id}`); }
+});
+
+test("invalid initial stock leaves no ingredient or receipt behind", async ({ request }) => {
+  const before = await (await request.get("/ingredients")).json();
+  const stocks = await (await request.get("/stocks")).json();
+  const entry = { newIngredient: { name: "Atomic new ingredient", stockMode: "unit", expiresInDays: 5 }, quantity: 3, metric: "unit", purchaseTotal: 0, expirationDate: "2099-12-31" };
+  const result = await request.post("/ingredient-stock-entries", { data: { entries: [entry, { ...entry, quantity: -1 }] } });
+  expect(result.status()).toBe(400);
+  expect(await (await request.get("/ingredients")).json()).toEqual(before);
+  expect(await (await request.get("/stocks")).json()).toEqual(stocks);
 });

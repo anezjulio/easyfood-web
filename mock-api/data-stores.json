@@ -1,45 +1,10 @@
 {
-  "activeStoreId": "ultimo-backup",
-  "stores": [
-    {
-      "id": "default",
-      "name": "default",
-      "dbPath": "C:\\project\\easyfood-web\\mock-api\\db.json",
-      "imagesDir": "C:\\project\\easyfood-web\\images",
-      "receiptsDir": "C:\\project\\easyfood-web\\mock-api\\receipts",
-      "createdAt": "2026-02-27T23:08:46.571Z"
-    },
-    {
-      "id": "nueva-db-1",
-      "name": "nueva db 1",
-      "dbPath": "C:\\project\\easyfood-web\\mock-api\\data-stores\\nueva-db-1\\db.js",
-      "imagesDir": "C:\\project\\easyfood-web\\images\\nueva-db-1",
-      "receiptsDir": "C:\\project\\easyfood-web\\mock-api\\receipts\\stores\\nueva-db-1",
-      "createdAt": "2026-02-27T23:09:22.351Z"
-    },
-    {
-      "id": "practifood",
-      "name": "practifood",
-      "dbPath": "C:\\project\\easyfood-web\\mock-api\\data-stores\\practifood\\db.js",
-      "imagesDir": "C:\\project\\easyfood-web\\images\\practifood",
-      "receiptsDir": "C:\\project\\easyfood-web\\mock-api\\receipts\\stores\\practifood",
-      "createdAt": "2026-09-03T04:42:20.730Z"
-    },
-    {
-      "id": "practifood-backup-20260909221249",
-      "name": "practifood backup 20260909221249",
-      "dbPath": "C:\\project\\easyfood-web\\mock-api\\data-stores\\practifood-backup-20260909221249\\db.js",
-      "imagesDir": "C:\\project\\easyfood-web\\images\\practifood-backup-20260909221249",
-      "receiptsDir": "C:\\project\\easyfood-web\\mock-api\\receipts\\stores\\practifood-backup-20260909221249",
-      "createdAt": "2026-09-09T22:12:49.000Z"
-    },
-    {
-      "id": "ultimo-backup",
-      "name": "ultimo backup",
-      "dbPath": "C:\\project\\easyfood-web\\mock-api\\data-stores\\ultimo-backup\\db.js",
-      "imagesDir": "C:\\project\\easyfood-web\\images\\ultimo-backup",
-      "receiptsDir": "C:\\project\\easyfood-web\\mock-api\\receipts\\stores\\ultimo-backup",
-      "createdAt": "2026-10-04T11:47:49.265Z"
-    }
-  ]
+    "activeStoreId":  "default",
+    "stores":  [
+                   {
+                       "id":  "default",
+                       "name":  "default",
+                       "createdAt":  "2026-11-10T13:59:45.057Z"
+                   }
+               ]
 }

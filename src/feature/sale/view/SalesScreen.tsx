@@ -532,7 +532,10 @@ export default function SalesScreen() {
 
   function chooseProduct(id: string) {
     if (hasPendingPayment) return;
-    if (selectedProductId === id && !editingCartId) return;
+    if (selectedProductId === id && !editingCartId) {
+      addSelectedProductToCart(true, 1);
+      return;
+    }
     setSelectedProductId(id); setEditingCartId(null); setExcludedIngredients([]);
     setQuantityToAdd("1"); setComboSelections({}); setError("");
     if (window.innerWidth <= 920) requestAnimationFrame(() => cartCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
@@ -590,10 +593,9 @@ export default function SalesScreen() {
     setError("");
   }
 
-  function addSelectedProductToCart(mergeExisting = true) {
+  function addSelectedProductToCart(mergeExisting = true, quantity = Number(quantityToAdd)) {
     if (!selectedProduct || hasPendingPayment) return;
     setError("");
-    const quantity = Number(quantityToAdd);
     if (!Number.isInteger(quantity) || quantity < 1) { setError("Ingresa una cantidad entera mayor a cero."); return; }
     const groups = (selectedProduct.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category);
     const selections = groups.map((group) => {
@@ -850,7 +852,7 @@ export default function SalesScreen() {
               {productGroups.map((group) => <section key={group.id} className={styles.productCategory} aria-label={group.name}>
                 <h3 className={styles.productCategoryTitle}>{group.name}<span>{group.products.length}</span></h3>
                 <div className={styles.productGrid}>
-                  {group.products.map((product) => <button key={product.id} className={styles.productCard} title={product.name} disabled={hasPendingPayment} onClick={() => chooseProduct(product.id)} onDoubleClick={() => addSelectedProductToCart()} aria-pressed={selectedProductId === product.id}>
+                  {group.products.map((product) => <button key={product.id} className={styles.productCard} title={product.name} disabled={hasPendingPayment} onClick={() => chooseProduct(product.id)} aria-pressed={selectedProductId === product.id}>
                     {product.imageUrl && <img src={resolveImageUrl(product.imageUrl)} alt="" loading="lazy" />}<span>{formatCatalogProductName(product.name, `${group.id} ${group.name}`)}</span><strong>{formatMoneyARS(product.price)}</strong>
                   </button>)}
                 </div>

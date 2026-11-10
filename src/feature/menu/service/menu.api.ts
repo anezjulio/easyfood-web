@@ -9,12 +9,12 @@ import { fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
 import type { Ingredient } from "../../ingredient/model/ingredient.types";
 import type { MenuComboItem, MenuProduct, MenuProductDraft } from "../model/menu.types";
 
-function comboToMenuComboItems(combo: Combo): MenuComboItem[] {
+function comboToMenuComboItems(combo: Combo, products: Product[]): MenuComboItem[] {
   return [
     ...combo.items.map((item) => ({
       type: "product" as const,
       menuProductId: item.productId,
-      menuProductName: item.productId,
+      menuProductName: products.find((product) => product.id === item.productId)?.name || "Producto no disponible",
       quantity: item.quantity,
     })),
     ...combo.optionGroups.map((group) => ({
@@ -27,7 +27,7 @@ function comboToMenuComboItems(combo: Combo): MenuComboItem[] {
   ];
 }
 
-function productToMenuProduct(product: Product, recipes: Recipe[], combos: Combo[], ingredients: Ingredient[]): MenuProduct | null {
+function productToMenuProduct(product: Product, recipes: Recipe[], combos: Combo[], ingredients: Ingredient[], products: Product[]): MenuProduct | null {
   if (product.type !== "receta" && product.type !== "combo") return null;
   const recipe = recipes.find((item) => item.id === product.recipeId || item.productId === product.id);
   const combo = combos.find((item) => item.id === product.comboId || item.productId === product.id);
@@ -50,7 +50,7 @@ function productToMenuProduct(product: Product, recipes: Recipe[], combos: Combo
       };
     }),
     kind: product.type === "combo" ? "combo" : "menu",
-    comboItems: combo ? comboToMenuComboItems(combo) : undefined,
+    comboItems: combo ? comboToMenuComboItems(combo, products) : undefined,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
   };
@@ -58,7 +58,7 @@ function productToMenuProduct(product: Product, recipes: Recipe[], combos: Combo
 
 export async function fetchMenuProductsApi(): Promise<MenuProduct[]> {
   const [products, recipes, combos, ingredients] = await Promise.all([fetchProducts(), fetchRecipesApi(), fetchCombosApi(), fetchIngredientsApi()]);
-  return products.map((product) => productToMenuProduct(product, recipes, combos, ingredients)).filter((item): item is MenuProduct => !!item);
+  return products.map((product) => productToMenuProduct(product, recipes, combos, ingredients, products)).filter((item): item is MenuProduct => !!item);
 }
 
 export async function createMenuProductApi(draft: MenuProductDraft): Promise<MenuProduct> {

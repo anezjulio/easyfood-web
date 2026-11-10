@@ -1,6 +1,27 @@
 import { test, expect } from "@playwright/test";
 import { createHash } from "node:crypto";
 
+test("DDBB imports backups above 1 MB and preserves UTF-8 content", async ({ request }) => {
+  const state = await (await request.get("/admin/data/stores")).json();
+  const users = await (await request.get("/users")).json();
+  const credentials = { requestedBy: "admin", adminPasswordHash: users.find((user: { username: string }) => user.username === "admin").password };
+  const description = "Respaldo con ñ y 🍔. ".repeat(70_000);
+  const content = JSON.stringify({ users, products: [{ id: "large-backup", name: "Respaldo", price: 100, description, createdAt: new Date().toISOString() }] });
+  expect(Buffer.byteLength(content)).toBeGreaterThan(1_000_000);
+  try {
+    const response = await request.post("/admin/data/stores/import", { data: { ...credentials, name: `large-backup-${Date.now()}`, content } });
+    expect(response.status(), await response.text()).toBe(201);
+    const products = await (await request.get("/products")).json();
+    const restored = products.find((product: { id: string }) => product.id === "large-backup").description;
+    expect(createHash("sha256").update(restored).digest("hex")).toBe(createHash("sha256").update(description.trim()).digest("hex"));
+    const oversized = await request.post("/admin/data/stores", { data: { padding: description } });
+    expect(oversized.status()).toBe(413);
+    expect((await oversized.json()).message).toContain("1 MB");
+  } finally {
+    await request.put("/admin/data/stores/active", { data: { ...credentials, storeId: state.activeStoreId } });
+  }
+});
+
 test("block backups isolate catalog, compose sources, preserve targets and reject incompatible references", async ({ request }) => {
   const state = await (await request.get("/admin/data/stores")).json();
   const users = await (await request.get("/users")).json();

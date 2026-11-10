@@ -1,0 +1,4 @@
+.row { display: flex; align-items: center; gap: 8px; }
+.row input[type="date"] { min-width: 145px; flex: 1; }
+.row input[type="number"] { width: 85px; min-width: 65px; flex: 0 0 85px; }
+.row > span { font-size: 13px; color: #475569; }

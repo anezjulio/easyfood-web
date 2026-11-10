@@ -582,7 +582,7 @@
 .productCategoryTitle span { padding: 2px 7px; background: #f1f5f9; color: #64748b; font-size: 12px; font-weight: 600; }
 .productGrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 8px; }
 .productCard { display: flex; flex-direction: column; align-items: stretch; text-align: left; gap: 6px; padding: 10px; min-height: 70px; min-width: 0; overflow-wrap: anywhere; border: 1px solid #cbd5e1; background: #fff; color: #0f172a; font: inherit; font-size: 13px; cursor: pointer; }
-.productCard span { font-weight: 750; flex: 1; }
+.productCard span { font-size: 17px; line-height: 1.3; font-weight: 750; flex: 1; }
 .productCard img { width: 100%; height: 44px; object-fit: cover; }
 .productCard strong { color: #166534; align-self: flex-end; text-align: right; font-size: 18px; line-height: 1.25; font-weight: 800; font-variant-numeric: tabular-nums; }
 .productCard:hover, .productCard[aria-pressed="true"] { border-color: #0f172a; background: #f1f5f9; box-shadow: inset 0 0 0 1px #0f172a; }

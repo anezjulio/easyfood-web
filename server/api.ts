@@ -20,6 +20,7 @@ const DATA_STORES_IMAGES_ROOT_DIR = resolveStoragePath("images");
 const DATA_STORES_RECEIPTS_ROOT_DIR = resolve(LEGACY_RECEIPTS_DIR, "stores");
 const DATA_STORES_SEED_PATH = resolve(REPO_MOCK_API_DIR, "data-stores.json");
 const DEFAULT_DATA_STORE_ID = "default";
+const DATA_BACKUP_MAX_BYTES = 100_000_000;
 type Product = {
   id: string;
   name: string;
@@ -62,6 +63,7 @@ type Ingredient = {
   stockQuantity: number;
   minStockQuantity?: number;
   portionSizeGrams?: number;
+  portionName?: string;
   createdAt: string;
   updatedAt?: string;
   lastEntryAt?: string;
@@ -1320,7 +1322,7 @@ export function installApi(middlewares: Server) {
 
           if (pathname === "/admin/data/blocks" && method === "POST") {
             const activeDb = await readDb();
-            const body = await readJsonBody(req, 100_000_000) as {
+            const body = await readJsonBody(req, DATA_BACKUP_MAX_BYTES) as {
               requestedBy: string; adminPasswordHash: string; action: string; storeId?: string;
               targetStoreId?: string; name?: string; blocks?: DataBlock[];
               sources?: Array<{ block: DataBlock; storeId?: string; content?: string }>;
@@ -1442,7 +1444,7 @@ export function installApi(middlewares: Server) {
 
           if (pathname === "/admin/data/stores/import" && method === "POST") {
             const activeDb = await readDb();
-            const draft = sanitizeAdminDataStoreImportDraft(await readJsonBody(req));
+            const draft = sanitizeAdminDataStoreImportDraft(await readJsonBody(req, DATA_BACKUP_MAX_BYTES));
             const credential = validateAdminCredentials(activeDb, draft.requestedBy, draft.adminPasswordHash);
             if (!credential.ok) {
               return sendJson(res, credential.status, { message: credential.message });
@@ -1880,6 +1882,7 @@ export function installApi(middlewares: Server) {
               stockQuantity: draft.stockQuantity + draft.entryQuantity,
               minStockQuantity: draft.minStockQuantity,
               portionSizeGrams: draft.portionSizeGrams,
+              portionName: draft.portionName,
               createdAt: now.toISOString(),
               lastEntryAt: draft.entryQuantity > 0 ? now.toISOString() : undefined,
               nextExpirationDate: draft.entryQuantity > 0 ? buildIngredientExpirationDate(draft.expiresInDays, now) : undefined,
@@ -1912,6 +1915,7 @@ export function installApi(middlewares: Server) {
               stockQuantity: draft.stockQuantity + draft.entryQuantity,
               minStockQuantity: draft.minStockQuantity,
               portionSizeGrams: draft.portionSizeGrams,
+              portionName: draft.portionName ?? db.ingredients[index].portionName,
               updatedAt: now.toISOString(),
               lastEntryAt: draft.entryQuantity > 0 ? now.toISOString() : db.ingredients[index].lastEntryAt,
               nextExpirationDate:
@@ -2494,7 +2498,14 @@ export function installApi(middlewares: Server) {
               today.setHours(0, 0, 0, 0);
               const validated = entries.map((entry) => {
                 if (!entry || typeof entry !== "object") throw new Error("Ingreso invalido.");
-                const ingredient = db.ingredients.find((item) => item.id === entry.ingredientId);
+                let ingredient = db.ingredients.find((item) => item.id === entry.ingredientId);
+                if (entry.newIngredient) {
+                  const draft = sanitizeIngredientDraft(entry.newIngredient);
+                  if (!draft.name || !["unit", "weight"].includes(draft.stockMode)) throw new Error("Completa el nombre y tipo del ingrediente.");
+                  if (draft.categoryId && !db.ingredientCategories.some((category) => category.id === draft.categoryId)) throw new Error("Categoria invalida.");
+                  if (draft.stockMode === "weight" && (!draft.portionName || !draft.portionSizeGrams || !Number.isFinite(draft.portionSizeGrams) || draft.portionSizeGrams <= 0)) throw new Error("Completa nombre y gramos de la porcion.");
+                  ingredient = { id: buildEntityId("ing"), name: draft.name, categoryId: draft.categoryId, stockMode: draft.stockMode, metric: draft.stockMode === "weight" ? "weight" : "unit", expiresInDays: draft.expiresInDays, stockQuantity: 0, portionName: draft.stockMode === "weight" ? draft.portionName : undefined, portionSizeGrams: draft.stockMode === "weight" ? draft.portionSizeGrams : undefined, createdAt: new Date().toISOString() };
+                }
                 const quantity = Number(entry.quantity);
                 const purchaseTotal = entry.purchaseTotal === undefined ? undefined : Number(entry.purchaseTotal);
                 if (purchaseTotal !== undefined && (!Number.isFinite(purchaseTotal) || purchaseTotal < 0 || !Number.isSafeInteger(Math.round(purchaseTotal * 100)) || Math.abs(purchaseTotal - Math.round(purchaseTotal * 100) / 100) > 0.0000001)) {
@@ -2516,6 +2527,7 @@ export function installApi(middlewares: Server) {
                 return { ingredient, quantity, purchaseTotal, metric: entry.metric as "unit" | "grams" | "kilos", expirationDate, delta };
               });
               for (const entry of validated) {
+                if (!db.ingredients.some((item) => item.id === entry.ingredient.id)) db.ingredients.unshift(entry.ingredient);
                 createStockEntryRecord(db, {
                   productId: entry.ingredient.productId || entry.ingredient.id,
                   quantity: entry.quantity,
@@ -3852,7 +3864,7 @@ export function installApi(middlewares: Server) {
 
           next();
         } catch (error) {
-          sendJson(res, 500, { message: error instanceof Error ? error.message : "Mock server error" });
+          sendJson(res, error instanceof PayloadTooLargeError ? 413 : 500, { message: error instanceof Error ? error.message : "Mock server error" });
         }
       });
 }
@@ -5027,6 +5039,7 @@ function normalizeIngredientRecord(input: unknown): Ingredient | null {
     stockMode: normalizeIngredientStockMode(draft.stockMode),
     stockQuantity: Math.max(0, Number(draft.stockQuantity) || 0),
     minStockQuantity: Math.max(0, Number(draft.minStockQuantity) || 0) || undefined,
+    portionName: draft.portionName,
     portionSizeGrams: Math.max(0, Number(draft.portionSizeGrams) || 0) || undefined,
     createdAt: String(draft.createdAt || "").trim() || new Date().toISOString(),
     updatedAt: String(draft.updatedAt || "").trim() || undefined,
@@ -6602,6 +6615,7 @@ function sanitizeIngredientDraft(input: unknown) {
     entryQuantity?: unknown;
     minStockQuantity?: unknown;
     portionSizeGrams?: unknown;
+    portionName?: unknown;
   };
   return {
     name: String(obj.name || "").trim(),
@@ -6613,6 +6627,7 @@ function sanitizeIngredientDraft(input: unknown) {
     stockQuantity: Math.max(0, Number(obj.stockQuantity) || 0),
     entryQuantity: Math.max(0, Number(obj.entryQuantity) || 0),
     minStockQuantity: Math.max(0, Number(obj.minStockQuantity) || 0) || undefined,
+    portionName: typeof obj.portionName === "string" ? obj.portionName.trim() : undefined,
     portionSizeGrams: Math.max(0, Number(obj.portionSizeGrams) || 0) || undefined,
   };
 }
@@ -8056,16 +8071,31 @@ function sanitizeSupplyOrderReceiptItemsDraft(
   return result;
 }
 
+class PayloadTooLargeError extends Error {
+  constructor(maxBytes: number) {
+    super(`La carga supera el limite de ${maxBytes / 1_000_000} MB por solicitud.`);
+  }
+}
+
 function readJsonBody(req: IncomingMessage, maxLength = 1_000_000): Promise<unknown> {
   return new Promise((resolveBody, rejectBody) => {
-    let data = "";
+    const chunks: Buffer[] = [];
+    let size = 0;
+    let exceeded = false;
     req.on("data", (chunk: Buffer) => {
-      data += chunk.toString("utf8");
-      if (data.length > maxLength) {
-        rejectBody(new Error("Payload too large"));
+      if (exceeded) return;
+      size += chunk.length;
+      if (size > maxLength) {
+        exceeded = true;
+        chunks.length = 0;
+        rejectBody(new PayloadTooLargeError(maxLength));
+        return;
       }
+      chunks.push(chunk);
     });
     req.on("end", () => {
+      if (exceeded) return;
+      const data = Buffer.concat(chunks).toString("utf8");
       if (!data.trim()) return resolveBody({});
       try {
         resolveBody(JSON.parse(data));

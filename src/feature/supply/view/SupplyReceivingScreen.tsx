@@ -1,3 +1,4 @@
+import ExpirationInput from "../../../shared/component/ExpirationInput";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
@@ -409,7 +410,7 @@ export default function SupplyReceivingScreen() {
                         <div className={styles.cellRight}>Esperado</div>
                         <div className={styles.cellRight}>No llego</div>
                         <div className={styles.cellRight}>Se recibe</div>
-                        <div>Vencimiento</div>
+                        <div>Vencimiento (fecha/dias)</div>
                       </div>
 
                       {selectedOrder.items.map((item) => {
@@ -446,16 +447,15 @@ export default function SupplyReceivingScreen() {
                             </div>
                             <div className={styles.cellRight}>{receivedQuantity}</div>
                             <div>
-                              <input
+                              <ExpirationInput
                                 className={styles.input}
-                                type="date"
                                 value={draft.expirationDate}
-                                onChange={(event) =>
+                                onChange={(value) =>
                                   setReceiptItems((current) => ({
                                     ...current,
                                     [item.productId]: {
                                       ...(current[item.productId] || { missingQuantity: "", expirationDate: "" }),
-                                      expirationDate: event.target.value,
+                                      expirationDate: value,
                                     },
                                   }))
                                 }

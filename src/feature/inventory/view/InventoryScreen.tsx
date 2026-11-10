@@ -1,3 +1,4 @@
+import ExpirationInput from "../../../shared/component/ExpirationInput";
 import StockNavigation from "../../stock/component/StockNavigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
@@ -218,8 +219,8 @@ export default function InventoryScreen() {
                   </label>
                 ) : null}
                 <label className={styles.field}>
-                  <span>Vencimiento</span>
-                  <input className={styles.input} type="date" value={expirationDate} onChange={(event) => setExpirationDate(event.target.value)} />
+                  <span>Vencimiento (fecha/dias)</span>
+                  <ExpirationInput className={styles.input}  value={expirationDate} onChange={(value) => setExpirationDate(value)} />
                 </label>
                 <div className={styles.previewBox}>
                   {selectedIngredient ? `${formatIngredientQuantity(baseEntryQuantity, selectedIngredient.stockMode)} a sumar` : "-"}
