@@ -69,7 +69,7 @@ export default function ProductRow({
   existenceAlign?: "left" | "center" | "right";
   dateValue?: string;
 }) {
-  const salesColumnTemplate = "minmax(280px, 1fr) 120px 120px";
+  const salesColumnTemplate = "minmax(252px, 1fr) 108px 108px";
   const columnCount =
     2 +
     (showImageThumbnail ? 1 : 0) +
@@ -78,7 +78,7 @@ export default function ProductRow({
     (showExistence ? 1 : 0) +
     (showCategory ? 1 : 0) +
     (showDateColumn ? 1 : 0);
-  const minTableWidth = salesCompactLayout ? 560 : Math.max(showImageThumbnail ? 520 : 620, columnCount * 140);
+  const minTableWidth = salesCompactLayout ? 504 : Math.max(showImageThumbnail ? 468 : 558, columnCount * 126);
   const isEven = rowIndex % 2 === 0;
   const baseBg = isEven ? "#f8fafc" : "white";
   const isOutOfStock = Number(product.existencia || 0) <= 0;
@@ -176,8 +176,8 @@ export default function ProductRow({
 const rowStyle: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-  padding: 10,
-  borderTop: "1px solid #e2e8f0",
+  padding: 9,
+  borderTop: "0.9px solid #e2e8f0",
   alignItems: "start",
   cursor: "pointer",
   userSelect: "none",
@@ -185,15 +185,15 @@ const rowStyle: React.CSSProperties = {
 };
 
 const imageCellStyle: React.CSSProperties = {
-  width: 58,
-  height: 58,
+  width: 52.2,
+  height: 52.2,
 };
 
 const imageStyle: React.CSSProperties = {
-  width: 58,
-  height: 58,
+  width: 52.2,
+  height: 52.2,
   objectFit: "cover",
-  border: "1px solid #e2e8f0",
+  border: "0.9px solid #e2e8f0",
   background: "#ffffff",
   display: "block",
 };
@@ -209,15 +209,15 @@ const imageFallbackStyle: React.CSSProperties = {
 const salesProductCellStyle: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: 8,
+  gap: 7.2,
   minWidth: 0,
 };
 
 const salesImageStyle: React.CSSProperties = {
-  width: 46,
-  height: 46,
+  width: 41.4,
+  height: 41.4,
   objectFit: "cover",
-  border: "1px solid #e2e8f0",
+  border: "0.9px solid #e2e8f0",
   background: "#ffffff",
   display: "block",
   flex: "0 0 auto",
@@ -233,7 +233,7 @@ const salesImageFallbackStyle: React.CSSProperties = {
 
 const salesProductTextStyle: React.CSSProperties = {
   display: "grid",
-  gap: 2,
+  gap: 1.8,
   minWidth: 0,
 };
 
@@ -242,7 +242,7 @@ const salesProductNameStyle: React.CSSProperties = {
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
-  fontSize: 15,
+  fontSize: 13.5,
   fontWeight: 950,
 };
 
@@ -252,7 +252,7 @@ const salesProductDescriptionStyle: React.CSSProperties = {
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
   color: "#64748b",
-  fontSize: 11,
+  fontSize: 9.9,
   fontWeight: 700,
 };
 
@@ -262,6 +262,6 @@ const salesComboItemsStyle: React.CSSProperties = {
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
   color: "#334155",
-  fontSize: 11,
+  fontSize: 9.9,
   fontWeight: 850,
 };

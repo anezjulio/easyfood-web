@@ -768,186 +768,188 @@
       "id": "ing250920261619323736",
       "name": "Pepsi Lata",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 990,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-25T16:19:32.073Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-25T16:19:32.073Z"
     },
     {
       "id": "ing250920261619166142",
       "name": "7up Lata",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 990,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-25T16:19:16.910Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-25T16:19:16.910Z"
     },
     {
       "id": "ing250920261619160718",
       "name": "7up Lata",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 990,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-25T16:19:16.882Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-25T16:19:16.882Z"
     },
     {
       "id": "ing150920261807521822",
       "name": "Pan de Miga",
       "metric": "unit",
+      "categoryId": "panificados",
       "expiresInDays": 30,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-15T18:07:52.111Z",
-      "categoryId": "panificados"
+      "createdAt": "2026-09-15T18:07:52.111Z"
     },
     {
       "id": "ing150920261802198688",
       "name": "Budin Entero",
       "metric": "unit",
+      "categoryId": "panificados",
       "expiresInDays": 30,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-15T18:02:19.793Z",
-      "categoryId": "panificados"
+      "createdAt": "2026-09-15T18:02:19.793Z"
     },
     {
       "id": "ing100920261711087643",
       "name": "Torta",
       "metric": "unit",
+      "categoryId": "panificados",
       "expiresInDays": 16,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-10T17:11:08.560Z",
-      "updatedAt": "2026-09-11T11:35:50.689Z",
-      "categoryId": "panificados"
+      "updatedAt": "2026-09-11T11:35:50.689Z"
     },
     {
       "id": "ing080920262309160008",
       "name": "Jamon",
       "metric": "unit",
+      "categoryId": "carnes",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-08T23:09:16.868Z",
-      "categoryId": "carnes"
+      "createdAt": "2026-09-08T23:09:16.868Z"
     },
     {
       "id": "ing080920262021486528",
       "name": "Queso Danbo Rallado",
       "metric": "unit",
+      "categoryId": "lacteos",
       "expiresInDays": 30,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-08T20:21:48.448Z",
-      "categoryId": "lacteos"
+      "createdAt": "2026-09-08T20:21:48.448Z"
     },
     {
       "id": "ing080920261921101195",
       "name": "Salsa de Barbacoa",
       "metric": "unit",
+      "categoryId": "salsas",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-08T19:21:10.502Z",
-      "categoryId": "salsas"
+      "createdAt": "2026-09-08T19:21:10.502Z"
     },
     {
       "id": "ing080920261736309330",
       "name": "7 UP Zero 600ml",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-08T17:36:30.634Z",
-      "categoryId": "bebidas"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing080920261736136082",
       "name": "7 UP 600ml",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-08T17:36:13.815Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-08T17:36:13.815Z"
     },
     {
       "id": "ing080920261628130193",
       "name": "Queso Azul",
       "metric": "unit",
+      "categoryId": "lacteos",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-08T16:28:13.106Z",
-      "updatedAt": "2026-09-08T18:18:33.650Z",
-      "categoryId": "lacteos"
+      "updatedAt": "2026-09-08T18:18:33.650Z"
     },
     {
       "id": "ing080920261628020062",
       "name": "Queso Danbo",
       "metric": "unit",
+      "categoryId": "lacteos",
       "expiresInDays": 60,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-08T16:28:02.154Z",
-      "updatedAt": "2026-09-08T18:18:02.323Z",
-      "categoryId": "lacteos"
+      "updatedAt": "2026-09-08T18:18:02.323Z"
     },
     {
       "id": "ing080920261627457656",
       "name": "Queso Cheddar",
       "metric": "unit",
+      "categoryId": "lacteos",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-08T16:27:45.944Z",
-      "updatedAt": "2026-09-08T18:18:29.020Z",
-      "categoryId": "lacteos"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing080920261612371371",
       "name": "Salsa de la casa",
       "metric": "unit",
+      "categoryId": "salsas",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-08T16:12:37.713Z",
-      "updatedAt": "2026-09-08T18:17:53.958Z",
-      "categoryId": "salsas"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing080920261610039156",
       "name": "Hamburguesa de pollo",
       "metric": "unit",
+      "categoryId": "carnes",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-08T16:10:03.761Z",
-      "categoryId": "carnes"
+      "createdAt": "2026-09-08T16:10:03.761Z"
     },
     {
       "id": "ing080920261609447483",
       "name": "Hamburguesa de carne",
       "metric": "unit",
+      "categoryId": "carnes",
       "expiresInDays": 5,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-08T16:09:44.889Z",
-      "categoryId": "carnes"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing070920262001387189",
       "name": "Pan de Miga",
       "metric": "unit",
+      "categoryId": "panificados",
       "expiresInDays": 14,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-07T20:01:38.464Z",
-      "categoryId": "panificados"
+      "createdAt": "2026-09-07T20:01:38.464Z"
     },
     {
       "id": "ing030920261930011004",
@@ -963,12 +965,12 @@
       "id": "ing030920261925467516",
       "name": "Pollo",
       "metric": "unit",
+      "categoryId": "carnes",
       "expiresInDays": 24,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T19:25:46.407Z",
-      "updatedAt": "2026-09-08T18:18:52.588Z",
-      "categoryId": "carnes"
+      "updatedAt": "2026-09-08T18:18:52.588Z"
     },
     {
       "id": "ing030920261925116593",
@@ -983,117 +985,117 @@
       "id": "ing030920261904052605",
       "name": "Placer Naranja (500ml)",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T19:04:05.078Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-03T19:04:05.078Z"
     },
     {
       "id": "ing030920261902544029",
       "name": "Agua (500ml)",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 999,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T19:02:54.768Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-03T19:02:54.768Z"
     },
     {
       "id": "ing030920261902243547",
       "name": "Placer Pomelo (500ml)",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T19:02:24.848Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-03T19:02:24.848Z"
     },
     {
       "id": "ing030920261902118349",
       "name": "Placer Manzana (500ml)",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T19:02:11.528Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-03T19:02:11.528Z"
     },
     {
       "id": "ing030920261901557453",
       "name": "Placer Pera (500ml)",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T19:01:55.203Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-03T19:01:55.203Z"
     },
     {
       "id": "ing030920261859217177",
       "name": "Salsa de Mostaza",
       "metric": "unit",
+      "categoryId": "salsas",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:59:21.768Z",
-      "updatedAt": "2026-09-08T18:17:42.533Z",
-      "categoryId": "salsas"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261858536397",
       "name": "Salsa de Mayonesa",
       "metric": "unit",
+      "categoryId": "salsas",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:58:53.070Z",
-      "updatedAt": "2026-09-08T18:17:47.373Z",
-      "categoryId": "salsas"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261858365479",
       "name": "Salsa de Tomate",
       "metric": "unit",
+      "categoryId": "salsas",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:58:36.885Z",
-      "updatedAt": "2026-09-08T18:17:36.612Z",
-      "categoryId": "salsas"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261856321089",
       "name": "Berengena",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:56:32.908Z",
-      "updatedAt": "2026-09-08T18:16:36.326Z",
-      "categoryId": "vegetales"
+      "updatedAt": "2026-09-08T18:16:36.326Z"
     },
     {
       "id": "ing030920261856176159",
       "name": "Morron",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:56:17.029Z",
-      "updatedAt": "2026-09-08T18:17:02.273Z",
-      "categoryId": "vegetales"
+      "updatedAt": "2026-09-08T18:17:02.273Z"
     },
     {
       "id": "ing030920261856026387",
       "name": "Pepinillo",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 90,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:56:02.180Z",
-      "updatedAt": "2026-09-08T18:18:14.119Z",
-      "categoryId": "vegetales"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261854315753",
@@ -1109,147 +1111,150 @@
       "id": "ing030920261853310833",
       "name": "Panceta",
       "metric": "unit",
+      "categoryId": "carnes",
       "expiresInDays": 60,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:53:31.475Z",
-      "updatedAt": "2026-09-08T18:14:05.417Z",
-      "categoryId": "carnes"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261853119601",
       "name": "Jamon Crudo",
       "metric": "unit",
+      "categoryId": "carnes",
       "expiresInDays": 60,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:53:11.978Z",
-      "updatedAt": "2026-09-08T18:16:42.821Z",
-      "categoryId": "carnes"
+      "updatedAt": "2026-09-08T18:16:42.821Z"
     },
     {
       "id": "ing030920261852446718",
       "name": "Jamon de Barra",
       "metric": "weight",
+      "categoryId": "carnes",
       "expiresInDays": 60,
       "stockMode": "weight",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:52:44.175Z",
-      "updatedAt": "2026-09-08T18:16:53.881Z",
-      "categoryId": "carnes"
+      "updatedAt": "2026-09-08T18:16:53.881Z"
     },
     {
       "id": "ing030920261851342941",
       "name": "Papas",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:51:34.611Z",
-      "categoryId": "vegetales"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261851237364",
       "name": "Coca-Cola Cero (600ml)",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T18:51:23.164Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-03T18:51:23.164Z"
     },
     {
       "id": "ing030920261851117643",
       "name": "Coca-Cola (600ml)",
       "metric": "unit",
+      "categoryId": "bebidas",
       "expiresInDays": 180,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T18:51:11.024Z",
-      "categoryId": "bebidas"
+      "createdAt": "2026-09-03T18:51:11.024Z"
     },
     {
       "id": "ing030920261849172876",
       "name": "Pan de Pancho",
       "metric": "unit",
+      "categoryId": "panificados",
       "expiresInDays": 14,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T18:49:17.391Z",
-      "categoryId": "panificados"
+      "createdAt": "2026-09-03T18:49:17.391Z"
     },
     {
       "id": "ing030920261849092695",
       "name": "Pan de Hamburguesa",
       "metric": "unit",
+      "categoryId": "panificados",
       "expiresInDays": 14,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:49:09.544Z",
-      "categoryId": "panificados"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261848438389",
       "name": "Salchicha Ahumada",
       "metric": "unit",
+      "categoryId": "carnes",
       "expiresInDays": 60,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:48:43.714Z",
-      "updatedAt": "2026-09-03T18:49:55.576Z",
-      "categoryId": "carnes"
+      "updatedAt": "2026-09-03T18:49:55.576Z"
     },
     {
       "id": "ing030920261847273007",
       "name": "Cebolla",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:47:27.886Z",
-      "categoryId": "vegetales"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261847200343",
       "name": "Zanahoria",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T18:47:20.896Z",
-      "categoryId": "vegetales"
+      "createdAt": "2026-09-03T18:47:20.896Z"
     },
     {
       "id": "ing030920261846516671",
       "name": "Repollo",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
-      "createdAt": "2026-09-03T18:46:51.293Z",
-      "categoryId": "vegetales"
+      "createdAt": "2026-09-03T18:46:51.293Z"
     },
     {
       "id": "ing030920261846398391",
       "name": "Lechuga",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:46:39.412Z",
-      "updatedAt": "2026-09-03T18:47:07.467Z",
-      "categoryId": "vegetales"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     },
     {
       "id": "ing030920261846327892",
       "name": "Tomate",
       "metric": "unit",
+      "categoryId": "vegetales",
       "expiresInDays": 7,
       "stockMode": "unit",
       "stockQuantity": 0,
       "createdAt": "2026-09-03T18:46:32.785Z",
-      "updatedAt": "2026-09-03T18:47:04.451Z",
-      "categoryId": "vegetales"
+      "updatedAt": "2026-11-11T03:23:57.678Z"
     }
   ],
   "ingredientCategories": [
@@ -2847,6 +2852,146 @@
   "deleteRequests": [],
   "requests": [],
   "stocks": [
+    {
+      "id": "se111120260023577859",
+      "productId": "ing080920261736309330",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -1,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023571193",
+      "productId": "ing080920261627457656",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -2,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023578494",
+      "productId": "ing030920261853310833",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -2,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023570461",
+      "productId": "ing030920261846327892",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023577392",
+      "productId": "ing080920261612371371",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023570064",
+      "productId": "ing030920261859217177",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023579140",
+      "productId": "ing030920261858365479",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023571074",
+      "productId": "ing030920261858536397",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023577376",
+      "productId": "ing030920261856026387",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023572681",
+      "productId": "ing030920261847273007",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023579157",
+      "productId": "ing030920261846398391",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023576742",
+      "productId": "ing080920261609447483",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023579005",
+      "productId": "ing030920261849092695",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -7,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.679Z"
+    },
+    {
+      "id": "se111120260023577863",
+      "productId": "ing030920261851342941",
+      "movementDate": "2026-11-11T03:23:57.678Z",
+      "quantity": -4,
+      "metric": "unit",
+      "movementType": "out",
+      "description": "Venta",
+      "createdAt": "2026-11-11T03:23:57.678Z"
+    },
     {
       "id": "se081120260040524829",
       "productId": "ing080920261736309330",
@@ -5249,6 +5394,83 @@
     }
   ],
   "orders": [
+    {
+      "id": "or111120260023549110",
+      "items": [
+        {
+          "productId": "menu:menu080920261931172153",
+          "productName": "Hamburguesa Carne Bacon + Papas",
+          "unitPrice": 13000,
+          "quantity": 1,
+          "comboItems": [
+            {
+              "menuProductId": "menu080920261842174993",
+              "menuProductName": "Raciòn de Papas",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu080920261907232794",
+              "menuProductName": "Hamburguesa Carne Bacon",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [],
+          "excludedIngredients": []
+        },
+        {
+          "productId": "menu:menu080920261925118847",
+          "productName": "Hamburguesa Carne Simple + Papas",
+          "unitPrice": 9000,
+          "quantity": 3,
+          "comboItems": [
+            {
+              "menuProductId": "menu080920261848447277",
+              "menuProductName": "Hamburguesa Carne Simple",
+              "quantity": 1
+            },
+            {
+              "menuProductId": "menu080920261842174993",
+              "menuProductName": "Raciòn de Papas",
+              "quantity": 1
+            }
+          ],
+          "comboSelections": [],
+          "excludedIngredients": []
+        },
+        {
+          "productId": "menu:menu080920261848447277",
+          "productName": "Hamburguesa Carne Simple",
+          "unitPrice": 6500,
+          "quantity": 2,
+          "comboItems": [],
+          "comboSelections": [],
+          "excludedIngredients": []
+        },
+        {
+          "productId": "menu:menu080920261907232794",
+          "productName": "Hamburguesa Carne Bacon",
+          "unitPrice": 10500,
+          "quantity": 1,
+          "comboItems": [],
+          "comboSelections": [],
+          "excludedIngredients": []
+        },
+        {
+          "productId": "menu:menu080920261752062063",
+          "productName": "7 UP Zero (600ml)",
+          "unitPrice": 2500,
+          "quantity": 1,
+          "comboItems": [],
+          "comboSelections": [],
+          "excludedIngredients": []
+        }
+      ],
+      "createdAt": "2026-11-11T03:23:54.889Z",
+      "status": "pagada",
+      "total": 66000,
+      "operator": "admin",
+      "paymentMethod": "efectivo"
+    },
     {
       "id": "or081120260040511277",
       "items": [
@@ -9804,6 +10026,14 @@
   ],
   "invoices": [
     {
+      "id": "fc111120260023570363",
+      "orderId": "or111120260023549110",
+      "createdAt": "2026-11-11T03:23:57.695Z",
+      "total": 66000,
+      "paymentMethod": "efectivo",
+      "operator": "admin"
+    },
+    {
       "id": "fc081120260040527541",
       "orderId": "or081120260040511277",
       "createdAt": "2026-11-08T00:40:52.406Z",
@@ -11561,7 +11791,9 @@
       "id": "wd101120261229093242",
       "operator": "admin",
       "startedAt": "2026-11-10T12:29:09.649Z",
-      "orderIds": [],
+      "orderIds": [
+        "or111120260023549110"
+      ],
       "status": "open",
       "openingDeclaredAmount": 10000,
       "openingDifferenceAmount": 0
@@ -13025,9 +13257,9 @@
       "name": "Caja fisica local",
       "kind": "asset",
       "description": "Efectivo declarado en aperturas, ventas en efectivo, pagos y vueltos del local.",
-      "currentBalance": 2842100,
+      "currentBalance": 2908100,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-11-10T13:59:45.079Z"
+      "updatedAt": "2026-11-11T03:23:57.713Z"
     },
     {
       "id": "account-gains",
@@ -13035,9 +13267,9 @@
       "name": "Ganancias",
       "kind": "income",
       "description": "Ventas pagadas registradas por la plataforma.",
-      "currentBalance": 3048400,
+      "currentBalance": 3114400,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-11-10T13:59:45.079Z"
+      "updatedAt": "2026-11-11T03:23:57.713Z"
     },
     {
       "id": "account-expenses",
@@ -13047,7 +13279,7 @@
       "description": "Egresos confirmados por gastos y pagos de mercaderia.",
       "currentBalance": 0,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-11-10T13:59:45.079Z"
+      "updatedAt": "2026-11-11T03:23:57.713Z"
     },
     {
       "id": "account-food-categories",
@@ -13057,10 +13289,50 @@
       "description": "Movimientos asociados a ventas agrupadas por categorias de comida.",
       "currentBalance": 0,
       "createdAt": "2026-09-03T04:42:20.732Z",
-      "updatedAt": "2026-11-10T13:59:45.079Z"
+      "updatedAt": "2026-11-11T03:23:57.713Z"
     }
   ],
   "financialTransactions": [
+    {
+      "id": "txn-sale-cash-or111120260023549110",
+      "createdAt": "2026-11-11T03:23:54.889Z",
+      "type": "sale-cash",
+      "title": "Ingreso en caja por venta or111120260023549110",
+      "description": "Venta en efectivo cobrada por admin.",
+      "amount": 66000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-cash-local",
+      "referenceModule": "sale",
+      "referenceId": "or111120260023549110",
+      "orderId": "or111120260023549110",
+      "workdayId": "wd101120261229093242",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "cash-local",
+      "accountName": "Caja fisica local"
+    },
+    {
+      "id": "txn-sale-income-or111120260023549110",
+      "createdAt": "2026-11-11T03:23:54.889Z",
+      "type": "sale-income",
+      "title": "Venta pagada or111120260023549110",
+      "description": "Venta registrada por admin por 66000.",
+      "amount": 66000,
+      "direction": "in",
+      "entryKind": "credit",
+      "accountId": "account-gains",
+      "referenceModule": "sale",
+      "referenceId": "or111120260023549110",
+      "orderId": "or111120260023549110",
+      "workdayId": "wd101120261229093242",
+      "paymentMethod": "efectivo",
+      "actor": "admin",
+      "countsInBalance": true,
+      "accountCode": "gains",
+      "accountName": "Ganancias"
+    },
     {
       "id": "txn-cash-opening-wd101120261229093242",
       "createdAt": "2026-11-10T12:29:09.649Z",
@@ -21358,6 +21630,201 @@
   ],
   "licenses": [],
   "notifications": [
+    {
+      "id": "nt111120260023571747",
+      "type": "sale-created",
+      "title": "Venta registrada: or111120260023549110",
+      "description": "Venta por 66000 (admin).",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-12T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "order",
+      "entityId": "or111120260023549110",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023578496",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261736309330",
+      "description": "Se registro un ingreso de -1 unidades para ing080920261736309330.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023577859",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023573769",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261627457656",
+      "description": "Se registro un ingreso de -2 unidades para ing080920261627457656.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023571193",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023578695",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261853310833",
+      "description": "Se registro un ingreso de -2 unidades para ing030920261853310833.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023578494",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023571013",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261846327892",
+      "description": "Se registro un ingreso de -7 unidades para ing030920261846327892.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023570461",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023571241",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261612371371",
+      "description": "Se registro un ingreso de -7 unidades para ing080920261612371371.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023577392",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023575300",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261859217177",
+      "description": "Se registro un ingreso de -7 unidades para ing030920261859217177.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023570064",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023574280",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261858365479",
+      "description": "Se registro un ingreso de -7 unidades para ing030920261858365479.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023579140",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023579624",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261858536397",
+      "description": "Se registro un ingreso de -7 unidades para ing030920261858536397.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023571074",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023576630",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261856026387",
+      "description": "Se registro un ingreso de -7 unidades para ing030920261856026387.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023577376",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023572823",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261847273007",
+      "description": "Se registro un ingreso de -7 unidades para ing030920261847273007.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023572681",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023574520",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261846398391",
+      "description": "Se registro un ingreso de -7 unidades para ing030920261846398391.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023579157",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023572174",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing080920261609447483",
+      "description": "Se registro un ingreso de -7 unidades para ing080920261609447483.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023576742",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023577429",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261849092695",
+      "description": "Se registro un ingreso de -7 unidades para ing030920261849092695.",
+      "createdAt": "2026-11-11T03:23:57.679Z",
+      "dueAt": "2026-11-18T03:23:57.679Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023579005",
+      "status": "active"
+    },
+    {
+      "id": "nt111120260023574056",
+      "type": "stock-created",
+      "title": "Ingreso de stock: ing030920261851342941",
+      "description": "Se registro un ingreso de -4 unidades para ing030920261851342941.",
+      "createdAt": "2026-11-11T03:23:57.678Z",
+      "dueAt": "2026-11-18T03:23:57.678Z",
+      "isFixed": false,
+      "requiresAction": false,
+      "entityType": "stock",
+      "entityId": "se111120260023577863",
+      "status": "active"
+    },
     {
       "id": "nt101120261229092000",
       "type": "cash-opened",

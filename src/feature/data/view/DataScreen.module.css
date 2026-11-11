@@ -1,87 +1,87 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
-.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-.summaryGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 7.2px; margin-top: 14.4px; }
+.summaryGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(162px, 1fr)); gap: 7.2px; }
 
 .content {
   width: 100%;
-  max-width: 1080px;
+  max-width: 972px;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
 
 .guardBox {
-  margin-top: 14px;
-  border: 1px solid #fecaca;
+  margin-top: 12.6px;
+  border: 0.9px solid #fecaca;
   background: #fff1f2;
   color: #991b1b;
   font-weight: 800;
-  padding: 12px;
+  padding: 10.8px;
 }
 
 .panel {
-  margin-top: 14px;
-  border: 1px solid #e2e8f0;
+  margin-top: 12.6px;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   display: grid;
-  gap: 12px;
+  gap: 10.8px;
 }
 
 .title {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
 }
 
 .warning {
   margin: 0;
-  border: 1px solid #fecaca;
+  border: 0.9px solid #fecaca;
   background: #fef2f2;
   color: #991b1b;
-  padding: 10px 12px;
+  padding: 9px 10.8px;
   font-weight: 700;
 }
 
 .hint {
   margin: 0;
   color: #475569;
-  font-size: 13px;
+  font-size: 11.7px;
 }
 
 .hint code {
   background: #f1f5f9;
-  padding: 1px 4px;
+  padding: 0.9px 3.6px;
 }
 
 .form {
   display: grid;
-  gap: 10px;
-  max-width: 420px;
+  gap: 9px;
+  max-width: 378px;
 }
 
 .field {
   display: grid;
-  gap: 6px;
+  gap: 5.4px;
   font-weight: 800;
 }
 
@@ -89,41 +89,41 @@
   width: 100%;
   box-sizing: border-box;
   border-radius: 0;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   outline: none;
-  font-size: 15px;
+  font-size: 13.5px;
   background: #ffffff;
-  height: 40px;
-  padding: 0 10px;
+  height: 36px;
+  padding: 0 9px;
 }
 
 .primaryButton,
 .secondaryButton,
 .dangerButton {
   width: fit-content;
-  min-width: 190px;
-  height: 42px;
+  min-width: 171px;
+  height: 37.8px;
   border-radius: 0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   font-weight: 900;
   cursor: pointer;
 }
 
 .primaryButton {
-  border: 1px solid #0f172a;
+  border: 0.9px solid #0f172a;
   background: #0f172a;
   color: #ffffff;
 }
 
 .secondaryButton {
-  border: 1px solid #334155;
+  border: 0.9px solid #334155;
   background: #ffffff;
   color: #0f172a;
 }
 
 .dangerButton {
-  border: 1px solid #991b1b;
+  border: 0.9px solid #991b1b;
   background: #b91c1c;
   color: #ffffff;
 }
@@ -140,19 +140,19 @@
 .storeList {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 9px;
 }
 
 .storeCard {
-  border: 1px solid #e2e8f0;
-  padding: 10px;
+  border: 0.9px solid #e2e8f0;
+  padding: 9px;
   display: grid;
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .storeCardActive {
   border-color: #0f172a;
-  box-shadow: inset 0 0 0 1px #0f172a;
+  box-shadow: inset 0 0 0 0.9px #0f172a;
   background: #f8fafc;
 }
 
@@ -164,7 +164,7 @@
 
 .storeMeta {
   margin: 0;
-  font-size: 12px;
+  font-size: 10.8px;
   color: #334155;
   word-break: break-word;
 }
@@ -172,7 +172,7 @@
 .storeActions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .modalOverlay {
@@ -181,30 +181,30 @@
   z-index: 40;
   display: grid;
   place-items: center;
-  padding: 16px;
+  padding: 14.4px;
   background: rgb(15 23 42 / 0.42);
 }
 
 .modalCard {
-  width: min(100%, 440px);
-  border: 1px solid #0f172a;
+  width: min(100%, 396px);
+  border: 0.9px solid #0f172a;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   display: grid;
-  gap: 12px;
-  box-shadow: 6px 6px 0 #0f172a;
+  gap: 10.8px;
+  box-shadow: 5.4px 5.4px 0 #0f172a;
 }
 
 .modalActions {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .success {
-  margin: 14px 0 0;
-  padding: 10px 14px;
+  margin: 12.6px 0 0;
+  padding: 9px 12.6px;
   border-radius: 0;
   background: #dcfce7;
   color: #166534;
@@ -212,15 +212,15 @@
 }
 
 .error {
-  margin: 14px 0 0;
-  padding: 10px 14px;
+  margin: 12.6px 0 0;
+  padding: 9px 12.6px;
   border-radius: 0;
   background: #fee2e2;
   color: #991b1b;
   font-weight: 800;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 810px) {
   .storeList {
     grid-template-columns: 1fr;
   }

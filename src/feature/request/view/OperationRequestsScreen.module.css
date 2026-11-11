@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
@@ -9,21 +9,21 @@
   width: 100%;
   max-width: none;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
   display: grid;
-  gap: 14px;
+  gap: 12.6px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
@@ -31,7 +31,7 @@
 .tabs {
   display: inline-flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .tabBtn,
@@ -39,8 +39,8 @@
 .secondaryBtn,
 .inlineBtn,
 .inlineDangerBtn {
-  border: 1px solid #0f172a;
-  padding: 9px 14px;
+  border: 0.9px solid #0f172a;
+  padding: 8.1px 12.6px;
   font: inherit;
   font-weight: 800;
   cursor: pointer;
@@ -65,7 +65,7 @@
 
 .inlineBtn,
 .inlineDangerBtn {
-  padding: 7px 12px;
+  padding: 6.3px 10.8px;
 }
 
 .inlineDangerBtn,
@@ -77,49 +77,49 @@
 
 .listCard,
 .formCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 14px;
+  padding: 12.6px;
   display: grid;
-  gap: 12px;
+  gap: 10.8px;
 }
 
 .cardHeader {
   display: flex;
   justify-content: space-between;
   align-items: start;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .cardTitle {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
   color: #0f172a;
 }
 
 .cardSubtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
-  font-size: 14px;
+  font-size: 12.6px;
   font-weight: 600;
 }
 
 .filters {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(180px, 220px));
-  gap: 8px;
+  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(162px, 198px));
+  gap: 7.2px;
 }
 
 .searchInput,
 .filterSelect,
 .textarea {
   width: 100%;
-  border: 1px solid #cbd5e1;
+  border: 0.9px solid #cbd5e1;
   background: #ffffff;
   color: #0f172a;
-  padding: 10px 12px;
+  padding: 9px 10.8px;
   font: inherit;
 }
 
@@ -129,18 +129,18 @@
 
 .requestList {
   display: grid;
-  gap: 10px;
-  max-height: min(72vh, 760px);
+  gap: 9px;
+  max-height: min(72vh, 684px);
   overflow: auto;
-  padding-right: 4px;
+  padding-right: 3.6px;
 }
 
 .requestCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #f8fafc;
-  padding: 12px;
+  padding: 10.8px;
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .requestTop,
@@ -149,7 +149,7 @@
 .requestSummaryRow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7.2px;
   flex-wrap: wrap;
 }
 
@@ -158,15 +158,15 @@
 }
 
 .requestType {
-  font-size: 14px;
+  font-size: 12.6px;
   font-weight: 900;
   color: #0f172a;
 }
 
 .badge {
-  padding: 2px 8px;
-  border: 1px solid;
-  font-size: 12px;
+  padding: 1.8px 7.2px;
+  border: 0.9px solid;
+  font-size: 10.8px;
   font-weight: 800;
 }
 
@@ -201,19 +201,19 @@
 
 .requestSummaryRow {
   color: #475569;
-  font-size: 13px;
+  font-size: 11.7px;
   font-weight: 700;
 }
 
 .reviewNote {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 10px;
+  padding: 9px;
 }
 
 .formLayout {
   display: grid;
-  gap: 14px;
+  gap: 12.6px;
   align-items: start;
 }
 
@@ -224,37 +224,37 @@
 .formColumn,
 .selectionColumn {
   display: grid;
-  gap: 14px;
+  gap: 12.6px;
   align-content: start;
   min-width: 0;
 }
 
 .form {
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .editingHint,
 .formHint {
   margin: 0;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #f8fafc;
   color: #334155;
-  padding: 10px 12px;
+  padding: 9px 10.8px;
   font-weight: 700;
 }
 
 .typeButtons {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .typeBtn {
-  border: 1px solid #0f172a;
+  border: 0.9px solid #0f172a;
   background: #ffffff;
   color: #0f172a;
-  padding: 10px 12px;
+  padding: 9px 10.8px;
   font-weight: 800;
   cursor: pointer;
 }
@@ -266,7 +266,7 @@
 
 .field {
   display: grid;
-  gap: 6px;
+  gap: 5.4px;
   color: #0f172a;
   font-weight: 700;
 }
@@ -274,30 +274,30 @@
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 7.2px;
   flex-wrap: wrap;
 }
 
 .errorBox,
 .successBox,
 .warningBox {
-  padding: 10px;
+  padding: 9px;
 }
 
 .errorBox {
-  border: 1px solid #fecaca;
+  border: 0.9px solid #fecaca;
   background: #fff1f2;
   color: #9f1239;
 }
 
 .successBox {
-  border: 1px solid #bbf7d0;
+  border: 0.9px solid #bbf7d0;
   background: #f0fdf4;
   color: #166534;
 }
 
 .warningBox {
-  border: 1px solid #fcd34d;
+  border: 0.9px solid #fcd34d;
   background: #fffbeb;
   color: #92400e;
 }
@@ -313,23 +313,23 @@
   background: rgba(15, 23, 42, 0.35);
   display: grid;
   place-items: center;
-  padding: 16px;
+  padding: 14.4px;
   z-index: 50;
 }
 
 .modalCard {
-  width: min(100%, 520px);
-  border: 1px solid #e2e8f0;
+  width: min(100%, 468px);
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
   color: #0f172a;
-  padding: 14px;
+  padding: 12.6px;
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .modalTitle {
   margin: 0;
-  font-size: 18px;
+  font-size: 16.2px;
   font-weight: 900;
 }
 
@@ -341,28 +341,28 @@
 
 .modalDescription {
   margin: 0;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #f8fafc;
   color: #334155;
-  padding: 8px 10px;
+  padding: 7.2px 9px;
   white-space: pre-wrap;
 }
 
 .modalActions {
-  margin-top: 8px;
+  margin-top: 7.2px;
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 7.2px;
   flex-wrap: wrap;
 }
 
 .modalDangerBtn {
-  padding: 9px 14px;
+  padding: 8.1px 12.6px;
   font-weight: 800;
   cursor: pointer;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 990px) {
   .filters {
     grid-template-columns: 1fr;
   }
@@ -372,7 +372,7 @@
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 648px) {
   .tabs,
   .actions,
   .modalActions {

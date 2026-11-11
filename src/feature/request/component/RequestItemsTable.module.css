@@ -1,9 +1,9 @@
 .card {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 14px;
+  padding: 12.6px;
   display: grid;
-  gap: 12px;
+  gap: 10.8px;
   min-width: 0;
 }
 
@@ -11,27 +11,27 @@
   display: flex;
   justify-content: space-between;
   align-items: start;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .title {
   margin: 0;
-  font-size: 18px;
+  font-size: 16.2px;
   font-weight: 900;
   color: #0f172a;
 }
 
 .meta,
 .helperText {
-  margin: 4px 0 0;
+  margin: 3.6px 0 0;
   color: #475569;
-  font-size: 13px;
+  font-size: 11.7px;
   font-weight: 700;
 }
 
 .tableCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
   min-width: 0;
 }
@@ -39,20 +39,20 @@
 .tableHead,
 .row {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 0.9fr) minmax(120px, 0.9fr);
-  gap: 10px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 0.9fr) minmax(108px, 0.9fr);
+  gap: 9px;
   align-items: center;
-  padding: 12px;
+  padding: 10.8px;
   min-width: 0;
 }
 
 .tableHeadEditable,
 .rowEditable {
-  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 0.9fr) minmax(120px, 0.9fr) 92px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.75fr) minmax(0, 0.75fr) minmax(0, 0.9fr) minmax(108px, 0.9fr) 82.8px;
 }
 
 .tableHead {
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 0.9px solid #e2e8f0;
   background: #f8fafc;
   font-weight: 900;
   color: #0f172a;
@@ -63,7 +63,7 @@
 }
 
 .row {
-  border-top: 1px solid #e2e8f0;
+  border-top: 0.9px solid #e2e8f0;
 }
 
 .row:first-child {
@@ -96,12 +96,12 @@
 .quantityStepper {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .stepBtn,
 .removeBtn {
-  border: 1px solid #0f172a;
+  border: 0.9px solid #0f172a;
   background: #ffffff;
   color: #0f172a;
   cursor: pointer;
@@ -110,8 +110,8 @@
 }
 
 .stepBtn {
-  width: 30px;
-  height: 30px;
+  width: 27px;
+  height: 27px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -119,21 +119,21 @@
 }
 
 .stepInput {
-  width: 56px;
-  border: 1px solid #cbd5e1;
+  width: 50.4px;
+  border: 0.9px solid #cbd5e1;
   background: #ffffff;
   color: #0f172a;
-  padding: 6px 8px;
+  padding: 5.4px 7.2px;
   font: inherit;
   text-align: center;
 }
 
 .quantityBadge {
-  min-width: 52px;
-  border: 1px solid #cbd5e1;
+  min-width: 46.8px;
+  border: 0.9px solid #cbd5e1;
   background: #f8fafc;
   color: #0f172a;
-  padding: 6px 10px;
+  padding: 5.4px 9px;
   text-align: center;
   font-weight: 900;
 }
@@ -144,7 +144,7 @@
 }
 
 .removeBtn {
-  padding: 6px 10px;
+  padding: 5.4px 9px;
   border-color: #991b1b;
   color: #991b1b;
 }
@@ -159,7 +159,7 @@
 
 .empty {
   margin: 0;
-  padding: 16px;
+  padding: 14.4px;
   color: #475569;
 }
 
@@ -168,7 +168,7 @@
   justify-content: flex-end;
 }
 
-@media (max-width: 980px) {
+@media (max-width: 882px) {
   .tableHead,
   .row,
   .tableHeadEditable,

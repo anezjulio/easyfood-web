@@ -1,4 +1,5 @@
 :root {
+  font-size: 90%;
   box-sizing: border-box;
   --font-sans: "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
   --text-primary: #0f172a;
@@ -67,7 +68,7 @@ a:hover {
 body {
   margin: 0;
   display: block;
-  min-width: 320px;
+  min-width: 288px;
   min-height: 100vh;
   overflow-x: hidden;
   background: var(--bg-app);
@@ -81,7 +82,7 @@ body {
 
 button {
   border-radius: 0;
-  border: 1px solid transparent;
+  border: 0.9px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 600;
@@ -99,8 +100,8 @@ button:hover {
 
 button:focus,
 button:focus-visible {
-  outline: 2px solid #93c5fd;
-  outline-offset: 1px;
+  outline: 1.8px solid #93c5fd;
+  outline-offset: 0.9px;
 }
 
 .table-filter-input {
@@ -108,10 +109,10 @@ button:focus-visible {
 }
 
 .table-date-filter-input::-webkit-calendar-picker-indicator {
-  transform: translateX(-4px);
+  transform: translateX(-3.6px);
 }
 
-@media (max-height: 820px) {
+@media (max-height: 738px) {
   [class*="_layout_"],
   [class*="_gridTwo_"],
   [class*="_marginsPanel_"],

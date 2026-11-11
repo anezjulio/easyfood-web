@@ -1,5 +1,5 @@
 .nav {
-  margin-top: 10px;
+  margin-top: 9px;
 }
 
 .navInline {
@@ -17,14 +17,14 @@
 }
 
 .listTitle {
-  font-size: 28px;
+  font-size: 25.2px;
   font-weight: 500;
 }
 
 .listTitle .item,
 .listTitle .link,
 .listTitle .current {
-  font-size: 28px;
+  font-size: 25.2px;
   line-height: 1.1;
 }
 
@@ -32,14 +32,14 @@
   display: inline-flex;
   align-items: center;
   color: #475569;
-  font-size: 14px;
+  font-size: 12.6px;
   font-weight: 700;
 }
 
 .item + .item::before {
   content: "/";
   color: #94a3b8;
-  margin: 0 8px;
+  margin: 0 7.2px;
 }
 
 .link {

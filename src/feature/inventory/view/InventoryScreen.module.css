@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
@@ -9,37 +9,37 @@
   width: 100%;
   max-width: none;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
 
 .tabs {
-  margin-top: 16px;
+  margin-top: 14.4px;
   display: flex;
-  gap: 8px;
-  border-bottom: 1px solid #cbd5e1;
+  gap: 7.2px;
+  border-bottom: 0.9px solid #cbd5e1;
 }
 
 .tabBtn {
-  border: 1px solid transparent;
+  border: 0.9px solid transparent;
   border-bottom: 0;
   background: #f8fafc;
   color: #475569;
-  min-height: 42px;
-  padding: 0 16px;
+  min-height: 37.8px;
+  padding: 0 14.4px;
   font: inherit;
   font-weight: 800;
   cursor: pointer;
@@ -49,89 +49,89 @@
   border-color: #cbd5e1;
   background: #ffffff;
   color: #c2410c;
-  box-shadow: 0 -2px 0 #ea580c inset;
+  box-shadow: 0 -1.8px 0 #ea580c inset;
 }
 
 .layout {
-  margin-top: 16px;
+  margin-top: 14.4px;
   display: grid;
-  grid-template-columns: minmax(360px, 0.8fr) minmax(0, 1.2fr);
-  gap: 12px;
+  grid-template-columns: minmax(324px, 0.8fr) minmax(0, 1.2fr);
+  gap: 10.8px;
   align-items: start;
 }
 
 .formCard,
 .listCard,
 .stockPanel {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 10px;
+  padding: 9px;
 }
 
 .form {
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .field {
   display: grid;
-  gap: 5px;
+  gap: 4.5px;
   color: #334155;
-  font-size: 13px;
+  font-size: 11.7px;
   font-weight: 900;
 }
 
 .input,
 .thresholdInput {
-  height: 40px;
+  height: 36px;
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #cbd5e1;
+  border: 0.9px solid #cbd5e1;
   background: #ffffff;
   color: #0f172a;
-  padding: 0 10px;
+  padding: 0 9px;
   font: inherit;
   font-weight: 800;
 }
 
 .thresholdInput {
-  max-width: 120px;
+  max-width: 108px;
 }
 
 .previewBox {
-  min-height: 42px;
+  min-height: 37.8px;
   display: flex;
   align-items: center;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #f8fafc;
-  padding: 0 10px;
+  padding: 0 9px;
   color: #0f172a;
   font-weight: 900;
 }
 
 .primaryBtn,
 .inlineBtn {
-  min-height: 40px;
-  border: 1px solid #0f172a;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  min-height: 36px;
+  border: 0.9px solid #0f172a;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #0f172a;
   color: #ffffff;
-  padding: 0 14px;
+  padding: 0 12.6px;
   font: inherit;
   font-weight: 900;
   cursor: pointer;
 }
 
 .inlineBtn {
-  min-height: 36px;
+  min-height: 32.4px;
   background: #ffffff;
   color: #0f172a;
 }
 
 .errorBox,
 .successBox {
-  padding: 10px 12px;
+  padding: 9px 10.8px;
   font-weight: 900;
 }
 
@@ -147,20 +147,20 @@
 
 .listCard {
   display: grid;
-  gap: 8px;
-  max-height: calc(100vh - 180px);
+  gap: 7.2px;
+  max-height: calc(100vh - 162px);
   overflow: auto;
 }
 
 .inventoryItem {
-  border: 1px solid #e2e8f0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #e2e8f0;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #ffffff;
   color: #0f172a;
-  padding: 10px;
+  padding: 9px;
   display: grid;
-  gap: 4px;
+  gap: 3.6px;
   text-align: left;
   cursor: pointer;
 }
@@ -177,29 +177,29 @@
 }
 
 .stockPanel {
-  margin-top: 16px;
+  margin-top: 14.4px;
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .stockTools {
-  max-width: 460px;
+  max-width: 414px;
 }
 
 .stockTable {
   display: grid;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   overflow: auto;
 }
 
 .stockHead,
 .stockRow {
-  min-width: 860px;
+  min-width: 774px;
   display: grid;
-  grid-template-columns: minmax(180px, 1.2fr) 150px 120px 140px 120px 100px;
-  gap: 8px;
+  grid-template-columns: minmax(162px, 1.2fr) 135px 108px 126px 108px 90px;
+  gap: 7.2px;
   align-items: center;
-  padding: 10px;
+  padding: 9px;
 }
 
 .stockHead {
@@ -209,33 +209,33 @@
   background: #f1f5f9;
   color: #0f172a;
   font-weight: 900;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 0.9px solid #e2e8f0;
 }
 
 .stockRow {
-  border-top: 1px solid #e2e8f0;
+  border-top: 0.9px solid #e2e8f0;
   color: #334155;
   font-weight: 800;
 }
 
 .stockWarning {
   background: #fffbeb;
-  border-left: 5px solid #f59e0b;
+  border-left: 4.5px solid #f59e0b;
 }
 
 .stockCritical {
   background: #fef2f2;
-  border-left: 5px solid #dc2626;
+  border-left: 4.5px solid #dc2626;
 }
 
 .empty {
   margin: 0;
-  padding: 14px;
+  padding: 12.6px;
   color: #475569;
   font-weight: 800;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 810px) {
   .layout {
     grid-template-columns: 1fr;
   }

@@ -69,7 +69,7 @@ export default function HelpScreen() {
       window.history.replaceState(null, "", nextHash);
     }
 
-    if (window.matchMedia("(max-width: 980px)").matches) {
+    if (window.matchMedia("(max-width: 882px)").matches) {
       window.requestAnimationFrame(() => {
         document.getElementById("help-detail")?.scrollIntoView({ behavior: "smooth", block: "start" });
       });

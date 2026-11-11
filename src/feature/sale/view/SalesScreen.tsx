@@ -39,8 +39,8 @@ import {
 } from "../../cash/service/cash.api";
 import { openCashWithAmount, syncCashState as syncCashStateService } from "../../cash/service/cash.operation";
 import { DATA_STORE_CHANGED_EVENT } from "../../data/service/data.api";
-import type { Ingredient } from "../../ingredient/model/ingredient.types";
-import { fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
+import type { Ingredient, IngredientCategory } from "../../ingredient/model/ingredient.types";
+import { fetchIngredientCategoriesApi, fetchIngredientsApi } from "../../ingredient/service/ingredient.api";
 import { buildDefaultSystemSettings, type SystemSettings } from "../../system/model/system.types";
 import { fetchSystemSettingsApi } from "../../system/service/system.api";
 import styles from "./SalesScreen.module.css";
@@ -198,12 +198,11 @@ export default function SalesScreen() {
   const cartCardRef = useRef<HTMLElement | null>(null);
   const [products, setProducts] = useState<SellableProduct[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [ingredientCategories, setIngredientCategories] = useState<IngredientCategory[]>([]);
   const [menuCategories, setMenuCategories] = useState<MenuCategory[]>([]);
   const [systemSettings, setSystemSettings] = useState<SystemSettings>(buildDefaultSystemSettings());
   const [loading, setLoading] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
-  const [quantityToAdd, setQuantityToAdd] = useState("1");
-  const [editingCartId, setEditingCartId] = useState<string | null>(null);
   const [excludedIngredients, setExcludedIngredients] = useState<NonNullable<CartItem["excludedIngredients"]>>([]);
   const [comboSelections, setComboSelections] = useState<Record<string, string>>({});
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -236,12 +235,13 @@ export default function SalesScreen() {
   async function reloadProducts() {
     setLoading(true);
     try {
-      const [productList, menuProductList, categoryList, ingredientList, nextSystemSettings] = await Promise.all([
+      const [productList, menuProductList, categoryList, ingredientList, nextSystemSettings, ingredientCategoryList] = await Promise.all([
         fetchProducts(),
         fetchMenuProductsApi(),
         fetchMenuCategoriesApi(),
         fetchIngredientsApi(),
         fetchSystemSettingsApi(),
+        fetchIngredientCategoriesApi(),
       ]);
       const menuById = new Map(menuProductList.map((item) => [item.id, item]));
       setProducts(productList.map((product) => {
@@ -251,6 +251,7 @@ export default function SalesScreen() {
           : { ...product, id: buildMenuSaleProductId(product.id), menuProductId: product.id };
       }));
       setIngredients(ingredientList);
+      setIngredientCategories(ingredientCategoryList);
       setSystemSettings(nextSystemSettings);
       setMenuCategories(categoryList);
     } finally {
@@ -267,8 +268,7 @@ export default function SalesScreen() {
       setCart([]);
       setPendingOrder(null);
       setSelectedProductId(null);
-      setQuantityToAdd("1");
-      setComboSelections({}); setEditingCartId(null); setExcludedIngredients([]);
+      setComboSelections({}); setExcludedIngredients([]);
       void reloadProducts();
     };
     window.addEventListener(DATA_STORE_CHANGED_EVENT, handler);
@@ -413,7 +413,6 @@ export default function SalesScreen() {
       setCart([]);
       setDraftOrderCode(generateOrderCode());
       setSelectedProductId(null);
-      setQuantityToAdd("1");
       setIsModalOpen(false);
       setError("");
       setWarning(`Se acabo el tiempo para pagar la orden ${pendingOrder.id}. El pago fue rechazado automaticamente.`);
@@ -532,21 +531,13 @@ export default function SalesScreen() {
 
   function chooseProduct(id: string) {
     if (hasPendingPayment) return;
-    if (selectedProductId === id && !editingCartId) {
+    if (selectedProductId === id) {
       addSelectedProductToCart(true, 1);
       return;
     }
-    setSelectedProductId(id); setEditingCartId(null); setExcludedIngredients([]);
-    setQuantityToAdd("1"); setComboSelections({}); setError("");
-    if (window.innerWidth <= 920) requestAnimationFrame(() => cartCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
-  }
-
-  function editCartItem(item: CartItem) {
-    if (hasPendingPayment) return;
-    setSelectedProductId(item.productId); setEditingCartId(item.id);
-    setQuantityToAdd(String(item.quantity)); setComboSelections(mapSelectionsByCategory(item.comboSelections));
-    setExcludedIngredients(item.excludedIngredients || []); setError("");
-    cartCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setSelectedProductId(id); setExcludedIngredients([]);
+    setComboSelections({}); setError("");
+    if (window.innerWidth <= 828) requestAnimationFrame(() => cartCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
 
   function buildCartIngredientConsumption(ignoreCartItemId?: string) {
@@ -562,7 +553,7 @@ export default function SalesScreen() {
     return consumption;
   }
 
-  function resolveProductStock(product: SellableProduct | null | undefined, ignoreCartId = editingCartId): number {
+  function resolveProductStock(product: SellableProduct | null | undefined, ignoreCartId: string | null = null): number {
     if (!product) return 0;
     if (systemSettings.allowOutOfStockSales) return Infinity;
     const consumption = resolveUnitConsumption(product, comboSelections, products, excludedIngredients);
@@ -583,17 +574,7 @@ export default function SalesScreen() {
     return cart.find((item) => cartConfigurationKey(item) === key);
   }
 
-  function subtractSelectedProductFromCart() {
-    if (hasPendingPayment) return;
-    const item = findSelectedCartItem();
-    const quantity = Number(quantityToAdd);
-    if (!item) return;
-    if (!Number.isInteger(quantity) || quantity < 1) { setError("Ingresa una cantidad entera mayor a cero."); return; }
-    setCart((previous) => previous.flatMap((entry) => entry.id !== item.id ? [entry] : entry.quantity > quantity ? [{ ...entry, quantity: entry.quantity - quantity }] : []));
-    setError("");
-  }
-
-  function addSelectedProductToCart(mergeExisting = true, quantity = Number(quantityToAdd)) {
+  function addSelectedProductToCart(mergeExisting = true, quantity = 1) {
     if (!selectedProduct || hasPendingPayment) return;
     setError("");
     if (!Number.isInteger(quantity) || quantity < 1) { setError("Ingresa una cantidad entera mayor a cero."); return; }
@@ -607,7 +588,7 @@ export default function SalesScreen() {
     const components = recipeComponents(selectedProduct, comboSelections, products);
     const excluded = excludedIngredients.filter((item) => components.some((component) => component.menuProductId === item.productId && component.menuProduct?.recipeItems.some((recipeItem) => recipeItem.ingredientId === item.ingredientId && !isRecipeIngredientRequired(recipeItem, component.menuProduct!.recipeItems.length))));
     const existing = mergeExisting ? findSelectedCartItem() : undefined;
-    const targetId = mergeExisting ? existing?.id : editingCartId;
+    const targetId = existing?.id;
     const nextQuantity = quantity + (existing?.quantity || 0);
     if (nextQuantity > resolveProductStock(selectedProduct, targetId || null)) { setError("No hay stock suficiente para esta cantidad."); return; }
     const item: CartItem = {
@@ -616,13 +597,27 @@ export default function SalesScreen() {
       comboItems: resolveComboItems(selectedProduct, selectionList, products), excludedIngredients: excluded,
     };
     setCart((previous) => targetId ? previous.map((entry) => entry.id === targetId ? item : entry) : [...previous, item]);
-    setEditingCartId(null);
+  }
+
+  function changeCartQuantity(item: CartItem, delta: number) {
+    if (hasPendingPayment) return;
+    if (delta > 0 && !systemSettings.allowOutOfStockSales) {
+      const product = products.find((entry) => entry.id === item.productId);
+      if (!product) return;
+      const consumption = resolveUnitConsumption(product, mapSelectionsByCategory(item.comboSelections), products, item.excludedIngredients);
+      const reserved = buildCartIngredientConsumption();
+      for (const [id, amount] of consumption) {
+        const available = Number(id.startsWith("product:") ? products.find((entry) => entry.id === id.slice(8))?.existencia || 0 : ingredients.find((entry) => entry.id === id)?.stockQuantity || 0);
+        if ((reserved.get(id) || 0) + amount > available) { setError("No hay stock suficiente para esta cantidad."); return; }
+      }
+    }
+    setCart((previous) => previous.flatMap((entry) => entry.id !== item.id ? [entry] : entry.quantity + delta > 0 ? [{ ...entry, quantity: entry.quantity + delta }] : []));
+    setError("");
   }
 
   function removeFromCart(id: string) {
     if (hasPendingPayment) return;
     setCart((previous) => previous.filter((item) => item.id !== id));
-    if (editingCartId === id) { setEditingCartId(null); setSelectedProductId(null); setExcludedIngredients([]); }
   }
 
   async function openPaymentModal() {
@@ -642,7 +637,7 @@ export default function SalesScreen() {
         setCart([]);
         setDraftOrderCode(generateOrderCode());
         setSelectedProductId(null);
-        setQuantityToAdd("1");
+
         setIsModalOpen(false);
         setError("");
         setWarning(`Se acabo el tiempo para pagar la orden ${pendingOrder.id}. El pago fue rechazado automaticamente.`);
@@ -768,7 +763,6 @@ export default function SalesScreen() {
       setCart([]);
       setDraftOrderCode(generateOrderCode());
       setSelectedProductId(null);
-      setQuantityToAdd("1");
       setIsModalOpen(false);
       setWarning("");
       setMessage("");
@@ -781,7 +775,7 @@ export default function SalesScreen() {
     }
   }
 
-  const generateLabel = hasPendingPayment ? "Continuar cobro" : "Ir a cobrar";
+  const generateLabel = hasPendingPayment ? "Continuar cobro" : "Cobrar";
   const orderCodeLabel = pendingOrder?.id || draftOrderCode;
   const shouldDisableSalesContent = !isCashStateResolved || !isCashOpenForSession;
   const shouldShowClosedCashModal = Boolean(currentUsername) && isCashStateResolved && !isCashOpenForSession;
@@ -813,25 +807,14 @@ export default function SalesScreen() {
         <p className={styles.orderReference}>Pedido {orderCodeLabel}</p>
         <div className={styles.layout}>
           <section className={styles.listCard}>
-            <h2 className={styles.cardTitle}>Productos</h2>
-            <div className={styles.salesFilters}>
-              <label className={styles.salesFilterField}>
-                <span>Buscar producto</span>
-                <input value={nameFilter} onChange={(event) => setNameFilter(event.target.value)} placeholder="Nombre del producto" />
-              </label>
-              <label className={styles.salesFilterField}>
-                <span>Precio</span>
-                <input value={priceFilter} onChange={(event) => setPriceFilter(event.target.value)} placeholder="Filtrar por precio" inputMode="numeric" />
-              </label>
-            </div>
-
+            <div className={styles.catalogFilters}>
             <div className={styles.categoryFilters} aria-label="Categorias de productos">
               <button
                 type="button"
                 className={`${styles.categoryFilterBtn} ${categoryFilter ? "" : styles.categoryFilterBtnActive}`.trim()}
                 onClick={() => setCategoryFilter("")}
               >
-                Todas ({products.length})
+                Todas
               </button>
               {categoryOptions.map((category) => (
                 <button
@@ -842,9 +825,20 @@ export default function SalesScreen() {
                   }`.trim()}
                   onClick={() => setCategoryFilter(category.id)}
                 >
-                  {category.name} ({category.count})
+                  {category.name}
                 </button>
               ))}
+            </div>
+            <div className={styles.salesFilters}>
+              <label className={styles.salesFilterField}>
+                <span>Producto</span>
+                <input value={nameFilter} onChange={(event) => setNameFilter(event.target.value)} placeholder="Nombre del producto" />
+              </label>
+              <label className={styles.salesFilterField}>
+                <span>Precio</span>
+                <input value={priceFilter} onChange={(event) => setPriceFilter(event.target.value)} placeholder="Filtrar por precio" inputMode="numeric" />
+              </label>
+            </div>
             </div>
             <div className={styles.groupedCatalog} aria-label="Catalogo de productos">
               {loading && <p>Cargando productos...</p>}
@@ -860,25 +854,37 @@ export default function SalesScreen() {
             </div>
           </section>
           <section ref={cartCardRef} className={styles.cartCard} aria-label="Pedido y personalizacion">
-            <h2 className={styles.cardTitle}>{editingCartId ? "Editar producto" : "Personalizar producto"}</h2>
             {selectedProduct ? <>
               <div className={styles.selectedBox}><div className={styles.selectedProductRow}>
                 {selectedImageUrl ? <img className={styles.selectedProductImg} src={selectedImageUrl} alt={selectedProduct.name} /> : <div className={styles.selectedProductFallback}>{selectedProduct.name.slice(0, 1)}</div>}
-                <div className={styles.selectedProductInfo}><h3 className={styles.selectedName}>{selectedProduct.name}</h3><strong>{formatMoneyARS(selectedProduct.price)}</strong>
+                <div className={styles.selectedProductInfo}><h3 className={styles.selectedName}>{selectedProduct.name}</h3><strong className={styles.selectedPrice}>{formatMoneyARS(selectedProduct.price)}</strong>
                   {selectedProduct.description && <p className={styles.subtitle}>{selectedProduct.description}</p>}
                   {!systemSettings.allowOutOfStockSales && <small>{selectedProductStockLabel}</small>}
                 </div>
               </div></div>
               {recipeComponents(selectedProduct, comboSelections, products).filter((component) => component.menuProduct?.recipeItems.length).map((component, index) => <fieldset key={component.id + index} className={styles.customizationGroup}>
                 <legend>{selectedProduct.menuProduct?.kind === "combo" ? component.name : "Ingredientes"}</legend>
-                <div className={styles.optionGrid}>{[...component.menuProduct!.recipeItems].sort((a, b) => Number(isRecipeIngredientRequired(b, component.menuProduct!.recipeItems.length)) - Number(isRecipeIngredientRequired(a, component.menuProduct!.recipeItems.length))).map((ingredient) => isRecipeIngredientRequired(ingredient, component.menuProduct!.recipeItems.length) ? <div key={ingredient.ingredientId} className={styles.requiredIngredient}>
+                <div className={styles.ingredientGroups}>{[...ingredientCategories, { id: "", name: "Sin categoria" }]
+                  .map((category) => ({ ...category, items: component.menuProduct!.recipeItems.filter((item) => {
+                    const categoryId = ingredients.find((entry) => entry.id === item.ingredientId)?.categoryId;
+                    return category.id ? categoryId === category.id : !ingredientCategories.some((entry) => entry.id === categoryId);
+                  }) }))
+                  .filter((group) => group.items.length)
+                  .sort((a, b) => {
+                    const order = ["panificados", "carnes", "lacteos", "vegetales", "salsas", "sin categoria", "bebidas"];
+                    const rank = (name: string) => { const index = order.indexOf(normalizeForSearch(name)); return index < 0 ? 5.5 : index; };
+                    return rank(a.name) - rank(b.name) || a.name.localeCompare(b.name, "es");
+                  }).map((group) => <div key={group.id} className={styles.ingredientGroup}>
+                    <strong className={styles.ingredientGroupName}>{group.name}</strong>
+                    <div className={styles.ingredientList}>{group.items.sort((a, b) => a.ingredientName.localeCompare(b.ingredientName, "es")).map((ingredient) => isRecipeIngredientRequired(ingredient, component.menuProduct!.recipeItems.length) ? <div key={ingredient.ingredientId} className={styles.ingredientText}>
                   <span>{ingredient.ingredientName}</span>
-                </div> : <label key={ingredient.ingredientId} className={styles.optionCard}>
+                </div> : <label key={ingredient.ingredientId} className={styles.ingredientOption}>
                   <input type="checkbox" checked={!excludedIngredients.some((item) => item.productId === component.menuProductId && item.ingredientId === ingredient.ingredientId)} disabled={hasPendingPayment} onChange={(event) => {
                     const entry = { productId: component.menuProductId!, ingredientId: ingredient.ingredientId, ingredientName: ingredient.ingredientName };
                     setExcludedIngredients((previous) => event.target.checked ? previous.filter((item) => item.productId !== entry.productId || item.ingredientId !== entry.ingredientId) : [...previous, entry]);
                   }} />{ingredient.ingredientName}
                 </label>)}</div>
+                  </div>)}</div>
               </fieldset>)}
               {(selectedProduct.menuProduct?.comboItems || []).filter((item) => item.type === "category" && item.category).map((group) => <fieldset key={group.category} className={styles.customizationGroup}>
                 <legend>{group.categoryName || formatCategoryLabel(group.category!, menuCategories)}</legend>
@@ -886,28 +892,24 @@ export default function SalesScreen() {
                   <input type="radio" name={"option-" + group.category} checked={comboSelections[group.category!] === option.id} disabled={hasPendingPayment} onChange={() => { setComboSelections((previous) => ({ ...previous, [group.category!]: option.id })); setExcludedIngredients((previous) => previous.filter((entry) => recipeComponents(selectedProduct, { ...comboSelections, [group.category!]: option.id }, products).some((component) => component.menuProductId === entry.productId))); }} />{option.name}
                 </label>)}</div>
               </fieldset>)}
-              <div className={styles.editorActions}>
-                <label className={styles.quantityRow}><span>Cantidad</span><input className={styles.input} type="number" min={1} step={1} value={quantityToAdd} onChange={(event) => setQuantityToAdd(event.target.value)} disabled={hasPendingPayment} /></label>
-                {editingCartId ? <button className={styles.primaryBtn} onClick={() => addSelectedProductToCart(false)} disabled={hasPendingPayment}>Guardar cambios</button> : <>
-                  <button type="button" className={`${styles.primaryBtn} ${styles.quantityActionButton}`} onClick={() => addSelectedProductToCart(true)} disabled={hasPendingPayment} aria-label="Sumar al pedido">+</button>
-                  <button type="button" className={`${styles.dangerBtn} ${styles.quantityActionButton}`} onClick={subtractSelectedProductFromCart} disabled={hasPendingPayment || !findSelectedCartItem()} aria-label="Restar del pedido">-</button>
-                </>}
-                {editingCartId && <button className={styles.secondaryBtn} disabled={hasPendingPayment} onClick={() => { setEditingCartId(null); setSelectedProductId(null); setExcludedIngredients([]); }}>Cancelar edicion</button>}
-              </div>
             </> : <p className={styles.empty}>Selecciona un producto del catalogo para ver sus opciones.</p>}
             <div className={styles.orderHeading}><h2 className={styles.cardTitle}>Tu pedido</h2><span>{cart.reduce((sum, item) => sum + item.quantity, 0)} productos</span></div>
             <div className={styles.orderItems}>
               {!cart.length && <p className={styles.empty}>El pedido esta vacio.</p>}
               {cart.map((item) => <article key={item.id} className={styles.orderItem}>
-                <div className={styles.orderItemHeading}><strong>{item.quantity} × {item.productName}</strong><strong>{formatMoneyARS(item.unitPrice * item.quantity)}</strong></div>
-                {!!item.comboItems?.length && <p className={styles.customizationHint}>{item.comboItems.map((component) => (component.quantity > 1 ? component.quantity + " × " : "") + (products.find((product) => product.menuProductId === component.menuProductId)?.name || component.menuProductName)).join(" · ")}</p>}
-                {!!item.excludedIngredients?.length && <p className={styles.removedIngredients}>{item.excludedIngredients.map((ingredient) => "Sin " + ingredient.ingredientName + (item.comboItems?.length ? " (" + (products.find((product) => product.menuProductId === ingredient.productId)?.name || "") + ")" : "")).join(" · ")}</p>}
-                <div className={styles.orderItemActions}><button className={styles.secondaryBtn} disabled={hasPendingPayment} onClick={() => editCartItem(item)}>Editar</button><button className={styles.removeItemButton} disabled={hasPendingPayment} onClick={() => removeFromCart(item.id)} aria-label={"Quitar " + item.productName}>Quitar</button></div>
+                <strong className={styles.orderLineName} title={[item.productName, ...(item.comboItems || []).map((entry) => entry.menuProductName), ...(item.excludedIngredients || []).map((entry) => "Sin " + entry.ingredientName)].join(" · ")}>{item.quantity}x {item.productName}{!!item.excludedIngredients?.length && <small> · {item.excludedIngredients.map((entry) => "Sin " + entry.ingredientName).join(", ")}</small>}</strong>
+                <span className={styles.orderLineLeader} />
+                <strong className={styles.orderLinePrice}>{formatMoneyARS(item.unitPrice * item.quantity)}</strong>
+                <button type="button" className={styles.orderLineButton} disabled={hasPendingPayment} onClick={() => changeCartQuantity(item, 1)} aria-label={"Sumar " + item.productName}>+</button>
+                <button type="button" className={styles.orderLineButton} disabled={hasPendingPayment} onClick={() => changeCartQuantity(item, -1)} aria-label={"Restar " + item.productName}>-</button>
+                <button type="button" className={styles.orderLineRemove} disabled={hasPendingPayment} onClick={() => removeFromCart(item.id)} aria-label={"Quitar " + item.productName}>X</button>
               </article>)}
             </div>
-            <div className={styles.totals}><p className={styles.totalLabel}>Total</p><p className={styles.totalValue}>{formatMoneyARS(cartBaseTotal)}</p></div>
-            <button className={styles.primaryBtn} onClick={openPaymentModal} disabled={!cart.length || !!editingCartId || isApprovingPayment || !isCashOpenForSession}>{generateLabel}</button>
-            {editingCartId && <small>Guarda o cancela la edicion antes de cobrar.</small>}
+            <div className={styles.totals}>
+              <p className={styles.totalLabel}>Total</p>
+              <p className={styles.totalValue}>{formatMoneyARS(cartBaseTotal)}</p>
+              <button className={styles.checkoutBtn} onClick={openPaymentModal} disabled={!cart.length || isApprovingPayment || !isCashOpenForSession}>{generateLabel}</button>
+            </div>
           </section>
 
 

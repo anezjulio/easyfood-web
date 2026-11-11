@@ -1,31 +1,31 @@
 .wrap {
-  min-height: 44px;
+  min-height: 39.6px;
   width: auto;
   display: flex;
   justify-content: center;
 }
 
 .notice {
-  min-height: 44px;
+  min-height: 39.6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 0 10px;
-  border: 1px solid transparent;
+  gap: 7.2px;
+  padding: 0 9px;
+  border: 0.9px solid transparent;
   box-sizing: border-box;
-  max-width: min(56vw, 760px);
+  max-width: min(56vw, 684px);
 }
 
 .text {
   flex: 0 1 auto;
   min-width: 0;
-  max-width: min(52vw, 700px);
+  max-width: min(52vw, 630px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 12.6px;
 }
 
 .closeBtn {

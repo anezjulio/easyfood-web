@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
@@ -9,31 +9,31 @@
   width: 100%;
   max-width: none;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
 
 .layout {
-  margin-top: 16px;
+  margin-top: 14.4px;
   display: grid;
-  grid-template-columns: minmax(520px, 1fr) minmax(0, 1.35fr);
-  gap: 16px;
+  grid-template-columns: minmax(468px, 1fr) minmax(0, 1.35fr);
+  gap: 14.4px;
   align-items: stretch;
-  height: calc(100vh - 140px);
-  min-height: 650px;
+  height: calc(100vh - 126px);
+  min-height: 585px;
   max-height: none;
   overflow: hidden;
 }
@@ -45,11 +45,11 @@
   min-height: 0;
   background: white;
   border-radius: 0;
-  border: 1px solid #e2e8f0;
-  padding: 10px;
+  border: 0.9px solid #e2e8f0;
+  padding: 9px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: 10px;
+  gap: 9px;
   overflow: hidden;
 }
 
@@ -59,28 +59,28 @@
   min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: 10px;
+  gap: 9px;
   overflow: hidden;
 }
 
 .topActions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 7.2px;
   flex-wrap: wrap;
 }
 
 .topActionBtn {
-  height: 44px;
-  padding: 0 14px;
+  height: 39.6px;
+  padding: 0 12.6px;
   border-radius: 0;
-  border: 1px solid #e2e8f0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #e2e8f0;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #ffffff;
   color: #0f172a;
   font-weight: 900;
-  font-size: 16px;
+  font-size: 14.4px;
   cursor: pointer;
 }
 
@@ -99,59 +99,59 @@
 }
 
 .photoImg {
-  width: 210px;
-  height: 210px;
+  width: 189px;
+  height: 189px;
   border-radius: 0;
   object-fit: cover;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: white;
 }
 
 .photoFallback {
-  width: 210px;
-  height: 210px;
+  width: 189px;
+  height: 189px;
   border-radius: 0;
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, #e2e8f0 0%, #f1f5f9 100%);
-  border: 1px dashed #94a3b8;
+  border: 0.9px dashed #94a3b8;
   color: #0f172a;
   font-weight: 900;
   text-align: center;
 }
 
 .photoLetter {
-  font-size: 72px;
+  font-size: 64.8px;
   line-height: 1;
 }
 
 .photoHint {
-  font-size: 12px;
+  font-size: 10.8px;
   color: #475569;
 }
 
 .formTitle {
   margin: 0;
-  font-size: 24px;
+  font-size: 21.6px;
   font-weight: 900;
   color: #0f172a;
 }
 
 .form {
   display: grid;
-  gap: 14px;
+  gap: 12.6px;
   min-height: 0;
   align-content: start;
   overflow-x: hidden;
   overflow-y: auto;
-  padding-right: 6px;
+  padding-right: 5.4px;
   scrollbar-gutter: stable;
 }
 
 .editorGrid {
   display: grid;
-  grid-template-columns: 230px minmax(0, 1fr);
-  gap: 14px;
+  grid-template-columns: 207px minmax(0, 1fr);
+  gap: 12.6px;
   align-items: start;
 }
 
@@ -163,14 +163,14 @@
 .fieldGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 10.8px;
 }
 
 .field {
   display: grid;
-  grid-template-columns: minmax(90px, 120px) minmax(0, 1fr);
+  grid-template-columns: minmax(81px, 108px) minmax(0, 1fr);
   align-items: start;
-  gap: 10px;
+  gap: 9px;
   color: #1f2937;
   font-weight: 700;
 }
@@ -178,7 +178,7 @@
 .field > span {
   text-align: right;
   align-self: start;
-  padding-top: 6px;
+  padding-top: 5.4px;
 }
 
 .photoField {
@@ -189,7 +189,7 @@
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
+  gap: 9px;
 }
 
 .input,
@@ -197,27 +197,27 @@
   width: 100%;
   box-sizing: border-box;
   border-radius: 0;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   outline: none;
-  font-size: 16px;
+  font-size: 14.4px;
   background: white;
 }
 
 .input {
-  height: 44px;
-  padding: 0 14px;
+  height: 39.6px;
+  padding: 0 12.6px;
 }
 
 .textarea {
   width: 100%;
-  min-height: 84px;
+  min-height: 75.6px;
   box-sizing: border-box;
   border-radius: 0;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   outline: none;
-  font-size: 16px;
+  font-size: 14.4px;
   background: white;
-  padding: 10px 14px;
+  padding: 9px 12.6px;
   resize: vertical;
   font-family: inherit;
 }
@@ -225,19 +225,19 @@
 .checkGrid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 7.2px;
   min-width: 0;
 }
 
 .inputWithAction {
   display: flex;
-  gap: 8px;
+  gap: 7.2px;
   align-items: center;
 }
 
 .inputStack {
   display: grid;
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .inputWithAction .input {
@@ -245,15 +245,15 @@
 }
 
 .inlineBtn {
-  height: 42px;
-  padding: 0 12px;
-  border: 1px solid #e2e8f0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  height: 37.8px;
+  padding: 0 10.8px;
+  border: 0.9px solid #e2e8f0;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #ffffff;
   color: #0f172a;
   font-weight: 800;
-  font-size: 13px;
+  font-size: 11.7px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -264,17 +264,17 @@
 }
 
 .toggleLabel {
-  min-height: 24px;
+  min-height: 21.6px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
+  gap: 5.4px;
+  font-size: 11.7px;
   color: #334155;
 }
 
 .valueBox {
-  min-height: 44px;
-  padding: 10px 0;
+  min-height: 39.6px;
+  padding: 9px 0;
   color: #334155;
   font-weight: 700;
   display: flex;
@@ -286,10 +286,10 @@
 
 .recipeNotice {
   grid-column: 1 / -1;
-  border: 1px solid #bfdbfe;
+  border: 0.9px solid #bfdbfe;
   background: #eff6ff;
   color: #1e3a8a;
-  padding: 10px 12px;
+  padding: 9px 10.8px;
   font-weight: 800;
 }
 
@@ -297,28 +297,28 @@
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  padding-right: 40px;
+  padding-right: 36px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%230f172a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 12px 8px;
+  background-position: right 12.6px center;
+  background-size: 10.8px 7.2px;
 }
 
 .fileInput {
-  height: 44px;
-  padding: 10px 14px;
+  height: 39.6px;
+  padding: 9px 12.6px;
 }
 
 .uploadBtn {
-  height: 42px;
-  padding: 0 14px;
-  border: 1px solid #0f172a;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  height: 37.8px;
+  padding: 0 12.6px;
+  border: 0.9px solid #0f172a;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #ffffff;
   color: #0f172a;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 12.6px;
   display: inline-flex;
   align-items: center;
   cursor: pointer;
@@ -334,7 +334,7 @@
 }
 
 .errorBox {
-  padding: 10px 14px;
+  padding: 9px 12.6px;
   border-radius: 0;
   background: #fee2e2;
   color: #991b1b;
@@ -342,7 +342,7 @@
 }
 
 .successBox {
-  padding: 10px 14px;
+  padding: 9px 12.6px;
   border-radius: 0;
   background: #dcfce7;
   color: #166534;
@@ -351,7 +351,7 @@
 
 .formActions {
   display: flex;
-  gap: 10px;
+  gap: 9px;
   flex-wrap: wrap;
   justify-content: flex-end;
 }
@@ -359,43 +359,43 @@
 .primaryBtn,
 .secondaryBtn,
 .warnBtn {
-  height: 56px;
-  padding: 0 18px;
+  height: 50.4px;
+  padding: 0 16.2px;
   border-radius: 0;
   font-weight: 900;
-  font-size: 16px;
+  font-size: 14.4px;
   cursor: pointer;
-  min-width: 200px;
+  min-width: 180px;
 }
 
 .primaryBtn {
-  border: 1px solid #0f172a;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #0f172a;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #0f172a;
   color: white;
 }
 
 .secondaryBtn {
-  border: 1px solid #e2e8f0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #e2e8f0;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: white;
   color: #0f172a;
 }
 
 .warnBtn {
-  border: 1px solid #ef4444;
-  border-right: 2px solid #7f1d1d;
-  border-bottom: 2px solid #7f1d1d;
+  border: 0.9px solid #ef4444;
+  border-right: 1.8px solid #7f1d1d;
+  border-bottom: 1.8px solid #7f1d1d;
   background: #fff1f2;
   color: #991b1b;
 }
 
 .roleHint {
-  margin: 4px 0 0;
+  margin: 3.6px 0 0;
   color: #475569;
-  font-size: 14px;
+  font-size: 12.6px;
   font-weight: 600;
 }
 
@@ -404,7 +404,7 @@
   height: 100%;
   min-height: 0;
   display: grid;
-  gap: 12px;
+  gap: 10.8px;
   overflow: hidden;
 }
 
@@ -414,8 +414,8 @@
 
 .form::-webkit-scrollbar,
 .listCard > section::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
 }
 
 .form::-webkit-scrollbar-track,
@@ -426,13 +426,13 @@
 .form::-webkit-scrollbar-thumb,
 .listCard > section::-webkit-scrollbar-thumb {
   background: #94a3b8;
-  border: 2px solid #f1f5f9;
+  border: 1.8px solid #f1f5f9;
 }
 
-@media (max-height: 820px) and (min-width: 1101px) {
+@media (max-height: 738px) and (min-width: 990.9px) {
   .layout {
-    height: calc(100vh - 128px) !important;
-    min-height: 520px;
+    height: calc(100vh - 115.2px) !important;
+    min-height: 468px;
     max-height: none !important;
     overflow: hidden !important;
   }
@@ -449,7 +449,7 @@
   }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 990px) {
   .layout {
     grid-template-columns: 1fr;
     height: auto;
@@ -493,11 +493,11 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 468px) {
   .photoImg,
   .photoFallback {
     width: 100%;
-    max-width: 210px;
+    max-width: 189px;
   }
 
   .primaryBtn,

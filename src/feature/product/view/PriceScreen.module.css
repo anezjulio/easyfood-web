@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
@@ -9,37 +9,37 @@
   width: 100%;
   max-width: none;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
 
 .tabs {
-  margin-top: 14px;
+  margin-top: 12.6px;
   display: flex;
-  gap: 8px;
+  gap: 7.2px;
   flex-wrap: wrap;
 }
 
 .tabBtn {
-  height: 42px;
-  padding: 0 14px;
+  height: 37.8px;
+  padding: 0 12.6px;
   border-radius: 0;
-  border: 1px solid #e2e8f0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #e2e8f0;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #ffffff;
   color: #0f172a;
   font-weight: 800;
@@ -53,33 +53,33 @@
 }
 
 .layout {
-  margin-top: 16px;
+  margin-top: 14.4px;
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.55fr);
-  gap: 16px;
+  gap: 14.4px;
   align-items: stretch;
-  height: calc(100vh - 220px);
-  max-height: calc(100vh - 220px);
+  height: calc(100vh - 198px);
+  max-height: calc(100vh - 198px);
   overflow: hidden;
 }
 
 .formCard {
   min-width: 0;
-  max-width: 620px;
+  max-width: 558px;
   background: white;
   border-radius: 0;
-  border: 1px solid #e2e8f0;
-  padding: 10px;
+  border: 0.9px solid #e2e8f0;
+  padding: 9px;
   display: grid;
-  gap: 10px;
+  gap: 9px;
   height: 100%;
   min-height: 0;
   overflow: hidden;
 }
 
 .formTitle {
-  margin: 0 0 4px;
-  font-size: 24px;
+  margin: 0 0 3.6px;
+  font-size: 21.6px;
   font-weight: 900;
   color: #0f172a;
   line-height: 1.2;
@@ -87,14 +87,14 @@
 
 .form {
   display: grid;
-  gap: 14px;
+  gap: 12.6px;
 }
 
 .field {
   display: grid;
-  grid-template-columns: minmax(90px, 140px) minmax(0, 1fr);
+  grid-template-columns: minmax(81px, 126px) minmax(0, 1fr);
   align-items: center;
-  gap: 12px;
+  gap: 10.8px;
   color: #1f2937;
   font-weight: 700;
 }
@@ -110,17 +110,17 @@
   width: 100%;
   box-sizing: border-box;
   border-radius: 0;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   outline: none;
-  font-size: 16px;
+  font-size: 14.4px;
   background: white;
-  height: 44px;
-  padding: 0 14px;
+  height: 39.6px;
+  padding: 0 12.6px;
 }
 
 .valueBox {
-  min-height: 44px;
-  padding: 10px 0;
+  min-height: 39.6px;
+  padding: 9px 0;
   color: #334155;
   font-weight: 700;
   display: flex;
@@ -131,7 +131,7 @@
 }
 
 .errorBox {
-  padding: 10px 14px;
+  padding: 9px 12.6px;
   border-radius: 0;
   background: #fee2e2;
   color: #991b1b;
@@ -139,7 +139,7 @@
 }
 
 .successBox {
-  padding: 10px 14px;
+  padding: 9px 12.6px;
   border-radius: 0;
   background: #dcfce7;
   color: #166534;
@@ -148,33 +148,33 @@
 
 .formActions {
   display: flex;
-  gap: 10px;
+  gap: 9px;
   flex-wrap: wrap;
   justify-content: flex-end;
 }
 
 .primaryBtn,
 .secondaryBtn {
-  height: 46px;
-  padding: 0 14px;
+  height: 41.4px;
+  padding: 0 12.6px;
   border-radius: 0;
   font-weight: 900;
-  font-size: 14px;
+  font-size: 12.6px;
   cursor: pointer;
 }
 
 .primaryBtn {
-  border: 1px solid #0f172a;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #0f172a;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #0f172a;
   color: white;
 }
 
 .secondaryBtn {
-  border: 1px solid #e2e8f0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #e2e8f0;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: white;
   color: #0f172a;
 }
@@ -182,22 +182,22 @@
 .listCard {
   min-width: 0;
   display: grid;
-  gap: 12px;
+  gap: 10.8px;
   height: 100%;
   min-height: 0;
   overflow: hidden;
 }
 
 .marginsPanel {
-  margin-top: 16px;
-  height: calc(100vh - 252px);
-  max-height: calc(100vh - 252px);
+  margin-top: 14.4px;
+  height: calc(100vh - 226.8px);
+  max-height: calc(100vh - 226.8px);
   overflow: hidden;
 }
 
 .success {
-  margin: 0 0 12px;
-  padding: 10px 14px;
+  margin: 0 0 10.8px;
+  padding: 9px 12.6px;
   border-radius: 0;
   background: #dcfce7;
   color: #166534;
@@ -205,8 +205,8 @@
 }
 
 .error {
-  margin: 0 0 12px;
-  padding: 10px 14px;
+  margin: 0 0 10.8px;
+  padding: 9px 12.6px;
   border-radius: 0;
   background: #fee2e2;
   color: #991b1b;
@@ -216,66 +216,66 @@
 .gridTwo {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10.8px;
   height: 100%;
   min-height: 0;
 }
 
 .subPanel {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 12px;
+  padding: 10.8px;
   display: grid;
   grid-template-rows: auto auto minmax(0, 1fr);
-  gap: 12px;
+  gap: 10.8px;
   min-height: 0;
   overflow: hidden;
 }
 
 .sectionTitle {
   margin: 0;
-  font-size: 18px;
+  font-size: 16.2px;
   font-weight: 900;
 }
 
 .meta {
   margin: 0;
   color: #475569;
-  font-size: 13px;
+  font-size: 11.7px;
 }
 
 .selectorLayout {
   display: grid;
-  grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.05fr);
-  gap: 12px;
+  grid-template-columns: minmax(198px, 0.95fr) minmax(0, 1.05fr);
+  gap: 10.8px;
   align-items: stretch;
   min-height: 0;
 }
 
 .selectorList {
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
   max-height: none;
   min-height: 0;
   height: 100%;
   overflow: auto;
-  padding-right: 2px;
+  padding-right: 1.8px;
 }
 
 .selectorRow {
   width: 100%;
-  border: 1px solid #e2e8f0;
-  padding: 10px;
+  border: 0.9px solid #e2e8f0;
+  padding: 9px;
   background: #ffffff;
   text-align: left;
   cursor: pointer;
   display: grid;
-  gap: 3px;
+  gap: 2.7px;
 }
 
 .selectorRowActive {
   border-color: #0f172a;
-  box-shadow: inset 0 0 0 1px #0f172a;
+  box-shadow: inset 0 0 0 0.9px #0f172a;
   background: #f8fafc;
 }
 
@@ -286,7 +286,7 @@
 }
 
 .selectorMeta {
-  font-size: 12px;
+  font-size: 10.8px;
   color: #64748b;
   line-height: 1.2;
 }
@@ -297,16 +297,16 @@
 }
 
 .selectorDetail {
-  border: 1px solid #e2e8f0;
-  padding: 10px;
+  border: 0.9px solid #e2e8f0;
+  padding: 9px;
   display: grid;
-  gap: 10px;
+  gap: 9px;
   min-height: 0;
 }
 
 .detailTitle {
   margin: 0;
-  font-size: 16px;
+  font-size: 14.4px;
   font-weight: 900;
   color: #0f172a;
 }
@@ -314,43 +314,43 @@
 .detailMeta {
   margin: 0;
   color: #334155;
-  font-size: 13px;
+  font-size: 11.7px;
 }
 
 .historyTitle {
-  margin: 4px 0 0;
-  font-size: 14px;
+  margin: 3.6px 0 0;
+  font-size: 12.6px;
   font-weight: 900;
   color: #0f172a;
 }
 
 .historyList {
   display: grid;
-  gap: 8px;
-  max-height: 260px;
+  gap: 7.2px;
+  max-height: 234px;
   overflow: auto;
-  padding-right: 2px;
+  padding-right: 1.8px;
 }
 
 .historyRow {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 8px 10px;
+  padding: 7.2px 9px;
   display: grid;
-  gap: 2px;
+  gap: 1.8px;
 }
 
 .historyValue {
   margin: 0;
   color: #0f172a;
-  font-size: 13px;
+  font-size: 11.7px;
   font-weight: 800;
 }
 
 .historyDate {
   margin: 0;
   color: #64748b;
-  font-size: 12px;
+  font-size: 10.8px;
 }
 
 .secondaryBtn:disabled {
@@ -363,7 +363,7 @@
   color: #64748b;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 810px) {
   .layout,
   .gridTwo {
     grid-template-columns: 1fr;
@@ -391,7 +391,7 @@
 
   .selectorList,
   .historyList {
-    max-height: 320px;
+    max-height: 288px;
   }
 
   .formCard,

@@ -152,7 +152,7 @@ export default function IngredientStockScreen() {
                 <label className={stockStyles.filterField}>Buscar:
                   <input aria-label="Buscar ingrediente" className={styles.searchInput} value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Nombre del ingrediente" />
                 </label>
-                <label className={stockStyles.filterField}>Categor?a:
+                <label className={stockStyles.filterField}>Categoria:
                   <select aria-label="Categoria de ingrediente" className={styles.filterSelect} value={categoryId} onChange={(event) => setCategoryId(event.target.value)}>
                     <option value="">Todas las categorias</option>
                     {categoryOptions.map((category) => <option key={category.id} value={category.id}>{category.name} ({category.count})</option>)}

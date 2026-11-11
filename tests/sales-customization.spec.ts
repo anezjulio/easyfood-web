@@ -28,7 +28,7 @@ async function prepare(request: APIRequestContext) {
   return { restore: () => request.put("/admin/data/stores/active", { data: { ...credentials, storeId: previous.activeStoreId } }) };
 }
 
-test("employee filters, customizes and edits combo before payment; receipt and stock match", async ({ page, request }, info) => {
+test("employee filters, customizes and adjusts combo before payment; receipt and stock match", async ({ page, request }, info) => {
   const fixture = await prepare(request);
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -45,30 +45,30 @@ test("employee filters, customizes and edits combo before payment; receipt and s
     const editor = page.getByRole("region", { name: "Pedido y personalizacion" });
     await expect(catalog.getByRole("region", { name: "hamburguesas", exact: true }).getByRole("button")).toHaveCount(1);
     await expect(catalog.getByRole("region", { name: "bebidas", exact: true }).getByRole("button")).toHaveCount(2);
-    await page.getByRole("button", { name: "bebidas (2)", exact: true }).click();
+    await page.getByRole("button", { name: "bebidas", exact: true }).click();
     await expect(catalog.getByRole("region")).toHaveCount(1);
     await expect(catalog.getByRole("button")).toHaveCount(2);
-    await page.getByRole("button", { name: "Todas (4)", exact: true }).click();
+    await page.getByRole("button", { name: "Todas", exact: true }).click();
     const colaCard = catalog.getByRole("button", { name: /Cola prueba/ });
     await colaCard.click();
     await expect(editor.getByRole("article")).toHaveCount(0);
-    await page.getByLabel("Cantidad", { exact: true }).fill("4");
+
     await colaCard.click();
     await expect(catalog.getByRole("button", { name: /Cola prueba/ })).toHaveAttribute("aria-pressed", "true");
-    await expect(editor.getByRole("button", { name: "Sumar al pedido", exact: true })).toBeVisible();
-    await expect(editor.getByText("1 × Cola prueba", { exact: true })).toBeVisible();
+    await expect(editor.getByRole("button", { name: "Sumar Cola prueba", exact: true })).toBeVisible();
+    await expect(editor.getByRole("article").filter({ hasText: "1x Cola prueba" })).toBeVisible();
     await expect(editor.getByRole("article")).toHaveCount(1);
     await colaCard.click();
-    await expect(editor.getByText("2 × Cola prueba", { exact: true })).toBeVisible();
+    await expect(editor.getByRole("article").filter({ hasText: "2x Cola prueba" })).toBeVisible();
     await catalog.getByRole("button", { name: /Agua prueba/ }).click();
     await expect(editor.getByRole("article")).toHaveCount(1);
     await colaCard.click();
-    await expect(editor.getByText("2 × Cola prueba", { exact: true })).toBeVisible();
+    await expect(editor.getByRole("article").filter({ hasText: "2x Cola prueba" })).toBeVisible();
     await colaCard.click();
-    await expect(editor.getByText("3 × Cola prueba", { exact: true })).toBeVisible();
+    await expect(editor.getByRole("article").filter({ hasText: "3x Cola prueba" })).toBeVisible();
     await editor.getByRole("button", { name: "Quitar Cola prueba", exact: true }).click();
     await expect(editor.getByRole("article")).toHaveCount(0);
-    await page.getByLabel("Buscar producto", { exact: true }).fill("Combo prueba");
+    await page.getByLabel("Producto", { exact: true }).fill("Combo prueba");
     await expect(catalog.getByRole("button")).toHaveCount(1);
     await catalog.getByRole("button", { name: /Combo prueba/ }).click();
     await catalog.getByRole("button", { name: /Combo prueba/ }).click();
@@ -80,28 +80,28 @@ test("employee filters, customizes and edits combo before payment; receipt and s
     await page.getByRole("radio", { name: "Agua prueba", exact: true }).check();
     await expect(page.getByRole("checkbox", { name: "Cebolla", exact: true })).not.toBeChecked();
     await page.screenshot({ path: info.outputPath("sales-customization.png"), fullPage: true });
-    await editor.getByRole("button", { name: "Sumar al pedido", exact: true }).click();
-    await editor.getByRole("button", { name: "Sumar al pedido", exact: true }).click();
-    await expect(editor.getByText("2 × Combo prueba", { exact: true })).toBeVisible();
-    await editor.getByRole("button", { name: "Restar del pedido", exact: true }).click();
-    await expect(editor.getByText("1 × Combo prueba", { exact: true })).toBeVisible();
+    await catalog.getByRole("button", { name: /Combo prueba/ }).click();
+    await editor.getByRole("button", { name: "Sumar Combo prueba", exact: true }).click();
+    await expect(editor.getByRole("article").filter({ hasText: "2x Combo prueba" })).toBeVisible();
+    await editor.getByRole("button", { name: "Restar Combo prueba", exact: true }).click();
+    await expect(editor.getByRole("article").filter({ hasText: "1x Combo prueba" })).toBeVisible();
     await expect(editor.getByText(/Sin Cebolla/)).toBeVisible();
-    await editor.getByRole("button", { name: "Editar", exact: true }).click();
+
     await expect(page.getByRole("radio", { name: "Agua prueba", exact: true })).toBeChecked();
-    await page.getByLabel("Cantidad", { exact: true }).fill("2");
-    await expect(page.getByRole("button", { name: "Ir a cobrar", exact: true })).toBeDisabled();
-    await editor.getByRole("button", { name: "Guardar cambios", exact: true }).click();
+
+    await expect(page.getByRole("button", { name: "Cobrar", exact: true })).toBeEnabled();
+    await editor.getByRole("button", { name: "Sumar Combo prueba", exact: true }).click();
     await expect(page.getByRole("radio", { name: "Agua prueba", exact: true })).toBeChecked();
     await expect(page.getByRole("checkbox", { name: "Cebolla", exact: true })).not.toBeChecked();
-    await expect(editor.getByText("2 × Combo prueba", { exact: true })).toBeVisible();
+    await expect(editor.getByRole("article").filter({ hasText: "2x Combo prueba" })).toBeVisible();
     await page.screenshot({ path: info.outputPath("sales-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.screenshot({ path: info.outputPath("sales-mobile.png"), fullPage: true });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
-    await page.getByRole("button", { name: "Ir a cobrar", exact: true }).click();
+    await page.getByRole("button", { name: "Cobrar", exact: true }).click();
     await page.getByRole("button", { name: "Volver al pedido", exact: true }).click();
-    await expect(editor.getByRole("button", { name: "Editar", exact: true })).toBeEnabled();
-    await page.getByRole("button", { name: "Ir a cobrar", exact: true }).click();
+    await expect(editor.getByRole("button", { name: "Sumar Combo prueba", exact: true })).toBeEnabled();
+    await page.getByRole("button", { name: "Cobrar", exact: true }).click();
     await page.getByRole("button", { name: "Confirmar cobro", exact: true }).click();
     await expect(page).toHaveURL(/\/sales\/summary$/);
     await expect(page.getByText("Sin Cebolla", { exact: true })).toBeVisible();
@@ -232,5 +232,41 @@ test("recipe requirements persist in the editor; single ingredients are mandator
     expect(categories[0]).toMatchObject({ id: "hamburguesas", order: 0 });
     await page.goto("/sales");
     await expect(page.getByLabel("Catalogo de productos").getByRole("region").first()).toHaveAccessibleName("hamburguesas");
+  } finally { await fixture.restore(); }
+});
+
+ test("compact order rows adjust quantity and enforce stock", async ({ page, request }) => {
+  const fixture = await prepare(request);
+  try {
+    await page.route("**/users", (route) => route.fulfill({ json: [{ id: "admin", username: "admin", role: "admin", password: createHash("md5").update("test").digest("hex") }] }));
+    await page.goto("/login");
+    await page.getByLabel("Usuario", { exact: true }).fill("admin");
+    await page.locator('input[type="password"]').fill("test");
+    await page.getByRole("button", { name: "Entrar", exact: true }).click();
+    await expect(page).toHaveURL(/\/operation$/);
+    await page.goto("/sales");
+    const editor = page.getByRole("region", { name: "Pedido y personalizacion" });
+    const card = page.getByLabel("Catalogo de productos").getByRole("button", { name: /Cola prueba/ });
+    await card.click(); await card.click();
+    const row = editor.getByRole("article");
+    await expect(row).toContainText("1x Cola prueba");
+    await expect(editor.getByLabel("Cantidad", { exact: true })).toHaveCount(0);
+    for (let i = 0; i < 4; i++) await row.getByRole("button", { name: "Sumar Cola prueba", exact: true }).click();
+    await expect(row).toContainText("5x Cola prueba");
+    await row.getByRole("button", { name: "Sumar Cola prueba", exact: true }).click();
+    await expect(row).toContainText("5x Cola prueba");
+    await expect(page.getByText("No hay stock suficiente para esta cantidad.", { exact: true })).toBeVisible();
+    await row.getByRole("button", { name: "Restar Cola prueba", exact: true }).click();
+    await expect(row).toContainText("4x Cola prueba");
+    await page.setViewportSize({ width: 390, height: 844 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+    const buttons = await row.getByRole("button").all();
+    const boxes = await Promise.all(buttons.map((button) => button.boundingBox()));
+    expect(new Set(boxes.map((box) => box?.y)).size).toBe(1);
+    await row.getByRole("button", { name: "Quitar Cola prueba", exact: true }).click();
+    await expect(row).toHaveCount(0);
+    await card.click();
+    await row.getByRole("button", { name: "Restar Cola prueba", exact: true }).click();
+    await expect(row).toHaveCount(0);
   } finally { await fixture.restore(); }
 });

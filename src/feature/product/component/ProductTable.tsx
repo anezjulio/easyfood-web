@@ -40,8 +40,8 @@ export default function ProductTable({
   showSortFeedback = true,
   filters,
   onFilterChange,
-  topMargin = 16,
-  maxHeight = "min(65vh, 640px)",
+  topMargin = 14.4,
+  maxHeight = "min(65vh, 576px)",
   dateLabel = "Creación",
   showExistence = false,
   existenceLabel = "Existencia",
@@ -82,7 +82,7 @@ export default function ProductTable({
   showHeaderFilters?: boolean;
   salesCompactLayout?: boolean;
 }) {
-  const salesColumnTemplate = "minmax(280px, 1fr) 120px 120px";
+  const salesColumnTemplate = "minmax(252px, 1fr) 108px 108px";
   const columnCount =
     2 +
     (showImageThumbnail ? 1 : 0) +
@@ -91,7 +91,7 @@ export default function ProductTable({
     (showExistence ? 1 : 0) +
     (showCategory ? 1 : 0) +
     (showDateColumn ? 1 : 0);
-  const minTableWidth = salesCompactLayout ? 560 : Math.max(showImageThumbnail ? 520 : 620, columnCount * 140);
+  const minTableWidth = salesCompactLayout ? 504 : Math.max(showImageThumbnail ? 468 : 558, columnCount * 126);
   const shouldShowFilters = !!filters && !!onFilterChange && showHeaderFilters;
   const categoryOptions = Array.from(
     new Set(
@@ -104,7 +104,7 @@ export default function ProductTable({
     marginTop: topMargin,
     background: "white",
     borderRadius: 0,
-    border: "1px solid #e2e8f0",
+    border: "0.9px solid #e2e8f0",
     maxHeight,
     overflowY: "auto",
     overflowX: "auto",
@@ -135,7 +135,7 @@ export default function ProductTable({
     const isActive = showSortFeedback && sortKey === key;
     const alignItems = align === "right" ? "flex-end" : align === "center" ? "center" : "flex-start";
     return (
-      <div style={{ display: "flex", alignItems: "center", justifySelf, gap: 6 }}>
+      <div style={{ display: "flex", alignItems: "center", justifySelf, gap: 5.4 }}>
         <button
           type="button"
           style={{
@@ -347,9 +347,9 @@ export default function ProductTable({
       </div>
 
       {loading ? (
-        <div style={{ padding: 18, color: "#475569" }}>Cargando…</div>
+        <div style={{ padding: 16.2, color: "#475569" }}>Cargando…</div>
       ) : products.length === 0 ? (
-        <div style={{ padding: 18, color: "#475569" }}>No hay productos.</div>
+        <div style={{ padding: 16.2, color: "#475569" }}>No hay productos.</div>
       ) : (
         products.map((p, index) => (
           <ProductRow
@@ -380,7 +380,7 @@ export default function ProductTable({
 const headerStyle: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-  padding: 14,
+  padding: 12.6,
   fontWeight: 900,
   background: "#f1f5f9",
   position: "sticky",
@@ -390,7 +390,7 @@ const headerStyle: React.CSSProperties = {
 
 const headerCellStyle: React.CSSProperties = {
   display: "grid",
-  gap: 6,
+  gap: 5.4,
   alignItems: "start",
   minWidth: 0,
 };
@@ -410,23 +410,23 @@ const headerButtonStyle: React.CSSProperties = {
 };
 
 const headerInputStyle: React.CSSProperties = {
-  height: 32,
-  width: "min(160px, 100%)",
+  height: 28.8,
+  width: "min(144px, 100%)",
   boxSizing: "border-box",
-  padding: "0 4px",
-  lineHeight: "32px",
+  padding: "0 3.6px",
+  lineHeight: "28.8px",
   border: "none",
-  borderBottom: "1px solid #0f172a",
+  borderBottom: "0.9px solid #0f172a",
   borderRadius: 0,
   outline: "none",
   background: "transparent",
-  fontSize: 14,
+  fontSize: 12.6,
 };
 
 const headerDateInputStyle: React.CSSProperties = {
   ...headerInputStyle,
   borderBottom: "none",
-  paddingRight: 4,
+  paddingRight: 3.6,
 };
 
 const headerSelectStyle: React.CSSProperties = {
@@ -442,16 +442,16 @@ const headerSelectStyle: React.CSSProperties = {
 const filterInputWrapStyle: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: 6,
-  width: "min(160px, 100%)",
+  gap: 5.4,
+  width: "min(144px, 100%)",
   justifyContent: "flex-start",
 };
 
 const dateFilterWrapStyle: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
-  gap: 6,
-  width: "min(160px, 100%)",
+  gap: 5.4,
+  width: "min(144px, 100%)",
   justifyContent: "flex-start",
 };
 
@@ -459,7 +459,7 @@ const clearFilterBtnStyle: React.CSSProperties = {
   border: "none",
   background: "transparent",
   padding: 0,
-  fontSize: 14,
+  fontSize: 12.6,
   fontWeight: 900,
   cursor: "pointer",
   color: "#334155",

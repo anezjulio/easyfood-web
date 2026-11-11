@@ -1,44 +1,44 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
 .content {
   width: 100%;
-  max-width: 1100px;
+  max-width: 990px;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
   display: grid;
-  gap: 16px;
+  gap: 14.4px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
 
 .summaryCard {
   background: white;
-  border: 1px solid #e2e8f0;
-  padding: 14px;
+  border: 0.9px solid #e2e8f0;
+  padding: 12.6px;
   display: grid;
-  gap: 14px;
+  gap: 12.6px;
 }
 
 .metaGrid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 9px;
 }
 
 .metaGrid p {
@@ -47,18 +47,18 @@
 }
 
 .tableWrap {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   overflow-x: auto;
 }
 
 .tableHead,
 .tableRow {
   display: grid;
-  grid-template-columns: minmax(0, 1.8fr) 90px 140px 160px;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1.8fr) 81px 126px 144px;
+  gap: 7.2px;
   align-items: center;
-  padding: 10px;
-  min-width: 620px;
+  padding: 9px;
+  min-width: 558px;
 }
 
 .tableHead {
@@ -68,7 +68,7 @@
 }
 
 .tableRow {
-  border-top: 1px solid #e2e8f0;
+  border-top: 0.9px solid #e2e8f0;
   color: #334155;
   font-weight: 700;
 }
@@ -90,10 +90,10 @@
 
 .comboItems {
   display: grid;
-  gap: 2px;
-  margin-top: 4px;
+  gap: 1.8px;
+  margin-top: 3.6px;
   color: #475569;
-  font-size: 12px;
+  font-size: 10.8px;
   font-weight: 700;
 }
 
@@ -110,7 +110,7 @@
 .totals {
   display: grid;
   justify-content: end;
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .totals p {
@@ -119,14 +119,14 @@
 }
 
 .receiptCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #f8fafc;
-  padding: 14px;
+  padding: 12.6px;
 }
 
 .receiptActions {
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .receiptMessage,
@@ -146,32 +146,32 @@
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 9px;
   flex-wrap: wrap;
 }
 
 .primaryBtn,
 .secondaryBtn {
-  height: 44px;
+  height: 39.6px;
   border-radius: 0;
   font-weight: 900;
-  font-size: 15px;
+  font-size: 13.5px;
   cursor: pointer;
-  padding: 0 14px;
+  padding: 0 12.6px;
 }
 
 .primaryBtn {
-  border: 1px solid #0f172a;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #0f172a;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #0f172a;
   color: white;
 }
 
 .secondaryBtn {
-  border: 1px solid #e2e8f0;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  border: 0.9px solid #e2e8f0;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: white;
   color: #0f172a;
 }
@@ -182,19 +182,19 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 774px) {
   .metaGrid {
     grid-template-columns: 1fr 1fr;
   }
 
   .tableHead,
   .tableRow {
-    grid-template-columns: minmax(0, 1fr) 72px 120px 132px;
-    font-size: 14px;
+    grid-template-columns: minmax(0, 1fr) 64.8px 108px 118.8px;
+    font-size: 12.6px;
   }
 }
 
-@media (max-width: 620px) {
+@media (max-width: 558px) {
   .metaGrid {
     grid-template-columns: 1fr;
   }

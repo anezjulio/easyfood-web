@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
@@ -9,7 +9,7 @@
   width: 100%;
   max-width: none;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
 }
 
 .header {
@@ -17,9 +17,9 @@
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: nowrap;
-  min-height: 44px;
+  min-height: 39.6px;
 }
 
 .headerLead {
@@ -34,31 +34,31 @@
   bottom: 0;
   transform: translateX(-50%);
   width: auto;
-  max-width: min(56vw, 760px);
+  max-width: min(56vw, 684px);
   z-index: 1;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
 
 .tabs {
-  margin-top: 14px;
+  margin-top: 12.6px;
   display: flex;
-  gap: 8px;
+  gap: 7.2px;
   flex-wrap: wrap;
 }
 
 .tabBtn {
-  height: 38px;
-  border: 1px solid #94a3b8;
+  height: 34.2px;
+  border: 0.9px solid #94a3b8;
   background: #f8fafc;
   color: #0f172a;
   font-weight: 800;
   cursor: pointer;
-  padding: 0 14px;
+  padding: 0 12.6px;
 }
 
 .tabBtnActive {
@@ -68,13 +68,13 @@
 }
 
 .summaryCard {
-  margin-top: 16px;
+  margin-top: 14.4px;
   background: white;
-  border: 1px solid #e2e8f0;
-  padding: 12px;
+  border: 0.9px solid #e2e8f0;
+  padding: 10.8px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: 9px;
 }
 
 .summaryCard p {
@@ -83,17 +83,17 @@
 }
 
 .operationCard {
-  margin-top: 12px;
-  border: 1px solid #e2e8f0;
+  margin-top: 10.8px;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 12px;
+  padding: 10.8px;
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .sectionTitle {
   margin: 0;
-  font-size: 18px;
+  font-size: 16.2px;
   font-weight: 900;
   color: #0f172a;
 }
@@ -112,34 +112,34 @@
 .inlineForm {
   display: flex;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .field {
   display: grid;
-  gap: 6px;
-  min-width: 250px;
+  gap: 5.4px;
+  min-width: 225px;
 }
 
 .field span {
-  font-size: 13px;
+  font-size: 11.7px;
   font-weight: 700;
   color: #334155;
 }
 
 .input {
-  height: 38px;
-  border: 1px solid #cbd5e1;
-  padding: 0 8px;
-  font-size: 14px;
+  height: 34.2px;
+  border: 0.9px solid #cbd5e1;
+  padding: 0 7.2px;
+  font-size: 12.6px;
 }
 
 .layout {
-  margin-top: 16px;
+  margin-top: 14.4px;
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.95fr);
-  gap: 16px;
+  gap: 14.4px;
   align-items: start;
 }
 
@@ -150,7 +150,7 @@
 }
 
 .tableCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: white;
   overflow-x: auto;
   overflow-y: auto;
@@ -158,9 +158,9 @@
 }
 
 .tableTitle {
-  margin: 0 0 10px;
-  padding: 12px 10px 0;
-  font-size: 20px;
+  margin: 0 0 9px;
+  padding: 10.8px 9px 0;
+  font-size: 18px;
   font-weight: 900;
   color: #0f172a;
 }
@@ -170,10 +170,10 @@
 .tableRow {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.9fr) minmax(0, 0.8fr) minmax(0, 1fr);
-  gap: 8px;
+  gap: 7.2px;
   align-items: center;
-  padding: 10px;
-  min-width: 760px;
+  padding: 9px;
+  min-width: 684px;
 }
 
 .tableHead {
@@ -181,16 +181,16 @@
   top: 0;
   z-index: 1;
   background: #f1f5f9;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 0.9px solid #e2e8f0;
 }
 
 .tableFilters {
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 0.9px solid #e2e8f0;
 }
 
 .tableRow {
-  border-top: 1px solid #e2e8f0;
+  border-top: 0.9px solid #e2e8f0;
   background: white;
   width: 100%;
   text-align: left;
@@ -224,7 +224,7 @@
 .headerCell {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .headerBtn {
@@ -238,23 +238,23 @@
 
 .headerBtnActive {
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 3.6px;
 }
 
 .filterWrap {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .filterInput,
 .filterInputDate {
-  width: min(160px, 100%);
-  height: 32px;
+  width: min(144px, 100%);
+  height: 28.8px;
   border: none;
-  border-bottom: 1px solid #0f172a;
-  padding: 0 4px;
-  font-size: 14px;
+  border-bottom: 0.9px solid #0f172a;
+  padding: 0 3.6px;
+  font-size: 12.6px;
   background: transparent;
 }
 
@@ -267,7 +267,7 @@
   border: none;
   background: transparent;
   padding: 0;
-  font-size: 14px;
+  font-size: 12.6px;
   font-weight: 900;
   cursor: pointer;
   color: #334155;
@@ -275,23 +275,23 @@
 }
 
 .detailCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: white;
-  padding: 12px;
+  padding: 10.8px;
   max-height: 62vh;
   overflow-y: auto;
 }
 
 .detailTitle {
-  margin: 0 0 10px;
-  font-size: 20px;
+  margin: 0 0 9px;
+  font-size: 18px;
   font-weight: 900;
   color: #0f172a;
 }
 
 .detailBody {
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .detailBody p {
@@ -300,18 +300,18 @@
 }
 
 .detailTable {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   overflow-x: auto;
 }
 
 .detailHead,
 .detailRow {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) 70px 110px 120px;
-  gap: 8px;
+  grid-template-columns: minmax(0, 1.2fr) 63px 99px 108px;
+  gap: 7.2px;
   align-items: center;
-  padding: 8px;
-  min-width: 560px;
+  padding: 7.2px;
+  min-width: 504px;
 }
 
 .detailHead {
@@ -321,7 +321,7 @@
 }
 
 .detailRow {
-  border-top: 1px solid #e2e8f0;
+  border-top: 0.9px solid #e2e8f0;
 }
 
 .detailHead > div,
@@ -337,21 +337,21 @@
 }
 
 .totalLine {
-  margin-top: 8px;
+  margin-top: 7.2px;
   font-weight: 900;
 }
 
 .closeSummaryCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #f8fafc;
-  padding: 10px;
+  padding: 9px;
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .closeSummaryTitle {
   margin: 0;
-  font-size: 16px;
+  font-size: 14.4px;
   font-weight: 900;
   color: #0f172a;
 }
@@ -359,7 +359,7 @@
 .closeSummaryGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .closeSummaryGrid p {
@@ -370,7 +370,7 @@
 .paymentBreakdown {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .paymentBreakdown p {
@@ -379,34 +379,34 @@
 }
 
 .assignmentCard {
-  margin-top: 12px;
-  border: 1px solid #e2e8f0;
+  margin-top: 10.8px;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 12px;
+  padding: 10.8px;
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .assignmentList {
   display: grid;
-  gap: 8px;
-  max-height: 240px;
+  gap: 7.2px;
+  max-height: 216px;
   overflow-y: auto;
 }
 
 .assignmentRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(210px, 1fr) 120px auto;
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) minmax(189px, 1fr) 108px auto;
+  gap: 9px;
   align-items: center;
-  border: 1px solid #e2e8f0;
-  padding: 8px;
+  border: 0.9px solid #e2e8f0;
+  padding: 7.2px;
   background: #f8fafc;
 }
 
 .assignmentMeta {
   display: grid;
-  gap: 3px;
+  gap: 2.7px;
 }
 
 .assignmentMeta strong {
@@ -415,61 +415,61 @@
 
 .assignmentMeta span {
   color: #475569;
-  font-size: 13px;
+  font-size: 11.7px;
 }
 
 .assignmentInput {
-  height: 36px;
-  border: 1px solid #cbd5e1;
-  padding: 0 8px;
+  height: 32.4px;
+  border: 0.9px solid #cbd5e1;
+  padding: 0 7.2px;
 }
 
 .assignmentSelect {
-  height: 36px;
-  border: 1px solid #cbd5e1;
-  padding: 0 8px;
+  height: 32.4px;
+  border: 0.9px solid #cbd5e1;
+  padding: 0 7.2px;
   background: #ffffff;
 }
 
 .secondaryBtn {
-  height: 36px;
-  border: 1px solid #334155;
+  height: 32.4px;
+  border: 0.9px solid #334155;
   background: white;
   color: #0f172a;
   cursor: pointer;
   font-weight: 800;
-  padding: 0 12px;
+  padding: 0 10.8px;
 }
 
 .auditLayout {
-  margin-top: 12px;
+  margin-top: 10.8px;
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
-  gap: 14px;
+  gap: 12.6px;
   align-items: start;
 }
 
 .auditListCard,
 .auditDetailCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: white;
-  padding: 12px;
+  padding: 10.8px;
 }
 
 .auditList {
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
   max-height: 65vh;
   overflow-y: auto;
 }
 
 .auditRow {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #f8fafc;
   text-align: left;
   display: grid;
-  gap: 4px;
-  padding: 8px;
+  gap: 3.6px;
+  padding: 7.2px;
   cursor: pointer;
 }
 
@@ -479,7 +479,7 @@
 
 .auditRow span {
   color: #475569;
-  font-size: 13px;
+  font-size: 11.7px;
 }
 
 .auditRowActive {
@@ -489,13 +489,13 @@
 
 .auditBody {
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .auditSummaryGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 6px 10px;
+  gap: 5.4px 9px;
 }
 
 .auditSummaryGrid p {
@@ -506,70 +506,70 @@
 .auditChecks {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .checkRow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7.2px;
   font-weight: 700;
   color: #334155;
 }
 
 .mismatchBox {
-  border: 1px solid #fecaca;
+  border: 0.9px solid #fecaca;
   background: #fff1f2;
-  padding: 8px;
+  padding: 7.2px;
   display: grid;
-  gap: 4px;
+  gap: 3.6px;
 }
 
 .mismatchBox p {
   margin: 0;
   color: #9f1239;
-  font-size: 13px;
+  font-size: 11.7px;
 }
 
 .textarea {
   width: 100%;
-  min-height: 90px;
-  border: 1px solid #cbd5e1;
+  min-height: 81px;
+  border: 0.9px solid #cbd5e1;
   resize: vertical;
-  padding: 8px;
+  padding: 7.2px;
   font: inherit;
 }
 
 .placeholder {
   margin: 0;
-  padding: 14px;
+  padding: 12.6px;
   color: #475569;
 }
 
 .actions {
-  margin-top: 16px;
+  margin-top: 14.4px;
   display: flex;
   justify-content: flex-end;
 }
 
 .primaryBtn {
-  height: 44px;
+  height: 39.6px;
   border-radius: 0;
   font-weight: 900;
-  font-size: 15px;
+  font-size: 13.5px;
   cursor: pointer;
-  padding: 0 14px;
-  border: 1px solid #0f172a;
-  border-right: 2px solid #000000;
-  border-bottom: 2px solid #000000;
+  padding: 0 12.6px;
+  border: 0.9px solid #0f172a;
+  border-right: 1.8px solid #000000;
+  border-bottom: 1.8px solid #000000;
   background: #0f172a;
   color: white;
 }
 
 .error {
   margin: 0;
-  margin-top: 10px;
-  padding: 10px 14px;
+  margin-top: 9px;
+  padding: 9px 12.6px;
   background: #fee2e2;
   color: #991b1b;
   font-weight: 800;
@@ -577,14 +577,14 @@
 
 .message {
   margin: 0;
-  margin-top: 10px;
-  padding: 10px 14px;
+  margin-top: 9px;
+  padding: 9px 12.6px;
   background: #dcfce7;
   color: #166534;
   font-weight: 800;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 921.6px) {
   .header {
     flex-wrap: wrap;
   }

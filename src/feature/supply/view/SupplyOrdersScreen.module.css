@@ -1,35 +1,35 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
 .content {
   width: 100%;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
   display: grid;
-  gap: 16px;
+  gap: 14.4px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
 
 .tabs {
   display: flex;
-  gap: 10px;
+  gap: 9px;
   flex-wrap: wrap;
 }
 
@@ -38,12 +38,12 @@
 .secondaryBtn,
 .inlineBtn,
 .removeBtn {
-  border: 1px solid #0f172a;
+  border: 0.9px solid #0f172a;
   background: #ffffff;
   color: #0f172a;
   font-weight: 800;
   cursor: pointer;
-  padding: 10px 14px;
+  padding: 9px 12.6px;
 }
 
 .tabBtnActive,
@@ -59,27 +59,27 @@
 
 .formCard,
 .listCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 14px;
+  padding: 12.6px;
   display: grid;
-  gap: 12px;
+  gap: 10.8px;
 }
 
 .form {
   display: grid;
-  gap: 12px;
+  gap: 10.8px;
 }
 
 .cardTitle {
   margin: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
 }
 
 .subTitle {
   margin: 0;
-  font-size: 16px;
+  font-size: 14.4px;
   font-weight: 900;
 }
 
@@ -90,8 +90,8 @@
 .successBox,
 .warningBox,
 .emptyInline {
-  padding: 10px 12px;
-  border: 1px solid #e2e8f0;
+  padding: 9px 10.8px;
+  border: 0.9px solid #e2e8f0;
 }
 
 .editingHint,
@@ -128,33 +128,33 @@
 .orderTop,
 .orderActions {
   display: flex;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .topFields {
   display: grid;
-  grid-template-columns: minmax(280px, 1.3fr) minmax(220px, 0.7fr);
-  gap: 12px;
+  grid-template-columns: minmax(252px, 1.3fr) minmax(198px, 0.7fr);
+  gap: 10.8px;
 }
 
 .createLayout {
   display: grid;
-  grid-template-columns: minmax(340px, 0.95fr) minmax(420px, 1.05fr);
+  grid-template-columns: minmax(306px, 0.95fr) minmax(378px, 1.05fr);
   grid-template-areas:
     "new-product new-order"
     "catalog selected";
-  gap: 14px;
+  gap: 12.6px;
   align-items: stretch;
 }
 
 .panelCard,
 .orderCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 12px;
+  padding: 10.8px;
   display: grid;
-  gap: 10px;
+  gap: 9px;
   min-width: 0;
 }
 
@@ -180,7 +180,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 4px;
+  gap: 3.6px;
 }
 
 .cardHead,
@@ -200,7 +200,7 @@
 .field,
 .fieldCompact {
   display: grid;
-  gap: 6px;
+  gap: 5.4px;
   font-weight: 700;
 }
 
@@ -213,10 +213,10 @@
 .textarea,
 .qtyInput {
   width: 100%;
-  border: 1px solid #cbd5e1;
+  border: 0.9px solid #cbd5e1;
   background: #fff;
   color: #0f172a;
-  padding: 10px 12px;
+  padding: 9px 10.8px;
   font: inherit;
   box-sizing: border-box;
 }
@@ -226,7 +226,7 @@
 }
 
 .descriptionTextarea {
-  min-height: 220px;
+  min-height: 198px;
   height: 100%;
   resize: none;
 }
@@ -234,7 +234,7 @@
 .toggleLabel {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7.2px;
   font-weight: 700;
   color: #0f172a;
 }
@@ -246,8 +246,8 @@
 }
 
 .tableCard {
-  border: 1px solid #e2e8f0;
-  min-height: 360px;
+  border: 0.9px solid #e2e8f0;
+  min-height: 324px;
   grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
 }
@@ -257,8 +257,8 @@
 .selectedTableRow {
   display: grid;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
+  gap: 10.8px;
+  padding: 10.8px;
   min-width: 0;
 }
 
@@ -266,17 +266,17 @@
   background: #f1f5f9;
   color: #0f172a;
   font-weight: 900;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 0.9px solid #e2e8f0;
 }
 
 .catalogTableHead,
 .catalogTableRow {
-  grid-template-columns: minmax(140px, 1fr) minmax(0, 1.5fr) minmax(0, 0.9fr) minmax(110px, 0.85fr) 92px;
+  grid-template-columns: minmax(126px, 1fr) minmax(0, 1.5fr) minmax(0, 0.9fr) minmax(99px, 0.85fr) 82.8px;
 }
 
 .selectedTableHead,
 .selectedTableRow {
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr) minmax(110px, 0.75fr) minmax(140px, 0.9fr) minmax(210px, 1.1fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr) minmax(99px, 0.75fr) minmax(126px, 0.9fr) minmax(189px, 1.1fr);
 }
 
 .tableBody {
@@ -284,7 +284,7 @@
 }
 
 .catalogCard .tableBody {
-  max-height: min(64vh, 708px);
+  max-height: min(64vh, 637.2px);
   overflow: auto;
 }
 
@@ -301,7 +301,7 @@
 .tableRowButton {
   width: 100%;
   border: none;
-  border-top: 1px solid #e2e8f0;
+  border-top: 0.9px solid #e2e8f0;
   background: #ffffff;
   color: inherit;
   font: inherit;
@@ -314,7 +314,7 @@
 }
 
 .selectedTableRow {
-  border-top: 1px solid #e2e8f0;
+  border-top: 0.9px solid #e2e8f0;
 }
 
 .selectedTableRow:first-child {
@@ -347,7 +347,7 @@
 
 .nameCell,
 .orderTitle {
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 900;
   color: #0f172a;
 }
@@ -364,23 +364,23 @@
 }
 
 .qtyInput {
-  width: 90px;
+  width: 81px;
 }
 
 .quantityStepper {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7.2px;
   justify-content: flex-end;
 }
 
 .stepBtn {
-  width: 36px;
-  height: 36px;
-  border: 1px solid #0f172a;
+  width: 32.4px;
+  height: 32.4px;
+  border: 0.9px solid #0f172a;
   background: #ffffff;
   color: #0f172a;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
@@ -393,28 +393,28 @@
 }
 
 .stepValue {
-  min-width: 36px;
+  min-width: 32.4px;
   text-align: center;
   font-weight: 900;
   color: #0f172a;
 }
 
 .stepInput {
-  width: 64px;
-  height: 36px;
-  border: 1px solid #cbd5e1;
+  width: 57.6px;
+  height: 32.4px;
+  border: 0.9px solid #cbd5e1;
   background: #ffffff;
   color: #0f172a;
   text-align: center;
   font: inherit;
-  padding: 0 4px;
+  padding: 0 3.6px;
   box-sizing: border-box;
 }
 
 .miniFormGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 9px;
 }
 
 .miniFormGrid > .toggleLabel,
@@ -427,7 +427,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 10px;
+  gap: 9px;
   flex-wrap: wrap;
 }
 
@@ -437,9 +437,9 @@
 }
 
 .badge {
-  padding: 4px 10px;
-  border: 1px solid;
-  font-size: 12px;
+  padding: 3.6px 9px;
+  border: 0.9px solid;
+  font-size: 10.8px;
   font-weight: 800;
 }
 
@@ -469,7 +469,7 @@
 .orderItemsTable {
   display: grid;
   gap: 0;
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
   overflow: hidden;
 }
@@ -478,26 +478,26 @@
 .orderItemRow {
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.75fr);
-  gap: 12px;
+  gap: 10.8px;
   align-items: center;
   min-width: 0;
-  padding: 10px 12px;
+  padding: 9px 10.8px;
 }
 
 .orderItemsHead {
   font-weight: 900;
   color: #0f172a;
   background: #f1f5f9;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 0.9px solid #e2e8f0;
 }
 
 .orderItemsHeadReceived,
 .orderItemRowReceived {
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.75fr) 110px 110px minmax(140px, 0.9fr);
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.75fr) 99px 99px minmax(126px, 0.9fr);
 }
 
 .orderItemRow {
-  border-top: 1px solid #e2e8f0;
+  border-top: 0.9px solid #e2e8f0;
 }
 
 .orderItemRowOdd {
@@ -508,7 +508,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 10px;
+  gap: 9px;
   min-width: 0;
 }
 
@@ -523,11 +523,11 @@
 
 .orderItemQtyBadge {
   flex: 0 0 auto;
-  padding: 3px 8px;
-  border: 1px solid #cbd5e1;
+  padding: 2.7px 7.2px;
+  border: 0.9px solid #cbd5e1;
   background: #e2e8f0;
   color: #0f172a;
-  font-size: 12px;
+  font-size: 10.8px;
   font-weight: 900;
 }
 
@@ -539,7 +539,7 @@
   justify-content: flex-end;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 990px) {
   .createLayout,
   .topFields,
   .miniFormGrid {

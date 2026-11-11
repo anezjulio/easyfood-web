@@ -231,7 +231,7 @@ export default function MerchandiseRequestEditor({
         showCategory
         showDateColumn={false}
         topMargin={0}
-        maxHeight={layoutMode === "split" ? "min(62vh, 780px)" : "min(58vh, 720px)"}
+        maxHeight={layoutMode === "split" ? "min(62vh, 702px)" : "min(58vh, 648px)"}
       />
 
       {loadError ? <div className={styles.errorBox}>{loadError}</div> : null}

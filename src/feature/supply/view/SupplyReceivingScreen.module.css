@@ -1,43 +1,43 @@
 .page {
   min-height: 100vh;
   background: #ffffff;
-  padding: 16px;
+  padding: 14.4px;
   color: #0f172a;
 }
 
 .content {
   width: 100%;
   margin: 0 auto;
-  padding: 8px;
+  padding: 7.2px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: end;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .subtitle {
-  margin: 6px 0 0;
+  margin: 5.4px 0 0;
   color: #475569;
   font-weight: 600;
 }
 
 .layout {
-  margin-top: 16px;
+  margin-top: 14.4px;
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 16px;
+  gap: 14.4px;
   align-items: start;
 }
 
 .listCard,
 .detailCard {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #ffffff;
-  padding: 14px;
+  padding: 12.6px;
 }
 
 .listHead,
@@ -47,7 +47,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 9px;
   flex-wrap: wrap;
 }
 
@@ -60,34 +60,34 @@
 }
 
 .cardTitle {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .subTitle,
 .modalTitle {
-  font-size: 17px;
+  font-size: 15.3px;
 }
 
 .orderList {
-  margin-top: 12px;
+  margin-top: 10.8px;
   display: grid;
-  gap: 10px;
-  max-height: min(70vh, 760px);
+  gap: 9px;
+  max-height: min(70vh, 684px);
   overflow: auto;
-  padding-right: 4px;
+  padding-right: 3.6px;
 }
 
 .orderBtn {
   width: 100%;
-  border: 1px solid #cbd5e1;
+  border: 0.9px solid #cbd5e1;
   background: #ffffff;
   color: #0f172a;
-  padding: 10px;
+  padding: 9px;
   text-align: left;
   font: inherit;
   cursor: pointer;
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .orderBtnActive {
@@ -108,9 +108,9 @@
 }
 
 .detailBody {
-  margin-top: 12px;
+  margin-top: 10.8px;
   display: grid;
-  gap: 12px;
+  gap: 10.8px;
 }
 
 .detailBody p {
@@ -122,9 +122,9 @@
 .amountRows,
 .itemsCard,
 .emptyInline {
-  border: 1px solid #e2e8f0;
+  border: 0.9px solid #e2e8f0;
   background: #f8fafc;
-  padding: 10px;
+  padding: 9px;
 }
 
 .descriptionBox {
@@ -133,14 +133,14 @@
 
 .itemTable {
   display: grid;
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .itemTableHead,
 .itemRow {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.75fr) 90px 120px 90px minmax(150px, 0.9fr);
-  gap: 10px;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.75fr) 81px 108px 81px minmax(135px, 0.9fr);
+  gap: 9px;
   align-items: center;
 }
 
@@ -150,8 +150,8 @@
 }
 
 .itemRow {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 6px;
+  border-top: 0.9px solid #e2e8f0;
+  padding-top: 5.4px;
 }
 
 .cellRight {
@@ -161,7 +161,7 @@
 .checkboxRow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7.2px;
   font-weight: 800;
   color: #0f172a;
   white-space: nowrap;
@@ -170,20 +170,20 @@
 .amountChoiceRow {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10.8px;
   flex-wrap: wrap;
 }
 
 .differentAmountInline {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 7.2px;
   color: #0f172a;
   font-weight: 800;
 }
 
 .differentAmountInline .input {
-  width: 220px;
+  width: 198px;
 }
 
 .differentAmountInlineHidden {
@@ -193,17 +193,17 @@
 
 .field {
   display: grid;
-  gap: 6px;
+  gap: 5.4px;
   font-weight: 700;
 }
 
 .input,
 .textarea {
   width: 100%;
-  border: 1px solid #cbd5e1;
+  border: 0.9px solid #cbd5e1;
   background: #fff;
   color: #0f172a;
-  padding: 10px 12px;
+  padding: 9px 10.8px;
   font: inherit;
   box-sizing: border-box;
 }
@@ -214,13 +214,13 @@
 
 .amountRows {
   display: grid;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .amountRows > div {
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .remainingPositive {
@@ -235,11 +235,11 @@
 .primaryBtn,
 .secondaryBtn,
 .modalCloseBtn {
-  border: 1px solid #0f172a;
+  border: 0.9px solid #0f172a;
   background: #ffffff;
   color: #0f172a;
   font-weight: 800;
-  padding: 9px 12px;
+  padding: 8.1px 10.8px;
   cursor: pointer;
 }
 
@@ -265,43 +265,43 @@
 
 .invoicePreviewWrap {
   display: grid;
-  gap: 6px;
+  gap: 5.4px;
 }
 
 .invoicePreviewBtn {
-  border: 1px solid #cbd5e1;
+  border: 0.9px solid #cbd5e1;
   background: #ffffff;
-  padding: 6px;
+  padding: 5.4px;
   width: fit-content;
   cursor: pointer;
 }
 
 .invoiceThumb {
   display: block;
-  width: min(100%, 340px);
-  max-height: 180px;
+  width: min(100%, 306px);
+  max-height: 162px;
   object-fit: cover;
 }
 
 .invoicePreviewHint {
   color: #475569;
-  font-size: 12px;
+  font-size: 10.8px;
   font-weight: 700;
 }
 
 .errorBox,
 .successBox {
-  padding: 10px;
+  padding: 9px;
 }
 
 .errorBox {
-  border: 1px solid #fecaca;
+  border: 0.9px solid #fecaca;
   background: #fff1f2;
   color: #9f1239;
 }
 
 .successBox {
-  border: 1px solid #bbf7d0;
+  border: 0.9px solid #bbf7d0;
   background: #f0fdf4;
   color: #166534;
 }
@@ -309,7 +309,7 @@
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
+  gap: 7.2px;
 }
 
 .modalOverlay {
@@ -318,17 +318,17 @@
   background: rgba(15, 23, 42, 0.55);
   display: grid;
   place-items: center;
-  padding: 14px;
+  padding: 12.6px;
   z-index: 60;
 }
 
 .modalCard {
-  width: min(100%, 920px);
-  border: 1px solid #cbd5e1;
+  width: min(100%, 828px);
+  border: 0.9px solid #cbd5e1;
   background: #ffffff;
-  padding: 10px;
+  padding: 9px;
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .modalImage {
@@ -338,13 +338,13 @@
   background: #f8fafc;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 1062px) {
   .layout {
     grid-template-columns: 1fr;
   }
 }
 
-@media (max-width: 780px) {
+@media (max-width: 702px) {
   .itemTableHead,
   .itemRow {
     grid-template-columns: repeat(2, minmax(0, 1fr));
