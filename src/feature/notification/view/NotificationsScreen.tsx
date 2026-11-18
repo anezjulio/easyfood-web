@@ -154,6 +154,14 @@ export default function NotificationsScreen() {
     void reload();
   }, [reload]);
 
+  async function refreshNotifications() {
+    try {
+      setNotifications(await fetchNotificationsApi());
+    } catch {
+      setError("El cambio se guardó, pero no se pudo actualizar el listado de notificaciones.");
+    }
+  }
+
   useEffect(() => {
     const selected = settings.find((item) => item.type === selectedSettingType);
     if (!selected) return;
@@ -278,6 +286,7 @@ export default function NotificationsScreen() {
         durationDays: nextDurationDays,
       });
       setSettings((current) => current.map((item) => (item.type === updated.type ? updated : item)));
+      await refreshNotifications();
       setMessage("Configuracion actualizada.");
     } catch {
       setError("No se pudo guardar la configuracion.");
@@ -296,6 +305,7 @@ export default function NotificationsScreen() {
       const updated = await updateCategoryStockThresholdApi(category, minUnits);
       setStockThresholdSettings(updated);
       setCategoryThresholdDrafts(buildCategoryThresholdDrafts(updated));
+      await refreshNotifications();
       setMessage(`Minimo por categoria actualizado: ${category}.`);
     } catch {
       setError("No se pudo actualizar el minimo por categoria.");
@@ -317,6 +327,7 @@ export default function NotificationsScreen() {
     try {
       const updated = await upsertProductStockThresholdApi(selectedProductIdForThreshold, minUnits);
       setStockThresholdSettings(updated);
+      await refreshNotifications();
       setMessage("Minimo por producto guardado.");
     } catch {
       setError("No se pudo guardar el minimo por producto.");
@@ -331,6 +342,7 @@ export default function NotificationsScreen() {
       if (selectedProductIdForThreshold === productId) {
         setSelectedProductMinUnits("10");
       }
+      await refreshNotifications();
       setMessage("Minimo especifico eliminado.");
     } catch {
       setError("No se pudo eliminar el minimo especifico.");

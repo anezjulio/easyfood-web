@@ -40,3 +40,11 @@
 .stockFields > label > span { gap: 5.4px; }
 .removeBtn { margin-left: auto; min-height: 27px; padding: 3.6px 7.2px; font-size: 10.8px; }
 .createRow { display: flex; align-items: center; gap: 10.8px; }
+
+.stockRow[data-stock-tone] > td {
+  background: var(--stock-background);
+}
+
+.stockRow[data-stock-tone] > td:first-child {
+  box-shadow: inset 4px 0 var(--stock-stripe);
+}

@@ -77,6 +77,17 @@ export default function UsersScreen() {
       setSelectedUserId(nextSelectedId);
       const selected = list.find((item) => item.id === nextSelectedId) || null;
       applyUserForm(selected);
+      if (selected) {
+        const selectedRole = resolveAppUserRole(selected);
+        if (!normalizeForSearch(selected.name).includes(normalizeForSearch(nameFilter))) setNameFilter("");
+        if (!normalizeForSearch(selected.email).includes(normalizeForSearch(emailFilter))) setEmailFilter("");
+        if (!normalizeForSearch(selected.username).includes(normalizeForSearch(usernameFilter))) setUsernameFilter("");
+        if (!normalizeForSearch(`${selectedRole} ${getRoleLabel(selectedRole)}`).includes(normalizeForSearch(roleFilter))) setRoleFilter("");
+        if (!normalizeForSearch(selected.startHour).includes(normalizeForSearch(startHourFilter))) setStartHourFilter("");
+        if (!normalizeForSearch(selected.endHour).includes(normalizeForSearch(endHourFilter))) setEndHourFilter("");
+        if (createdAtFilter && !selected.createdAt.startsWith(createdAtFilter)) setCreatedAtFilter("");
+        if (updatedAtFilter && !selected.updatedAt.startsWith(updatedAtFilter)) setUpdatedAtFilter("");
+      }
     }
   }
 

@@ -1554,6 +1554,7 @@ export function installApi(middlewares: Server) {
           }
 
           if (pathname === "/products" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, enrichProductsWithStocks(db.products, db.stocks));
           }
@@ -1623,6 +1624,7 @@ export function installApi(middlewares: Server) {
           }
 
           if (pathname === "/users" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, db.users);
           }
@@ -2570,11 +2572,13 @@ export function installApi(middlewares: Server) {
           }
 
           if (pathname === "/expenses" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, db.expenses);
           }
 
           if (pathname === "/feedback" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(
               res,
@@ -2911,6 +2915,7 @@ export function installApi(middlewares: Server) {
           }
 
           if (pathname === "/workdays" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, db.workdays);
           }
@@ -3428,6 +3433,7 @@ export function installApi(middlewares: Server) {
           }
 
           if (pathname === "/licenses" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, db.licenses);
           }
@@ -3554,6 +3560,7 @@ export function installApi(middlewares: Server) {
           }
 
           if (pathname === "/notifications" && method === "GET") {
+            if (isBrowserNavigation(req)) return next();
             const db = await readDb();
             return sendJson(res, 200, db.notifications);
           }
@@ -6551,6 +6558,7 @@ function buildDataStoreBackupFileName(store: DataStoreRecord): string {
 function sendJson(res: { statusCode: number; setHeader: (name: string, value: string) => void; end: (chunk?: string) => void }, status: number, payload: unknown) {
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Cache-Control", "no-store");
   res.end(JSON.stringify(payload));
 }
 

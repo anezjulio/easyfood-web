@@ -273,12 +273,14 @@ export default function PriceScreen() {
     }
 
     try {
-      await createProductPriceApi({
+      const saved = await createProductPriceApi({
         productId: selectedProduct.id,
         costPrice: newCostPriceValue,
         newPrice: newSalePricePreview,
         marginPercent: selectedProductMargin,
       });
+      const priceQuery = priceFilter.replace(/\D/g, "");
+      if (priceQuery && !matchesPriceFilter(saved.newPrice, priceQuery)) setPriceFilter("");
       await reloadProductsAndMargins(selectedProduct.id);
       setMessage("Precio de coste y venta actualizados correctamente.");
     } catch {

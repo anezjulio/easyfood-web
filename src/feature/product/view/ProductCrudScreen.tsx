@@ -92,7 +92,7 @@ export default function ProductCrudScreen() {
                     )}
 
                     <label className={styles.uploadBtn} aria-disabled={vm.isUploadingImage}>
-                      {vm.isUploadingImage ? "Subiendo..." : "Cargar archivo"}
+                      {vm.isUploadingImage ? "Subiendo..." : "12- Cargar archivo"}
                       <input
                         type="file"
                         accept="image/*"
@@ -106,7 +106,7 @@ export default function ProductCrudScreen() {
 
                 <div className={styles.fieldGrid}>
                   <label className={styles.field}>
-                    <span>Nombre</span>
+                    <span>1- Nombre</span>
                     <input
                       value={vm.name}
                       onChange={(e) => vm.setName(e.target.value)}
@@ -116,7 +116,7 @@ export default function ProductCrudScreen() {
                   </label>
 
                   <label className={styles.field}>
-                    <span>Marca</span>
+                    <span>2- Marca</span>
                     <input
                       value={vm.brand}
                       onChange={(e) => vm.setBrand(e.target.value)}
@@ -126,7 +126,7 @@ export default function ProductCrudScreen() {
                   </label>
 
                   <label className={styles.field}>
-                    <span>Codigo de barra</span>
+                    <span>3- Codigo de barra</span>
                     <div className={styles.inputStack}>
                       <input
                         value={vm.barcode}
@@ -152,7 +152,7 @@ export default function ProductCrudScreen() {
                   </label>
 
                   <label className={styles.field}>
-                    <span>Tipo de producto</span>
+                    <span>4- Tipo de producto</span>
                     <select
                       value={vm.productType}
                       onChange={(e) => vm.setProductType(e.target.value as ProductType)}
@@ -165,7 +165,7 @@ export default function ProductCrudScreen() {
                   </label>
 
                   <label className={styles.field}>
-                    <span>Manejo de stock</span>
+                    <span>5- Manejo de stock</span>
                     <select
                       value={vm.stockMode}
                       onChange={(e) => vm.setStockMode(e.target.value as ProductStockMode)}
@@ -179,7 +179,7 @@ export default function ProductCrudScreen() {
                   </label>
 
                   <label className={styles.field}>
-                    <span>Descripcion</span>
+                    <span>6- Descripcion</span>
                     <textarea
                       value={vm.description}
                       onChange={(e) => vm.setDescription(e.target.value)}
@@ -190,7 +190,7 @@ export default function ProductCrudScreen() {
                   </label>
 
                   <div className={styles.field}>
-                    <span>Categorias</span>
+                    <span>7- Categorias</span>
                     <div className={styles.checkGrid}>
                       {vm.categories.map((option) => (
                         <label key={option.id} className={styles.toggleLabel}>
@@ -212,7 +212,7 @@ export default function ProductCrudScreen() {
                   ) : null}
 
                   <label className={styles.field}>
-                    <span>Precio de coste</span>
+                    <span>8- Precio de coste</span>
                     <input
                       type="number"
                       min={vm.productType === "ingrediente" || vm.productType === "empaque" ? 0 : 1}
@@ -226,7 +226,7 @@ export default function ProductCrudScreen() {
                   {vm.isAdmin ? (
                     <>
                       <label className={styles.field}>
-                        <span>% categoria</span>
+                        <span>9- % categoria</span>
                         <div className={styles.inputWithAction}>
                           <input
                             type="number"
@@ -244,7 +244,7 @@ export default function ProductCrudScreen() {
 
                       {vm.isEditing ? (
                         <label className={styles.field}>
-                          <span>% producto</span>
+                          <span>10- % producto</span>
                           <div className={styles.inputWithAction}>
                             <input
                               type="number"
@@ -266,7 +266,7 @@ export default function ProductCrudScreen() {
                         </label>
                       ) : (
                         <label className={styles.field}>
-                          <span>% producto</span>
+                          <span>10- % producto</span>
                           <div className={styles.inputWithAction}>
                             <label className={styles.toggleLabel}>
                               <input
@@ -290,7 +290,7 @@ export default function ProductCrudScreen() {
                       )}
 
                       <label className={styles.field}>
-                        <span>Precio de venta</span>
+                        <span>11- Precio de venta</span>
                         <div className={styles.valueBox}>
                           {vm.salePricePreview > 0 ? vm.formatMoneyARS(vm.salePricePreview) : "-"}
                           {" "}

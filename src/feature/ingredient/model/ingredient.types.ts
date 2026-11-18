@@ -57,6 +57,20 @@ export function getIngredientQuantityUnitLabel(mode: IngredientStockMode): strin
   return "unidades";
 }
 
+export function getIngredientStockRatio(ingredient: Ingredient): number | null {
+  const minimum = Number(ingredient.minStockQuantity);
+  return minimum > 0 ? Math.max(0, Number(ingredient.stockQuantity) || 0) / minimum : null;
+}
+
+export function getIngredientStockTone(ingredient: Ingredient, ratio = getIngredientStockRatio(ingredient)) {
+  if (ingredient.stockQuantity <= 0) return "critical";
+  if (ratio === null) return undefined;
+  if (ratio >= 0.7 / 0.3) return "high";
+  if (ratio > 1) return "moderate";
+  if (ratio > 0.1) return "warning";
+  return "critical";
+}
+
 export function formatIngredientQuantity(value: number, mode: IngredientStockMode): string {
   const quantity = Math.max(0, Number(value) || 0);
   if (mode === "weight") {

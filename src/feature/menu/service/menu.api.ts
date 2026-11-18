@@ -91,13 +91,13 @@ export async function createMenuProductApi(draft: MenuProductDraft): Promise<Men
           productIds: item.allowedMenuProductIds || [],
         })),
     });
-    await updateProductApi(product.id, { ...product, comboId: combo.id, type, stockType: type });
+    await updateProductApi(product.id, { ...product, costPrice: undefined, comboId: combo.id, type, stockType: type });
   } else {
     const recipe = await createRecipeApi({
       productId: product.id,
       ingredients: draft.recipeItems.map((item) => ({ ingredientId: item.ingredientId, quantity: item.quantity, required: isRecipeIngredientRequired(item, draft.recipeItems.length) })),
     });
-    await updateProductApi(product.id, { ...product, recipeId: recipe.id, type, stockType: type });
+    await updateProductApi(product.id, { ...product, costPrice: undefined, recipeId: recipe.id, type, stockType: type });
   }
 
   const list = await fetchMenuProductsApi();
@@ -121,7 +121,7 @@ export async function updateMenuProductApi(id: string, draft: MenuProductDraft):
     description: draft.description,
     imageUrl: draft.imageUrl ?? current.imageUrl,
     price: draft.price,
-    costPrice: current.costPrice || 0,
+    costPrice: undefined,
     category: draft.category,
     categoryIds,
     type,

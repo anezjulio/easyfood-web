@@ -143,29 +143,38 @@ export default function IngredientsScreen() {
 
     try {
       const metric: "unit" | "weight" = stockMode === "weight" ? "weight" : "unit";
+      const shouldCreateFromTemplate = selectedIngredient && normalizeForSearch(selectedIngredient.name) !== normalizeForSearch(trimmedName) && !renameSelectedIngredient;
+      const ingredientBeingUpdated = shouldCreateFromTemplate ? null : selectedIngredient;
       const draft = {
         name: trimmedName,
         categoryId,
         expiresInDays: parsedDays,
         stockMode,
         metric,
+        productId: ingredientBeingUpdated?.productId,
+        minStockQuantity: ingredientBeingUpdated?.minStockQuantity,
+        portionName: selectedIngredient?.portionName,
         stockQuantity: selectedIngredient ? selectedIngredient.stockQuantity : 0,
         entryQuantity: 0,
         portionSizeGrams: selectedIngredient?.portionSizeGrams,
       };
-      const shouldCreateFromTemplate = selectedIngredient && normalizeForSearch(selectedIngredient.name) !== normalizeForSearch(trimmedName) && !renameSelectedIngredient;
-      const saved = selectedIngredient && !shouldCreateFromTemplate ? await updateIngredientApi(selectedIngredient.id, draft) : await createIngredientApi(draft);
+      const saved = ingredientBeingUpdated ? await updateIngredientApi(ingredientBeingUpdated.id, draft) : await createIngredientApi(draft);
       if (!saved) {
         setError("No se pudo guardar el ingrediente seleccionado.");
         return;
       }
-      if (selectedIngredient && !shouldCreateFromTemplate) {
-        await reload(saved.id);
+      if (!normalizeForSearch(saved.name).includes(normalizeForSearch(search))) setSearch("");
+      if (stockModeFilter !== "all" && saved.stockMode !== stockModeFilter) setStockModeFilter("all");
+      setIngredients((current) => ingredientBeingUpdated
+        ? current.map((item) => item.id === saved.id ? saved : item)
+        : [...current, saved]);
+      if (ingredientBeingUpdated) {
         selectIngredient(saved);
+        await reload(saved.id);
         setMessage("Ingrediente actualizado.");
       } else {
-        await reload();
         clearForm();
+        await reload();
         setMessage("Ingrediente creado.");
       }
     } catch {
@@ -184,6 +193,7 @@ export default function IngredientsScreen() {
         return;
       }
       clearForm();
+      setIngredients((current) => current.filter((item) => item.id !== selectedIngredient.id));
       await reload();
       setMessage("Ingrediente eliminado.");
     } catch {
@@ -206,11 +216,7 @@ export default function IngredientsScreen() {
     }
     try {
       const saved = await updateIngredientApi(selectedPortionIngredient.id, {
-        name: selectedPortionIngredient.name,
-        categoryId: selectedPortionIngredient.categoryId,
-        expiresInDays: selectedPortionIngredient.expiresInDays,
-        stockMode: selectedPortionIngredient.stockMode,
-        stockQuantity: selectedPortionIngredient.stockQuantity,
+        ...selectedPortionIngredient,
         entryQuantity: 0,
         portionSizeGrams: grams,
       });
@@ -218,7 +224,8 @@ export default function IngredientsScreen() {
         setError("No se pudo guardar la porcion.");
         return;
       }
-      await reload(saved.id);
+      setIngredients((current) => current.map((item) => item.id === saved.id ? saved : item));
+      await reload();
       setPortionIngredientId(saved.id);
       setMessage("Porcion guardada.");
     } catch {
@@ -261,7 +268,7 @@ export default function IngredientsScreen() {
               </div>
               <form className={styles.form} onSubmit={submitPortion}>
                 <label className={styles.field}>
-                  <span>Ingrediente</span>
+                  <span>1- Ingrediente</span>
                   <select className={styles.input} value={portionIngredientId} onChange={(event) => setPortionIngredientId(event.target.value)}>
                     {portionIngredients.map((item) => (
                       <option key={item.id} value={item.id}>{item.name}</option>
@@ -269,7 +276,7 @@ export default function IngredientsScreen() {
                   </select>
                 </label>
                 <label className={styles.field}>
-                  <span>Gramos por porcion</span>
+                  <span>2- Gramos por porcion</span>
                   <input className={styles.input} type="number" min={1} value={portionSizeGrams} onChange={(event) => setPortionSizeGrams(event.target.value)} placeholder="Ej: 120" />
                 </label>
                 <div className={styles.previewGrid}>
@@ -320,14 +327,14 @@ export default function IngredientsScreen() {
             <form className={styles.form} onSubmit={submitIngredient}>
               <div className={styles.nameRow}>
                 <label className={styles.field}>
-                  <span>Nombre</span>
+                  <span>1- Nombre</span>
                   <input className={styles.input} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ej: Tomate, lechuga o pan de pancho" />
                 </label>
                 <label className={styles.inlineToggle}><input type="checkbox" checked={renameSelectedIngredient} onChange={(event) => setRenameSelectedIngredient(event.target.checked)} disabled={!selectedIngredient} />Modificar</label>
               </div>
 
               <label className={styles.field}>
-                <span>Dias antes de caducar</span>
+                <span>2- Dias antes de caducar</span>
                 <input
                   className={styles.input}
                   type="number"
@@ -339,7 +346,7 @@ export default function IngredientsScreen() {
               </label>
 
               <label className={styles.field}>
-                <span>Categoria</span>
+                <span>3- Categoria</span>
                 <select className={styles.input} value={categoryId} onChange={(event) => setCategoryId(event.target.value)}>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>{category.name}</option>
@@ -348,7 +355,7 @@ export default function IngredientsScreen() {
               </label>
 
               <label className={styles.field}>
-                <span>Modo de stock</span>
+                <span>4- Modo de stock</span>
                 <select className={styles.input} value={stockMode} onChange={(event) => setStockMode(event.target.value as IngredientStockMode)}>
                   <option value="weight">Por peso</option>
                   <option value="unit">Por unidad</option>

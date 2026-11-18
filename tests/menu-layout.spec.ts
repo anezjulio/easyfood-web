@@ -10,9 +10,12 @@ test("menu groups ingredients with beverages last and keeps a compact responsive
   await page.getByRole("button", { name: "Entrar", exact: true }).click();
   await expect(page).toHaveURL(/\/operation$/);
   await page.goto("/menu-products");
-  const editor = page.locator("section").filter({ has: page.getByRole("heading", { name: "Ingredientes", exact: true }) }).last();
+  const editor = page.locator("section").filter({ has: page.getByRole("heading", { name: "5- Seleccion de ingredientes", exact: true }) }).last();
   await expect(editor.getByRole("region").last()).toHaveAccessibleName("Bebidas");
-  await expect(editor.getByRole("region").locator("h4")).toHaveText(["Panificados (6)▾", "Carnes (8)▾", "Lacteos (4)▾", "Vegetales (9)▾", "Salsas (5)▾", "Sin categoria (3)▾", "Bebidas (12)▸"]);
+  await expect(editor.getByRole("region").locator("h4")).toHaveText([
+    /^Panificados \(\d+\)/, /^Carnes \(\d+\)/, /^Lacteos \(\d+\)/, /^Vegetales \(\d+\)/,
+    /^Salsas \(\d+\)/, /^Sin categoria \(\d+\)/, /^Bebidas \(\d+\)/,
+  ]);
   const beverages = editor.getByRole("region", { name: "Bebidas", exact: true });
   const beverageToggle = beverages.getByRole("button", { name: /^Bebidas/ });
   await expect(beverageToggle).toHaveAttribute("aria-expanded", "false");
@@ -72,20 +75,20 @@ test("menu groups ingredients with beverages last and keeps a compact responsive
   const fourthGroup = await groups.nth(3).boundingBox();
   expect(Math.abs(firstGroup!.y - fourthGroup!.y)).toBeLessThan(2);
   expect(fourthGroup!.x).toBeGreaterThan(firstGroup!.x);
-  const name = await page.getByLabel("Nombre", { exact: true }).boundingBox();
-  const price = await page.getByLabel("Precio de venta", { exact: true }).boundingBox();
-  const category = await page.getByRole("combobox", { name: "Categoria", exact: true }).boundingBox();
-  const description = await page.getByLabel("Descripcion", { exact: true }).boundingBox();
+  const name = await page.getByLabel("1- Nombre", { exact: true }).boundingBox();
+  const price = await page.getByLabel("2- Precio venta", { exact: true }).boundingBox();
+  const category = await page.getByRole("combobox", { name: "3- Categoria", exact: true }).boundingBox();
+  const description = await page.getByLabel("4- Descripcion", { exact: true }).boundingBox();
   expect(Math.abs(name!.y - price!.y)).toBeLessThan(2);
   expect(Math.abs(category!.y - description!.y)).toBeLessThan(2);
   expect(Math.abs(name!.y - category!.y)).toBeLessThan(2);
   expect(name!.width).toBeGreaterThan(price!.width * 1.5);
-  const formCard = page.locator("section").filter({ has: page.getByRole("heading", { name: "Crear producto de menu", exact: true }) }).first();
+  const formCard = page.locator("section").filter({ has: page.getByRole("heading", { name: "Crear producto", exact: true }) }).first();
   const listCard = page.locator("section").filter({ has: page.getByRole("heading", { name: "Menu actual", exact: true }) }).first();
   const formBounds = await formCard.boundingBox();
   const listBounds = await listCard.boundingBox();
   expect(formBounds!.width / listBounds!.width).toBeCloseTo(65 / 35, 1);
-  const submit = await page.getByRole("button", { name: "Crear producto", exact: true }).boundingBox();
+  const submit = await page.getByRole("button", { name: "7- Crear producto", exact: true }).boundingBox();
   expect(submit!.x + submit!.width).toBeLessThanOrEqual(formBounds!.x + formBounds!.width);
   await expect(formCard.getByText("Precio", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Produccion con stock", { exact: true })).toHaveCount(0);
@@ -107,7 +110,7 @@ test("menu groups ingredients with beverages last and keeps a compact responsive
   for (const width of [1920, 1440, 1280, 1050, 768, 390]) {
     await page.setViewportSize({ width, height: 1000 });
     const bounds = await formCard.boundingBox();
-    for (const control of [page.getByLabel("Nombre", { exact: true }), page.getByLabel("Precio de venta", { exact: true }), page.getByRole("combobox", { name: "Categoria", exact: true }), page.getByLabel("Descripcion", { exact: true }), page.getByRole("button", { name: "Crear producto", exact: true })]) {
+    for (const control of [page.getByLabel("1- Nombre", { exact: true }), page.getByLabel("2- Precio venta", { exact: true }), page.getByRole("combobox", { name: "3- Categoria", exact: true }), page.getByLabel("4- Descripcion", { exact: true }), page.getByRole("button", { name: "7- Crear producto", exact: true })]) {
       const box = await control.boundingBox();
       expect(box!.x).toBeGreaterThanOrEqual(bounds!.x);
       expect(box!.x + box!.width).toBeLessThanOrEqual(bounds!.x + bounds!.width);

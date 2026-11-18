@@ -89,12 +89,14 @@ export function useProductCrudViewModel() {
 
   const reloadProducts = useCallback(async (nextSelectedId?: string | null) => {
     setLoading(true);
-    const [list, categoryList] = await Promise.all([fetchProducts(), fetchCategoriesApi()]);
-    setProducts(list);
-    setCategories(categoryList.filter((item) => item.id !== "ingrediente"));
-    setLoading(false);
-    if (typeof nextSelectedId !== "undefined") {
-      setSelectedProductId(nextSelectedId);
+    try {
+      const [list, categoryList] = await Promise.all([fetchProducts(), fetchCategoriesApi()]);
+      setProducts(list);
+      setCategories(categoryList.filter((item) => item.id !== "ingrediente"));
+      if (typeof nextSelectedId !== "undefined") setSelectedProductId(nextSelectedId);
+      return list;
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -381,6 +383,18 @@ export function useProductCrudViewModel() {
     }
   }
 
+  async function refreshSavedProduct(id: string) {
+    const saved = (await reloadProducts(id)).find((item) => item.id === id);
+    if (!saved) return;
+    if (!normalizeForSearch(saved.name).includes(normalizeForSearch(nameFilter))) setNameFilter("");
+    if (!(saved.barcode || "").includes(barcodeFilter.trim())) setBarcodeFilter("");
+    const priceQuery = priceFilter.replace(/\D/g, "");
+    if (priceQuery && !matchesPriceFilter(saved.price, priceQuery)) setPriceFilter("");
+    const stockQuery = existenciaFilter.replace(/\D/g, "");
+    if (stockQuery && !matchesNumericContainsFilter(Number(saved.existencia || 0), stockQuery)) setExistenciaFilter("");
+    if (createdAtFilter && !saved.createdAt.startsWith(createdAtFilter)) setCreatedAtFilter("");
+  }
+
   async function submitForm(event: React.FormEvent) {
     event.preventDefault();
     setError("");
@@ -446,7 +460,7 @@ export function useProductCrudViewModel() {
           return;
         }
 
-        await reloadProducts(updated.id);
+        await refreshSavedProduct(updated.id);
         setMessage("Producto actualizado correctamente.");
         return;
       }
@@ -472,7 +486,7 @@ export function useProductCrudViewModel() {
         setMarginSettings(updatedMargins);
       }
 
-      await reloadProducts(created.id);
+      await refreshSavedProduct(created.id);
       setMessage("Producto creado correctamente.");
     } catch (error) {
       setError(error instanceof Error ? error.message : "No se pudo guardar el producto.");

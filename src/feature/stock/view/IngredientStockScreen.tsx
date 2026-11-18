@@ -4,12 +4,13 @@ import StockNavigation from "../component/StockNavigation";
 import Breadcrumbs from "../../../app/component/Breadcrumbs";
 import SessionStatusBar from "../../../app/component/SessionStatusBar";
 import { normalizeForSearch } from "../../../shared/search/search";
-import { formatIngredientQuantity, type Ingredient, type IngredientCategory } from "../../ingredient/model/ingredient.types";
+import { formatIngredientQuantity, getIngredientStockTone, type Ingredient, type IngredientCategory } from "../../ingredient/model/ingredient.types";
 import { fetchIngredientCategoriesApi } from "../../ingredient/service/ingredient.api";
 import { readJsonOrThrow } from "../../../shared/http/http";
 import { createIngredientStockEntriesApi, type IngredientStockEntry } from "../service/stock.api";
 import styles from "../../ingredient/view/IngredientsScreen.module.css";
 import stockStyles from "./IngredientStockScreen.module.css";
+import toneStyles from "../../ingredient/view/IngredientStockTone.module.css";
 
 type Draft = { quantity: string; purchaseTotal: string; expirationDate: string };
 type NewDraft = Draft & { id: string; name: string; stockMode: "unit" | "weight"; categoryId: string; portionName: string; portionSizeGrams: string };
@@ -170,7 +171,7 @@ export default function IngredientStockScreen() {
                   <thead><tr><th>Ingrediente</th><th>Costo de compra (total ARS)</th><th>Vencimiento (fecha/dias)</th><th>Cantidad recibida</th><th>Stock actual</th><th>Porciones</th></tr></thead>
                   <tbody>{visible.map((item) => {
                     const draft = getDraft(item);
-                    return <tr key={item.id}>
+                    return <tr key={item.id} className={`${stockStyles.stockRow} ${toneStyles.stockTone}`} data-stock-tone={getIngredientStockTone(item)}>
                       <td>{item.name}</td>
                       <td><input className={styles.input} aria-label={`Costo de compra de ${item.name}`} type="number" min={0} step="0.01" placeholder="Total del ingreso" value={draft.purchaseTotal} onChange={(event) => change(item, { purchaseTotal: event.target.value })} /></td>
                       <td><ExpirationInput className={styles.input} aria-label={`Vencimiento de ${item.name}`}  value={draft.expirationDate} onChange={(value) => change(item, { expirationDate: value })} /></td>

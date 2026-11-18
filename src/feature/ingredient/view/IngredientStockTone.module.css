@@ -1,0 +1,19 @@
+.stockTone[data-stock-tone="high"] {
+  --stock-background: #bbefc9;
+  --stock-stripe: #358451;
+}
+
+.stockTone[data-stock-tone="moderate"] {
+  --stock-background: #dcfce7;
+  --stock-stripe: #65a30d;
+}
+
+.stockTone[data-stock-tone="warning"] {
+  --stock-background: #ffedd5;
+  --stock-stripe: #ea580c;
+}
+
+.stockTone[data-stock-tone="critical"] {
+  --stock-background: #fee2e2;
+  --stock-stripe: #dc2626;
+}

@@ -654,13 +654,10 @@ export default function StockEntryScreen() {
         description: `Ingreso de materia prima: ${selectedIngredient.name}`,
       });
       const saved = await updateIngredientApi(selectedIngredient.id, {
-        name: selectedIngredient.name,
+        ...selectedIngredient,
         categoryId: ingredientCategoryId || selectedIngredient.categoryId,
         expiresInDays,
-        stockMode: selectedIngredient.stockMode,
-        stockQuantity: selectedIngredient.stockQuantity,
         entryQuantity: ingredientStockDelta,
-        portionSizeGrams: selectedIngredient.portionSizeGrams,
       });
       if (!saved) {
         setError("No se pudo actualizar la materia prima.");
